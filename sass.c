@@ -238,7 +238,98 @@ static PyTypeObject sass_OptionsType = {
     .tp_dictoffset = 0,
     .tp_init = (initproc) sass_Options_init,
     .tp_alloc = 0,
-    .tp_new = 0
+    .tp_new = PyType_GenericNew
+};
+
+typedef struct {
+    PyObject_HEAD
+    void *context;
+} sass_BaseContextObject;
+
+static int
+sass_BaseContext_init(sass_BaseContextObject *self, PyObject *args,
+                      PyObject *kwds)
+{
+    PyErr_SetString(PyExc_TypeError,
+                    "the sass.BaseContext type cannot be instantiated "
+                    "because it's an abstract interface.  use one of "
+                    "sass.Context, sass.FileContext, or sass.FolderContext "
+                    "instead");
+    return -1;
+}
+
+static PyObject *
+sass_BaseContext_compile(sass_BaseContextObject *self) {
+    PyErr_SetString(PyExc_NotImplementedError,
+                    "the sass.BaseContext type is an abstract interface. "
+                    "use one of sass.Context, sass.FileContext, or sass."
+                    "FolderContext instead");
+    return NULL;
+}
+
+static PyObject *
+sass_BaseContext_get_options(sass_BaseContextObject *self, void *closure)
+{
+    PyErr_SetString(PyExc_NotImplementedError,
+                    "the sass.BaseContext type is an abstract interface. "
+                    "use one of sass.Context, sass.FileContext, or sass."
+                    "FolderContext instead");
+    return NULL;
+}
+
+static PyMethodDef sass_BaseContext_methods[] = {
+    {"compile", (PyCFunction) sass_BaseContext_compile, METH_NOARGS,
+     "Compiles SASS source."},
+    {NULL, NULL, 0, NULL}
+};
+
+static PyGetSetDef sass_BaseContext_getset[] = {
+    {"options", (getter) sass_BaseContext_get_options, NULL,
+     "The compilation options for the context."},
+    {NULL}
+};
+
+static PyTypeObject sass_BaseContextType = {
+    PyObject_HEAD_INIT(NULL)
+    .ob_size = 0,
+    .tp_name = "sass.BaseContext",
+    .tp_basicsize = sizeof(sass_BaseContextObject),
+    .tp_itemsize = 0,
+    .tp_dealloc = 0,
+    .tp_print = 0,
+    .tp_getattr = 0,
+    .tp_setattr = 0,
+    .tp_compare = 0,
+    .tp_repr = 0,
+    .tp_as_number = 0,
+    .tp_as_sequence = 0,
+    .tp_as_mapping = 0,
+    .tp_hash = 0,
+    .tp_call = 0,
+    .tp_str = 0,
+    .tp_getattro = 0,
+    .tp_setattro = 0,
+    .tp_as_buffer = 0,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = "The common interface between sass.Context, sass.FileContext, "
+              "and sass.FolderContext.",
+    .tp_traverse = 0,
+    .tp_clear = 0,
+    .tp_richcompare = 0,
+    .tp_weaklistoffset = 0,
+    .tp_iter = 0,
+    .tp_iternext = 0,
+    .tp_methods = sass_BaseContext_methods,
+    .tp_members = 0,
+    .tp_getset = sass_BaseContext_getset,
+    .tp_base = 0,
+    .tp_dict = 0,
+    .tp_descr_get = 0,
+    .tp_descr_set = 0,
+    .tp_dictoffset = 0,
+    .tp_init = (initproc) sass_BaseContext_init,
+    .tp_alloc = 0,
+    .tp_new = PyType_GenericNew
 };
 
 static PyMethodDef sass_methods[] = {
@@ -250,8 +341,10 @@ initsass()
 {
     PyObject *module;
 
-    sass_OptionsType.tp_new = PyType_GenericNew;
     if (PyType_Ready(&sass_OptionsType) < 0) {
+        return;
+    }
+    if (PyType_Ready(&sass_BaseContextType) < 0) {
         return;
     }
 
@@ -262,4 +355,7 @@ initsass()
     }
     Py_INCREF(&sass_OptionsType);
     PyModule_AddObject(module, "Options", (PyObject *) &sass_OptionsType);
+    Py_INCREF(&sass_BaseContextType);
+    PyModule_AddObject(module, "BaseContext",
+                       (PyObject *) &sass_BaseContextType);
 }

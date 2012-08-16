@@ -3,7 +3,7 @@ from attest import assert_hook
 
 from attest import Tests, raises
 
-from sass import Options
+from sass import BaseContext, Options
 
 
 suite = Tests()
@@ -48,3 +48,11 @@ def options_image_path():
         Options('nested', include_paths='a:b', image_path=123)
     with raises(TypeError):
         Options('nested', include_paths='a:b', image_path=['a/b', 'c/d'])
+
+
+@suite.test
+def base_context_init():
+    with raises(TypeError):
+        BaseContext()
+    assert hasattr(BaseContext, 'options')
+    assert callable(BaseContext.compile)
