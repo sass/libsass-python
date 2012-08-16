@@ -339,7 +339,7 @@ static PyMethodDef sass_methods[] = {
 PyMODINIT_FUNC
 initsass()
 {
-    PyObject *module;
+    PyObject *module, *version;
 
     if (PyType_Ready(&sass_OptionsType) < 0) {
         return;
@@ -353,6 +353,12 @@ initsass()
     if (module == NULL) {
         return;
     }
+#ifdef LIBSASS_PYTHON_VERSION
+    version = PyString_FromString(LIBSASS_PYTHON_VERSION);
+#else
+    version = PyString_FromString("unknown");
+#endif
+    PyModule_AddObject(module, "__version__", version);
     Py_INCREF(&sass_OptionsType);
     PyModule_AddObject(module, "Options", (PyObject *) &sass_OptionsType);
     Py_INCREF(&sass_BaseContextType);

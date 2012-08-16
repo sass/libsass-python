@@ -1,12 +1,19 @@
 from __future__ import with_statement
 from attest import assert_hook
 
+import re
+
 from attest import Tests, raises
 
-from sass import BaseContext, Options
+from sass import __version__, BaseContext, Options
 
 
 suite = Tests()
+
+
+@suite.test
+def version():
+    assert re.match(r'^\d+\.\d+\.\d+$', __version__)
 
 
 @suite.test

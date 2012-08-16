@@ -4,6 +4,8 @@ except ImportError:
     from distutils.core import Extension, setup
 
 
+version = '0.1.0'
+
 libsass_sources = [ 
     'context.cpp', 'functions.cpp', 'document.cpp',
     'document_parser.cpp', 'eval_apply.cpp', 'node.cpp',
@@ -21,6 +23,7 @@ libsass_headers = [
 sass_extension = Extension(
     'sass',
     ['sass.c'] + libsass_sources,
+    define_macros=[('LIBSASS_PYTHON_VERSION', '"' + version + '"')],
     depends=libsass_headers,
     extra_compile_args=['-c', '-Wall', '-O2', '-fPIC'],
     extra_link_args=['-fPIC'],
@@ -28,7 +31,7 @@ sass_extension = Extension(
 
 setup(
     name='libsass',
-    version='0.1.0',
+    version=version,
     ext_modules=[sass_extension],
     py_modules=['sasstests'],
     license='MIT License',
