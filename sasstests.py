@@ -5,7 +5,7 @@ import re
 
 from attest import Tests, raises
 
-from sass import __version__, BaseContext, Options
+import sass
 
 
 suite = Tests()
@@ -13,53 +13,68 @@ suite = Tests()
 
 @suite.test
 def version():
-    assert re.match(r'^\d+\.\d+\.\d+$', __version__)
+    assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
 
 
 @suite.test
-def options_output_style():
-    for style in 'nested', 'expanded', 'compact', 'compressed':
-        o = Options(output_style=style, include_paths='a:b', image_path='')
-        assert o.output_style == style
+def compile_required_arguments():
     with raises(TypeError):
-        Options(output_style=None, include_paths='a:b', image_path='')
+        sass.compile()
+
+
+@suite.test
+def compile_takes_only_keywords():
     with raises(TypeError):
-        Options(output_style=123, include_paths='a:b', image_path='')
+        sass.compile('a { color: blue; }')
+
+
+@suite.test
+def compile_exclusive_arguments():
     with raises(TypeError):
-        Options(output_style=['abc'], include_paths='a:b', image_path='')
+        sass.compile(string='a { color: blue; }',
+                     filename='test/a.sass')
+    with raises(TypeError):
+        sass.compile(string='a { color: blue; }',
+                     dirname='test/')
+    with raises(TypeError):
+        sass.compile(filename='test/a.sass',
+                     dirname='test/')
+
+
+@suite.test
+def compile_invalid_output_style():
+    with raises(TypeError):
+        sass.compile(string='a { color: blue; }', output_style=['compact'])
+    with raises(TypeError):
+        sass.compile(string='a { color: blue; }', output_style=123j)
     with raises(ValueError):
-        Options(output_style='abc', include_paths='a:b', image_path='')
+        sass.compile(string='a { color: blue; }', output_style='invalid')
 
 
 @suite.test
-def options_include_paths():
-    o = Options('nested', include_paths='ab/cd:de/fg', image_path='')
-    assert o.include_paths == ['ab/cd', 'de/fg']
-    o = Options('nested', include_paths=['li/st', 'te/st'], image_path='')
-    assert o.include_paths == ['li/st', 'te/st']
-    o = Options('nested', include_paths=('tup/le', 'te/st'), image_path='')
-    assert o.include_paths == ['tup/le', 'te/st']
+def compile_invalid_image_path():
     with raises(TypeError):
-        Options('nested', include_paths=None, image_path='a/b')
+        sass.compile(string='a { color: blue; }', image_path=[])
     with raises(TypeError):
-        Options('nested', include_paths=123, image_path='a/b')
+        sass.compile(string='a { color: blue; }', image_path=123)
 
 
 @suite.test
-def options_image_path():
-    o = Options('nested', include_paths='a:b', image_path='image/path')
-    assert o.image_path == 'image/path'
+def compile_string():
+    actual = sass.compile(string='a { b { color: blue; } }',
+                          output_style='compact')
+    assert actual == 'a b{color: blue;}'
     with raises(TypeError):
-        Options('nested', include_paths='a:b', image_path=None)
+        sass.compile(string=1234)
     with raises(TypeError):
-        Options('nested', include_paths='a:b', image_path=123)
-    with raises(TypeError):
-        Options('nested', include_paths='a:b', image_path=['a/b', 'c/d'])
+        sass.compile(string=[])
 
 
 @suite.test
-def base_context_init():
+def compile_filename():
+    actual = sass.compile(filename='test/a.sass', output_style='compact')
+    assert actual == 'a b{color: blue;}'
     with raises(TypeError):
-        BaseContext()
-    assert hasattr(BaseContext, 'options')
-    assert callable(BaseContext.compile)
+        sass.compile(filename=1234)
+    with raises(TypeError):
+        sass.compile(filename=[])

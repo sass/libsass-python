@@ -1,15 +1,10 @@
 #include <Python.h>
 #include "sass_interface.h"
 
-typedef struct {
-    PyObject_HEAD
-    struct sass_options options;
-} sass_OptionsObject;
-
 static struct {
     char *label;
     int value;
-} sass_Options_output_style_enum[] = {
+} PySass_output_style_enum[] = {
     {"nested", SASS_STYLE_NESTED},
     {"expanded", SASS_STYLE_EXPANDED},
     {"compact", SASS_STYLE_COMPACT},
@@ -17,323 +12,245 @@ static struct {
     {NULL}
 };
 
-static int
-sass_Options_init(sass_OptionsObject *self, PyObject *args, PyObject *kwds)
+static PyObject *
+PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
 {
-    static char *sig[] = {"output_style", "include_paths", "image_path", NULL};
-    PyObject *output_style, *include_paths, *image_path, *item;
-    char *include_paths_cstr, *item_buffer, *image_path_cstr;
-    size_t include_paths_len, include_paths_size, i, offset, item_size,
-           image_path_size;
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "SOS", sig,
-                                     &output_style, &include_paths,
-                                     &image_path)) {
-        return -1;
+    PyObject *string, *filename, *dirname, *search_path, *output_path,
+             *output_style, *include_paths, *image_path,
+             *result, *item;
+    int expected_kwds, output_style_v;
+    char *include_paths_v, *image_path_v, *item_buffer;
+    Py_ssize_t include_paths_num, include_paths_size, i, offset, item_size;
+    union {
+        struct sass_context *string;
+        struct sass_file_context *filename;
+        struct sass_folder_context *dirname;
+    } context;
+
+    if (PyTuple_Size(args)) {
+        PyErr_SetString(PyExc_TypeError, "compile() takes only keywords");
+        return NULL;
+    }
+    if (PyDict_Size(kwds) < 1) {
+        PyErr_SetString(PyExc_TypeError,
+                        "compile() requires one of string, filename, or "
+                        "dirname");
+        return NULL;
     }
 
-    for (i = 0; sass_Options_output_style_enum[i].label; ++i) {
-        if (0 == strncmp(PyString_AsString(output_style),
-                         sass_Options_output_style_enum[i].label,
-                         PyString_Size(output_style))) {
-            self->options.output_style =
-                sass_Options_output_style_enum[i].value;
-            break;
-        }
+    expected_kwds = 1;
+    string = PyDict_GetItemString(kwds, "string");
+    filename = PyDict_GetItemString(kwds, "filename");
+    dirname = PyDict_GetItemString(kwds, "dirname");
+
+    if (string == NULL && filename == NULL && dirname == NULL) {
+        PyErr_SetString(PyExc_TypeError,
+                        "compile() requires one of string, filename, or "
+                        "dirname");
+        return NULL;
     }
-    if (sass_Options_output_style_enum[i].label == NULL) {
-        PyErr_SetString(PyExc_ValueError, "invalid output_style option");
-        return -1;
+    if (string != NULL && !(filename == NULL && dirname == NULL) ||
+        filename != NULL && !(string == NULL && dirname == NULL) ||
+        dirname != NULL && !(string == NULL && filename == NULL)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "string, filename, and dirname arguments are "
+                        "exclusive for each other.  use only one at a time");
+        return NULL;
     }
 
-    if (include_paths == Py_None) {
-        PyErr_SetString(PyExc_TypeError, "include_paths must not be None");
-        return -1;
+    output_style = PyDict_GetItemString(kwds, "output_style");
+    include_paths = PyDict_GetItemString(kwds, "include_paths");
+    image_path = PyDict_GetItemString(kwds, "image_path");
+
+    if (output_style == NULL || output_style == Py_None) {
+        output_style_v = SASS_STYLE_EXPANDED;
     }
-    if (PyString_Check(include_paths)) {
-        if (PyString_AsStringAndSize(include_paths,
-                                     &include_paths_cstr, &include_paths_size)
-            != 0) {
-            return -1;
+    else if (PyString_Check(output_style)) {
+        item_size = PyString_Size(output_style);
+        if (item_size) {
+            for (i = 0; PySass_output_style_enum[i].label; ++i) {
+                if (0 == strncmp(PyString_AsString(output_style),
+                                 PySass_output_style_enum[i].label,
+                                 item_size)) {
+                    output_style_v = PySass_output_style_enum[i].value;
+                    break;
+                }
+            }
         }
-        self->options.include_paths = malloc(sizeof(char) *
-                                             (include_paths_size + 1));
-        strncpy(self->options.include_paths,
-                include_paths_cstr,
-                include_paths_size + 1);
-        self->options.include_paths[include_paths_size] = '\0';
+        if (PySass_output_style_enum[i].label == NULL) {
+            PyErr_SetString(PyExc_ValueError, "invalid output_style option");
+            return NULL;
+        }
+        ++expected_kwds;
+    }
+    else {
+        PyErr_SetString(PyExc_TypeError, "output_style must be a string");
+        return NULL;
+    }
+
+    if (include_paths == NULL || include_paths == Py_None) {
+        include_paths_v = "";
+    }
+    else if (PyString_Check(include_paths)) {
+        include_paths_v = PyString_AsString(include_paths);
+        ++expected_kwds;
+    }
+    else {
+        PyErr_SetString(PyExc_TypeError,
+                        "include_paths must be a list or a colon-separated "
+                        "string");
+        return NULL;
+    }
+
+    if (image_path == NULL || image_path == Py_None) {
+        image_path_v = ".";
+    }
+    else if (PyString_Check(image_path)) {
+        image_path_v = PyString_AsString(image_path);
+        ++expected_kwds;
     }
     else if (PySequence_Check(include_paths)) {
-        include_paths_len = PySequence_Size(include_paths);
-        if (include_paths_len < 0) {
-            return -1;
-        }
+        include_paths_num = PySequence_Size(include_paths);
         include_paths_size = 0;
-        for (i = 0; i < include_paths_len; ++i) {
+        for (i = 0; i < include_paths_num; ++i) {
             item = PySequence_GetItem(include_paths, i);
             if (item == NULL) {
-                return -1;
+                return NULL;
             }
             if (!PyString_Check(item)) {
                 PyErr_Format(PyExc_TypeError,
                              "include_paths must consists of only strings, "
-                             "but #%d is not a string", i);
-                return -1;
+                             "but #%zd is not a string", i);
+                return NULL;
             }
             include_paths_size += PyString_Size(item);
         }
         // add glue chars
-        if (include_paths_len > 1) {
-            include_paths_size += include_paths_len - 1;
+        if (include_paths_num > 1) {
+            include_paths_size += include_paths_num - 1;
         }
-        self->options.include_paths = malloc(sizeof(char) *
-                                             (include_paths_size + 1));
+        include_paths_v = malloc(sizeof(char) * (include_paths_size + 1));
         // join
         offset = 0;
-        for (i = 0; i < include_paths_len; ++i) {
+        for (i = 0; i < include_paths_num; ++i) {
             if (i) {
-                self->options.include_paths[offset] = ':';
+                include_paths_v[offset] = ':';
                 ++offset;
             }
             item = PySequence_GetItem(include_paths, i);
             PyString_AsStringAndSize(item, &item_buffer, &item_size);
-            strncpy(self->options.include_paths + offset,
-                    item_buffer, item_size);
+            strncpy(include_paths_v + offset, item_buffer, item_size);
             offset += item_size;
         }
-        self->options.include_paths[include_paths_size] = '\0';
+        include_paths_v[include_paths_size] = '\0';
     }
     else {
-        PyErr_SetString(PyExc_TypeError,
-                        "include_paths must be a string or a sequence of "
-                        "strings");
-        return -1;
-    }
-
-    if (PyString_AsStringAndSize(image_path,
-                                 &image_path_cstr, &image_path_size) != 0) {
-        return -1;
-    }
-    self->options.image_path = malloc(sizeof(char) * (image_path_size + 1));
-    strncpy(self->options.image_path, image_path_cstr, image_path_size + 1);
-    self->options.image_path[image_path_size] = '\0';
-
-    return 0;
-}
-
-static void
-sass_Options_dealloc(sass_OptionsObject *self)
-{
-    free(self->options.include_paths);
-    free(self->options.image_path);
-    self->ob_type->tp_free((PyObject *) self);
-}
-
-static PyObject *
-sass_Options_get_output_style(sass_OptionsObject *self, void *closure)
-{
-    int value;
-    PyObject *label;
-    size_t i;
-
-    value = self->options.output_style;
-    for (i = 0; sass_Options_output_style_enum[i].label; ++i) {
-        if (value == sass_Options_output_style_enum[i].value) {
-            label = PyString_FromString(
-                sass_Options_output_style_enum[i].label);
-            Py_INCREF(label);
-            return label;
-        }
-    }
-
-    PyErr_Format(PyExc_ValueError, "output_style is invalid (%d)", value);
-    return NULL;
-}
-
-static PyObject *
-sass_Options_get_include_paths(sass_OptionsObject *self, void *closure)
-{
-    size_t i, j;
-    char *paths;
-    PyObject *list;
-    int tmp;
-
-    paths = self->options.include_paths;
-    list = PyList_New(0);
-    if (list == NULL) {
+        PyErr_SetString(PyExc_TypeError, "image_path must be a string");
         return NULL;
     }
-    Py_INCREF(list);
 
-    i = j = 0;
-    do {
-        if (i > j && (paths[i] == ':' || paths[i] == '\0')) {
-            tmp = PyList_Append(list,
-                                PyString_FromStringAndSize(paths + j, i - j));
-            if (tmp != 0) {
-                return NULL;
-            }
-            j = i + 1;
+    if (string) {
+        if (!PyString_Check(string)) {
+            PyErr_SetString(PyExc_TypeError, "string must be a string");
+            result = NULL;
+            goto finalize;
         }
+
+        context.string = sass_new_context();
+        context.string->source_string = PyString_AsString(string);
+        context.string->options.output_style = output_style_v;
+        context.string->options.include_paths = include_paths_v;
+        context.string->options.image_path = image_path_v;
+
+        sass_compile(context.string);
+
+        if (context.string->error_status) {
+            PyErr_SetString(PyExc_IOError, context.string->error_message);
+            result = NULL;
+            goto finalize_string;
+        }
+
+        result = PyString_FromString(context.string->output_string);
+
+finalize_string:
+        sass_free_context(context.string);
+        goto finalize;
     }
-    while (paths[i++]);
+    else if (filename) {
+        if (!PyString_Check(filename)) {
+            PyErr_SetString(PyExc_TypeError, "filename must be a string");
+            result = NULL;
+            goto finalize;
+        }
+        context.filename = sass_new_file_context();
+        context.filename->input_path = PyString_AsString(filename);
+        context.filename->options.output_style = output_style_v;
+        context.filename->options.include_paths = include_paths_v;
+        context.filename->options.image_path = image_path_v;
 
-    return list;
+        sass_compile_file(context.filename);
+
+        if (context.filename->error_status) {
+            PyErr_SetString(PyExc_IOError, context.filename->error_message);
+            result = NULL;
+            goto finalize_filename;
+        }
+
+        result = PyString_FromString(context.filename->output_string);
+
+finalize_filename:
+        sass_free_file_context(context.filename);
+        goto finalize;
+    }
+    else if (dirname) {
+        if (!PySequence_Check(dirname) || PySequence_Size(dirname) != 2) {
+            PyErr_SetString(
+                PySequence_Check(dirname) ? PyExc_ValueError: PyExc_TypeError,
+                "dirname must be a (search_path, output_path) pair"
+            );
+            result = NULL;
+            goto finalize;
+        }
+
+        search_path = PySequence_GetItem(dirname, 0);
+        output_path = PySequence_GetItem(dirname, 1);
+
+        context.dirname = sass_new_folder_context();
+        context.dirname->search_path = PyString_AsString(search_path);
+        context.dirname->output_path = PyString_AsString(output_path);
+        context.dirname->options.output_style = output_style_v;
+        context.dirname->options.include_paths = include_paths_v;
+        context.dirname->options.image_path = image_path_v;
+
+        sass_compile_folder(context.dirname);
+
+        if (context.dirname->error_status) {
+            PyErr_SetString(PyExc_IOError, context.dirname->error_message);
+            result = NULL;
+            goto finalize_dirname;
+        }
+
+        result = Py_None;
+
+finalize_dirname:
+        sass_free_folder_context(context.dirname);
+        goto finalize;
+    }
+    else {
+        PyErr_SetString(PyExc_RuntimeError, "something went wrong");
+        goto finalize;
+    }
+
+finalize:
+    if (PySequence_Check(include_paths)) {
+        free(include_paths_v);
+    }
+    return result;
 }
 
-static PyObject *
-sass_Options_get_image_path(sass_OptionsObject *self, void *closure)
-{
-    PyObject *string;
-    string = PyString_FromString(self->options.image_path);
-    Py_INCREF(string);
-    return string;
-}
-
-static PyGetSetDef sass_Options_getset[] = {
-    {"output_style", (getter) sass_Options_get_output_style, NULL,
-     "The string value of output style option."},
-    {"include_paths", (getter) sass_Options_get_include_paths, NULL,
-     "The list of paths to include."},
-    {"image_path", (getter) sass_Options_get_image_path, NULL,
-     "The path to find images."},
-    {NULL}
-};
-
-static PyTypeObject sass_OptionsType = {
-    PyObject_HEAD_INIT(NULL)
-    .ob_size = 0,
-    .tp_name = "sass.Options",
-    .tp_basicsize = sizeof(sass_OptionsObject),
-    .tp_itemsize = 0,
-    .tp_dealloc = (destructor) sass_Options_dealloc,
-    .tp_print = 0,
-    .tp_getattr = 0,
-    .tp_setattr = 0,
-    .tp_compare = 0,
-    .tp_repr = 0,
-    .tp_as_number = 0,
-    .tp_as_sequence = 0,
-    .tp_as_mapping = 0,
-    .tp_hash = 0,
-    .tp_call = 0,
-    .tp_str = 0,
-    .tp_getattro = 0,
-    .tp_setattro = 0,
-    .tp_as_buffer = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "The object which contains compilation options.",
-    .tp_traverse = 0,
-    .tp_clear = 0,
-    .tp_richcompare = 0,
-    .tp_weaklistoffset = 0,
-    .tp_iter = 0,
-    .tp_iternext = 0,
-    .tp_methods = 0,
-    .tp_members = 0,
-    .tp_getset = sass_Options_getset,
-    .tp_base = 0,
-    .tp_dict = 0,
-    .tp_descr_get = 0,
-    .tp_descr_set = 0,
-    .tp_dictoffset = 0,
-    .tp_init = (initproc) sass_Options_init,
-    .tp_alloc = 0,
-    .tp_new = PyType_GenericNew
-};
-
-typedef struct {
-    PyObject_HEAD
-    void *context;
-} sass_BaseContextObject;
-
-static int
-sass_BaseContext_init(sass_BaseContextObject *self, PyObject *args,
-                      PyObject *kwds)
-{
-    PyErr_SetString(PyExc_TypeError,
-                    "the sass.BaseContext type cannot be instantiated "
-                    "because it's an abstract interface.  use one of "
-                    "sass.Context, sass.FileContext, or sass.FolderContext "
-                    "instead");
-    return -1;
-}
-
-static PyObject *
-sass_BaseContext_compile(sass_BaseContextObject *self) {
-    PyErr_SetString(PyExc_NotImplementedError,
-                    "the sass.BaseContext type is an abstract interface. "
-                    "use one of sass.Context, sass.FileContext, or sass."
-                    "FolderContext instead");
-    return NULL;
-}
-
-static PyObject *
-sass_BaseContext_get_options(sass_BaseContextObject *self, void *closure)
-{
-    PyErr_SetString(PyExc_NotImplementedError,
-                    "the sass.BaseContext type is an abstract interface. "
-                    "use one of sass.Context, sass.FileContext, or sass."
-                    "FolderContext instead");
-    return NULL;
-}
-
-static PyMethodDef sass_BaseContext_methods[] = {
-    {"compile", (PyCFunction) sass_BaseContext_compile, METH_NOARGS,
-     "Compiles SASS source."},
+static PyMethodDef PySass_methods[] = {
+    {"compile", PySass_compile, METH_KEYWORDS, "Compile a SASS source."},
     {NULL, NULL, 0, NULL}
-};
-
-static PyGetSetDef sass_BaseContext_getset[] = {
-    {"options", (getter) sass_BaseContext_get_options, NULL,
-     "The compilation options for the context."},
-    {NULL}
-};
-
-static PyTypeObject sass_BaseContextType = {
-    PyObject_HEAD_INIT(NULL)
-    .ob_size = 0,
-    .tp_name = "sass.BaseContext",
-    .tp_basicsize = sizeof(sass_BaseContextObject),
-    .tp_itemsize = 0,
-    .tp_dealloc = 0,
-    .tp_print = 0,
-    .tp_getattr = 0,
-    .tp_setattr = 0,
-    .tp_compare = 0,
-    .tp_repr = 0,
-    .tp_as_number = 0,
-    .tp_as_sequence = 0,
-    .tp_as_mapping = 0,
-    .tp_hash = 0,
-    .tp_call = 0,
-    .tp_str = 0,
-    .tp_getattro = 0,
-    .tp_setattro = 0,
-    .tp_as_buffer = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT,
-    .tp_doc = "The common interface between sass.Context, sass.FileContext, "
-              "and sass.FolderContext.",
-    .tp_traverse = 0,
-    .tp_clear = 0,
-    .tp_richcompare = 0,
-    .tp_weaklistoffset = 0,
-    .tp_iter = 0,
-    .tp_iternext = 0,
-    .tp_methods = sass_BaseContext_methods,
-    .tp_members = 0,
-    .tp_getset = sass_BaseContext_getset,
-    .tp_base = 0,
-    .tp_dict = 0,
-    .tp_descr_get = 0,
-    .tp_descr_set = 0,
-    .tp_dictoffset = 0,
-    .tp_init = (initproc) sass_BaseContext_init,
-    .tp_alloc = 0,
-    .tp_new = PyType_GenericNew
-};
-
-static PyMethodDef sass_methods[] = {
-    {NULL}
 };
 
 PyMODINIT_FUNC
@@ -341,14 +258,7 @@ initsass()
 {
     PyObject *module, *version;
 
-    if (PyType_Ready(&sass_OptionsType) < 0) {
-        return;
-    }
-    if (PyType_Ready(&sass_BaseContextType) < 0) {
-        return;
-    }
-
-    module = Py_InitModule3("sass", sass_methods,
+    module = Py_InitModule3("sass", PySass_methods,
                             "The thin binding of libsass for Python.");
     if (module == NULL) {
         return;
@@ -359,9 +269,4 @@ initsass()
     version = PyString_FromString("unknown");
 #endif
     PyModule_AddObject(module, "__version__", version);
-    Py_INCREF(&sass_OptionsType);
-    PyModule_AddObject(module, "Options", (PyObject *) &sass_OptionsType);
-    Py_INCREF(&sass_BaseContextType);
-    PyModule_AddObject(module, "BaseContext",
-                       (PyObject *) &sass_BaseContextType);
 }
