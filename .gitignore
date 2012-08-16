@@ -9,3 +9,9 @@ build/*
 a.out
 bin/*
 *.gem
+
+dist/
+.*.swp
+*.egg
+*.egg-info
+*.so
