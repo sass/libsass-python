@@ -7,7 +7,8 @@ typedef struct {
 } sass_OptionsObject;
 
 static int
-sass_Options_init(sass_OptionsObject *self, PyObject *args, PyObject *kwds) {
+sass_Options_init(sass_OptionsObject *self, PyObject *args, PyObject *kwds)
+{
     static char *sig[] = {"include_paths", "image_path", NULL};
     PyObject *include_paths, *image_path, *item;
     char *include_paths_cstr, *item_buffer, *image_path_cstr;
@@ -96,7 +97,8 @@ sass_Options_init(sass_OptionsObject *self, PyObject *args, PyObject *kwds) {
 }
 
 static void
-sass_Options_dealloc(sass_OptionsObject *self) {
+sass_Options_dealloc(sass_OptionsObject *self)
+{
     free(self->options.include_paths);
     free(self->options.image_path);
     self->ob_type->tp_free((PyObject *) self);
