@@ -1,3 +1,7 @@
+from __future__ import with_statement
+
+import os.path
+
 try:
     from setuptools import Extension, setup
 except ImportError:
@@ -29,8 +33,16 @@ sass_extension = Extension(
     extra_link_args=['-fPIC'],
 )
 
+
+def readme():
+    with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
+        return f.read()
+
 setup(
     name='libsass',
+    description='SASS for Python: '
+                'A straightforward binding of libsass for Python.',
+    long_description=readme(),
     version=version,
     ext_modules=[sass_extension],
     py_modules=['sasstests'],
@@ -41,5 +53,22 @@ setup(
     url='https://github.com/dahlia/libsass-python',
     tests_require=['Attest'],
     test_loader='attest:auto_reporter.test_loader',
-    test_suite='sasstests.suite'
+    test_suite='sasstests.suite',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: C',
+        'Programming Language :: C++',
+        'Programming Language :: Python :: 2.5',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 2 :: Only',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Code Generators',
+        'Topic :: Software Development :: Compilers'
+    ]
 )
