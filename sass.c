@@ -6,20 +6,44 @@ typedef struct {
     struct sass_options options;
 } sass_OptionsObject;
 
+static struct {
+    char *label;
+    int value;
+} sass_Options_output_style_enum[] = {
+    {"nested", SASS_STYLE_NESTED},
+    {"expanded", SASS_STYLE_EXPANDED},
+    {"compact", SASS_STYLE_COMPACT},
+    {"compressed", SASS_STYLE_COMPRESSED},
+    {NULL}
+};
+
 static int
 sass_Options_init(sass_OptionsObject *self, PyObject *args, PyObject *kwds)
 {
-    static char *sig[] = {"include_paths", "image_path", NULL};
-    PyObject *include_paths, *image_path, *item;
+    static char *sig[] = {"output_style", "include_paths", "image_path", NULL};
+    PyObject *output_style, *include_paths, *image_path, *item;
     char *include_paths_cstr, *item_buffer, *image_path_cstr;
     size_t include_paths_len, include_paths_size, i, offset, item_size,
            image_path_size;
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "OS", sig,
-                                     &include_paths, &image_path)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "SOS", sig,
+                                     &output_style, &include_paths,
+                                     &image_path)) {
         return -1;
     }
 
-    self->options.output_style = SASS_STYLE_NESTED;
+    for (i = 0; sass_Options_output_style_enum[i].label; ++i) {
+        if (0 == strncmp(PyString_AsString(output_style),
+                         sass_Options_output_style_enum[i].label,
+                         PyString_Size(output_style))) {
+            self->options.output_style =
+                sass_Options_output_style_enum[i].value;
+            break;
+        }
+    }
+    if (sass_Options_output_style_enum[i].label == NULL) {
+        PyErr_SetString(PyExc_ValueError, "invalid output_style option");
+        return -1;
+    }
 
     if (include_paths == Py_None) {
         PyErr_SetString(PyExc_TypeError, "include_paths must not be None");
@@ -105,6 +129,27 @@ sass_Options_dealloc(sass_OptionsObject *self)
 }
 
 static PyObject *
+sass_Options_get_output_style(sass_OptionsObject *self, void *closure)
+{
+    int value;
+    PyObject *label;
+    size_t i;
+
+    value = self->options.output_style;
+    for (i = 0; sass_Options_output_style_enum[i].label; ++i) {
+        if (value == sass_Options_output_style_enum[i].value) {
+            label = PyString_FromString(
+                sass_Options_output_style_enum[i].label);
+            Py_INCREF(label);
+            return label;
+        }
+    }
+
+    PyErr_Format(PyExc_ValueError, "output_style is invalid (%d)", value);
+    return NULL;
+}
+
+static PyObject *
 sass_Options_get_include_paths(sass_OptionsObject *self, void *closure)
 {
     size_t i, j;
@@ -145,6 +190,8 @@ sass_Options_get_image_path(sass_OptionsObject *self, void *closure)
 }
 
 static PyGetSetDef sass_Options_getset[] = {
+    {"output_style", (getter) sass_Options_get_output_style, NULL,
+     "The string value of output style option."},
     {"include_paths", (getter) sass_Options_get_include_paths, NULL,
      "The list of paths to include."},
     {"image_path", (getter) sass_Options_get_image_path, NULL,
