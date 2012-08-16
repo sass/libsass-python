@@ -12,6 +12,8 @@ static struct {
     {NULL}
 };
 
+static PyObject *PySass_CompileError;
+
 static PyObject *
 PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
 {
@@ -165,7 +167,7 @@ PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
         sass_compile(context.string);
 
         if (context.string->error_status) {
-            PyErr_SetString(PyExc_IOError, context.string->error_message);
+            PyErr_SetString(PySass_CompileError, context.string->error_message);
             result = NULL;
             goto finalize_string;
         }
@@ -269,4 +271,9 @@ initsass()
     version = PyString_FromString("unknown");
 #endif
     PyModule_AddObject(module, "__version__", version);
+    PySass_CompileError = PyErr_NewException("sass.CompileError",
+                                             PyExc_ValueError,
+                                             NULL);
+    Py_INCREF(PySass_CompileError);
+    PyModule_AddObject(module, "CompileError", PySass_CompileError);
 }

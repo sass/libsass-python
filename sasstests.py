@@ -63,6 +63,11 @@ def compile_invalid_image_path():
 def compile_string():
     actual = sass.compile(string='a { b { color: blue; } }')
     assert actual == 'a b {\n  color: blue; }\n'
+    with raises(sass.CompileError):
+        sass.compile(string='a { b { color: blue; }')
+    # sass.CompileError should be a subtype of ValueError
+    with raises(ValueError):
+        sass.compile(string='a { b { color: blue; }')
     with raises(TypeError):
         sass.compile(string=1234)
     with raises(TypeError):
