@@ -34,6 +34,7 @@ setup(
     version=version,
     ext_modules=[sass_extension],
     py_modules=['sasstests'],
+    package_data={'': ['test/*.sass']},
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',

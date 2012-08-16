@@ -1,3 +1,4 @@
 include *.h
 include *.hpp
 include *.cpp
+include test/*.sass
