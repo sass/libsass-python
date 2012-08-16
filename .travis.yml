@@ -1,0 +1,16 @@
+language: python
+python:
+- 2.5
+- 2.6
+- 2.7
+- pypy
+install:
+- pip install Attest
+script:
+- python setup.py test
+notifications:
+  irc:
+    channels:
+    - "irc.ozinger.org:8080#hongminhee"
+    on_success: change
+    on_failure: always
