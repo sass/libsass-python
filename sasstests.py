@@ -1,4 +1,7 @@
-from attest import Tests, assert_hook, raises
+from __future__ import with_statement
+from attest import assert_hook
+
+from attest import Tests, raises
 
 from sass import Options
 
