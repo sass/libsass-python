@@ -61,9 +61,8 @@ def compile_invalid_image_path():
 
 @suite.test
 def compile_string():
-    actual = sass.compile(string='a { b { color: blue; } }',
-                          output_style='compact')
-    assert actual == 'a b{color: blue;}'
+    actual = sass.compile(string='a { b { color: blue; } }')
+    assert actual == 'a b {\n  color: blue; }\n'
     with raises(TypeError):
         sass.compile(string=1234)
     with raises(TypeError):
@@ -72,8 +71,13 @@ def compile_string():
 
 @suite.test
 def compile_filename():
-    actual = sass.compile(filename='test/a.sass', output_style='compact')
-    assert actual == 'a b{color: blue;}'
+    actual = sass.compile(filename='test/a.sass')
+    assert actual == '''\
+body {
+  background-color: green; }
+  body a {
+    color: blue; }
+'''
     with raises(TypeError):
         sass.compile(filename=1234)
     with raises(TypeError):

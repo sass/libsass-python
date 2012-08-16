@@ -63,7 +63,7 @@ PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
     image_path = PyDict_GetItemString(kwds, "image_path");
 
     if (output_style == NULL || output_style == Py_None) {
-        output_style_v = SASS_STYLE_EXPANDED;
+        output_style_v = SASS_STYLE_NESTED;
     }
     else if (PyString_Check(output_style)) {
         item_size = PyString_Size(output_style);
