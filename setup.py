@@ -35,8 +35,11 @@ sass_extension = Extension(
 
 
 def readme():
-    with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
-        return f.read()
+    try:
+        with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
+            return f.read()
+    except IOError:
+        pass
 
 setup(
     name='libsass',
@@ -46,7 +49,7 @@ setup(
     version=version,
     ext_modules=[sass_extension],
     py_modules=['sasstests'],
-    package_data={'': ['test/*.sass']},
+    package_data={'': ['README.rst', 'test/*.sass']},
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
