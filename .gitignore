@@ -11,6 +11,7 @@ bin/*
 *.gem
 
 dist/
+.tox
 .*.swp
 *.egg
 *.egg-info
