@@ -244,7 +244,7 @@ finalize_dirname:
     }
 
 finalize:
-    if (PySequence_Check(include_paths)) {
+    if (include_paths != NULL && PySequence_Check(include_paths)) {
         free(include_paths_v);
     }
     return result;
