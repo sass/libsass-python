@@ -35,6 +35,9 @@ Use
 It takes a source ``string`` or a ``filename`` and returns the compiled
 CSS string.
 
+If it fails for any reason (for example the given SASS has broken syntax)
+it will raise ``sass.CompileError``.
+
 ``string`` (required)
    The string of SASS source code to compile.  It's exclusive to ``filename``
    parameter.
@@ -42,6 +45,9 @@ CSS string.
 ``filename`` (required)
    The filename of SASS source code to compile.  It's exclusive to ``string``
    parameter.
+
+   If the file does not exist or cannot be read it will raises
+   ``exceptions.IOError`` exception.
 
 ``output_style`` (optional)
    The coding style of the compiled result.  Choose one in:
@@ -56,6 +62,13 @@ CSS string.
 
 ``image_path`` (optional)
    The path to find images.
+
+
+``sass.CompileError``
+---------------------
+
+The exception type that is raised by ``sass.compile()``.  It is a subtype
+of ``exceptions.ValueError``.
 
 
 Credit
