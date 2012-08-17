@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <Python.h>
 #include "sass_interface.h"
 
@@ -21,7 +22,7 @@ PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
              *output_style, *include_paths, *image_path,
              *result, *item;
     int expected_kwds, output_style_v;
-    char *include_paths_v, *image_path_v, *item_buffer;
+    char *filename_v, *include_paths_v, *image_path_v, *item_buffer;
     Py_ssize_t include_paths_num, include_paths_size, i, offset, item_size;
     union {
         struct sass_context *string;
@@ -184,8 +185,19 @@ finalize_string:
             result = NULL;
             goto finalize;
         }
+
+        filename_v = PyString_AsString(filename);
+
+        if (access(filename_v, R_OK) < 0) {
+            PyErr_Format(PyExc_IOError,
+                         "filename '%s' cannot be read",
+                         filename_v);
+            result = NULL;
+            goto finalize;
+        }
+
         context.filename = sass_new_file_context();
-        context.filename->input_path = PyString_AsString(filename);
+        context.filename->input_path = filename_v;
         context.filename->options.output_style = output_style_v;
         context.filename->options.include_paths = include_paths_v;
         context.filename->options.image_path = image_path_v;

@@ -82,6 +82,9 @@ Version 0.1.1
 
 To be released.
 
+- Fixed segmentation fault for reading ``filename`` which does not exist.
+  Now it raises a proper ``exceptions.IOError`` exception.
+
 
 Version 0.1.0
 '''''''''''''

@@ -83,6 +83,8 @@ body {
   body a {
     color: blue; }
 '''
+    with raises(IOError):
+        sass.compile(filename='test/not-exist.sass')
     with raises(TypeError):
         sass.compile(filename=1234)
     with raises(TypeError):
