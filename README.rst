@@ -21,6 +21,14 @@ Use ``easy_install`` or ``pip``::
     $ easy_install libsass
 
 
+Use
+---
+
+>>> import sass
+>>> print sass.compile(string='a { b { color: blue; } }')
+'a b {\n  color: blue; }\n'
+
+
 ``sass.compile()``
 ------------------
 
