@@ -8,7 +8,7 @@ except ImportError:
     from distutils.core import Extension, setup
 
 
-version = '0.1.0'
+version = '0.1.1'
 
 libsass_sources = [ 
     'context.cpp', 'functions.cpp', 'document.cpp',
