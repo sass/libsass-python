@@ -57,7 +57,7 @@ it will raise ``sass.CompileError``.
    - ``'compact'``
    - ``'compressed'``
 
-``includes_paths`` (optional)
+``include_paths`` (optional)
    The list of paths to find ``@import``\ ed SASS/CSS source files.
 
 ``image_path`` (optional)
