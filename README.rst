@@ -72,3 +72,12 @@ reference implementation of it in Ruby.
 The above three softwares are all distributed under `MIT license`_.
 
 .. _MIT license: http://mit-license.org/
+
+
+Changelog
+---------
+
+Version 0.1.0
+'''''''''''''
+
+Released on August 17, 2012.  Initial version.
