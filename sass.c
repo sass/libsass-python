@@ -97,20 +97,6 @@ PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
         include_paths_v = PyString_AsString(include_paths);
         ++expected_kwds;
     }
-    else {
-        PyErr_SetString(PyExc_TypeError,
-                        "include_paths must be a list or a colon-separated "
-                        "string");
-        return NULL;
-    }
-
-    if (image_path == NULL || image_path == Py_None) {
-        image_path_v = ".";
-    }
-    else if (PyString_Check(image_path)) {
-        image_path_v = PyString_AsString(image_path);
-        ++expected_kwds;
-    }
     else if (PySequence_Check(include_paths)) {
         include_paths_num = PySequence_Size(include_paths);
         include_paths_size = 0;
@@ -145,6 +131,20 @@ PySass_compile(PyObject *self, PyObject *args, PyObject *kwds)
             offset += item_size;
         }
         include_paths_v[include_paths_size] = '\0';
+    }
+    else {
+        PyErr_SetString(PyExc_TypeError,
+                        "include_paths must be a list or a colon-separated "
+                        "string");
+        return NULL;
+    }
+
+    if (image_path == NULL || image_path == Py_None) {
+        image_path_v = ".";
+    }
+    else if (PyString_Check(image_path)) {
+        image_path_v = PyString_AsString(image_path);
+        ++expected_kwds;
     }
     else {
         PyErr_SetString(PyExc_TypeError, "image_path must be a string");
