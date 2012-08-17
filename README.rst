@@ -71,4 +71,4 @@ reference implementation of it in Ruby.
 
 The above three softwares are all distributed under `MIT license`_.
 
-.. _MIT licence: http://mit-license.org/
+.. _MIT license: http://mit-license.org/
