@@ -1,7 +1,7 @@
 libsass: SASS_ for Python
 =========================
 
-This package provides a simple Python extension module `sass` which is
+This package provides a simple Python extension module ``sass`` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
