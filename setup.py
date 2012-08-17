@@ -29,7 +29,9 @@ sass_extension = Extension(
     ['sass.c'] + libsass_sources,
     define_macros=[('LIBSASS_PYTHON_VERSION', '"' + version + '"')],
     depends=libsass_headers,
-    extra_compile_args=['-c', '-Wall', '-O2', '-fPIC'],
+    extra_compile_args=['-c', '-O2', '-fPIC',
+                        '-Wall', '-Wno-parentheses',
+                        '-Wno-tautological-compare'],
     extra_link_args=['-fPIC'],
 )
 
