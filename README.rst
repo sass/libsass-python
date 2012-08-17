@@ -93,7 +93,7 @@ Changelog
 Version 0.1.1
 '''''''''''''
 
-To be released.
+Released on August 18, 2012.
 
 - Fixed segmentation fault for reading ``filename`` which does not exist.
   Now it raises a proper ``exceptions.IOError`` exception.
