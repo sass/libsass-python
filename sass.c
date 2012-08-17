@@ -193,7 +193,8 @@ finalize_string:
         sass_compile_file(context.filename);
 
         if (context.filename->error_status) {
-            PyErr_SetString(PyExc_IOError, context.filename->error_message);
+            PyErr_SetString(PySass_CompileError,
+                            context.filename->error_message);
             result = NULL;
             goto finalize_filename;
         }
@@ -227,7 +228,8 @@ finalize_filename:
         sass_compile_folder(context.dirname);
 
         if (context.dirname->error_status) {
-            PyErr_SetString(PyExc_IOError, context.dirname->error_message);
+            PyErr_SetString(PySass_CompileError,
+                            context.dirname->error_message);
             result = NULL;
             goto finalize_dirname;
         }
