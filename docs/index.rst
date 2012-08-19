@@ -1,5 +1,5 @@
-libsass: SASS_ for Python
-=========================
+libsass
+=======
 
 This package provides a simple Python extension module ``sass`` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
@@ -16,9 +16,11 @@ It currently supports CPython 2.5, 2.6, 2.7, and PyPy 1.9!
 Install
 -------
 
-Use ``easy_install`` or ``pip``::
+Use ``easy_install`` or ``pip``:
 
-    $ easy_install libsass
+.. sourcecode:: console
+
+   $ easy_install libsass
 
 
 Example
@@ -29,17 +31,13 @@ Example
 'a b {\n  color: blue; }\n'
 
 
-Docs
-----
+References
+----------
 
-There's the user guide manual and the full API reference for ``libsass``.
+.. toctree::
+   :maxdepth: 2
 
-You can build the docs by yourself::
-
-    $ cd docs/
-    $ make html
-
-The built docs will go to ``docs/_build/html/`` directory.
+   sass
 
 
 Credit
@@ -56,3 +54,24 @@ reference implementation of it in Ruby.
 The above three softwares are all distributed under `MIT license`_.
 
 .. _MIT license: http://mit-license.org/
+
+
+Open source
+-----------
+
+GitHub (Git repository + issues)
+   https://github.com/dahlia/libsass-python
+
+PyPI
+   http://pypi.python.org/pypi/libsass
+
+Changelog
+   :doc:`changes`
+
+
+Indices and tables
+------------------
+
+- :ref:`genindex`
+- :ref:`modindex`
+- :ref:`search`

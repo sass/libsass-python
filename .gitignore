@@ -11,6 +11,7 @@ bin/*
 *.gem
 
 dist/
+docs/_build
 .tox
 .*.swp
 *.egg
