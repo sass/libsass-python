@@ -1,6 +1,10 @@
 from __future__ import with_statement
 
+import distutils.cmd
+import os
 import os.path
+import shutil
+import tempfile
 
 try:
     from setuptools import Extension, setup
@@ -43,6 +47,35 @@ def readme():
     except IOError:
         pass
 
+
+class upload_doc(distutils.cmd.Command):
+    """Uploads the documentation to GitHub pages."""
+
+    description = __doc__
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        path = tempfile.mkdtemp()
+        build = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             'build', 'sphinx', 'html')
+        os.chdir(path)
+        os.system('git clone git@github.com:dahlia/libsass-python.git .')
+        os.system('git checkout gh-pages')
+        os.system('git rm -r .')
+        os.system('touch .nojekyll')
+        os.system('cp -r ' + build + '/* .')
+        os.system('git stage .')
+        os.system('git commit -a -m "Documentation updated."')
+        os.system('git push origin gh-pages')
+        shutil.rmtree(path)
+
+
 setup(
     name='libsass',
     description='SASS for Python: '
@@ -55,7 +88,7 @@ setup(
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
-    url='https://github.com/dahlia/libsass-python',
+    url='http://dahlia.kr/libsass-python/',
     tests_require=['Attest'],
     test_loader='attest:auto_reporter.test_loader',
     test_suite='sasstests.suite',
@@ -75,5 +108,6 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Code Generators',
         'Topic :: Software Development :: Compilers'
-    ]
+    ],
+    cmdclass={'upload_doc': upload_doc}
 )
