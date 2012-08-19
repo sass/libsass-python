@@ -25,7 +25,7 @@ Use
 ---
 
 >>> import sass
->>> print sass.compile(string='a { b { color: blue; } }')
+>>> sass.compile(string='a { b { color: blue; } }')
 'a b {\n  color: blue; }\n'
 
 
