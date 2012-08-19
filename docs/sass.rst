@@ -8,7 +8,7 @@ which is written in C/C++.  It contains only one function and one exception
 type.
 
 >>> import sass
->>> print sass.compile(string='a { b { color: blue; } }')
+>>> sass.compile(string='a { b { color: blue; } }')
 'a b {\n  color: blue; }\n'
 
 .. function:: compile(string, filename, output_style, include_paths, image_path)
