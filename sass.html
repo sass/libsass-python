@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +10,7 @@
     
     <title>sass — Binding of libsass &mdash; libsass 0.2.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -55,7 +56,7 @@
 which is written in C/C++.  It contains only one function and one exception
 type.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
 </pre></div>
 </div>
@@ -89,8 +90,8 @@ SASS/CSS source files</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><strong>CompileError</strong> &#8211; when it fails for any reason (for example the given
-SASS has broken syntax)</li>
+<li><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> &#8211; when it fails for any reason
+(for example the given SASS has broken syntax)</li>
 <li><a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.IOError" title="(in Python v2.7)"><strong>exceptions.IOError</strong></a> &#8211; when the <tt class="docutils literal"><span class="pre">filename</span></tt> doesn&#8217;t exist or
 cannot be read</li>
 </ul>
