@@ -33,8 +33,8 @@ type.
    :type image_path: :class:`str`
    :returns: the compiled CSS string
    :rtype: :class:`str`
-   :raises CompileError: when it fails for any reason (for example the given
-                         SASS has broken syntax)
+   :raises sass.CompileError: when it fails for any reason
+                              (for example the given SASS has broken syntax)
    :raises exceptions.IOError: when the ``filename`` doesn't exist or
                                cannot be read
 
