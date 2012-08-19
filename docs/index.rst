@@ -1,11 +1,12 @@
 libsass
 =======
 
-This package provides a simple Python extension module ``sass`` which is
+This package provides a simple Python extension module :mod:`sass` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
-your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
+your :file:`setup.py`'s ``install_requires`` list or :file:`requirements.txt`
+file.
 
 It currently supports CPython 2.5, 2.6, 2.7, and PyPy 1.9!
 
@@ -16,8 +17,8 @@ It currently supports CPython 2.5, 2.6, 2.7, and PyPy 1.9!
 Install
 -------
 
-It's available on PyPI_, so you can install it using ``easy_install``
-or ``pip``:
+It's available on PyPI_, so you can install it using :program:`easy_install`
+or :program:`pip`:
 
 .. sourcecode:: console
 
