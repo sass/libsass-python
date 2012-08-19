@@ -16,11 +16,14 @@ It currently supports CPython 2.5, 2.6, 2.7, and PyPy 1.9!
 Install
 -------
 
-Use ``easy_install`` or ``pip``:
+It's available on PyPI_, so you can install it using ``easy_install``
+or ``pip``:
 
 .. sourcecode:: console
 
    $ easy_install libsass
+
+.. _PyPI: http://pypi.python.org/pypi/libsass
 
 
 Example
