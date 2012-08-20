@@ -42,6 +42,7 @@ References
    :maxdepth: 2
 
    sass
+   sassutils
 
 
 Credit
