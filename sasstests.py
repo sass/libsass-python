@@ -90,10 +90,22 @@ b i {
   font-size: 20px; }
 '''
 
+C_EXPECTED_CSS = '''\
+body {
+  background-color: green; }
+  body a {
+    color: blue; }
+
+h1 a {
+  color: green; }
+'''
+
 @suite.test
 def compile_filename():
     actual = sass.compile(filename='test/a.sass')
     assert actual == A_EXPECTED_CSS
+    actual = sass.compile(filename='test/c.sass')
+    assert actual == C_EXPECTED_CSS
     with raises(IOError):
         sass.compile(filename='test/not-exist.sass')
     with raises(TypeError):
@@ -108,7 +120,7 @@ def builder_build_directory():
     path = os.path.join(temp_path, 'css')
     shutil.copytree('test', path)
     result_files = build_directory(path)
-    assert len(result_files) == 2
+    assert len(result_files) == 3
     assert result_files['a.sass'] == 'a.sass.css'
     with open(os.path.join(path, 'a.sass.css')) as f:
         css = f.read()
@@ -117,4 +129,8 @@ def builder_build_directory():
     with open(os.path.join(path, 'b.sass.css')) as f:
         css = f.read()
     assert css == B_EXPECTED_CSS
+    assert result_files['c.sass'] == 'c.sass.css'
+    with open(os.path.join(path, 'c.sass.css')) as f:
+        css = f.read()
+    assert css == C_EXPECTED_CSS
     shutil.rmtree(temp_path)
