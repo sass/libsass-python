@@ -117,20 +117,21 @@ def compile_filename():
 @suite.test
 def builder_build_directory():
     temp_path= tempfile.mkdtemp()
-    path = os.path.join(temp_path, 'css')
-    shutil.copytree('test', path)
-    result_files = build_directory(path)
+    sass_path = os.path.join(temp_path, 'sass')
+    css_path = os.path.join(temp_path, 'css')
+    shutil.copytree('test', sass_path)
+    result_files = build_directory(sass_path, css_path)
     assert len(result_files) == 3
     assert result_files['a.sass'] == 'a.sass.css'
-    with open(os.path.join(path, 'a.sass.css')) as f:
+    with open(os.path.join(css_path, 'a.sass.css')) as f:
         css = f.read()
     assert css == A_EXPECTED_CSS
     assert result_files['b.sass'] == 'b.sass.css'
-    with open(os.path.join(path, 'b.sass.css')) as f:
+    with open(os.path.join(css_path, 'b.sass.css')) as f:
         css = f.read()
     assert css == B_EXPECTED_CSS
     assert result_files['c.sass'] == 'c.sass.css'
-    with open(os.path.join(path, 'c.sass.css')) as f:
+    with open(os.path.join(css_path, 'c.sass.css')) as f:
         css = f.read()
     assert css == C_EXPECTED_CSS
     shutil.rmtree(temp_path)
