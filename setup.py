@@ -9,7 +9,9 @@ import tempfile
 try:
     from setuptools import Extension, setup
 except ImportError:
-    from distutils.core import Extension, setup
+    from distribute_setup import use_setuptools
+    use_setuptools()
+    from setuptools import Extension, setup
 
 
 version = '0.2.0'
