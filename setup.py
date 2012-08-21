@@ -85,6 +85,7 @@ setup(
     long_description=readme(),
     version=version,
     ext_modules=[sass_extension],
+    packages=['sassutils'],
     py_modules=['sasstests'],
     package_data={'': ['README.rst', 'test/*.sass']},
     license='MIT License',
