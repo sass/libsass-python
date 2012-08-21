@@ -19,31 +19,38 @@ SUFFIXES = frozenset(['sass', 'scss'])
 SUFFIX_PATTERN = re.compile('[.](' + '|'.join(map(re.escape, SUFFIXES)) + ')$')
 
 
-def build_directory(path, root_path=None):
+def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
     """Compiles all SASS/SCSS files in ``path`` to CSS.
 
-    :param path: the path of the directory which contains source files
-                 to compile
-    :type path: :class:`basestring`
+    :param sass_path: the path of the directory which contains source files
+                      to compile
+    :type sass_path: :class:`basestring`
+    :param css_path: the path of the directory compiled CSS files will go
+    :type css_path: :class:`basestring`
     :returns: a dictionary of source filenames to compiled CSS filenames
     :rtype: :class:`collections.Mapping`
 
     """
-    if root_path is None:
-        root_path = path
+    if _root_sass is None or _root_css is None:
+        _root_sass = sass_path
+        _root_css = css_path
     result = {}
-    for name in os.listdir(path):
+    if not os.path.isdir(css_path):
+        os.mkdir(css_path)
+    for name in os.listdir(sass_path):
         if not SUFFIX_PATTERN.search(name):
             continue
-        fullname = os.path.join(path, name)
-        if os.path.isfile(fullname):
-            css_name = fullname + '.css'
-            css = compile(filename=fullname, include_paths=[root_path])
-            with open(css_name, 'w') as css_file:
+        sass_fullname = os.path.join(sass_path, name)
+        if os.path.isfile(sass_fullname):
+            css_fullname = os.path.join(css_path, name) + '.css'
+            css = compile(filename=sass_fullname, include_paths=[_root_sass])
+            with open(css_fullname, 'w') as css_file:
                 css_file.write(css)
-            result[os.path.relpath(fullname, root_path)] = \
-                os.path.relpath(css_name, root_path)
-        elif os.path.isdir(fullname):
-            subresult = build_directory(fullname, root_path)
+            result[os.path.relpath(sass_fullname, _root_sass)] = \
+                os.path.relpath(css_fullname, _root_css)
+        elif os.path.isdir(sass_fullname):
+            css_fullname = os.path.join(css_path, name)
+            subresult = build_directory(sass_fullname, css_fullname,
+                                        _root_sass, _root_css)
             result.update(subresult)
     return result
