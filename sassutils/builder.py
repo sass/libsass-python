@@ -97,7 +97,7 @@ class Manifest(object):
             manifests[package_name] = manifest
         return manifests
 
-    def __init__(self, sass_path, css_path=None):
+    def __init__(self, sass_path, css_path=None, wsgi_path=None):
         if not isinstance(sass_path, basestring):
             raise TypeError('sass_path must be a string, not ' +
                             repr(sass_path))
@@ -106,11 +106,17 @@ class Manifest(object):
         elif not isinstance(css_path, basestring):
             raise TypeError('css_path must be a string, not ' +
                             repr(css_path))
+        if wsgi_path is None:
+            wsgi_path = css_path
+        elif not isinstance(wsgi_path, basestring):
+            raise TypeError('wsgi_path must be a string, not ' +
+                            repr(wsgi_path))
         self.sass_path = sass_path
         self.css_path = css_path
+        self.wsgi_path = wsgi_path
 
     def build(self, package_dir):
-        """Builds the SASS/CSS files in the specified :attr:`sass_path`.
+        """Builds the SASS/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`
         as relative to the given ``package_dir``.
 
@@ -125,3 +131,23 @@ class Manifest(object):
         css_files = build_directory(sass_path, css_path).values()
         return frozenset(os.path.join(self.css_path, filename)
                          for filename in css_files)
+
+    def build_one(self, package_dir, filename):
+        """Builds one SASS/SCSS file.
+
+        :param package_dir: the path of package directory
+        :type package_dir: :class:`basestring`
+        :param filename: the filename of SASS/SCSS source to compile
+        :type filename: :class:`basestring`
+        :returns: the filename of compiled CSS
+        :rtype: :class:`basestring`
+
+        """
+        root_path = os.path.join(package_dir, self.sass_path)
+        sass_path = os.path.join(root_path, filename)
+        css = compile(filename=sass_path, include_paths=[root_path])
+        css_filename = filename + '.css'
+        css_path = os.path.join(package_dir, self.css_path, css_filename)
+        with open(css_path, 'w') as f:
+            f.write(css)
+        return os.path.join(self.css_path, css_filename)
