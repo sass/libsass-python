@@ -9,7 +9,7 @@ import tempfile
 from attest import Tests, raises
 
 import sass
-from sassutils.builder import build_directory
+from sassutils.builder import Manifest, build_directory
 
 
 suite = Tests()
@@ -135,3 +135,22 @@ def builder_build_directory():
         css = f.read()
     assert css == C_EXPECTED_CSS
     shutil.rmtree(temp_path)
+
+
+@suite.test
+def normalize_manifests():
+    manifests = Manifest.normalize_manifests({
+        'package': 'sass/path',
+        'package.name': ('sass/path', 'css/path'),
+        'package.name2': Manifest('sass/path', 'css/path')
+    })
+    assert len(manifests) == 3
+    assert isinstance(manifests['package'], Manifest)
+    assert manifests['package'].sass_path == 'sass/path'
+    assert manifests['package'].css_path == 'sass/path'
+    assert isinstance(manifests['package.name'], Manifest)
+    assert manifests['package.name'].sass_path == 'sass/path'
+    assert manifests['package.name'].css_path == 'css/path'
+    assert isinstance(manifests['package.name2'], Manifest)
+    assert manifests['package.name2'].sass_path == 'sass/path'
+    assert manifests['package.name2'].css_path == 'css/path'

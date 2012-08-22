@@ -70,21 +70,15 @@ def validate_manifests(dist, attr, value):
     :class:`sassutils.builder.Manifest`.
 
     """
-    error = distutils.errors.DistutilsSetupError(
-        "value must be a mapping object like: {'package.name': "
-        "sassutils.distutils.Manifest('sass/path')}, or as shorten form: "
-        "{'package.name': ('sass/path', 'css/path'}), not " +
-        repr(value)
-    )
-    if not isinstance(value, collections.Mapping):
-        raise error
-    for package_name, manifest in value.items():
-        if not isinstance(package_name, basestring):
-            raise error
-        elif not isinstance(manifest, (basestring, tuple, Manifest)):
-            raise error
-        elif isinstance(manifest, tuple) and len(manifest) != 2:
-            raise error
+    try:
+        Manifest.normalize_manifests(value)
+    except TypeError:
+        raise distutils.errors.DistutilsSetupError(
+            attr + "must be a mapping object like: {'package.name': "
+            "sassutils.distutils.Manifest('sass/path')}, or as shorten form: "
+            "{'package.name': ('sass/path', 'css/path'}), not " +
+            repr(value)
+        )
 
 
 class build_sass(Command):
@@ -104,7 +98,9 @@ class build_sass(Command):
                 self.package_dir[name] = distutils.util.convert_path(path)
 
     def run(self):
-        manifests = self.normalize_manifests()
+        manifests = self.distribution.sass_manifests
+        manifests = Manifest.normalize_manifests(manifests)
+        self.distribution.sass_manifests = manifests
         package_data = self.distribution.package_data
         data_files = self.distribution.data_files or []
         for package_name, manifest in manifests.items():
@@ -119,21 +115,6 @@ class build_sass(Command):
         self.distribution.has_data_files = lambda: True
         # See the below monkey patch (end of this source code).
         self.distribution.compiled_sass_files = data_files
-
-    def normalize_manifests(self):
-        manifests = self.distribution.sass_manifests
-        if manifests is None:
-            manifests = {}
-        for package_name, manifest in manifests.items():
-            if isinstance(manifest, Manifest):
-                continue
-            elif isinstance(manifest, tuple):
-                manifest = Manifest(*manifest)
-            elif isinstance(manifest, basestring):
-                manifest = Manifest(manifest)
-            manifests[package_name] = manifest
-        self.distribution.sass_manifests = manifests
-        return manifests
 
     def get_package_dir(self, package):
         """Returns the directory, relative to the top of the source

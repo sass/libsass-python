@@ -2,6 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+import collections
 import os
 import os.path
 import re
@@ -67,6 +68,34 @@ class Manifest(object):
     :type css_path: :class:`basestring`
 
     """
+
+    @classmethod
+    def normalize_manifests(cls, manifests):
+        if manifests is None:
+            manifests = {}
+        elif isinstance(manifests, collections.Mapping):
+            manifests = dict(manifests)
+        else:
+            raise TypeError('manifests must be a mapping object, not ' +
+                            repr(manifests))
+        for package_name, manifest in manifests.items():
+            if not isinstance(package_name, basestring):
+                raise TypeError('manifest keys must be a string of package '
+                                'name, not ' + repr(package_name))
+            if isinstance(manifest, Manifest):
+                continue
+            elif isinstance(manifest, tuple):
+                manifest = Manifest(*manifest)
+            elif isinstance(manifest, basestring):
+                manifest = Manifest(manifest)
+            else:
+                raise TypeError(
+                    'manifest values must be a sassutils.builder.Manifest, '
+                    'a pair of (sass_path, css_path), or a string of '
+                    'sass_path, not ' + repr(manifest)
+                )
+            manifests[package_name] = manifest
+        return manifests
 
     def __init__(self, sass_path, css_path=None):
         if not isinstance(sass_path, basestring):
