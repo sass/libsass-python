@@ -92,6 +92,14 @@ setup(
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
     url='http://dahlia.kr/libsass-python/',
+    entry_points={
+        'distutils.commands': [
+            'build_sass = sassutils.distutils:build_sass'
+        ],
+        'distutils.setup_keywords': [
+            'sass_manifests = sassutils.distutils:validate_manifests'
+        ]
+    },
     tests_require=['Attest'],
     test_loader='attest:auto_reporter.test_loader',
     test_suite='sasstests.suite',
