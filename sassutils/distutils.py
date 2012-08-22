@@ -60,14 +60,14 @@ import os.path
 from setuptools import Command
 from setuptools.command.sdist import sdist
 
-from .builder import build_directory
+from .builder import Manifest
 
-__all__ = 'Manifest', 'build_sass', 'validate_manifests'
+__all__ = 'build_sass', 'validate_manifests'
 
 
 def validate_manifests(dist, attr, value):
     """Verifies that ``value`` is an expected mapping of package to
-    :class:`Manifest`.
+    :class:`sassutils.builder.Manifest`.
 
     """
     error = distutils.errors.DistutilsSetupError(
@@ -85,48 +85,6 @@ def validate_manifests(dist, attr, value):
             raise error
         elif isinstance(manifest, tuple) and len(manifest) != 2:
             raise error
-
-
-class Manifest(object):
-    """Building manifest of SASS/SCSS.
-
-    :param sass_path: the path of the directory that contains SASS/SCSS
-                      source files
-    :type sass_path: :class:`basestring`
-    :param css_path: the path of the directory to store compiled CSS
-                     files
-    :type css_path: :class:`basestring`
-
-    """
-
-    def __init__(self, sass_path, css_path=None):
-        if not isinstance(sass_path, basestring):
-            raise TypeError('sass_path must be a string, not ' +
-                            repr(sass_path))
-        if css_path is None:
-            css_path = sass_path
-        elif not isinstance(css_path, basestring):
-            raise TypeError('css_path must be a string, not ' +
-                            repr(css_path))
-        self.sass_path = sass_path
-        self.css_path = css_path
-
-    def build(self, package_dir):
-        """Builds the SASS/CSS files in the specified :attr:`sass_path`.
-        It finds :attr:`sass_path` and locates :attr:`css_path`
-        as relative to the given ``package_dir``.
-
-        :param package_dir: the path of package directory
-        :type package_dir: :class:`basestring`
-        :returns: the set of compiled CSS filenames
-        :rtype: :class:`collections.Set`
-
-        """
-        sass_path = os.path.join(package_dir, self.sass_path)
-        css_path = os.path.join(package_dir, self.css_path)
-        css_files = build_directory(sass_path, css_path).values()
-        return frozenset(os.path.join(self.css_path, filename)
-                         for filename in css_files)
 
 
 class build_sass(Command):

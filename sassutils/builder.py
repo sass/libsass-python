@@ -8,7 +8,7 @@ import re
 
 from sass import compile
 
-__all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'build_directory'
+__all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
 
 
 #: (:class:`collections.Set`) The set of supported filename suffixes.
@@ -54,3 +54,45 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
                                         _root_sass, _root_css)
             result.update(subresult)
     return result
+
+
+class Manifest(object):
+    """Building manifest of SASS/SCSS.
+
+    :param sass_path: the path of the directory that contains SASS/SCSS
+                      source files
+    :type sass_path: :class:`basestring`
+    :param css_path: the path of the directory to store compiled CSS
+                     files
+    :type css_path: :class:`basestring`
+
+    """
+
+    def __init__(self, sass_path, css_path=None):
+        if not isinstance(sass_path, basestring):
+            raise TypeError('sass_path must be a string, not ' +
+                            repr(sass_path))
+        if css_path is None:
+            css_path = sass_path
+        elif not isinstance(css_path, basestring):
+            raise TypeError('css_path must be a string, not ' +
+                            repr(css_path))
+        self.sass_path = sass_path
+        self.css_path = css_path
+
+    def build(self, package_dir):
+        """Builds the SASS/CSS files in the specified :attr:`sass_path`.
+        It finds :attr:`sass_path` and locates :attr:`css_path`
+        as relative to the given ``package_dir``.
+
+        :param package_dir: the path of package directory
+        :type package_dir: :class:`basestring`
+        :returns: the set of compiled CSS filenames
+        :rtype: :class:`collections.Set`
+
+        """
+        sass_path = os.path.join(package_dir, self.sass_path)
+        css_path = os.path.join(package_dir, self.css_path)
+        css_files = build_directory(sass_path, css_path).values()
+        return frozenset(os.path.join(self.css_path, filename)
+                         for filename in css_files)
