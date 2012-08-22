@@ -11,7 +11,7 @@ option of the :file:`setup.py` script::
     from setuptools import setup
 
     setup(
-        ...,
+        # ...,
         setup_requires=['libsass >= 0.2.0']
     )
 
