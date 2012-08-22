@@ -6,6 +6,16 @@ Version 0.2.0
 
 To be released.
 
+- Added new :mod:`sassutils` package.
+
+  - Added :mod:`sassutils.builder` module to build the whole directory
+    at a time.
+  - Added :mod:`sassutils.distutils` module for :mod:`distutils` and
+    :mod:`setuptools` integration.
+
+- Added :class:`~sassutils.distutils.build_sass` command for
+  :mod:`distutils`/:mod:`setuptools`.
+
 
 Version 0.1.1
 -------------
