@@ -10,7 +10,7 @@
     
     <title>sassutils.distutils — setuptools/distutils integration &mdash; libsass 0.2.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -45,7 +45,32 @@
         <li><a href="../index.html">libsass 0.2.0 documentation</a> &raquo;</li>
           <li><a href="../sassutils.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="builder.html"
+                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils.builder</span></tt> &#8212; Build the whole directory</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/sassutils/distutils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
@@ -59,12 +84,13 @@ of the standard <a class="reference external" href="http://docs.python.org/libra
 Distribute) for libsass.</p>
 <p>To use this, add <tt class="docutils literal"><span class="pre">libsass</span></tt> into <tt class="docutils literal"><span class="pre">setup_requires</span></tt> (not <tt class="docutils literal"><span class="pre">install_requires</span></tt>)
 option of the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script:</p>
-<div class="highlight-python"><pre>from setuptools import setup
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
 
-setup(
-    ...,
-    setup_requires=['libsass &gt;= 0.2.0']
-)</pre>
+<span class="n">setup</span><span class="p">(</span>
+    <span class="c"># ...,</span>
+    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.2.0&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
 </div>
 <p>It will adds <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a> command to the <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> python setup.py build_sass
@@ -162,31 +188,6 @@ method.</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="builder.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils.builder</span></tt> &#8212; Build the whole directory</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/sassutils/distutils.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
