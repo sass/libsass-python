@@ -70,7 +70,7 @@ class SassMiddleware(object):
                 sass_filename = css_filename[:-4]
                 try:
                     result = manifest.build_one(package_dir, sass_filename)
-                except IOError:
+                except (IOError, OSError):
                     break
                 except CompileError as e:
                     start_response(self.error_status,
