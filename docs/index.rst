@@ -35,6 +35,16 @@ Example
 'a b {\n  color: blue; }\n'
 
 
+User's Guide
+------------
+
+.. toctree::
+   :maxdepth: 2
+
+   frameworks/flask
+   changes
+
+
 References
 ----------
 
