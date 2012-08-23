@@ -12,6 +12,8 @@ To be released.
     at a time.
   - Added :mod:`sassutils.distutils` module for :mod:`distutils` and
     :mod:`setuptools` integration.
+  - Added :mod:`sassutils.wsgi` module which provides a development-purpose
+    WSGI middleware.
 
 - Added :class:`~sassutils.distutils.build_sass` command for
   :mod:`distutils`/:mod:`setuptools`.
