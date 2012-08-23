@@ -115,6 +115,24 @@ class Manifest(object):
         self.css_path = css_path
         self.wsgi_path = wsgi_path
 
+    def resolve_filename(self, package_dir, filename):
+        """Gets a proper full relative path of SASS source and
+        CSS source that will be generated, according to ``package_dir``
+        and ``filename``.
+
+        :param package_dir: the path of package directory
+        :type package_dir: :class:`basestring`
+        :param filename: the filename of SASS/SCSS source to compile
+        :type filename: :class:`basestring`
+        :returns: a pair of (sass, css) path
+        :rtype: :class:`tuple`
+
+        """
+        sass_path = os.path.join(package_dir, self.sass_path, filename)
+        css_filename = filename + '.css'
+        css_path = os.path.join(package_dir, self.css_path, css_filename)
+        return sass_path, css_path
+
     def build(self, package_dir):
         """Builds the SASS/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`
@@ -143,11 +161,11 @@ class Manifest(object):
         :rtype: :class:`basestring`
 
         """
+        sass_filename, css_filename = self.resolve_filename(
+            package_dir, filename)
         root_path = os.path.join(package_dir, self.sass_path)
-        sass_path = os.path.join(root_path, filename)
-        css = compile(filename=sass_path, include_paths=[root_path])
-        css_filename = filename + '.css'
+        css = compile(filename=sass_filename, include_paths=[root_path])
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         with open(css_path, 'w') as f:
             f.write(css)
-        return os.path.join(self.css_path, css_filename)
+        return css_filename
