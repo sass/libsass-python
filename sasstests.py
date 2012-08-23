@@ -7,9 +7,12 @@ import shutil
 import tempfile
 
 from attest import Tests, raises
+from werkzeug.test import Client
+from werkzeug.wrappers import Response
 
 import sass
 from sassutils.builder import Manifest, build_directory
+from sassutils.wsgi import SassMiddleware
 
 
 suite = Tests()
@@ -154,3 +157,30 @@ def normalize_manifests():
     assert isinstance(manifests['package.name2'], Manifest)
     assert manifests['package.name2'].sass_path == 'sass/path'
     assert manifests['package.name2'].css_path == 'css/path'
+
+
+def sample_wsgi_app(environ, start_response):
+    start_response('200 OK', [('Content-Type', 'text/plain')])
+    return environ['PATH_INFO'],
+
+
+@suite.test
+def wsgi_sass_middleware():
+    css_dir = tempfile.mkdtemp()
+    app = SassMiddleware(sample_wsgi_app, {
+        __name__: ('test', css_dir, '/static')
+    })
+    client = Client(app, Response)
+    r = client.get('/asdf')
+    assert r.status_code == 200
+    assert r.data == '/asdf'
+    assert r.mimetype == 'text/plain'
+    r = client.get('/static/a.sass.css')
+    assert r.status_code == 200
+    assert r.data == A_EXPECTED_CSS
+    assert r.mimetype == 'text/css'
+    r = client.get('/static/not-exists.sass.css')
+    assert r.status_code == 200
+    assert r.data == '/static/not-exists.sass.css'
+    assert r.mimetype == 'text/plain'
+    shutil.rmtree(css_dir)

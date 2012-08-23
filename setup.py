@@ -100,7 +100,7 @@ setup(
             'sass_manifests = sassutils.distutils:validate_manifests'
         ]
     },
-    tests_require=['Attest'],
+    tests_require=['Attest', 'Werkzeug'],
     test_loader='attest:auto_reporter.test_loader',
     test_suite='sasstests.suite',
     classifiers=[
