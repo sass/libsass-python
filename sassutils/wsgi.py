@@ -66,7 +66,6 @@ class SassMiddleware(object):
             for prefix, package_dir, manifest in self.paths:
                 if not path.startswith(prefix):
                     continue
-                print (prefix,path)
                 css_filename = path[len(prefix):]
                 sass_filename = css_filename[:-4]
                 try:
