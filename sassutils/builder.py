@@ -4,12 +4,12 @@
 """
 from __future__ import with_statement
 
-import collections
 import os
 import os.path
 import re
 
 from sass import compile
+from .utils import is_mapping, relpath
 
 __all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
 
@@ -49,8 +49,8 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
             css = compile(filename=sass_fullname, include_paths=[_root_sass])
             with open(css_fullname, 'w') as css_file:
                 css_file.write(css)
-            result[os.path.relpath(sass_fullname, _root_sass)] = \
-                os.path.relpath(css_fullname, _root_css)
+            result[relpath(sass_fullname, _root_sass)] = \
+                relpath(css_fullname, _root_css)
         elif os.path.isdir(sass_fullname):
             css_fullname = os.path.join(css_path, name)
             subresult = build_directory(sass_fullname, css_fullname,
@@ -75,7 +75,7 @@ class Manifest(object):
     def normalize_manifests(cls, manifests):
         if manifests is None:
             manifests = {}
-        elif isinstance(manifests, collections.Mapping):
+        elif is_mapping(manifests):
             manifests = dict(manifests)
         else:
             raise TypeError('manifests must be a mapping object, not ' +
