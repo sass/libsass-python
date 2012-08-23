@@ -94,9 +94,73 @@
 
 <dl class="data">
 <dt id="sassutils.builder.SUFFIX_PATTERN">
-<tt class="descclassname">sassutils.builder.</tt><tt class="descname">SUFFIX_PATTERN</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x109016810&gt;</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">sassutils.builder.</tt><tt class="descname">SUFFIX_PATTERN</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x10e53b810&gt;</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/re.html#re.RegexObject" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">re.RegexObject</span></tt></a>) The regular expression pattern which matches to
 filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><tt class="xref py py-const docutils literal"><span class="pre">SUFFIXES</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sassutils.builder.Manifest">
+<em class="property">class </em><tt class="descclassname">sassutils.builder.</tt><tt class="descname">Manifest</tt><big>(</big><em>sass_path</em>, <em>css_path=None</em>, <em>wsgi_path=None</em><big>)</big><a class="headerlink" href="#sassutils.builder.Manifest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Building manifest of SASS/SCSS.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sass_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of the directory that contains SASS/SCSS
+source files</li>
+<li><strong>css_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of the directory to store compiled CSS
+files</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="sassutils.builder.Manifest.build">
+<tt class="descname">build</tt><big>(</big><em>package_dir</em><big>)</big><a class="headerlink" href="#sassutils.builder.Manifest.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the SASS/SCSS files in the specified <tt class="xref py py-attr docutils literal"><span class="pre">sass_path</span></tt>.
+It finds <tt class="xref py py-attr docutils literal"><span class="pre">sass_path</span></tt> and locates <tt class="xref py py-attr docutils literal"><span class="pre">css_path</span></tt>
+as relative to the given <tt class="docutils literal"><span class="pre">package_dir</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>package_dir</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of package directory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the set of compiled CSS filenames</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sassutils.builder.Manifest.build_one">
+<tt class="descname">build_one</tt><big>(</big><em>package_dir</em>, <em>filename</em><big>)</big><a class="headerlink" href="#sassutils.builder.Manifest.build_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds one SASS/SCSS file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>package_dir</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of package directory</li>
+<li><strong>filename</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the filename of SASS/SCSS source to compile</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the filename of compiled CSS</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">

@@ -27,6 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="libsass 0.2.0 documentation" href="../index.html" />
     <link rel="up" title="sassutils — Additional utilities related to SASS" href="../sassutils.html" />
+    <link rel="next" title="sassutils.wsgi — WSGI middleware for development purpose" href="wsgi.html" />
     <link rel="prev" title="sassutils.builder — Build the whole directory" href="builder.html" /> 
   </head>
   <body>
@@ -40,6 +41,9 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="wsgi.html" title="sassutils.wsgi — WSGI middleware for development purpose"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="builder.html" title="sassutils.builder — Build the whole directory"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libsass 0.2.0 documentation</a> &raquo;</li>
@@ -51,6 +55,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="builder.html"
                         title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils.builder</span></tt> &#8212; Build the whole directory</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wsgi.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">sassutils.wsgi</span></tt> &#8212; WSGI middleware for development purpose</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/sassutils/distutils.txt"
@@ -122,46 +129,6 @@ store compiled CSS files, specify <tt class="docutils literal"><span class="pre"
 </pre></div>
 </div>
 <dl class="class">
-<dt id="sassutils.distutils.Manifest">
-<em class="property">class </em><tt class="descclassname">sassutils.distutils.</tt><tt class="descname">Manifest</tt><big>(</big><em>sass_path</em>, <em>css_path=None</em><big>)</big><a class="headerlink" href="#sassutils.distutils.Manifest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Building manifest of SASS/SCSS.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sass_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of the directory that contains SASS/SCSS
-source files</li>
-<li><strong>css_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of the directory to store compiled CSS
-files</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="sassutils.distutils.Manifest.build">
-<tt class="descname">build</tt><big>(</big><em>package_dir</em><big>)</big><a class="headerlink" href="#sassutils.distutils.Manifest.build" title="Permalink to this definition">¶</a></dt>
-<dd><p>Builds the SASS/CSS files in the specified <tt class="xref py py-attr docutils literal"><span class="pre">sass_path</span></tt>.
-It finds <tt class="xref py py-attr docutils literal"><span class="pre">sass_path</span></tt> and locates <tt class="xref py py-attr docutils literal"><span class="pre">css_path</span></tt>
-as relative to the given <tt class="docutils literal"><span class="pre">package_dir</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>package_dir</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of package directory</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the set of compiled CSS filenames</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="sassutils.distutils.build_sass">
 <em class="property">class </em><tt class="descclassname">sassutils.distutils.</tt><tt class="descname">build_sass</tt><big>(</big><em>dist</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds SASS/SCSS files to CSS files.</p>
@@ -181,7 +148,7 @@ method.</p>
 <dt id="sassutils.distutils.validate_manifests">
 <tt class="descclassname">sassutils.distutils.</tt><tt class="descname">validate_manifests</tt><big>(</big><em>dist</em>, <em>attr</em>, <em>value</em><big>)</big><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies that <tt class="docutils literal"><span class="pre">value</span></tt> is an expected mapping of package to
-<a class="reference internal" href="#sassutils.distutils.Manifest" title="sassutils.distutils.Manifest"><tt class="xref py py-class docutils literal"><span class="pre">Manifest</span></tt></a>.</p>
+<a class="reference internal" href="builder.html#sassutils.builder.Manifest" title="sassutils.builder.Manifest"><tt class="xref py py-class docutils literal"><span class="pre">sassutils.builder.Manifest</span></tt></a>.</p>
 </dd></dl>
 
 </div>
@@ -201,6 +168,9 @@ method.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="wsgi.html" title="sassutils.wsgi — WSGI middleware for development purpose"
+             >next</a> |</li>
         <li class="right" >
           <a href="builder.html" title="sassutils.builder — Build the whole directory"
              >previous</a> |</li>
