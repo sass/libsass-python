@@ -1,3 +1,6 @@
+branches:
+  only:
+  - python
 language: python
 python:
 - 2.5
