@@ -4,7 +4,7 @@ Changelog
 Version 0.2.0
 -------------
 
-To be released.
+Released on August 24, 2012.
 
 - Added new :mod:`sassutils` package.
 
