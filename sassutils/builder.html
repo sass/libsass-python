@@ -47,14 +47,14 @@
           <a href="../sassutils.html" title="sassutils — Additional utilities related to SASS"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">libsass 0.2.0 documentation</a> &raquo;</li>
-          <li><a href="../sassutils.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
+          <li><a href="../sassutils.html" accesskey="U"><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../sassutils.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a></p>
+                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="distutils.html"
                         title="next chapter"><tt class="docutils literal"><span class="pre">sassutils.distutils</span></tt> &#8212; <tt class="docutils literal"><span class="pre">setuptools</span></tt>/<tt class="docutils literal"><span class="pre">distutils</span></tt> integration</a></p>
@@ -94,7 +94,7 @@
 
 <dl class="data">
 <dt id="sassutils.builder.SUFFIX_PATTERN">
-<tt class="descclassname">sassutils.builder.</tt><tt class="descname">SUFFIX_PATTERN</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x10e53b810&gt;</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">sassutils.builder.</tt><tt class="descname">SUFFIX_PATTERN</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1044a9618&gt;</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/re.html#re.RegexObject" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">re.RegexObject</span></tt></a>) The regular expression pattern which matches to
 filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><tt class="xref py py-const docutils literal"><span class="pre">SUFFIXES</span></tt></a>.</p>
 </dd></dl>
@@ -161,6 +161,32 @@ as relative to the given <tt class="docutils literal"><span class="pre">package_
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="sassutils.builder.Manifest.resolve_filename">
+<tt class="descname">resolve_filename</tt><big>(</big><em>package_dir</em>, <em>filename</em><big>)</big><a class="headerlink" href="#sassutils.builder.Manifest.resolve_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a proper full relative path of SASS source and
+CSS source that will be generated, according to <tt class="docutils literal"><span class="pre">package_dir</span></tt>
+and <tt class="docutils literal"><span class="pre">filename</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>package_dir</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the path of package directory</li>
+<li><strong>filename</strong> (<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt>) &#8211; the filename of SASS/SCSS source to compile</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a pair of (sass, css) path</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
@@ -212,7 +238,7 @@ to compile</li>
           <a href="../sassutils.html" title="sassutils — Additional utilities related to SASS"
              >previous</a> |</li>
         <li><a href="../index.html">libsass 0.2.0 documentation</a> &raquo;</li>
-          <li><a href="../sassutils.html" ><tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
+          <li><a href="../sassutils.html" ><tt class="docutils literal docutils literal docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

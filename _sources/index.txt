@@ -67,6 +67,13 @@ Open source
 GitHub (Git repository + issues)
    https://github.com/dahlia/libsass-python
 
+Travis CI
+   http://travis-ci.org/dahlia/libsass-python
+
+   .. image:: https://secure.travis-ci.org/dahlia/libsass-python.png?branch=python
+      :alt: Build Status
+      :target: http://travis-ci.org/dahlia/libsass-python
+
 PyPI
    http://pypi.python.org/pypi/libsass
 
