@@ -17,9 +17,11 @@ Install
 -------
 
 It's available on PyPI_, so you can install it using ``easy_install``
-or ``pip``::
+or ``pip``:
 
-    $ easy_install libsass
+.. code-block:: console
+
+   $ easy_install libsass
 
 .. _PyPI: http://pypi.python.org/pypi/libsass
 
@@ -27,9 +29,12 @@ or ``pip``::
 Example
 -------
 
->>> import sass
->>> sass.compile(string='a { b { color: blue; } }')
-'a b {\n  color: blue; }\n'
+.. code-block:: pycon
+
+   >>> import sass
+   >>> print sass.compile(string='a { b { color: blue; } }')
+   a b {
+     color: blue; }
 
 
 Docs
@@ -39,10 +44,12 @@ There's the user guide manual and the full API reference for ``libsass``:
 
 http://dahlia.kr/libsass-python/
 
-You can build the docs by yourself::
+You can build the docs by yourself:
 
-    $ cd docs/
-    $ make html
+.. code-block:: console
+
+   $ cd docs/
+   $ make html
 
 The built docs will go to ``docs/_build/html/`` directory.
 
