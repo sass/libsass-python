@@ -24,8 +24,6 @@
 #define access _access
 #define ftruncate _chsize
 
-#define ssize_t int
-
 #define STDIN_FILENO 0
 #define STDOUT_FILENO 1
 #define STDERR_FILENO 2
