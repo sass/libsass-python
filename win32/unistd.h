@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <io.h>
 #include <process.h> /* for getpid() and the exec..() family */
+#include <direct.h>  /* for _getcwd() */
 
 #define srandom srand
 #define random rand
