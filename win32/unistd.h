@@ -23,6 +23,7 @@
 
 #define access _access
 #define ftruncate _chsize
+#define getcwd _getcwd
 
 #define STDIN_FILENO 0
 #define STDOUT_FILENO 1
