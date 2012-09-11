@@ -32,10 +32,12 @@ libsass_headers = [
 ]
 
 if sys.platform == 'win32':
-    warnings = ['-Wall']
+    flags = ['-Wall', '-I"' + os.path.abspath('win32') + '"']
+    link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
-    warnings = ['-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
+    flags = ['-fPIC', '-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
+    link_flags = ['-fPIC']
     macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
 sass_extension = Extension(
@@ -43,8 +45,8 @@ sass_extension = Extension(
     ['sass.c'] + libsass_sources,
     define_macros=macros.items(),
     depends=libsass_headers,
-    extra_compile_args=['-c', '-O2', '-fPIC'] + warnings,
-    extra_link_args=['-fPIC'],
+    extra_compile_args=['-c', '-O2'] + flags,
+    extra_link_args=link_flags,
 )
 
 

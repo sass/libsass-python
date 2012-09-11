@@ -1,9 +1,4 @@
-#if defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__)
-#define R_OK 4
-#define access _access
-#else
 #include <unistd.h>
-#endif
 #include <Python.h>
 #include "sass_interface.h"
 
