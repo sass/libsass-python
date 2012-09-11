@@ -4,7 +4,7 @@ Changelog
 Version 0.2.1
 -------------
 
-To be released.
+Released on September 12, 2012.
 
 - Support Windows.
 
