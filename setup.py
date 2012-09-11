@@ -4,6 +4,7 @@ import distutils.cmd
 import os
 import os.path
 import shutil
+import sys
 import tempfile
 
 try:
@@ -30,14 +31,17 @@ libsass_headers = [
     'sass_interface.h'
 ]
 
+if sys.platform == 'win32':
+    warnings = ['-Wall']
+else:
+    warnings = ['-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
+
 sass_extension = Extension(
     'sass',
     ['sass.c'] + libsass_sources,
     define_macros=[('LIBSASS_PYTHON_VERSION', '"' + version + '"')],
     depends=libsass_headers,
-    extra_compile_args=['-c', '-O2', '-fPIC',
-                        '-Wall', '-Wno-parentheses',
-                        '-Wno-tautological-compare'],
+    extra_compile_args=['-c', '-O2', '-fPIC'] + warnings,
     extra_link_args=['-fPIC'],
 )
 

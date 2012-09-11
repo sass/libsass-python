@@ -6,6 +6,8 @@ Version 0.2.1
 
 To be released.
 
+- Fixed :file:`setup.py` build options for Windows compatibility.
+
 
 Version 0.2.0
 -------------
