@@ -14,7 +14,7 @@ except ImportError:
     from setuptools import Extension, setup
 
 
-version = '0.2.0'
+version = '0.2.1'
 
 libsass_sources = [ 
     'context.cpp', 'functions.cpp', 'document.cpp',
