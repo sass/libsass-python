@@ -9,8 +9,9 @@
 
 #include <stdlib.h>
 #include <io.h>
-#include <process.h> /* for getpid() and the exec..() family */
-#include <direct.h>  /* for _getcwd() */
+#include <process.h>  /* for getpid() and the exec..() family */
+#include <direct.h>   /* for _getcwd() */
+#include <sys/stat.h> /* for _S_IFDIR */
 
 #define srandom srand
 #define random rand
@@ -25,6 +26,7 @@
 #define access _access
 #define ftruncate _chsize
 #define getcwd _getcwd
+#define S_ISDIR(B) ((B)&_S_IFDIR)
 
 #define STDIN_FILENO 0
 #define STDOUT_FILENO 1
