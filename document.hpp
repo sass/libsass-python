@@ -1,14 +1,16 @@
+#define SASS_DOCUMENT
+
 #include <map>
 
-#ifndef SASS_PRELEXER_INCLUDED
+#ifndef SASS_PRELEXER
 #include "prelexer.hpp"
 #endif
 
-#ifndef SASS_NODE_INCLUDED
+#ifndef SASS_NODE
 #include "node.hpp"
 #endif
 
-#ifndef SASS_CONTEXT_INCLUDED
+#ifndef SASS_CONTEXT
 #include "context.hpp"
 #endif
 
@@ -130,10 +132,10 @@ namespace Sass {
     Node parse_mixin_definition();
     Node parse_function_definition();
     Node parse_parameters();
-    Node parse_parameter();
+    Node parse_parameter(Node::Type);
     Node parse_mixin_call();
     Node parse_arguments();
-    Node parse_argument();
+    Node parse_argument(Node::Type);
     Node parse_assignment();
     Node parse_propset();
     Node parse_ruleset(Selector_Lookahead lookahead, Node::Type inside_of = Node::none);

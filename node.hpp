@@ -1,4 +1,4 @@
-#define SASS_NODE_INCLUDED
+#define SASS_NODE
 
 #include <cstring>
 #include <string>
@@ -8,6 +8,7 @@
 namespace Sass {
   using namespace std;
 
+  // Token type for representing lexed chunks of text
   struct Token {
     const char* begin;
     const char* end;
@@ -61,6 +62,7 @@ namespace Sass {
   
   struct Node_Impl;
 
+  // Node type for representing SCSS expression nodes. Really just a handle.
   class Node {
   private:
     friend class Node_Factory;
@@ -176,6 +178,7 @@ namespace Sass {
 
     Type type() const;
 
+    bool is_stub() const;
     bool has_children() const;
     bool has_statements() const;
     bool has_blocks() const;
@@ -183,11 +186,12 @@ namespace Sass {
     bool has_backref() const;
     bool from_variable() const;
     bool& should_eval() const;
-    bool& is_unquoted() const;
-    bool& is_quoted() const;
+    bool& is_unquoted() const; // for strings
+    bool& is_quoted() const;   // for identifiers
     bool is_numeric() const;
     bool is_guarded() const;
     bool& has_been_extended() const;
+    bool is_false() const;
 
     string& path() const;
     size_t line() const;
@@ -236,6 +240,7 @@ namespace Sass {
 
   };
   
+  // The actual implementation object for Nodes; Node handles point at these.
   struct Node_Impl {
     union value_t {
       bool         boolean;
@@ -382,9 +387,10 @@ namespace Sass {
   // ------------------------------------------------------------------------
   
   inline Node::Node(Node_Impl* ip) : ip_(ip) { }
-  
+
   inline Node::Type Node::type() const    { return ip_->type; }
-  
+
+  inline bool Node::is_stub() const        { return !ip_; }
   inline bool Node::has_children() const   { return ip_->has_children; }
   inline bool Node::has_statements() const { return ip_->has_statements; }
   inline bool Node::has_blocks() const     { return ip_->has_blocks; }
@@ -397,6 +403,7 @@ namespace Sass {
   inline bool Node::is_numeric() const     { return ip_->is_numeric(); }
   inline bool Node::is_guarded() const     { return (type() == assignment) && (size() == 3); }
   inline bool& Node::has_been_extended() const { return ip_->has_been_extended; }
+  inline bool Node::is_false() const       { return (type() == boolean) && (boolean_value() == false); }
   
   inline string& Node::path() const  { return ip_->path; }
   inline size_t  Node::line() const  { return ip_->line; }

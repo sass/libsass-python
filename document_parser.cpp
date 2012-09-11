@@ -147,12 +147,17 @@ namespace Sass {
   {
     Node params(context.new_Node(Node::parameters, path, line, 0));
     Token name(lexed);
+    Node::Type param_type = Node::none;
     if (lex< exactly<'('> >()) {
       if (peek< variable >()) {
-        params << parse_parameter();
+        Node param(parse_parameter(param_type));
+        if (param.type() == Node::assignment) param_type = Node::assignment;
+        params << param;
         while (lex< exactly<','> >()) {
           if (!peek< variable >()) throw_syntax_error("expected a variable name (e.g. $x) for the parameter list for " + name.to_string());
-          params << parse_parameter();
+          Node param(parse_parameter(param_type));
+          if (param.type() == Node::assignment) param_type = Node::assignment;
+          params << param;
         }
         if (!lex< exactly<')'> >()) throw_syntax_error("parameter list for " + name.to_string() + " requires a ')'");
       }
@@ -161,20 +166,27 @@ namespace Sass {
     return params;
   }
 
-  Node Document::parse_parameter() {
+  Node Document::parse_parameter(Node::Type param_type) {
     lex< variable >();
     Node var(context.new_Node(Node::variable, path, line, lexed));
-    if (lex< exactly<':'> >()) { // default value
+    if (param_type == Node::assignment) {
+      if (lex< exactly<':'> >()) { // default value
+        Node val(parse_space_list());
+        Node par_and_val(context.new_Node(Node::assignment, path, line, 2));
+        par_and_val << var << val;
+        return par_and_val;
+      }
+      else {
+        throw_syntax_error("required parameter " + var.token().to_string() + " must precede all optional parameters");
+      }
+    }
+    else if (lex< exactly<':'> >()) { // default value
       Node val(parse_space_list());
       Node par_and_val(context.new_Node(Node::assignment, path, line, 2));
       par_and_val << var << val;
       return par_and_val;
     }
-    else {
-      return var;
-    }
-    // unreachable statement
-    return Node();
+    return var;
   }
 
   Node Document::parse_mixin_call()
@@ -192,15 +204,18 @@ namespace Sass {
   {
     Token name(lexed);
     Node args(context.new_Node(Node::arguments, path, line, 0));
+    Node::Type arg_type = Node::none;
     if (lex< exactly<'('> >()) {
       if (!peek< exactly<')'> >(position)) {
-        Node arg(parse_argument());
+        Node arg(parse_argument(Node::none));
         arg.should_eval() = true;
         args << arg;
+        if (arg.type() == Node::assignment) arg_type = Node::assignment;
         while (lex< exactly<','> >()) {
-          Node arg(parse_argument());
+          Node arg(parse_argument(arg_type));
           arg.should_eval() = true;
           args << arg;
+          if (arg.type() == Node::assignment) arg_type = Node::assignment;
         }
       }
       if (!lex< exactly<')'> >()) throw_syntax_error("improperly terminated argument list for " + name.to_string());
@@ -208,9 +223,26 @@ namespace Sass {
     return args;
   }
   
-  Node Document::parse_argument()
+  Node Document::parse_argument(Node::Type arg_type)
   {
-    if (peek< sequence < variable, spaces_and_comments, exactly<':'> > >()) {
+    // if arg_type is assignment, only accept keyword args from here onwards
+    if (arg_type == Node::assignment) {
+      if (peek< sequence < variable, spaces_and_comments, exactly<':'> > >()) {
+        lex< variable >();
+        Node var(context.new_Node(Node::variable, path, line, lexed));
+        lex< exactly<':'> >();
+        Node val(parse_space_list());
+        Node assn(context.new_Node(Node::assignment, path, line, 2));
+        assn << var << val;
+        return assn;
+      }
+      else {
+        throw_syntax_error("ordinal arguments must precede keyword arguments");
+      }
+    }
+    // otherwise accept either, and let the caller set the arg_type flag
+    if (arg_type == Node::none &&
+        peek< sequence < variable, spaces_and_comments, exactly<':'> > >()) {
       lex< variable >();
       Node var(context.new_Node(Node::variable, path, line, lexed));
       lex< exactly<':'> >();
@@ -219,9 +251,19 @@ namespace Sass {
       assn << var << val;
       return assn;
     }
-    else {
-      return parse_space_list();
-    }
+    return parse_space_list();
+    // if (peek< sequence < variable, spaces_and_comments, exactly<':'> > >()) {
+    //   lex< variable >();
+    //   Node var(context.new_Node(Node::variable, path, line, lexed));
+    //   lex< exactly<':'> >();
+    //   Node val(parse_space_list());
+    //   Node assn(context.new_Node(Node::assignment, path, line, 2));
+    //   assn << var << val;
+    //   return assn;
+    // }
+    // else {
+    //   return parse_space_list();
+    // }
   }
 
   Node Document::parse_assignment()
@@ -430,6 +472,9 @@ namespace Sass {
       }
       else if (lex< sequence< optional<sign>, digits > >()) {
         pseudo << context.new_Node(Node::value, path, line, lexed);
+      }
+      else if (lex< identifier >()) {
+        pseudo << context.new_Node(Node::identifier, path, line, lexed);
       }
       else if (lex< string_constant >()) {
         pseudo << context.new_Node(Node::string_constant, path, line, lexed);
@@ -1010,7 +1055,7 @@ namespace Sass {
     }
 
     Node args(parse_arguments());
-    Node call(context.new_Node(Node::function_call, path, line, 2));
+    Node call(context.new_Node(Node::function_call, name.path(), name.line(), 2));
     call << name << args;
     call.should_eval() = true;
     return call;

@@ -323,7 +323,7 @@ namespace Sass {
             if (!f_env.count(resolved_name)) throw_eval_error("wrong number of arguments to " + name, expr.path(), expr.line());
             f = f_env[resolved_name];
           }
-          return apply_function(f, expr[1], prefix, env, f_env, new_Node, ctx);
+          return apply_function(f, expr[1], prefix, env, f_env, new_Node, ctx, expr.path(), expr.line());
         }
       } break;
       
@@ -353,7 +353,16 @@ namespace Sass {
         string id_str(expr.to_string());
         to_lowercase(id_str);
         if (!function_name && ctx.color_names_to_values.count(id_str)) {
-          return ctx.color_names_to_values[id_str];
+          Node color_orig(ctx.color_names_to_values[id_str]);
+          Node r(color_orig[0]);
+          Node g(color_orig[1]);
+          Node b(color_orig[2]);
+          Node a(color_orig[3]);
+          return new_Node(expr.path(), expr.line(),
+                          r.numeric_value(),
+                          g.numeric_value(),
+                          b.numeric_value(),
+                          a.numeric_value());
         }
         else {
           return expr;
@@ -611,61 +620,80 @@ namespace Sass {
     }
   }
 
+  // Helper function for binding arguments in function and mixin calls.
+  // Needs the environment containing the bindings to be passed in by the
+  // caller. Also expects the caller to have pre-evaluated the arguments.
+  void bind_arguments(string callee_name, const Node params, const Node args, Node prefix, Environment& env, map<string, Function>& f_env, Node_Factory& new_Node, Context& ctx)
+  {
+    // populate the env with the names of the parameters so we can check for
+    // correctness further down
+    for (size_t i = 0, S = params.size(); i < S; ++i) {
+      Node param(params[i]);
+      env.current_frame[param.type() == Node::variable ? param.token() : param[0].token()] = Node();
+    }
+
+    // now do the actual binding
+    size_t args_bound = 0, num_params = params.size();
+    for (size_t i = 0, j = 0, S = args.size(); i < S; ++i) {
+      if (j >= num_params) {
+        stringstream msg;
+        msg << callee_name << " only takes " << num_params << " arguments";
+        throw_eval_error(msg.str(), args.path(), args.line());
+      }
+      Node arg(args[i]), param(params[j]);
+      // ordinal argument; just bind and keep going
+      if (arg.type() != Node::assignment) {
+        env[param.type() == Node::variable ? param.token() : param[0].token()] = arg;
+        ++j;
+      }
+      // keyword argument -- need to check for correctness
+      else {
+        Token arg_name(arg[0].token());
+        Node arg_value(arg[1]);
+        if (!env.query(arg_name)) {
+          throw_eval_error(callee_name + " has no parameter named " + arg_name.to_string(), arg.path(), arg.line());
+        }
+        if (!env[arg_name].is_stub()) {
+          throw_eval_error(callee_name + " was passed argument " + arg_name.to_string() + " both by position and by name", arg.path(), arg.line());
+        }
+        env[arg_name] = arg_value;
+        ++args_bound;
+      }
+    }
+    // now plug in the holes with default values, if any
+    for (size_t i = 0, S = params.size(); i < S; ++i) {
+      Node param(params[i]);
+      Token param_name((param.type() == Node::assignment ? param[0] : param).token());
+      if (env[param_name].is_stub()) {
+        if (param.type() != Node::assignment) {
+          throw_eval_error(callee_name + " is missing argument " + param_name.to_string(), args.path(), args.line());
+        }
+        // eval default values in an environment where the previous vals have already been evaluated
+        env[param_name] = eval(param[1], prefix, env, f_env, new_Node, ctx);
+      }
+    }
+  }
+
   // Apply a mixin -- bind the arguments in a new environment, link the new
   // environment to the current one, then copy the body and eval in the new
   // environment.
-  
   Node apply_mixin(Node mixin, const Node args, Node prefix, Environment& env, map<string, Function>& f_env, Node_Factory& new_Node, Context& ctx, bool dynamic_scope)
   {
     Node params(mixin[1]);
     Node body(new_Node(mixin[2])); // clone the body
-    Environment bindings;
-    // TO DO: REFACTOR THE ARG-BINDER
-    // bind arguments
-    for (size_t i = 0, j = 0, S = args.size(); i < S; ++i) {
-      if (args[i].type() == Node::assignment) {
-        Node arg(args[i]);
-        Token name(arg[0].token());
-        // check that the keyword arg actually names a formal parameter
-        bool valid_param = false;
-        for (size_t k = 0, S = params.size(); k < S; ++k) {
-          Node param_k = params[k];
-          if (param_k.type() == Node::assignment) param_k = param_k[0];
-          if (arg[0] == param_k) {
-            valid_param = true;
-            break;
-          }
-        }
-        if (!valid_param) throw_eval_error("mixin " + mixin[0].to_string() + " has no parameter named " + name.to_string(), arg.path(), arg.line());
-        if (!bindings.query(name)) {
-          bindings[name] = eval(arg[1], prefix, env, f_env, new_Node, ctx);
-        }
+
+    // evaluate arguments in the current environment
+    for (size_t i = 0, S = args.size(); i < S; ++i) {
+      if (args[i].type() != Node::assignment) {
+        args[i] = eval(args[i], prefix, env, f_env, new_Node, ctx);
       }
       else {
-        // ensure that the number of ordinal args < params.size()
-        if (j >= params.size()) {
-          stringstream ss;
-          ss << "mixin " << mixin[0].to_string() << " only takes " << params.size() << ((params.size() == 1) ? " argument" : " arguments");
-          throw_eval_error(ss.str(), args[i].path(), args[i].line());
-        }
-        Node param(params[j]);
-        Token name(param.type() == Node::variable ? param.token() : param[0].token());
-        bindings[name] = eval(args[i], prefix, env, f_env, new_Node, ctx);
-        ++j;
+        args[i][1] = eval(args[i][1], prefix, env, f_env, new_Node, ctx);
       }
     }
-    // plug the holes with default arguments if any
-    for (size_t i = 0, S = params.size(); i < S; ++i) {
-      if (params[i].type() == Node::assignment) {
-        Node param(params[i]);
-        Token name(param[0].token());
-        if (!bindings.query(name)) {
-          bindings[name] = eval(param[1], prefix, env, f_env, new_Node, ctx);
-        }
-      }
-    }
-    // END ARG-BINDER
-    // link the new environment and eval the mixin's body
+
+    // Create a new environment for the mixin and link it to the appropriate parent
+    Environment bindings;
     if (dynamic_scope) {
       bindings.link(env);
     }
@@ -674,6 +702,9 @@ namespace Sass {
       // to implement full lexical scope someday.
       bindings.link(env.global ? *env.global : env);
     }
+    // bind arguments in the extended environment
+    bind_arguments("mixin " + mixin[0].to_string(), params, args, prefix, bindings, f_env, new_Node, ctx);
+    // evaluate the mixin's body
     for (size_t i = 0, S = body.size(); i < S; ++i) {
       body[i] = eval(body[i], prefix, bindings, f_env, new_Node, ctx);
     }
@@ -682,76 +713,44 @@ namespace Sass {
 
   // Apply a function -- bind the arguments and pass them to the underlying
   // primitive function implementation, then return its value.
-  
-  Node apply_function(const Function& f, const Node args, Node prefix, Environment& env, map<string, Function>& f_env, Node_Factory& new_Node, Context& ctx)
+  Node apply_function(const Function& f, const Node args, Node prefix, Environment& env, map<string, Function>& f_env, Node_Factory& new_Node, Context& ctx, string& path, size_t line)
   {
     if (f.primitive) {
-      map<Token, Node> bindings;
-      // bind arguments
-      for (size_t i = 0, j = 0, S = args.size(); i < S; ++i) {
-        if (args[i].type() == Node::assignment) {
-          Node arg(args[i]);
-          Token name(arg[0].token());
-          bindings[name] = eval(arg[1], prefix, env, f_env, new_Node, ctx);
+      // evaluate arguments in the current environment
+      for (size_t i = 0, S = args.size(); i < S; ++i) {
+        if (args[i].type() != Node::assignment) {
+          args[i] = eval(args[i], prefix, env, f_env, new_Node, ctx);
         }
         else {
-          // TO DO: ensure (j < f.parameters.size())
-          bindings[f.parameters[j].token()] = eval(args[i], prefix, env, f_env, new_Node, ctx);
-          ++j;
+          args[i][1] = eval(args[i][1], prefix, env, f_env, new_Node, ctx);
         }
       }
-      return f(bindings, new_Node);
+      // bind arguments
+      Environment bindings;
+      bindings.link(env.global ? *env.global : env);
+      bind_arguments("function " + f.name, f.parameters, args, prefix, bindings, f_env, new_Node, ctx);
+      return f.primitive(f.parameter_names, bindings, new_Node, path, line);
     }
     else {
       Node params(f.definition[1]);
       Node body(new_Node(f.definition[2]));
-      Environment bindings;
-      // TO DO: REFACTOR THE ARG-BINDER
-      // bind arguments
-      for (size_t i = 0, j = 0, S = args.size(); i < S; ++i) {
-        if (args[i].type() == Node::assignment) {
-          Node arg(args[i]);
-          Token name(arg[0].token());
-          // check that the keyword arg actually names a formal parameter
-          bool valid_param = false;
-          for (size_t k = 0, S = params.size(); k < S; ++k) {
-            Node param_k = params[k];
-            if (param_k.type() == Node::assignment) param_k = param_k[0];
-            if (arg[0] == param_k) {
-              valid_param = true;
-              break;
-            }
-          }
-          if (!valid_param) throw_eval_error("mixin " + f.name + " has no parameter named " + name.to_string(), arg.path(), arg.line());
-          if (!bindings.query(name)) {
-            bindings[name] = eval(arg[1], prefix, env, f_env, new_Node, ctx);
-          }
+
+      // evaluate arguments in the current environment
+      for (size_t i = 0, S = args.size(); i < S; ++i) {
+        if (args[i].type() != Node::assignment) {
+          args[i] = eval(args[i], prefix, env, f_env, new_Node, ctx);
         }
         else {
-          // ensure that the number of ordinal args < params.size()
-          if (j >= params.size()) {
-            stringstream ss;
-            ss << "mixin " << f.name << " only takes " << params.size() << ((params.size() == 1) ? " argument" : " arguments");
-            throw_eval_error(ss.str(), args[i].path(), args[i].line());
-          }
-          Node param(params[j]);
-          Token name(param.type() == Node::variable ? param.token() : param[0].token());
-          bindings[name] = eval(args[i], prefix, env, f_env, new_Node, ctx);
-          ++j;
+          args[i][1] = eval(args[i][1], prefix, env, f_env, new_Node, ctx);
         }
       }
-      // plug the holes with default arguments if any
-      for (size_t i = 0, S = params.size(); i < S; ++i) {
-        if (params[i].type() == Node::assignment) {
-          Node param(params[i]);
-          Token name(param[0].token());
-          if (!bindings.query(name)) {
-            bindings[name] = eval(param[1], prefix, env, f_env, new_Node, ctx);
-          }
-        }
-      }
-      // END ARG-BINDER
+
+      // create a new environment for the function and link it to the global env
+      // (C-style scope -- no full-blown lexical scope yet)
+      Environment bindings;
       bindings.link(env.global ? *env.global : env);
+      // bind the arguments
+      bind_arguments("function " + f.name, params, args, prefix, bindings, f_env, new_Node, ctx);
       return function_eval(f.name, body, bindings, new_Node, ctx, true);
     }
   }
@@ -779,8 +778,8 @@ namespace Sass {
           }
           Node var(stm[0]);
           if (stm.is_guarded() && bindings.query(var.token())) continue;
-          // If a binding exists (possible upframe), then update it.
-          // Otherwise, make a new on in the current frame.
+          // If a binding exists (possibly upframe), then update it.
+          // Otherwise, make a new one in the current frame.
           if (bindings.query(var.token())) {
             bindings[var.token()] = val;
           }
@@ -1009,6 +1008,7 @@ namespace Sass {
         for (multimap<Node, Node>::iterator i = extension_table.lower_bound(extendee_base), E = extension_table.upper_bound(extendee_base);
              i != E;
              ++i) {
+          if (i->second.size() <= 2) continue; // TODO: UN-HACKIFY THIS
           if (i->second[2].type() == Node::selector_group)
             extender_group += i->second[2];
           else
@@ -1033,6 +1033,7 @@ namespace Sass {
             for (multimap<Node, Node>::iterator i = extension_table.lower_bound(extendee_i_base), E = extension_table.upper_bound(extendee_i_base);
                  i != E;
                  ++i) {
+              if (i->second.size() <= 2) continue; // TODO: UN-HACKIFY THIS
               if (i->second[2].type() == Node::selector_group)
                 extender_group += i->second[2];
               else
