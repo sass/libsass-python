@@ -37,6 +37,19 @@ if sys.platform == 'win32':
         os.environ['VS90COMNTOOLS'] = os.environ['VS110COMNTOOLS']
     except KeyError:
         warnings.warn('You probably need Visual Studio 2012 (11.0) or higher')
+    # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
+    if sys.version < (2, 7):
+        def spawn(self, cmd):
+            from distutils.spawn import spawn
+            if cmd[0] == self.linker:
+                for i, val in enumerate(cmd):
+                    if val.startswith('/MANIFESTFILE:'):
+                        spawn(cmd[:i] + ['/MANIFEST'] + cmd[i:],
+                              dry_run=self.dry_run)
+                        break
+            spawn(cmd, dry_run=self.dry_run)
+        from distutils.msvc9compiler import MSVCCompiler
+        MSVCCompiler.spawn = spawn
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
