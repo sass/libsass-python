@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.2.2
+-------------
+
+To be released.
+
+- Fixed a link error on PyPy and Linux.
+- Fixed build errors on Windows.
+
+
 Version 0.2.1
 -------------
 
