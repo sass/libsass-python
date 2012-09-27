@@ -6,6 +6,7 @@ import os.path
 import shutil
 import sys
 import tempfile
+import warnings
 
 try:
     from setuptools import Extension, setup
@@ -32,6 +33,10 @@ libsass_headers = [
 ]
 
 if sys.platform == 'win32':
+    try:
+        os.environ['VS90COMNTOOLS'] = os.environ['VS110COMNTOOLS']
+    except KeyError:
+        warnings.warn('You probably need Visual Studio 2012 (11.0) or higher')
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
