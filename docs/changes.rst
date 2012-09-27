@@ -4,7 +4,7 @@ Changelog
 Version 0.2.2
 -------------
 
-To be released.
+Released on September 28, 2012.
 
 - Fixed a link error on PyPy and Linux.
 - Fixed build errors on Windows.
