@@ -46,7 +46,7 @@ if sys.platform == 'win32':
                     if val.startswith('/MANIFESTFILE:'):
                         spawn(cmd[:i] + ['/MANIFEST'] + cmd[i:],
                               dry_run=self.dry_run)
-                        break
+                        return
             spawn(cmd, dry_run=self.dry_run)
         from distutils.msvc9compiler import MSVCCompiler
         MSVCCompiler.spawn = spawn
