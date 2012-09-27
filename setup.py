@@ -55,7 +55,7 @@ if sys.platform == 'win32':
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
     flags = ['-fPIC', '-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
-    link_flags = ['-fPIC']
+    link_flags = ['-fPIC', '-lstdc++']
     macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
 sass_extension = Extension(
