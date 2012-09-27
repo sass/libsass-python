@@ -28,11 +28,11 @@ libsass_headers = [
     'color_names.hpp', 'error.hpp', 'node.hpp',
     'context.hpp', 'eval_apply.hpp', 'node_factory.hpp',
     'document.hpp', 'functions.hpp', 'prelexer.hpp',
-    'sass_interface.h'
+    'sass_interface.h', 'win32/unistd.h'
 ]
 
 if sys.platform == 'win32':
-    flags = ['-Wall', '-I"' + os.path.abspath('win32') + '"']
+    flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
