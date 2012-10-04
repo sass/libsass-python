@@ -19,7 +19,7 @@ except ImportError:
 version = '0.2.3'
 
 libsass_sources = [ 
-    'context.cpp', 'functions.cpp', 'document.cpp',
+    'constants.cpp', 'context.cpp', 'functions.cpp', 'document.cpp',
     'document_parser.cpp', 'eval_apply.cpp', 'node.cpp',
     'node_factory.cpp', 'node_emitters.cpp', 'prelexer.cpp',
     'sass_interface.cpp',
