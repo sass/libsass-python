@@ -10,6 +10,7 @@
 namespace Sass {
   struct Environment;
   struct Context;
+  struct Node_Factory;
 
   using std::map;
   
@@ -147,6 +148,9 @@ namespace Sass {
     extern Signature adjust_color_sig;
     Node adjust_color(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
+    extern Signature scale_color_sig;
+    Node scale_color(const Node, Environment&, Node_Factory&, string& path, size_t line);
+
     extern Signature change_color_sig;
     Node change_color(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
@@ -183,15 +187,21 @@ namespace Sass {
     extern Signature nth_sig;
     Node nth(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
+    extern Signature index_sig;
+    Node index(const Node, Environment&, Node_Factory&, string& path, size_t line);
+
     extern Signature join_sig;    
     Node join(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
     extern Signature append_sig;
     Node append(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
-    extern Signature compact_sig;
-    Node compact(const Node, Environment&, Node_Factory&, string& path, size_t line);
-    
+    extern Signature compact_1_sig;
+    Node compact_1(const Node, Environment&, Node_Factory&, string& path, size_t line);
+
+    extern Signature compact_n_sig;
+    Node compact_n(const Node, Environment&, Node_Factory&, string& path, size_t line);
+
     // Introspection Functions /////////////////////////////////////////////
     
     extern Signature type_of_sig;
@@ -214,6 +224,9 @@ namespace Sass {
     extern Signature if_sig;
     Node if_impl(const Node, Environment&, Node_Factory&, string& path, size_t line);
 
+    // Path Functions //////////////////////////////////////////////////////
+
+    extern Signature image_url_sig;
+    Node image_url(const Node, Environment&, Node_Factory&, string& path, size_t line);
   }
-  
 }

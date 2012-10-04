@@ -1,9 +1,16 @@
-#include "document.hpp"
-#include "error.hpp"
+#include <cstdlib>
 #include <iostream>
+#include "document.hpp"
+#include "constants.hpp"
+#include "error.hpp"
+
+#ifndef SASS_PRELEXER
+#include "prelexer.hpp"
+#endif
 
 namespace Sass {
   using namespace std;
+  using namespace Constants;
 
   void Document::parse_scss()
   {
@@ -315,8 +322,6 @@ namespace Sass {
     return ruleset;
   }
 
-  extern const char hash_lbrace[] = "#{";
-  extern const char rbrace[] = "}";
   Node Document::parse_selector_schema(const char* end_of_selector)
   {    
     const char* i = position;
@@ -659,12 +664,13 @@ namespace Sass {
         peek< exactly<'}'> >(position) ||
         peek< exactly<'{'> >(position) ||
         peek< exactly<')'> >(position))
-    { return context.new_Node(Node::nil, path, line, 0); }
+    { return context.new_Node(Node::list, path, line, 0); }
     Node list1(parse_space_list());
     // if it's a singleton, return it directly; don't wrap it
     if (!peek< exactly<','> >(position)) return list1;
     
-    Node comma_list(context.new_Node(Node::comma_list, path, line, 2));
+    Node comma_list(context.new_Node(Node::list, path, line, 2));
+    comma_list.is_comma_separated() = true;
     comma_list << list1;
     comma_list.should_eval() |= list1.should_eval();
     
@@ -690,7 +696,7 @@ namespace Sass {
         peek< default_flag >(position))
     { return disj1; }
     
-    Node space_list(context.new_Node(Node::space_list, path, line, 2));
+    Node space_list(context.new_Node(Node::list, path, line, 2));
     space_list << disj1;
     space_list.should_eval() |= disj1.should_eval();
     
@@ -713,11 +719,11 @@ namespace Sass {
   {
     Node conj1(parse_conjunction());
     // if it's a singleton, return it directly; don't wrap it
-    if (!peek< sequence< or_kwd, negate< identifier > > >()) return conj1;
+    if (!peek< sequence< or_op, negate< identifier > > >()) return conj1;
     
     Node disjunction(context.new_Node(Node::disjunction, path, line, 2));
     disjunction << conj1;
-    while (lex< sequence< or_kwd, negate< identifier > > >()) disjunction << parse_conjunction();
+    while (lex< sequence< or_op, negate< identifier > > >()) disjunction << parse_conjunction();
     disjunction.should_eval() = true;
     
     return disjunction;
@@ -727,11 +733,11 @@ namespace Sass {
   {
     Node rel1(parse_relation());
     // if it's a singleton, return it directly; don't wrap it
-    if (!peek< sequence< and_kwd, negate< identifier > > >()) return rel1;
+    if (!peek< sequence< and_op, negate< identifier > > >()) return rel1;
     
     Node conjunction(context.new_Node(Node::conjunction, path, line, 2));
     conjunction << rel1;
-    while (lex< sequence< and_kwd, negate< identifier > > >()) conjunction << parse_relation();
+    while (lex< sequence< and_op, negate< identifier > > >()) conjunction << parse_relation();
     conjunction.should_eval() = true;
     return conjunction;
   }
@@ -828,7 +834,7 @@ namespace Sass {
     if (lex< exactly<'('> >()) {
       Node value(parse_comma_list());
       value.should_eval() = true;
-      if (value.type() == Node::comma_list || value.type() == Node::space_list) {
+      if (value.type() == Node::list && value.size() > 0) {
         value[0].should_eval() = true;
       }
       if (!lex< exactly<')'> >()) throw_syntax_error("unclosed parenthesis");
@@ -855,27 +861,34 @@ namespace Sass {
   {
     if (lex< uri_prefix >())
     {
-      const char* value = position;
-      const char* rparen = find_first< exactly<')'> >(position);
-      if (!rparen) throw_syntax_error("URI is missing ')'");
-      Token content_tok(Token::make(value, rparen));
-      Node content_node(context.new_Node(Node::string_constant, path, line, content_tok));
-      // lex< string_constant >();
       Node result(context.new_Node(Node::uri, path, line, 1));
-      result << content_node;
-      position = rparen;
-      lex< exactly<')'> >();
+      if (lex< variable >()) {
+        result << context.new_Node(Node::variable, path, line, lexed);
+        result.should_eval() = true;
+      }
+      else if (lex< string_constant >()) {
+        result << parse_string();
+        result.should_eval() = true;
+      }
+      else if (lex< url_schema >()) {
+        result << Document::make_from_token(context, lexed, path, line).parse_url_schema();
+        result.should_eval() = true;
+      }
+      else if (lex< url_value >()) {
+        result << context.new_Node(Node::identifier, path, line, lexed);
+      }
+      else {
+        const char* value = position;
+        const char* rparen = find_first< exactly<')'> >(position);
+        if (!rparen) throw_syntax_error("URI is missing ')'");
+        Token content_tok(Token::make(value, rparen));
+        Node content_node(context.new_Node(Node::identifier, path, line, content_tok));
+        // lex< string_constant >();
+        result << content_node;
+        position = rparen;
+      }
+      if (!lex< exactly<')'> >()) throw_syntax_error("URI is missing ')'");
       return result;
-    }
-
-    if (lex< image_url_prefix >())
-    {
-      Node url(parse_value());
-      if (!lex< exactly<')'> >()) throw_syntax_error("call to image-url is missing ')'");
-      Node the_call(context.new_Node(Node::image_url, path, line, 1));
-      the_call << url;
-      the_call.should_eval() = true;
-      return the_call;
     }
 
     if (peek< functional >())
@@ -884,10 +897,10 @@ namespace Sass {
     if (lex< value_schema >())
     { return Document::make_from_token(context, lexed, path, line).parse_value_schema(); }
     
-    if (lex< sequence< true_kwd, negate< identifier > > >())
+    if (lex< sequence< true_val, negate< identifier > > >())
     { return context.new_Node(Node::boolean, path, line, true); }
     
-    if (lex< sequence< false_kwd, negate< identifier > > >())
+    if (lex< sequence< false_val, negate< identifier > > >())
     { return context.new_Node(Node::boolean, path, line, false); }
         
     if (lex< important >())
@@ -907,6 +920,34 @@ namespace Sass {
 
     if (lex< hex >())
     { return context.new_Node(Node::textual_hex, path, line, lexed); }
+
+    // if (lex< percentage >())
+    // { return context.new_Node(path, line, atof(lexed.begin), Node::numeric_percentage); }
+
+    // if (lex< dimension >()) {
+    //   return context.new_Node(path, line, atof(lexed.begin),
+    //                           Token::make(Prelexer::number(lexed.begin), lexed.end));
+    // }
+
+    // if (lex< number >())
+    // { return context.new_Node(path, line, atof(lexed.begin)); }
+
+    // if (lex< hex >()) {
+    //   Node triple(context.new_Node(Node::numeric_color, path, line, 4));
+    //   Token hext(Token::make(lexed.begin+1, lexed.end));
+    //   if (hext.length() == 6) {
+    //     for (int i = 0; i < 6; i += 2) {
+    //       triple << context.new_Node(path, line, static_cast<double>(strtol(string(hext.begin+i, 2).c_str(), NULL, 16)));
+    //     }
+    //   }
+    //   else {
+    //     for (int i = 0; i < 3; ++i) {
+    //       triple << context.new_Node(path, line, static_cast<double>(strtol(string(2, hext.begin[i]).c_str(), NULL, 16)));
+    //     }
+    //   }
+    //   triple << context.new_Node(path, line, 1.0);
+    //   return triple;
+    // }
 
     if (peek< string_constant >())
     { return parse_string(); } 
@@ -932,7 +973,9 @@ namespace Sass {
     // see if there any interpolants
     const char* p = find_first_in_interval< sequence< negate< exactly<'\\'> >, exactly<hash_lbrace> > >(str.begin, str.end);
     if (!p) {
-      return context.new_Node(Node::string_constant, path, line, str);
+      Node result(context.new_Node(Node::string_constant, path, line, str));
+      result.is_quoted() = true;
+      return result;
     }
     
     Node schema(context.new_Node(Node::string_schema, path, line, 1));
@@ -960,6 +1003,7 @@ namespace Sass {
         break;
       }
     }
+    schema.is_quoted() = true;
     schema.should_eval() = true;
     return schema;
   }
@@ -979,24 +1023,73 @@ namespace Sass {
       }
       else if (lex< percentage >()) {
         schema << context.new_Node(Node::textual_percentage, path, line, lexed);
+        // schema << context.new_Node(path, line, atof(lexed.begin), Node::numeric_percentage);
       }
       else if (lex< dimension >()) {
         schema << context.new_Node(Node::textual_dimension, path, line, lexed);
+        // schema << context.new_Node(path, line, atof(lexed.begin),
+        //                            Token::make(Prelexer::number(lexed.begin), lexed.end));
       }
       else if (lex< number >()) {
         schema << context.new_Node(Node::textual_number, path, line, lexed);
+        // schema << context.new_Node(path, line, atof(lexed.begin));
       }
       else if (lex< hex >()) {
         schema << context.new_Node(Node::textual_hex, path, line, lexed);
+        // Node triple(context.new_Node(Node::numeric_color, path, line, 4));
+        // Token hext(Token::make(lexed.begin+1, lexed.end));
+        // if (hext.length() == 6) {
+        //   for (int i = 0; i < 6; i += 2) {
+        //     triple << context.new_Node(path, line, static_cast<double>(strtol(string(hext.begin+i, 2).c_str(), NULL, 16)));
+        //   }
+        // }
+        // else {
+        //   for (int i = 0; i < 3; ++i) {
+        //     triple << context.new_Node(path, line, static_cast<double>(strtol(string(2, hext.begin[i]).c_str(), NULL, 16)));
+        //   }
+        // }
+        // triple << context.new_Node(path, line, 1.0);
+        // schema << triple;
       }
       else if (lex< string_constant >()) {
-        schema << context.new_Node(Node::string_constant, path, line, lexed);
+        Node str(context.new_Node(Node::string_constant, path, line, lexed));
+        str.is_quoted() = true;
+        schema << str;
       }
       else if (lex< variable >()) {
         schema << context.new_Node(Node::variable, path, line, lexed);
       }
       else {
         throw_syntax_error("error parsing interpolated value");
+      }
+    }
+    schema.should_eval() = true;
+    return schema;
+  }
+
+  Node Document::parse_url_schema()
+  {    
+    Node schema(context.new_Node(Node::value_schema, path, line, 1));
+    
+    while (position < end) {
+      if (position[0] == '/') {
+        lexed = Token::make(position, position+1);
+        schema << context.new_Node(Node::identifier, path, line, lexed);
+        ++position;
+      }
+      else if (lex< interpolant >()) {
+        Token insides(Token::make(lexed.begin + 2, lexed.end - 1));
+        Node interp_node(Document::make_from_token(context, insides, path, line).parse_list());
+        schema << interp_node;
+      }
+      else if (lex< sequence< identifier, exactly<':'> > >()) {
+        schema << context.new_Node(Node::identifier, path, line, lexed);
+      }
+      else if (lex< filename >()) {
+        schema << context.new_Node(Node::identifier, path, line, lexed);
+      }
+      else {
+        throw_syntax_error("error parsing interpolated url");
       }
     }
     schema.should_eval() = true;
@@ -1162,13 +1255,11 @@ namespace Sass {
     return media_query;
   }
 
-  // extern const char not_kwd[] = "not";
-  extern const char only_kwd[] = "only";
   Node Document::parse_media_expression()
   {
     Node media_expr(context.new_Node(Node::media_expression, path, line, 1));
     // if the query begins with 'not' or 'only', then a media type is required
-    if (lex< not_kwd >() || lex< exactly<only_kwd> >()) {
+    if (lex< not_op >() || lex< exactly<only_kwd> >()) {
       media_expr << context.new_Node(Node::identifier, path, line, lexed);
       if (!lex< identifier >()) throw_syntax_error("media type expected in media query");
       media_expr << context.new_Node(Node::identifier, path, line, lexed);
@@ -1185,7 +1276,7 @@ namespace Sass {
     }
     // parse the rest of the properties for this disjunct
     while (!peek< exactly<','> >() && !peek< exactly<'{'> >()) {
-      if (!lex< and_kwd >()) throw_syntax_error("invalid media query");
+      if (!lex< and_op >()) throw_syntax_error("invalid media query");
       media_expr << context.new_Node(Node::identifier, path, line, lexed);
       if (!lex< exactly<'('> >()) throw_syntax_error("invalid media query");
       media_expr << parse_rule();

@@ -1,11 +1,13 @@
 #include <sstream>
 #include <algorithm>
-#include "node.hpp"
-#include "error.hpp"
 #include <iostream>
+#include "node.hpp"
+#include "constants.hpp"
+#include "error.hpp"
 
 namespace Sass {
   using namespace std;
+  using namespace Constants;
 
   // ------------------------------------------------------------------------
   // Node method implementations
@@ -80,12 +82,12 @@ namespace Sass {
 
     switch (t)
     {
-      case comma_list:
-      case space_list:
+      case list:
       case expression:
       case term:
       case numeric_color: {
         if (size() != rhs.size()) return false;
+        if ((t == list) && (is_comma_separated() != rhs.is_comma_separated())) return false;
         for (size_t i = 0, L = size(); i < L; ++i) {
           if (at(i) == rhs[i]) continue;
           else return false;
@@ -340,8 +342,6 @@ namespace Sass {
     return 0;
   }
   
-  extern const char percent_str[] = "%";
-  extern const char empty_str[]   = "";
   Token Node_Impl::unit()
   {
     switch (type)
