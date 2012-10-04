@@ -151,14 +151,15 @@ class build_sass(Command):
 
 # Does monkey-patching the setuptools.command.sdist.sdist.check_readme()
 # method to include compiled SASS files as data files.
-@functools.wraps(sdist.check_readme)
-def check_readme(self):
-    try:
-        files = self.distribution.compiled_sass_files
-    except AttributeError:
-        pass
-    else:
-        self.filelist.extend(os.path.join(*pair) for pair in files)
-    return self._wrapped_check_readme()
-sdist._wrapped_check_readme = sdist.check_readme
-sdist.check_readme = check_readme
+if not hasattr(sdist, '_wrapped_check_readme'):
+    @functools.wraps(sdist.check_readme)
+    def check_readme(self):
+        try:
+            files = self.distribution.compiled_sass_files
+        except AttributeError:
+            pass
+        else:
+            self.filelist.extend(os.path.join(*pair) for pair in files)
+        return self._wrapped_check_readme()
+    sdist._wrapped_check_readme = sdist.check_readme
+    sdist.check_readme = check_readme
