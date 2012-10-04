@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.2.3
+-------------
+
+To be released.
+
+- :mod:`sassutils.distutils`: Prevent double monkey patch of ``sdist``.
+
+
 Version 0.2.2
 -------------
 
