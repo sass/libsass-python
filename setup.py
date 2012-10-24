@@ -22,14 +22,14 @@ libsass_sources = [
     'constants.cpp', 'context.cpp', 'functions.cpp', 'document.cpp',
     'document_parser.cpp', 'eval_apply.cpp', 'node.cpp',
     'node_factory.cpp', 'node_emitters.cpp', 'prelexer.cpp',
-    'sass_interface.cpp',
+    'selector.cpp', 'sass_interface.cpp',
 ]
 
 libsass_headers = [
     'color_names.hpp', 'error.hpp', 'node.hpp',
     'context.hpp', 'eval_apply.hpp', 'node_factory.hpp',
     'document.hpp', 'functions.hpp', 'prelexer.hpp',
-    'sass_interface.h', 'win32/unistd.h'
+    'selector.hpp', 'sass_interface.h', 'win32/unistd.h'
 ]
 
 if sys.platform == 'win32':
