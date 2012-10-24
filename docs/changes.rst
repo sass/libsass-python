@@ -4,7 +4,7 @@ Changelog
 Version 0.2.3
 -------------
 
-To be released.
+Released on October 24, 2012.
 
 - :mod:`sassutils.distutils`: Prevent double monkey patch of ``sdist``.
 - Merged upstream changes of libsass.
