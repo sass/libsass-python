@@ -159,7 +159,11 @@ if not hasattr(sdist, '_wrapped_check_readme'):
         except AttributeError:
             pass
         else:
-            self.filelist.extend(os.path.join(*pair) for pair in files)
+            try:
+                join = os.path.join
+            except AttributeError:
+                from os.path import join  # XXX: workaround
+            self.filelist.extend(join(*pair) for pair in files)
         return self._wrapped_check_readme()
     sdist._wrapped_check_readme = sdist.check_readme
     sdist.check_readme = check_readme
