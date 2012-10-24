@@ -75,19 +75,19 @@ def readme():
             readme = f.read()
     except IOError:
         pass
-    return re.sub(
-        r'''
+    pattern = re.compile(r'''
         (?P<colon> : \n{2,})?
         \.\. [ ] code-block:: \s+ [^\n]+ \n
         [^ \t]* \n
         (?P<block>
             (?: (?: (?: \t | [ ]{3}) [^\n]* | [ \t]* ) \n)+
         )
-        ''',
+    ''', re.VERBOSE)
+    return pattern.sub(
         lambda m: (':' + m.group('colon') if m.group('colon') else '') +
                   '\n'.join(' ' + l for l in m.group('block').splitlines()) +
                   '\n\n',
-        readme, 0, re.VERBOSE
+        readme, 0
     )
 
 
