@@ -6,6 +6,7 @@ binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
 your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
+Need no Ruby nor Node.js.
 
 It currently supports CPython 2.5, 2.6, 2.7, and PyPy 1.9!
 
