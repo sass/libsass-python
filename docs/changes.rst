@@ -6,6 +6,8 @@ Version 0.2.4
 
 To be released.
 
+- Added :const:`sass.OUTPUT_STYLES` constant map.
+
 
 Version 0.2.3
 -------------

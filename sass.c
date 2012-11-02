@@ -272,13 +272,25 @@ static PyMethodDef PySass_methods[] = {
 PyMODINIT_FUNC
 initsass()
 {
-    PyObject *module, *version;
+    PyObject *module, *version, *output_styles;
+    size_t i = 0;
 
     module = Py_InitModule3("sass", PySass_methods,
                             "The thin binding of libsass for Python.");
     if (module == NULL) {
         return;
     }
+
+    output_styles = PyDict_New();
+    for (i = 0; PySass_output_style_enum[i].label; ++i) {
+        PyDict_SetItemString(
+            output_styles,
+            PySass_output_style_enum[i].label,
+            PyInt_FromLong((long) PySass_output_style_enum[i].value)
+        );
+    }
+    PyModule_AddObject(module, "OUTPUT_STYLES", output_styles);
+
 #ifdef LIBSASS_PYTHON_VERSION
     version = PyString_FromString(LIBSASS_PYTHON_VERSION);
 #else

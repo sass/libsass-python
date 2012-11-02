@@ -1,6 +1,7 @@
 from __future__ import with_statement
 from attest import assert_hook
 
+import collections
 import os.path
 import re
 import shutil
@@ -21,6 +22,13 @@ suite = Tests()
 @suite.test
 def version():
     assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
+
+
+@suite.test
+def output_styles():
+    if hasattr(collections, 'Mapping'):
+        assert isinstance(sass.OUTPUT_STYLES, collections.Mapping)
+    assert 'nested' in sass.OUTPUT_STYLES
 
 
 @suite.test
