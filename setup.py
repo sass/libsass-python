@@ -127,8 +127,9 @@ setup(
     version=version,
     ext_modules=[sass_extension],
     packages=['sassutils'],
-    py_modules=['sasstests'],
+    py_modules=['sassc', 'sasstests'],
     package_data={'': ['README.rst', 'test/*.sass']},
+    scripts=['sassc.py'],
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
@@ -139,6 +140,9 @@ setup(
         ],
         'distutils.setup_keywords': [
             'sass_manifests = sassutils.distutils:validate_manifests'
+        ],
+        'console_scripts': [
+            ['sassc = sassc:main']
         ]
     },
     tests_require=['Attest', 'Werkzeug'],

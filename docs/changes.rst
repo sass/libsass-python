@@ -6,6 +6,7 @@ Version 0.2.4
 
 To be released.
 
+- Added :mod:`sassc` CLI executable script.
 - Added :const:`sass.OUTPUT_STYLES` constant map.
 
 

@@ -51,6 +51,7 @@ References
 .. toctree::
    :maxdepth: 2
 
+   sassc
    sass
    sassutils
 
