@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """:mod:`sassc` --- SassC compliant command line interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
