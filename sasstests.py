@@ -192,3 +192,22 @@ def wsgi_sass_middleware():
     assert r.data == '/static/not-exists.sass.css'
     assert r.mimetype == 'text/plain'
     shutil.rmtree(css_dir)
+
+
+regression = Tests()
+
+
+@regression.test
+def regression_issue_2():
+    actual = sass.compile(string='''
+        @media (min-width: 980px) {
+            a {
+                color: red;
+            }
+        }
+    ''')
+    normalized = re.sub(r'\s+', '', actual)
+    assert normalized == '@media(min-width:980px){a{color:red;}}'
+
+
+suite.register(regression)
