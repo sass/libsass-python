@@ -4,7 +4,7 @@ Changelog
 Version 0.2.4
 -------------
 
-To be released.
+Released on December 4, 2012.
 
 - Added :mod:`sassc` CLI executable script.
 - Added :const:`sass.OUTPUT_STYLES` constant map.
