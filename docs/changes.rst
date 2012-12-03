@@ -8,6 +8,10 @@ To be released.
 
 - Added :mod:`sassc` CLI executable script.
 - Added :const:`sass.OUTPUT_STYLES` constant map.
+- Merged recent changes from libsass upstream:
+  `e997102--a84b181`__.
+
+__ https://github.com/hcatlin/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84
 
 
 Version 0.2.3
