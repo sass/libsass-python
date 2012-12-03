@@ -38,6 +38,11 @@ type.
    :raises exceptions.IOError: when the ``filename`` doesn't exist or
                                cannot be read
 
+.. data:: OUTPUT_STYLES
+
+   (:class:`collections.Mapping`) The dictionary of output styles.
+   Keys are output name strings, and values are flag integers.
+
 .. exception:: CompileError
 
    The exception type that is raised by :func:`compile()`.  It is a subtype

@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sassc — SassC compliant command line interface &mdash; libsass 0.2.4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="libsass 0.2.4 documentation" href="index.html" />
+    <link rel="next" title="sass — Binding of libsass" href="sass.html" />
+    <link rel="prev" title="Changelog" href="changes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sass.html" title="sass — Binding of libsass"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="changes.html" title="Changelog"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="changes.html"
+                        title="previous chapter">Changelog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sass.html"
+                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">sass</span></tt> &#8212; Binding of <tt class="docutils literal docutils literal"><span class="pre">libsass</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/sassc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-sassc"></span><div class="section" id="sassc-sassc-compliant-command-line-interface">
+<h1><a class="reference internal" href="#module-sassc" title="sassc"><tt class="xref py py-mod docutils literal"><span class="pre">sassc</span></tt></a> &#8212; SassC compliant command line interface<a class="headerlink" href="#sassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
+<p>This provides <a class="reference external" href="https://github.com/hcatlin/sassc">SassC</a> compliant CLI executable named <strong class="program">sassc</strong>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> sassc
+<span class="go">Usage: sassc [options] SCSS_FILE...</span>
+</pre></div>
+</div>
+<p>There are options as well:</p>
+<dl class="option">
+<dt id="cmdoption-sassc-s">
+<tt class="descname">-s</tt><tt class="descclassname"> &lt;style&gt;</tt><tt class="descclassname">, </tt><tt class="descname">--output-style</tt><tt class="descclassname"> &lt;style&gt;</tt><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coding style of the compiled result.  The same as <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a>
+function&#8217;s <tt class="docutils literal"><span class="pre">output_style</span></tt> keyword argument.  Default is <tt class="docutils literal"><span class="pre">nested</span></tt>.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sassc-I">
+<tt class="descname">-I</tt><tt class="descclassname"> &lt;dir&gt;</tt><tt class="descclassname">, </tt><tt class="descname">--include-path</tt><tt class="descclassname"> &lt;dir&gt;</tt><a class="headerlink" href="#cmdoption-sassc-I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional directory path to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed (S)CSS files.
+Can be multiply used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sassc-i">
+<tt class="descname">-i</tt><tt class="descclassname"> &lt;dir&gt;</tt><tt class="descclassname">, </tt><tt class="descname">--image-path</tt><tt class="descclassname"> &lt;dir&gt;</tt><a class="headerlink" href="#cmdoption-sassc-i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to find images.  Default is the current directory (<tt class="file docutils literal"><span class="pre">./</span></tt>).</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sassc-v">
+<tt class="descname">-v</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--version</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-sassc-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the program version.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sassc-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><tt class="descclassname">, </tt><tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-sassc-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the help message.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sass.html" title="sass — Binding of libsass"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="changes.html" title="Changelog"
+             >previous</a> |</li>
+        <li><a href="index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Hong Minhee.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
