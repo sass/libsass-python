@@ -55,9 +55,7 @@ if sys.platform == 'win32':
     link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
-    flags = ['-fPIC', '-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
-    if sys.platform == 'darwin':
-        flags.pop()
+    flags = ['-fPIC', '-Wall', '-Wno-parentheses']
     link_flags = ['-fPIC', '-lstdc++']
     macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
