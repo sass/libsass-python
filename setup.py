@@ -19,7 +19,7 @@ except ImportError:
 
 version = '0.2.4'
 
-libsass_sources = [ 
+libsass_sources = [
     'constants.cpp', 'context.cpp', 'functions.cpp', 'document.cpp',
     'document_parser.cpp', 'eval_apply.cpp', 'node.cpp',
     'node_factory.cpp', 'node_emitters.cpp', 'prelexer.cpp',
@@ -55,7 +55,9 @@ if sys.platform == 'win32':
     link_flags = []
     macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
-    flags = ['-fPIC', '-Wall', '-Wno-parentheses', '-Wno-tautological-compare']
+    flags = ['-fPIC', '-Wall', '-Wno-parentheses']
+    if sys.platform != 'darwin':
+        flags.append('-Wno-tautological-compare')
     link_flags = ['-fPIC', '-lstdc++']
     macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
