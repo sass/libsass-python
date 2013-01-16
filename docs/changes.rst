@@ -8,6 +8,9 @@ To be released.
 
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
+- Now builder creates target recursive subdirectories even if it doesn't
+  exist yet, rather than siliently fails.
+  [:issue:`8`, :issue:`9` by Philipp Volguine]
 
 
 Version 0.2.4
