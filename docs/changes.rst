@@ -6,6 +6,9 @@ Version 0.2.5
 
 To be released.
 
+- Fixed build failing on Mac OS X.
+  [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
+
 
 Version 0.2.4
 -------------
