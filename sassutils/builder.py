@@ -168,6 +168,8 @@ class Manifest(object):
         root_path = os.path.join(package_dir, self.sass_path)
         css = compile(filename=sass_filename, include_paths=[root_path])
         css_path = os.path.join(package_dir, self.css_path, css_filename)
+        if not os.path.exists(css_path):
+            os.mkdir(os.path.dirname(css_path))
         with open(css_path, 'w') as f:
             f.write(css)
         return css_filename
