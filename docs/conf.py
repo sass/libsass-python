@@ -27,7 +27,8 @@ needs_sphinx = '1.1'
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
+              'sphinx.ext.extlinks']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -261,3 +262,10 @@ intersphinx_mapping = {
     'flask': ('http://flask.pocoo.org/docs/', None)
 }
 
+
+extlinks = {
+    'issue': ('https://github.com/dahlia/libsass-python/issues/%s', '#'),
+    'branch': ('https://github.com/dahlia/libsass-python/compare/master...%s',
+               ''),
+    'commit': ('https://github.com/dahlia/libsass-python/commit/%s', '')
+}
