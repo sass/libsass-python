@@ -339,7 +339,7 @@ namespace Sass {
                                 rgb_color[1].numeric_value(),
                                 rgb_color[2].numeric_value(),
                                 new_Node, path, line));
-      return new_Node(path, line, hsl_color[1].numeric_value(), Token::make(percent_str));
+      return new_Node(path, line, hsl_color[1].numeric_value(), Node::numeric_percentage);
     }
 
     extern Signature lightness_sig = "lightness($color)";
@@ -349,7 +349,7 @@ namespace Sass {
                                 rgb_color[1].numeric_value(),
                                 rgb_color[2].numeric_value(),
                                 new_Node, path, line));
-      return new_Node(path, line, hsl_color[2].numeric_value(), Token::make(percent_str));
+      return new_Node(path, line, hsl_color[2].numeric_value(), Node::numeric_percentage);
     }
 
     extern Signature adjust_hue_sig = "adjust-hue($color, $degrees)";
@@ -1049,7 +1049,13 @@ namespace Sass {
           type_name = Token::make(color_name);
         } break;
         case Node::list: {
-          type_name = Token::make(list_name);
+          // cerr << val.to_string() << endl;
+          // cerr << val.is_arglist() << endl;
+          // throw (42);
+          if (val.is_arglist())
+            type_name = Token::make(arglist_name);
+          else
+            type_name = Token::make(list_name);
         } break;
         default: {
           type_name = Token::make(string_name);
@@ -1128,6 +1134,9 @@ namespace Sass {
             (u1 == "em" && u2 == "em") ||
             ((u1 == "in" || u1 == "cm" || u1 == "mm" || u1 == "pt" || u1 == "pc" || u1 == "px") &&
              (u2 == "in" || u2 == "cm" || u2 == "mm" || u2 == "pt" || u2 == "pc" || u2 == "px"))) {
+          return new_Node(Node::boolean, path, line, true);
+        }
+        else if (u1 == u2) {
           return new_Node(Node::boolean, path, line, true);
         }
         else {
