@@ -3,7 +3,6 @@ from __future__ import with_statement
 import distutils.cmd
 import os
 import os.path
-import re
 import shutil
 import sys
 import tempfile
@@ -72,23 +71,9 @@ sass_extension = Extension(
 def readme():
     try:
         with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
-            readme = f.read()
+            return f.read()
     except IOError:
         pass
-    pattern = re.compile(r'''
-        (?P<colon> : \n{2,})?
-        \.\. [ ] code-block:: \s+ [^\n]+ \n
-        [^ \t]* \n
-        (?P<block>
-            (?: (?: (?: \t | [ ]{3}) [^\n]* | [ \t]* ) \n)+
-        )
-    ''', re.VERBOSE)
-    return pattern.sub(
-        lambda m: (':' + m.group('colon') if m.group('colon') else '') +
-                  '\n'.join(' ' + l for l in m.group('block').splitlines()) +
-                  '\n\n',
-        readme, 0
-    )
 
 
 class upload_doc(distutils.cmd.Command):
