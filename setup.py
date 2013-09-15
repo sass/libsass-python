@@ -38,7 +38,7 @@ if sys.platform == 'win32':
     except KeyError:
         warnings.warn('You probably need Visual Studio 2012 (11.0) or higher')
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
-    if sys.version < (2, 7):
+    if sys.version_info < (2, 7):
         def spawn(self, cmd):
             from distutils.spawn import spawn
             if cmd[0] == self.linker:
@@ -130,8 +130,7 @@ setup(
             ['sassc = sassc:main']
         ]
     },
-    tests_require=['Attest', 'Werkzeug'],
-    test_loader='attest:auto_reporter.test_loader',
+    tests_require=['Werkzeug < 0.9'],
     test_suite='sasstests.suite',
     classifiers=[
         'Development Status :: 4 - Beta',
