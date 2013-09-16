@@ -14,7 +14,6 @@ To be released.
 - Merged recent changes from libsass upstream:
   `57a2f62--4ad3577`_.
             
-
   - Supports `variable arguments`_.
 
 .. _57a2f62--4ad3577: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...4ad3577cc4bf36356f166939f02d4a7fafd121e0

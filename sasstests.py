@@ -113,6 +113,16 @@ class CompileTestCase(unittest.TestCase):
         normalized = re.sub(r'\s+', '', actual)
         assert normalized == '@media(min-width:980px){a{color:red;}}'
 
+    def test_regression_issue_11(self):
+        actual = sass.compile(string='''
+            $foo: 3;
+            @media (max-width: $foo) {
+                body { color: black; }
+            }
+        ''')
+        normalized = re.sub(r'\s+', '', actual)
+        assert normalized == '@media(max-width:3){body{color:black;}}'
+
 
 class BuilderTestCase(unittest.TestCase):
 
