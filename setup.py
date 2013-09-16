@@ -19,17 +19,15 @@ except ImportError:
 version = '0.2.5'
 
 libsass_sources = [
-    'constants.cpp', 'context.cpp', 'functions.cpp', 'document.cpp',
-    'document_parser.cpp', 'eval_apply.cpp', 'node.cpp',
-    'node_factory.cpp', 'node_emitters.cpp', 'prelexer.cpp',
-    'selector.cpp', 'sass_interface.cpp',
+    'ast.cpp', 'bind.cpp', 'constants.cpp', 'context.cpp', 'contextualize.cpp',
+    'copy_c_str.cpp', 'error_handling.cpp', 'eval.cpp', 'expand.cpp',
+    'extend.cpp', 'file.cpp', 'functions.cpp', 'inspect.cpp',
+    'output_compressed.cpp', 'output_nested.cpp', 'parser.cpp', 'prelexer.cpp',
+    'sass.cpp', 'sass_interface.cpp', 'to_c.cpp', 'to_string.cpp', 'units.cpp'
 ]
 
 libsass_headers = [
-    'color_names.hpp', 'error.hpp', 'node.hpp',
-    'context.hpp', 'eval_apply.hpp', 'node_factory.hpp',
-    'document.hpp', 'functions.hpp', 'prelexer.hpp',
-    'selector.hpp', 'sass_interface.h', 'win32/unistd.h'
+    'sass_interface.h', 'sass.h', 'win32/unistd.h'
 ]
 
 if sys.platform == 'win32':
@@ -60,7 +58,7 @@ else:
 
 sass_extension = Extension(
     'sass',
-    ['sass.c'] + libsass_sources,
+    ['pysass.c'] + libsass_sources,
     define_macros=macros.items(),
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,

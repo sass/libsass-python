@@ -26,6 +26,8 @@ namespace Sass {
     extern const char while_kwd[];
     extern const char warn_kwd[];
     extern const char default_kwd[];
+    extern const char null_kwd[];
+    extern const char optional_kwd[];
 
     // css standard units
     extern const char em_kwd[];
@@ -43,9 +45,17 @@ namespace Sass {
     extern const char Hz_kwd[];
     extern const char kHz_kwd[];
 
+    // vendor prefixes
+    extern const char vendor_opera_kwd[];
+    extern const char vendor_webkit_kwd[];
+    extern const char vendor_mozilla_kwd[];
+    extern const char vendor_ms_kwd[];
+    extern const char vendor_khtml_kwd[];
+
     // css functions and keywords
     extern const char charset_kwd[];
     extern const char media_kwd[];
+    extern const char keyframes_kwd[];
     extern const char only_kwd[];
     extern const char rgb_kwd[];
     extern const char url_kwd[];
@@ -54,6 +64,7 @@ namespace Sass {
     extern const char pseudo_not_kwd[];
     extern const char even_kwd[];
     extern const char odd_kwd[];
+    extern const char progid_kwd[];
 
     // css attribute-matching operators
     extern const char tilde_equal[];
@@ -98,5 +109,24 @@ namespace Sass {
     extern const char color_name[];
     extern const char list_name[];
     extern const char arglist_name[];
+
+    // byte order marks
+    // (taken from http://en.wikipedia.org/wiki/Byte_order_mark)
+    extern const unsigned char utf_8_bom[];
+    extern const unsigned char utf_16_bom_be[];
+    extern const unsigned char utf_16_bom_le[];
+    extern const unsigned char utf_32_bom_be[];
+    extern const unsigned char utf_32_bom_le[];
+    extern const unsigned char utf_7_bom_1[];
+    extern const unsigned char utf_7_bom_2[];
+    extern const unsigned char utf_7_bom_3[];
+    extern const unsigned char utf_7_bom_4[];
+    extern const unsigned char utf_7_bom_5[];
+    extern const unsigned char utf_1_bom[];
+    extern const unsigned char utf_ebcdic_bom[];
+    extern const unsigned char scsu_bom[];
+    extern const unsigned char bocu_1_bom[];
+    extern const unsigned char gb_18030_bom[];
+
   }
 }
