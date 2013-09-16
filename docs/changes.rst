@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.2.5
+Version 0.3.0
 -------------
 
 To be released.
@@ -12,11 +12,12 @@ To be released.
   exist yet, rather than siliently fails.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
 - Merged recent changes from libsass upstream:
-  `57a2f62--222b1dc`_.
+  `57a2f62--4ad3577`_.
+            
 
   - Supports `variable arguments`_.
 
-.. _57a2f62--222b1dc: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...222b1dcc4c7bb784b8ab7a9f62054230dc8a7d6a
+.. _57a2f62--4ad3577: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...4ad3577cc4bf36356f166939f02d4a7fafd121e0
 .. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
 
 
