@@ -1,3 +1,0 @@
-
-.. automodule:: sassutils.utils
-   :members:

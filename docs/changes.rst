@@ -6,6 +6,7 @@ Version 0.3.0
 
 To be released.
 
+- Dropped support for Python 2.5.
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
 - Now builder creates target recursive subdirectories even if it doesn't

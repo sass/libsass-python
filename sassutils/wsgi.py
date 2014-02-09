@@ -4,6 +4,7 @@
 """
 from __future__ import absolute_import, with_statement
 
+import collections
 import os
 import os.path
 
@@ -11,7 +12,6 @@ import pkg_resources
 
 from sass import CompileError
 from .builder import Manifest
-from .utils import is_mapping
 
 __all__ = 'SassMiddleware',
 
@@ -41,7 +41,7 @@ class SassMiddleware(object):
                             'not ' + repr(app))
         self.app = app
         self.manifests = Manifest.normalize_manifests(manifests)
-        if not is_mapping(package_dir):
+        if not isinstance(package_dir, collections.Mapping):
             raise TypeError('package_dir must be a mapping object, not ' +
                             repr(package_dir))
         self.error_status = error_status
