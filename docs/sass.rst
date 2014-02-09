@@ -14,14 +14,23 @@ type.
 .. function:: compile(string, filename, output_style, include_paths, image_path)
 
    It takes a source ``string`` or a ``filename`` and returns the compiled
-   CSS string.
+   CSS string, or takes a ``dirname`` pair and returns nothing.  The parameters
+   ``string``, ``filename``, and ``dirname`` are exclusive for each other,
+   and only one of them can be used at a time.
+
+   If ``dirname`` is used, compiled results are written to the given output
+   directory path.
 
    :param string: SASS source code to compile.  it's exclusive to
-                  ``filename`` parameter
+                  ``filename`` and ``dirname`` parameters
    :type string: :class:`str`
    :param filename: the filename of SASS source code to compile.
-                    it's exclusive to ``string`` parameter
+                    it's exclusive to ``string`` and ``dirname`` parameters
    :type filename: :class:`str`
+   :param dirname: a pair of ``(source_dir, output_dir)``.
+                   it's exclusive to ``string`` and ``filename``
+                   parameters
+   :type dirname: :class:`tuple`
    :param output_style: an optional coding style of the compiled result.
                         choose one in: ``'nested'`` (default), ``'expanded'``,
                         ``'compact'``, ``'compressed'``
