@@ -16,7 +16,7 @@ except ImportError:
     from setuptools import Extension, setup
 
 
-version = '0.3.0'
+version = '0.3.0'  # FIXME
 
 libsass_sources = [
     'ast.cpp', 'bind.cpp', 'constants.cpp', 'context.cpp', 'contextualize.cpp',
@@ -57,7 +57,7 @@ else:
     macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
 sass_extension = Extension(
-    'sass',
+    '_sass',
     ['pysass.c'] + libsass_sources,
     define_macros=macros.items(),
     depends=libsass_headers,
@@ -110,7 +110,7 @@ setup(
     version=version,
     ext_modules=[sass_extension],
     packages=['sassutils'],
-    py_modules=['sassc', 'sasstests'],
+    py_modules=['sass', 'sassc', 'sasstests'],
     package_data={'': ['README.rst', 'test/*.sass']},
     scripts=['sassc.py'],
     license='MIT License',

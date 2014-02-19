@@ -48,6 +48,18 @@ class SassTestCase(unittest.TestCase):
             assert isinstance(sass.OUTPUT_STYLES, collections.Mapping)
         assert 'nested' in sass.OUTPUT_STYLES
 
+    def test_and_join(self):
+        self.assertEquals(
+            'Korea, Japan, China, and Taiwan',
+            sass.and_join(['Korea', 'Japan', 'China', 'Taiwan'])
+        )
+        self.assertEquals(
+            'Korea, and Japan',
+            sass.and_join(['Korea', 'Japan'])
+        )
+        self.assertEquals('Korea', sass.and_join(['Korea']))
+        self.assertEquals('', sass.and_join([]))
+
 
 class CompileTestCase(unittest.TestCase):
 
