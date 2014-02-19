@@ -10,7 +10,6 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-import ast
 import os
 import sys
 import warnings
@@ -19,6 +18,8 @@ import warnings
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
+
+import sass
 
 # -- General configuration -----------------------------------------------------
 
@@ -51,17 +52,7 @@ copyright = u'2012, Hong Minhee'
 # built documents.
 #
 # The short X.Y version.  (Parse setup.py script.)
-with open('../setup.py') as f:
-    setup_py = ast.parse(f.read(), f.name)
-for node in setup_py.body:
-    if (isinstance(node, ast.Assign) and len(node.targets) == 1 and
-        node.targets[0].id == 'version' and isinstance(node.value, ast.Str)):
-        version = node.value.s
-        break
-else:
-    warnings.warn('cannot find "version = \'...\'" expression in setup.py '
-                  "script; set version = 'unknown' instead")
-    version = 'unknown'
+version = sass.__version__
 # The full version, including alpha/beta/rc tags.
 release = version
 

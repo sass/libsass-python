@@ -1,5 +1,6 @@
 from __future__ import with_statement
 
+import ast
 import distutils.cmd
 import os
 import os.path
@@ -15,8 +16,6 @@ except ImportError:
     use_setuptools()
     from setuptools import Extension, setup
 
-
-version = '0.3.0'  # FIXME
 
 libsass_sources = [
     'ast.cpp', 'bind.cpp', 'constants.cpp', 'context.cpp', 'contextualize.cpp',
@@ -50,20 +49,28 @@ if sys.platform == 'win32':
         MSVCCompiler.spawn = spawn
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
-    macros = {'LIBSASS_PYTHON_VERSION': '\\"' + version + '\\"'}
 else:
     flags = ['-fPIC', '-Wall', '-Wno-parentheses']
     link_flags = ['-fPIC', '-lstdc++']
-    macros = {'LIBSASS_PYTHON_VERSION': '"' + version + '"'}
 
 sass_extension = Extension(
     '_sass',
     ['pysass.c'] + libsass_sources,
-    define_macros=macros.items(),
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,
 )
+
+
+def version(sass_filename='sass.py'):
+    with open(sass_filename) as f:
+        tree = ast.parse(f.read(), sass_filename)
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and \
+           len(node.targets) == 1:
+            target, = node.targets
+            if isinstance(target, ast.Name) and target.id == '__version__':
+                return node.value.s
 
 
 def readme():
@@ -107,7 +114,7 @@ setup(
     description='SASS for Python: '
                 'A straightforward binding of libsass for Python.',
     long_description=readme(),
-    version=version,
+    version=version(),
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
