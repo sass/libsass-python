@@ -2,6 +2,7 @@ from __future__ import with_statement
 
 import ast
 import distutils.cmd
+import distutils.log
 import glob
 import os
 import os.path
@@ -9,7 +10,6 @@ import re
 import shutil
 import sys
 import tempfile
-import warnings
 
 try:
     from setuptools import Extension, setup
@@ -38,25 +38,28 @@ libsass_headers.extend(glob.glob('*.hpp'))
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
-    vccmntools_env = 'VS{0}{1}COMNTOOLS'.format(
+    vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
         int(get_build_version()),
         int(get_build_version() * 10) % 10
     )
     try:
-        os.environ[vccmntools_env] = os.environ['VS100COMNTOOLS']
+        os.environ[vscomntools_env] = os.environ['VS100COMNTOOLS']
     except KeyError:
         try:
-            os.environ[vccmntools_env] = os.environ['VS110COMNTOOLS']
+            os.environ[vscomntools_env] = os.environ['VS110COMNTOOLS']
         except KeyError:
-            warnings.warn('You probably need Visual Studio 2010 (10.0) '
-                          'or higher')
+            distutils.log.warn('You probably need Visual Studio 2010 (10.0) '
+                               'or higher')
     # vsvarsall.bat might not exist in %VS...CMNTOOLS% directory
-    if not os.path.isfile(os.path.join(os.environ[vccmntools_env],
+    if not os.path.isfile(os.path.join(os.environ[vscomntools_env],
                                        'vcvarsall.bat')):
-        os.environ[vccmntools_env] = os.path.join(
-            os.environ[vccmntools_env],
+        os.environ[vscomntools_env] = os.path.join(
+            os.environ[vscomntools_env],
             '..', '..', 'VC'
         )
+    distutils.log.warn('%%%s%%=%s',
+                       vscomntools_env,
+                       os.environ[vscomntools_env])
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
