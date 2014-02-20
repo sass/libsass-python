@@ -10,6 +10,10 @@ Need no Ruby nor Node.js.
 
 It currently supports CPython 2.6, 2.7, 3.3, and PyPy 1.9+!
 
+.. image:: https://travis-ci.org/dahlia/libsass-python.png?branch=python
+   :target: https://travis-ci.org/dahlia/libsass-python
+   :alt: Build Status
+
 .. _SASS: http://sass-lang.com/
 .. _Libsass: https://github.com/hcatlin/libsass
 
