@@ -4,7 +4,7 @@ Changelog
 Version 0.3.0
 -------------
 
-To be released.
+Released on February 21, 2014.
 
 - Added support for Python 3.3.
 - Dropped support for Python 2.5.
