@@ -30,8 +30,13 @@ libsass_headers = [
 ]
 
 if sys.platform == 'win32':
+    from distutils.msvc9compiler import get_build_version
+    vccmntools_env = 'VS{0}{1}COMNTOOLS'.format(
+        int(get_build_version()),
+        int(get_build_version() * 10) % 10
+    )
     try:
-        os.environ['VS90COMNTOOLS'] = os.environ['VS110COMNTOOLS']
+        os.environ[vccmntools_env] = os.environ['VS110COMNTOOLS']
     except KeyError:
         warnings.warn('You probably need Visual Studio 2012 (11.0) or higher')
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
