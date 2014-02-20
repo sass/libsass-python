@@ -6,7 +6,7 @@ Version 0.3.0
 
 Released on February 21, 2014.
 
-- Added support for Python 3.3.
+- Added support for Python 3.3.  [:issue:`7`]
 - Dropped support for Python 2.5.
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
