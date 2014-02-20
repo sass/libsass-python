@@ -43,13 +43,10 @@ if sys.platform == 'win32':
         int(get_build_version() * 10) % 10
     )
     try:
-        os.environ[vscomntools_env] = os.environ['VS100COMNTOOLS']
+        os.environ[vscomntools_env] = os.environ['VS110COMNTOOLS']
     except KeyError:
-        try:
-            os.environ[vscomntools_env] = os.environ['VS110COMNTOOLS']
-        except KeyError:
-            distutils.log.warn('You probably need Visual Studio 2010 (10.0) '
-                               'or higher')
+        distutils.log.warn('You probably need Visual Studio 2012 (11.0) '
+                           'or higher')
     distutils.log.warn('%%%s%%=%s',
                        vscomntools_env,
                        os.environ.get(vscomntools_env, ''))
