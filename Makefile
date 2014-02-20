@@ -4,12 +4,15 @@ LDFLAGS  = -fPIC
 
 PREFIX    = /usr/local
 LIBDIR    = $(PREFIX)/lib
+
+SASS_SASSC_PATH ?= sassc
+SASS_SPEC_PATH ?= sass-spec
 SASSC_BIN = $(SASS_SASSC_PATH)/bin/sassc
 
-SOURCES = ast.cpp bind.cpp constants.cpp context.cpp contextualize.cpp \
+SOURCES = ast.cpp base64vlq.cpp bind.cpp constants.cpp context.cpp contextualize.cpp \
 	copy_c_str.cpp error_handling.cpp eval.cpp expand.cpp extend.cpp file.cpp \
 	functions.cpp inspect.cpp output_compressed.cpp output_nested.cpp \
-	parser.cpp prelexer.cpp sass.cpp sass_interface.cpp to_c.cpp to_string.cpp \
+	parser.cpp prelexer.cpp sass.cpp sass_interface.cpp source_map.cpp to_c.cpp to_string.cpp \
 	units.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -41,10 +44,13 @@ $(SASSC_BIN): libsass.a
 	cd $(SASS_SASSC_PATH) && make
 
 test: $(SASSC_BIN) libsass.a 
-	ruby $(SASS_SPEC_PATH)/sass-spec.rb -d $(SASS_SPEC_PATH) -c $(SASSC_BIN)
+	ruby $(SASS_SPEC_PATH)/sass-spec.rb -c $(SASSC_BIN) -s $(LOG_FLAGS) $(SASS_SPEC_PATH)
+
+test_build: $(SASSC_BIN) libsass.a 
+	ruby $(SASS_SPEC_PATH)/sass-spec.rb -c $(SASSC_BIN) -s --ignore-todo $(LOG_FLAGS) $(SASS_SPEC_PATH)
 
 test_issues: $(SASSC_BIN) libsass.a 
-	ruby $(SASS_SPEC_PATH)/sass-spec.rb -d $(SASS_SPEC_PATH)/spec/issues -c $(SASSC_BIN)
+	ruby $(SASS_SPEC_PATH)/sass-spec.rb -c $(SASSC_BIN) $(LOG_FLAGS) $(SASS_SPEC_PATH)/spec/issues
 
 clean:
 	rm -f $(OBJECTS) *.a *.so

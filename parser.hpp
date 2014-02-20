@@ -19,6 +19,12 @@
 #include "ast.hpp"
 #endif
 
+#ifndef SASS_POSITION
+#include "position.hpp"
+#endif
+
+#include <iostream>
+
 struct Selector_Lookahead {
   const char* found;
   bool has_interpolants;
@@ -42,19 +48,32 @@ namespace Sass {
     const char* position;
     const char* end;
     string path;
-    size_t line;
+    size_t column;
+    Position source_position;
 
 
     Token lexed;
 
-    Parser(Context& ctx, string path, size_t line)
+    Parser(Context& ctx, string path, Position source_position)
     : ctx(ctx), stack(vector<Syntactic_Context>()),
-      source(0), position(0), end(0), path(path), line(line)
+      source(0), position(0), end(0), path(path), column(1), source_position(source_position)
     { stack.push_back(nothing); }
 
-    static Parser from_string(string src, Context& ctx, string path = "", size_t line = 1);
-    static Parser from_c_str(const char* src, Context& ctx, string path = "", size_t line = 1);
-    static Parser from_token(Token t, Context& ctx, string path = "", size_t line = 1);
+    static Parser from_string(string src, Context& ctx, string path = "", Position source_position = Position());
+    static Parser from_c_str(const char* src, Context& ctx, string path = "", Position source_position = Position());
+    static Parser from_token(Token t, Context& ctx, string path = "", Position source_position = Position());
+
+#ifdef __clang__
+
+    // lex and peak uses the template parameter to branch on the action, which
+    // triggers clangs tautological comparison on the single-comparison
+    // branches. This is not a bug, just a merging of behaviour into
+    // one function
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wtautological-compare"
+
+#endif
 
     template <prelexer mx>
     const char* peek(const char* start = 0)
@@ -106,7 +125,7 @@ namespace Sass {
       else if (mx == spaces) {
         after_whitespace = spaces(position);
         if (after_whitespace) {
-          line += count_interval<'\n'>(position, after_whitespace);
+          source_position.line += count_interval<'\n'>(position, after_whitespace);
           lexed = Token(position, after_whitespace);
           return position = after_whitespace;
         }
@@ -122,8 +141,25 @@ namespace Sass {
       }
       const char* after_token = mx(after_whitespace);
       if (after_token) {
-        line += count_interval<'\n'>(position, after_token);
+        size_t previous_line = source_position.line;
+        source_position.line += count_interval<'\n'>(position, after_token);
+        
+        size_t whitespace = 0;
+        const char* ptr = after_whitespace - 1;
+        while (ptr >= position) {
+          if (*ptr == '\n')
+            break;
+          whitespace++;
+          ptr--;
+        }
+        if (previous_line != source_position.line) {
+          column = 1;
+        }
+        
+        source_position.column = column + whitespace;
+        column += after_token - after_whitespace + whitespace;
         lexed = Token(after_whitespace, after_token);
+
         return position = after_token;
       }
       else {
@@ -131,7 +167,13 @@ namespace Sass {
       }
     }
 
-    void error(string msg, size_t ln = 0);
+#ifdef __clang__
+
+#pragma clang diagnostic pop
+
+#endif
+
+    void error(string msg, Position pos = Position());
     void read_bom();
 
     Block* parse();
@@ -146,9 +188,9 @@ namespace Sass {
     Propset* parse_propset();
     Ruleset* parse_ruleset(Selector_Lookahead lookahead);
     Selector_Schema* parse_selector_schema(const char* end_of_selector);
-    Selector_Group* parse_selector_group();
-    Selector_Combination* parse_selector_combination();
-    Simple_Selector_Sequence* parse_simple_selector_sequence();
+    Selector_List* parse_selector_group();
+    Complex_Selector* parse_selector_combination();
+    Compound_Selector* parse_simple_selector_sequence();
     Simple_Selector* parse_simple_selector();
     Negated_Selector* parse_negated_selector();
     Pseudo_Selector* parse_pseudo_selector();

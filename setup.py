@@ -2,8 +2,10 @@ from __future__ import with_statement
 
 import ast
 import distutils.cmd
+import glob
 import os
 import os.path
+import re
 import shutil
 import sys
 import tempfile
@@ -17,17 +19,22 @@ except ImportError:
     from setuptools import Extension, setup
 
 
-libsass_sources = [
-    'ast.cpp', 'bind.cpp', 'constants.cpp', 'context.cpp', 'contextualize.cpp',
-    'copy_c_str.cpp', 'error_handling.cpp', 'eval.cpp', 'expand.cpp',
-    'extend.cpp', 'file.cpp', 'functions.cpp', 'inspect.cpp',
-    'output_compressed.cpp', 'output_nested.cpp', 'parser.cpp', 'prelexer.cpp',
-    'sass.cpp', 'sass_interface.cpp', 'to_c.cpp', 'to_string.cpp', 'units.cpp'
-]
+MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
+    (?: ^ | \n ) libsass_la_SOURCES [ \t]* = [ \t]*
+    (?P<sources> (?: (?: $ | [ \t] | \\ [\n] )+
+                     [^ \n\t\\]+ )+ )
+''', re.VERBOSE)
+
+
+with open('Makefile.am') as makefile:
+    sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
+    sources_list = sources_match.group('sources').replace('\\\n', ' ')
+    libsass_sources = sources_list.split()
 
 libsass_headers = [
     'sass_interface.h', 'sass.h', 'win32/unistd.h'
 ]
+libsass_headers.extend(glob.glob('*.hpp'))
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -123,7 +130,9 @@ setup(
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
-    package_data={'': ['README.rst', 'win32/*.h', 'test/*.sass']},
+    package_data={
+        '': ['README.rst', 'Makefile.am', 'win32/*.h', 'test/*.sass']
+    },
     scripts=['sassc.py'],
     license='MIT License',
     author='Hong Minhee',

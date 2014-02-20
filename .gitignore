@@ -3,27 +3,43 @@
 .DS_Store
 .sass-cache
 *.gem
+.svn/*
+.gitattributes
 
 # Configuration stuff
 
-aclocal.m4
-autom4te.cache/
-config.h
-config.h.in
-config.log
-config.status
-configure
 Makefile.in
+/aclocal.m4
+/autom4te.cache/
+/config.guess
+/config.h
+/config.h.in
+/config.log
+/config.status
+/config.sub
+/configure
+/depcomp
+/install-sh
+/libtool
+/ltmain.sh
+/m4/libtool.m4
+/m4/ltoptions.m4
+/m4/ltsugar.m4
+/m4/ltversion.m4
+/m4/lt~obsolete.m4
+/missing
+/stamp-h1
 src/Makefile
-libtool
-stamp-h1
+libsass/*
 
 # Build stuff
 
 *.o
 *.lo
 *.a
+a.out
 
+bin/*
 .deps/
 .libs/
 
@@ -31,6 +47,7 @@ stamp-h1
 
 sassc++
 libsass.la
+support/libsass.pc
 
 # libsass-python
 build/

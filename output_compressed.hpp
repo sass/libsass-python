@@ -7,7 +7,7 @@
 namespace Sass {
   using namespace std;
 
-  class Context;
+  struct Context;
 
   class Output_Compressed : public Operation_CRTP<void, Output_Compressed> {
     // import all the class-specific methods and override as desired
@@ -17,6 +17,8 @@ namespace Sass {
     Context* ctx;
 
     void fallback_impl(AST_Node* n);
+    
+    void append_singleline_part_to_buffer(const string& text);
 
   public:
     Output_Compressed(Context* ctx = 0);
@@ -74,9 +76,9 @@ namespace Sass {
     // virtual void operator()(Attribute_Selector*);
     // virtual void operator()(Pseudo_Selector*);
     // virtual void operator()(Negated_Selector*);
-    // virtual void operator()(Simple_Selector_Sequence*);
-    virtual void operator()(Selector_Combination*);
-    virtual void operator()(Selector_Group*);
+    // virtual void operator()(Compound_Selector*);
+    virtual void operator()(Complex_Selector*);
+    virtual void operator()(Selector_List*);
 
     template <typename U>
     void fallback(U x) { fallback_impl(x); }

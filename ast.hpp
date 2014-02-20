@@ -5,6 +5,26 @@
 #include <vector>
 #include <algorithm>
 
+#ifdef __clang__
+
+/*
+ * There are some overloads used here that trigger the clang overload
+ * hiding warning. Specifically:
+ *
+ * Type type() which hides string type() from Expression
+ * 
+ * and
+ *
+ * Block* block() which hides virtual Block* block() from Statement
+ *
+ */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
+
+#endif
+
+
 #ifndef SASS_OPERATION
 #include "operation.hpp"
 #endif
@@ -22,12 +42,20 @@
 #endif
 
 #include "units.hpp"
+
+#ifndef SASS_ERROR_HANDLING
 #include "error_handling.hpp"
+#endif
+
 #include "ast_def_macros.hpp"
 
 #include <sstream>
 #include <iostream>
 #include <typeinfo>
+
+#ifndef SASS_POSITION
+#include "position.hpp"
+#endif
 
 namespace Sass {
   using namespace std;
@@ -74,9 +102,9 @@ namespace Sass {
   class Selector;
   class AST_Node {
     ADD_PROPERTY(string, path);
-    ADD_PROPERTY(size_t, line);
+    ADD_PROPERTY(Position, position);
   public:
-    AST_Node(string p, size_t l) : path_(p), line_(l) { }
+    AST_Node(string path, Position position) : path_(path), position_(position) { }
     virtual ~AST_Node() = 0;
     // virtual Block* block() { return 0; }
     ATTACH_OPERATIONS();
@@ -90,11 +118,11 @@ namespace Sass {
   /////////////////////////////////////////////////////////////////////////
   class Statement : public AST_Node {
   public:
-    Statement(string p, size_t l) : AST_Node(p, l) { }
+    Statement(string path, Position position) : AST_Node(path, position) { }
     virtual ~Statement() = 0;
     // needed for rearranging nested rulesets during CSS emission
     virtual bool   is_hoistable() { return false; }
-    virtual Block* block()        { return 0; }
+    virtual Block* block()  { return 0; }
   };
   inline Statement::~Statement() { }
 
@@ -113,8 +141,8 @@ namespace Sass {
       else                   has_non_hoistable_ = true;
     };
   public:
-    Block(string p, size_t l, size_t s = 0, bool r = false)
-    : Statement(p, l),
+    Block(string path, Position position, size_t s = 0, bool r = false)
+    : Statement(path, position),
       Vectorized<Statement*>(s),
       is_root_(r), has_hoistable_(false), has_non_hoistable_(false)
     { }
@@ -128,8 +156,8 @@ namespace Sass {
   class Has_Block : public Statement {
     ADD_PROPERTY(Block*, block);
   public:
-    Has_Block(string p, size_t l, Block* b)
-    : Statement(p, l), block_(b)
+    Has_Block(string path, Position position, Block* b)
+    : Statement(path, position), block_(b)
     { }
     virtual ~Has_Block() = 0;
   };
@@ -143,8 +171,8 @@ namespace Sass {
   class Ruleset : public Has_Block {
     ADD_PROPERTY(Selector*, selector);
   public:
-    Ruleset(string p, size_t l, Selector* s, Block* b)
-    : Has_Block(p, l, b), selector_(s)
+    Ruleset(string path, Position position, Selector* s, Block* b)
+    : Has_Block(path, position, b), selector_(s)
     { }
     // nested rulesets need to be hoisted out of their enclosing blocks
     bool is_hoistable() { return true; }
@@ -158,8 +186,8 @@ namespace Sass {
   class Propset : public Has_Block {
     ADD_PROPERTY(String*, property_fragment);
   public:
-    Propset(string p, size_t l, String* pf, Block* b = 0)
-    : Has_Block(p, l, b), property_fragment_(pf)
+    Propset(string path, Position position, String* pf, Block* b = 0)
+    : Has_Block(path, position, b), property_fragment_(pf)
     { }
     ATTACH_OPERATIONS();
   };
@@ -172,8 +200,8 @@ namespace Sass {
     ADD_PROPERTY(List*, media_queries);
     ADD_PROPERTY(Selector*, enclosing_selector);
   public:
-    Media_Block(string p, size_t l, List* mqs, Block* b)
-    : Has_Block(p, l, b), media_queries_(mqs), enclosing_selector_(0)
+    Media_Block(string path, Position position, List* mqs, Block* b)
+    : Has_Block(path, position, b), media_queries_(mqs), enclosing_selector_(0)
     { }
     bool is_hoistable() { return true; }
     ATTACH_OPERATIONS();
@@ -187,8 +215,8 @@ namespace Sass {
     ADD_PROPERTY(string, keyword);
     ADD_PROPERTY(Selector*, selector);
   public:
-    At_Rule(string p, size_t l, string kwd, Selector* sel = 0, Block* b = 0)
-    : Has_Block(p, l, b), keyword_(kwd), selector_(sel)
+    At_Rule(string path, Position position, string kwd, Selector* sel = 0, Block* b = 0)
+    : Has_Block(path, position, b), keyword_(kwd), selector_(sel)
     { }
     ATTACH_OPERATIONS();
   };
@@ -201,9 +229,9 @@ namespace Sass {
     ADD_PROPERTY(Expression*, value);
     ADD_PROPERTY(bool, is_important);
   public:
-    Declaration(string p, size_t l,
+    Declaration(string path, Position position,
                 String* prop, Expression* val, bool i = false)
-    : Statement(p, l), property_(prop), value_(val), is_important_(i)
+    : Statement(path, position), property_(prop), value_(val), is_important_(i)
     { }
     ATTACH_OPERATIONS();
   };
@@ -218,9 +246,9 @@ namespace Sass {
     ADD_PROPERTY(Expression*, value);
     ADD_PROPERTY(bool, is_guarded);
   public:
-    Assignment(string p, size_t l,
+    Assignment(string path, Position position,
                string var, Expression* val, bool guarded = false)
-    : Statement(p, l), variable_(var), value_(val), is_guarded_(guarded)
+    : Statement(path, position), variable_(var), value_(val), is_guarded_(guarded)
     { }
     ATTACH_OPERATIONS();
   };
@@ -233,8 +261,8 @@ namespace Sass {
     vector<string>         files_;
     vector<Expression*> urls_;
   public:
-    Import(string p, size_t l)
-    : Statement(p, l),
+    Import(string path, Position position)
+    : Statement(path, position),
       files_(vector<string>()), urls_(vector<Expression*>())
     { }
     vector<string>&         files() { return files_; }
@@ -245,8 +273,8 @@ namespace Sass {
   class Import_Stub : public Statement {
     ADD_PROPERTY(string, file_name);
   public:
-    Import_Stub(string p, size_t l, string f)
-    : Statement(p, l), file_name_(f)
+    Import_Stub(string path, Position position, string f)
+    : Statement(path, position), file_name_(f)
     { }
     ATTACH_OPERATIONS();
   };
@@ -257,8 +285,8 @@ namespace Sass {
   class Warning : public Statement {
     ADD_PROPERTY(Expression*, message);
   public:
-    Warning(string p, size_t l, Expression* msg)
-    : Statement(p, l), message_(msg)
+    Warning(string path, Position position, Expression* msg)
+    : Statement(path, position), message_(msg)
     { }
     ATTACH_OPERATIONS();
   };
@@ -269,8 +297,8 @@ namespace Sass {
   class Comment : public Statement {
     ADD_PROPERTY(String*, text);
   public:
-    Comment(string p, size_t l, String* txt)
-    : Statement(p, l), text_(txt)
+    Comment(string path, Position position, String* txt)
+    : Statement(path, position), text_(txt)
     { }
     ATTACH_OPERATIONS();
   };
@@ -283,8 +311,8 @@ namespace Sass {
     ADD_PROPERTY(Block*, consequent);
     ADD_PROPERTY(Block*, alternative);
   public:
-    If(string p, size_t l, Expression* pred, Block* con, Block* alt = 0)
-    : Statement(p, l), predicate_(pred), consequent_(con), alternative_(alt)
+    If(string path, Position position, Expression* pred, Block* con, Block* alt = 0)
+    : Statement(path, position), predicate_(pred), consequent_(con), alternative_(alt)
     { }
     ATTACH_OPERATIONS();
   };
@@ -298,9 +326,9 @@ namespace Sass {
     ADD_PROPERTY(Expression*, upper_bound);
     ADD_PROPERTY(bool, is_inclusive);
   public:
-    For(string p, size_t l,
+    For(string path, Position position,
         string var, Expression* lo, Expression* hi, Block* b, bool inc)
-    : Has_Block(p, l, b),
+    : Has_Block(path, position, b),
       variable_(var), lower_bound_(lo), upper_bound_(hi), is_inclusive_(inc)
     { }
     ATTACH_OPERATIONS();
@@ -313,8 +341,8 @@ namespace Sass {
     ADD_PROPERTY(string, variable);
     ADD_PROPERTY(Expression*, list);
   public:
-    Each(string p, size_t l, string var, Expression* lst, Block* b)
-    : Has_Block(p, l, b), variable_(var), list_(lst)
+    Each(string path, Position position, string var, Expression* lst, Block* b)
+    : Has_Block(path, position, b), variable_(var), list_(lst)
     { }
     ATTACH_OPERATIONS();
   };
@@ -325,8 +353,8 @@ namespace Sass {
   class While : public Has_Block {
     ADD_PROPERTY(Expression*, predicate);
   public:
-    While(string p, size_t l, Expression* pred, Block* b)
-    : Has_Block(p, l, b), predicate_(pred)
+    While(string path, Position position, Expression* pred, Block* b)
+    : Has_Block(path, position, b), predicate_(pred)
     { }
     ATTACH_OPERATIONS();
   };
@@ -337,8 +365,8 @@ namespace Sass {
   class Return : public Statement {
     ADD_PROPERTY(Expression*, value);
   public:
-    Return(string p, size_t l, Expression* val)
-    : Statement(p, l), value_(val)
+    Return(string path, Position position, Expression* val)
+    : Statement(path, position), value_(val)
     { }
     ATTACH_OPERATIONS();
   };
@@ -349,8 +377,8 @@ namespace Sass {
   class Extension : public Statement {
     ADD_PROPERTY(Selector*, selector);
   public:
-    Extension(string p, size_t l, Selector* s)
-    : Statement(p, l), selector_(s)
+    Extension(string path, Position position, Selector* s)
+    : Statement(path, position), selector_(s)
     { }
     ATTACH_OPERATIONS();
   };
@@ -359,12 +387,12 @@ namespace Sass {
   // Definitions for both mixins and functions. The two cases are distinguished
   // by a type tag.
   /////////////////////////////////////////////////////////////////////////////
-  class Context;
+  struct Context;
   struct Backtrace;
   class Parameters;
   typedef Environment<AST_Node*> Env;
   typedef const char* Signature;
-  typedef Expression* (*Native_Function)(Env&, Context&, Signature, const string&, size_t, Backtrace*);
+  typedef Expression* (*Native_Function)(Env&, Context&, Signature, const string&, Position, Backtrace*);
   typedef const char* Signature;
   class Definition : public Has_Block {
   public:
@@ -378,13 +406,13 @@ namespace Sass {
     ADD_PROPERTY(bool, is_overload_stub);
     ADD_PROPERTY(Signature, signature);
   public:
-    Definition(string p,
-               size_t l,
+    Definition(string path,
+               Position position,
                string n,
                Parameters* params,
                Block* b,
                Type t)
-    : Has_Block(p, l, b),
+    : Has_Block(path, position, b),
       name_(n),
       parameters_(params),
       environment_(0),
@@ -394,14 +422,14 @@ namespace Sass {
       is_overload_stub_(false),
       signature_(0)
     { }
-    Definition(string p,
-               size_t l,
+    Definition(string path,
+               Position position,
                Signature sig,
                string n,
                Parameters* params,
                Native_Function func_ptr,
                bool overload_stub = false)
-    : Has_Block(p, l, 0),
+    : Has_Block(path, position, 0),
       name_(n),
       parameters_(params),
       environment_(0),
@@ -411,15 +439,15 @@ namespace Sass {
       is_overload_stub_(overload_stub),
       signature_(sig)
     { }
-    Definition(string p,
-               size_t l,
+    Definition(string path,
+               Position position,
                Signature sig,
                string n,
                Parameters* params,
                Sass_C_Function func_ptr,
                bool whatever,
                bool whatever2)
-    : Has_Block(p, l, 0),
+    : Has_Block(path, position, 0),
       name_(n),
       parameters_(params),
       environment_(0),
@@ -440,8 +468,8 @@ namespace Sass {
     ADD_PROPERTY(string, name);
     ADD_PROPERTY(Arguments*, arguments);
   public:
-    Mixin_Call(string p, size_t l, string n, Arguments* args, Block* b = 0)
-    : Has_Block(p, l, b), name_(n), arguments_(args)
+    Mixin_Call(string path, Position position, string n, Arguments* args, Block* b = 0)
+    : Has_Block(path, position, b), name_(n), arguments_(args)
     { }
     ATTACH_OPERATIONS();
   };
@@ -451,7 +479,7 @@ namespace Sass {
   ///////////////////////////////////////////////////
   class Content : public Statement {
   public:
-    Content(string p, size_t l) : Statement(p, l) { }
+    Content(string path, Position position) : Statement(path, position) { }
     ATTACH_OPERATIONS();
   };
 
@@ -478,9 +506,9 @@ namespace Sass {
     ADD_PROPERTY(bool, is_interpolant);
     ADD_PROPERTY(Concrete_Type, concrete_type);
   public:
-    Expression(string p, size_t l,
+    Expression(string path, Position position,
                bool d = false, bool i = false, Concrete_Type ct = NONE)
-    : AST_Node(p, l),
+    : AST_Node(path, position),
       is_delayed_(d), is_interpolant_(i), concrete_type_(ct)
     { }
     virtual operator bool() { return true; }
@@ -503,9 +531,9 @@ namespace Sass {
     ADD_PROPERTY(Separator, separator);
     ADD_PROPERTY(bool, is_arglist);
   public:
-    List(string p, size_t l,
+    List(string path, Position position,
          size_t size = 0, Separator sep = SPACE, bool argl = false)
-    : Expression(p, l),
+    : Expression(path, position),
       Vectorized<Expression*>(size),
       separator_(sep), is_arglist_(argl)
     { concrete_type(LIST); }
@@ -533,9 +561,9 @@ namespace Sass {
     ADD_PROPERTY(Expression*, left);
     ADD_PROPERTY(Expression*, right);
   public:
-    Binary_Expression(string p, size_t l,
+    Binary_Expression(string path, Position position,
                       Type t, Expression* lhs, Expression* rhs)
-    : Expression(p, l), type_(t), left_(lhs), right_(rhs)
+    : Expression(path, position), type_(t), left_(lhs), right_(rhs)
     { }
     ATTACH_OPERATIONS();
   };
@@ -550,8 +578,8 @@ namespace Sass {
     ADD_PROPERTY(Type, type);
     ADD_PROPERTY(Expression*, operand);
   public:
-    Unary_Expression(string p, size_t l, Type t, Expression* o)
-    : Expression(p, l), type_(t), operand_(o)
+    Unary_Expression(string path, Position position, Type t, Expression* o)
+    : Expression(path, position), type_(t), operand_(o)
     { }
     ATTACH_OPERATIONS();
   };
@@ -563,8 +591,8 @@ namespace Sass {
     ADD_PROPERTY(string, name);
     ADD_PROPERTY(Arguments*, arguments);
   public:
-    Function_Call(string p, size_t l, string n, Arguments* args)
-    : Expression(p, l), name_(n), arguments_(args)
+    Function_Call(string path, Position position, string n, Arguments* args)
+    : Expression(path, position), name_(n), arguments_(args)
     { concrete_type(STRING); }
     ATTACH_OPERATIONS();
   };
@@ -576,8 +604,8 @@ namespace Sass {
     ADD_PROPERTY(String*, name);
     ADD_PROPERTY(Arguments*, arguments);
   public:
-    Function_Call_Schema(string p, size_t l, String* n, Arguments* args)
-    : Expression(p, l), name_(n), arguments_(args)
+    Function_Call_Schema(string path, Position position, String* n, Arguments* args)
+    : Expression(path, position), name_(n), arguments_(args)
     { concrete_type(STRING); }
     ATTACH_OPERATIONS();
   };
@@ -588,8 +616,8 @@ namespace Sass {
   class Variable : public Expression {
     ADD_PROPERTY(string, name);
   public:
-    Variable(string p, size_t l, string n)
-    : Expression(p, l), name_(n)
+    Variable(string path, Position position, string n)
+    : Expression(path, position), name_(n)
     { }
     ATTACH_OPERATIONS();
   };
@@ -605,8 +633,8 @@ namespace Sass {
     ADD_PROPERTY(Type, type);
     ADD_PROPERTY(string, value);
   public:
-    Textual(string p, size_t l, Type t, string val)
-    : Expression(p, l, true), type_(t), value_(val)
+    Textual(string path, Position position, Type t, string val)
+    : Expression(path, position, true), type_(t), value_(val)
     { }
     ATTACH_OPERATIONS();
   };
@@ -619,8 +647,8 @@ namespace Sass {
     vector<string> numerator_units_;
     vector<string> denominator_units_;
   public:
-    Number(string p, size_t l, double val, string u = "")
-    : Expression(p, l),
+    Number(string path, Position position, double val, string u = "")
+    : Expression(path, position),
       value_(val),
       numerator_units_(vector<string>()),
       denominator_units_(vector<string>())
@@ -734,9 +762,10 @@ namespace Sass {
     ADD_PROPERTY(double, g);
     ADD_PROPERTY(double, b);
     ADD_PROPERTY(double, a);
+    ADD_PROPERTY(string, disp);
   public:
-    Color(string p, size_t l, double r, double g, double b, double a = 1)
-    : Expression(p, l), r_(r), g_(g), b_(b), a_(a)
+    Color(string path, Position position, double r, double g, double b, double a = 1, const string disp = "")
+    : Expression(path, position), r_(r), g_(g), b_(b), a_(a), disp_(disp)
     { concrete_type(COLOR); }
     string type() { return "color"; }
     static string type_name() { return "color"; }
@@ -749,7 +778,7 @@ namespace Sass {
   class Boolean : public Expression {
     ADD_PROPERTY(bool, value);
   public:
-    Boolean(string p, size_t l, bool val) : Expression(p, l), value_(val)
+    Boolean(string path, Position position, bool val) : Expression(path, position), value_(val)
     { concrete_type(BOOLEAN); }
     virtual operator bool() { return value_; }
     string type() { return "bool"; }
@@ -765,8 +794,8 @@ namespace Sass {
   class String : public Expression {
     ADD_PROPERTY(bool, needs_unquoting);
   public:
-    String(string p, size_t l, bool unq = false, bool delayed = false)
-    : Expression(p, l, delayed), needs_unquoting_(unq)
+    String(string path, Position position, bool unq = false, bool delayed = false)
+    : Expression(path, position, delayed), needs_unquoting_(unq)
     { concrete_type(STRING); }
     static string type_name() { return "string"; }
     virtual ~String() = 0;
@@ -781,8 +810,8 @@ namespace Sass {
   class String_Schema : public String, public Vectorized<Expression*> {
     ADD_PROPERTY(char, quote_mark);
   public:
-    String_Schema(string p, size_t l, size_t size = 0, bool unq = false, char qm = '\0')
-    : String(p, l, unq), Vectorized<Expression*>(size), quote_mark_(qm)
+    String_Schema(string path, Position position, size_t size = 0, bool unq = false, char qm = '\0')
+    : String(path, position, unq), Vectorized<Expression*>(size), quote_mark_(qm)
     { }
     string type() { return "string"; }
     static string type_name() { return "string"; }
@@ -795,17 +824,17 @@ namespace Sass {
   class String_Constant : public String {
     ADD_PROPERTY(string, value);
   public:
-    String_Constant(string p, size_t l, string val, bool unq = false)
-    : String(p, l, unq, true), value_(val)
+    String_Constant(string path, Position position, string val, bool unq = false)
+    : String(path, position, unq, true), value_(val)
     { }
-    String_Constant(string p, size_t l, const char* beg, bool unq = false)
-    : String(p, l, unq, true), value_(string(beg))
+    String_Constant(string path, Position position, const char* beg, bool unq = false)
+    : String(path, position, unq, true), value_(string(beg))
     { }
-    String_Constant(string p, size_t l, const char* beg, const char* end, bool unq = false)
-    : String(p, l, unq, true), value_(string(beg, end-beg))
+    String_Constant(string path, Position position, const char* beg, const char* end, bool unq = false)
+    : String(path, position, unq, true), value_(string(beg, end-beg))
     { }
-    String_Constant(string p, size_t l, const Token& tok, bool unq = false)
-    : String(p, l, unq, true), value_(string(tok.begin, tok.end))
+    String_Constant(string path, Position position, const Token& tok, bool unq = false)
+    : String(path, position, unq, true), value_(string(tok.begin, tok.end))
     { }
     string type() { return "string"; }
     static string type_name() { return "string"; }
@@ -823,9 +852,9 @@ namespace Sass {
     ADD_PROPERTY(bool, is_negated);
     ADD_PROPERTY(bool, is_restricted);
   public:
-    Media_Query(string p, size_t l,
+    Media_Query(string path, Position position,
                 String* t = 0, size_t s = 0, bool n = false, bool r = false)
-    : Expression(p, l), Vectorized<Media_Query_Expression*>(s),
+    : Expression(path, position), Vectorized<Media_Query_Expression*>(s),
       media_type_(t), is_negated_(n), is_restricted_(r)
     { }
     ATTACH_OPERATIONS();
@@ -839,9 +868,9 @@ namespace Sass {
     ADD_PROPERTY(Expression*, value);
     ADD_PROPERTY(bool, is_interpolated);
   public:
-    Media_Query_Expression(string p, size_t l,
+    Media_Query_Expression(string path, Position position,
                            Expression* f, Expression* v, bool i = false)
-    : Expression(p, l), feature_(f), value_(v), is_interpolated_(i)
+    : Expression(path, position), feature_(f), value_(v), is_interpolated_(i)
     { }
     ATTACH_OPERATIONS();
   };
@@ -851,7 +880,7 @@ namespace Sass {
   //////////////////
   class Null : public Expression {
   public:
-    Null(string p, size_t l) : Expression(p, l) { concrete_type(NULL_VAL); }
+    Null(string path, Position position) : Expression(path, position) { concrete_type(NULL_VAL); }
     string type() { return "null"; }
     static string type_name() { return "null"; }
     bool is_invisible() { return true; }
@@ -867,8 +896,8 @@ namespace Sass {
     ADD_PROPERTY(Expression*, expression);
     ADD_PROPERTY(Env*, environment);
   public:
-    Thunk(string p, size_t l, Expression* exp, Env* env = 0)
-    : Expression(p, l), expression_(exp), environment_(env)
+    Thunk(string path, Position position, Expression* exp, Env* env = 0)
+    : Expression(path, position), expression_(exp), environment_(env)
     { }
   };
 
@@ -880,12 +909,12 @@ namespace Sass {
     ADD_PROPERTY(Expression*, default_value);
     ADD_PROPERTY(bool, is_rest_parameter);
   public:
-    Parameter(string p, size_t l,
+    Parameter(string p, Position pos,
               string n, Expression* def = 0, bool rest = false)
-    : AST_Node(p, l), name_(n), default_value_(def), is_rest_parameter_(rest)
+    : AST_Node(p, pos), name_(n), default_value_(def), is_rest_parameter_(rest)
     {
       if (default_value_ && is_rest_parameter_) {
-        error("variable-length parameter may not have a default value", path(), line());
+        error("variable-length parameter may not have a default value", path(), position());
       }
     }
     ATTACH_OPERATIONS();
@@ -904,31 +933,31 @@ namespace Sass {
     {
       if (p->default_value()) {
         if (has_rest_parameter_) {
-          error("optional parameters may not be combined with variable-length parameters", p->path(), p->line());
+          error("optional parameters may not be combined with variable-length parameters", p->path(), p->position());
         }
         has_optional_parameters_ = true;
       }
       else if (p->is_rest_parameter()) {
         if (has_rest_parameter_) {
-          error("functions and mixins cannot have more than one variable-length parameter", p->path(), p->line());
+          error("functions and mixins cannot have more than one variable-length parameter", p->path(), p->position());
         }
         if (has_optional_parameters_) {
-          error("optional parameters may not be combined with variable-length parameters", p->path(), p->line());
+          error("optional parameters may not be combined with variable-length parameters", p->path(), p->position());
         }
         has_rest_parameter_ = true;
       }
       else {
         if (has_rest_parameter_) {
-          error("required parameters must precede variable-length parameters", p->path(), p->line());
+          error("required parameters must precede variable-length parameters", p->path(), p->position());
         }
         if (has_optional_parameters_) {
-          error("required parameters must precede optional parameters", p->path(), p->line());
+          error("required parameters must precede optional parameters", p->path(), p->position());
         }
       }
     }
   public:
-    Parameters(string p, size_t l)
-    : AST_Node(p, l),
+    Parameters(string path, Position position)
+    : AST_Node(path, position),
       Vectorized<Parameter*>(),
       has_optional_parameters_(false),
       has_rest_parameter_(false)
@@ -944,11 +973,11 @@ namespace Sass {
     ADD_PROPERTY(string, name);
     ADD_PROPERTY(bool, is_rest_argument);
   public:
-    Argument(string p, size_t l, Expression* val, string n = "", bool rest = false)
-    : Expression(p, l), value_(val), name_(n), is_rest_argument_(rest)
+    Argument(string p, Position pos, Expression* val, string n = "", bool rest = false)
+    : Expression(p, pos), value_(val), name_(n), is_rest_argument_(rest)
     {
       if (!name_.empty() && is_rest_argument_) {
-        error("variable-length argument may not be passed by name", path(), line());
+        error("variable-length argument may not be passed by name", path(), position());
       }
     }
     ATTACH_OPERATIONS();
@@ -967,31 +996,31 @@ namespace Sass {
     {
       if (!a->name().empty()) {
         if (has_rest_argument_) {
-          error("named arguments must precede variable-length argument", a->path(), a->line());
+          error("named arguments must precede variable-length argument", a->path(), a->position());
         }
         has_named_arguments_ = true;
       }
       else if (a->is_rest_argument()) {
         if (has_rest_argument_) {
-          error("functions and mixins may only be called with one variable-length argument", a->path(), a->line());
+          error("functions and mixins may only be called with one variable-length argument", a->path(), a->position());
         }
         if (has_named_arguments_) {
-          error("functions and mixins may not be called with both named arguments and variable-length arguments", a->path(), a->line());
+          error("functions and mixins may not be called with both named arguments and variable-length arguments", a->path(), a->position());
         }
         has_rest_argument_ = true;
       }
       else {
         if (has_rest_argument_) {
-          error("ordinal arguments must precede variable-length arguments", a->path(), a->line());
+          error("ordinal arguments must precede variable-length arguments", a->path(), a->position());
         }
         if (has_named_arguments_) {
-          error("ordinal arguments must precede named arguments", a->path(), a->line());
+          error("ordinal arguments must precede named arguments", a->path(), a->position());
         }
       }
     }
   public:
-    Arguments(string p, size_t l)
-    : Expression(p, l),
+    Arguments(string path, Position position)
+    : Expression(path, position),
       Vectorized<Argument*>(),
       has_named_arguments_(false),
       has_rest_argument_(false)
@@ -1002,13 +1031,12 @@ namespace Sass {
   /////////////////////////////////////////
   // Abstract base class for CSS selectors.
   /////////////////////////////////////////
-  class Simple_Selector_Sequence;
   class Selector : public AST_Node {
     ADD_PROPERTY(bool, has_reference);
     ADD_PROPERTY(bool, has_placeholder);
   public:
-    Selector(string p, size_t l, bool r = false, bool h = false)
-    : AST_Node(p, l), has_reference_(r), has_placeholder_(h)
+    Selector(string path, Position position, bool r = false, bool h = false)
+    : AST_Node(path, position), has_reference_(r), has_placeholder_(h)
     { }
     virtual ~Selector() = 0;
     virtual Selector_Placeholder* find_placeholder();
@@ -1022,8 +1050,8 @@ namespace Sass {
   class Selector_Schema : public Selector {
     ADD_PROPERTY(String*, contents);
   public:
-    Selector_Schema(string p, size_t l, String* c)
-    : Selector(p, l), contents_(c)
+    Selector_Schema(string path, Position position, String* c)
+    : Selector(path, position), contents_(c)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1033,8 +1061,8 @@ namespace Sass {
   ////////////////////////////////////////////
   class Simple_Selector : public Selector {
   public:
-    Simple_Selector(string p, size_t l)
-    : Selector(p, l)
+    Simple_Selector(string path, Position position)
+    : Selector(path, position)
     { }
     virtual ~Simple_Selector() = 0;
   };
@@ -1046,8 +1074,8 @@ namespace Sass {
   class Selector_Reference : public Simple_Selector {
     ADD_PROPERTY(Selector*, selector);
   public:
-    Selector_Reference(string p, size_t l, Selector* r = 0)
-    : Simple_Selector(p, l), selector_(r)
+    Selector_Reference(string path, Position position, Selector* r = 0)
+    : Simple_Selector(path, position), selector_(r)
     { has_reference(true); }
     ATTACH_OPERATIONS();
   };
@@ -1058,8 +1086,8 @@ namespace Sass {
   class Selector_Placeholder : public Simple_Selector {
     ADD_PROPERTY(string, name);
   public:
-    Selector_Placeholder(string p, size_t l, string n)
-    : Simple_Selector(p, l), name_(n)
+    Selector_Placeholder(string path, Position position, string n)
+    : Simple_Selector(path, position), name_(n)
     { has_placeholder(true); }
     virtual Selector_Placeholder* find_placeholder();
     ATTACH_OPERATIONS();
@@ -1071,8 +1099,8 @@ namespace Sass {
   class Type_Selector : public Simple_Selector {
     ADD_PROPERTY(string, name);
   public:
-    Type_Selector(string p, size_t l, string n)
-    : Simple_Selector(p, l), name_(n)
+    Type_Selector(string path, Position position, string n)
+    : Simple_Selector(path, position), name_(n)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1083,8 +1111,8 @@ namespace Sass {
   class Selector_Qualifier : public Simple_Selector {
     ADD_PROPERTY(string, name);
   public:
-    Selector_Qualifier(string p, size_t l, string n)
-    : Simple_Selector(p, l), name_(n)
+    Selector_Qualifier(string path, Position position, string n)
+    : Simple_Selector(path, position), name_(n)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1097,8 +1125,8 @@ namespace Sass {
     ADD_PROPERTY(string, matcher);
     ADD_PROPERTY(string, value);
   public:
-    Attribute_Selector(string p, size_t l, string n, string m, string v)
-    : Simple_Selector(p, l), name_(n), matcher_(m), value_(v)
+    Attribute_Selector(string path, Position position, string n, string m, string v)
+    : Simple_Selector(path, position), name_(n), matcher_(m), value_(v)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1110,8 +1138,8 @@ namespace Sass {
     ADD_PROPERTY(string, name);
     ADD_PROPERTY(String*, expression);
   public:
-    Pseudo_Selector(string p, size_t l, string n, String* expr = 0)
-    : Simple_Selector(p, l), name_(n), expression_(expr)
+    Pseudo_Selector(string path, Position position, string n, String* expr = 0)
+    : Simple_Selector(path, position), name_(n), expression_(expr)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1122,8 +1150,8 @@ namespace Sass {
   class Negated_Selector : public Simple_Selector {
     ADD_PROPERTY(Selector*, selector);
   public:
-    Negated_Selector(string p, size_t l, Selector* sel)
-    : Simple_Selector(p, l), selector_(sel)
+    Negated_Selector(string path, Position position, Selector* sel)
+    : Simple_Selector(path, position), selector_(sel)
     { }
     ATTACH_OPERATIONS();
   };
@@ -1132,7 +1160,7 @@ namespace Sass {
   // Simple selector sequences. Maintains flags indicating whether it contains
   // any parent references or placeholders, to simplify expansion.
   ////////////////////////////////////////////////////////////////////////////
-  class Simple_Selector_Sequence : public Selector, public Vectorized<Simple_Selector*> {
+  class Compound_Selector : public Selector, public Vectorized<Simple_Selector*> {
   protected:
     void adjust_after_pushing(Simple_Selector* s)
     {
@@ -1140,11 +1168,11 @@ namespace Sass {
       if (s->has_placeholder()) has_placeholder(true);
     }
   public:
-    Simple_Selector_Sequence(string p, size_t l, size_t s = 0)
-    : Selector(p, l),
+    Compound_Selector(string path, Position position, size_t s = 0)
+    : Selector(path, position),
       Vectorized<Simple_Selector*>(s)
     { }
-    bool operator<(const Simple_Selector_Sequence& rhs) const;
+    bool operator<(const Compound_Selector& rhs) const;
     virtual Selector_Placeholder* find_placeholder();
     ATTACH_OPERATIONS();
   };
@@ -1154,27 +1182,27 @@ namespace Sass {
   // CSS selector combinators (">", "+", "~", and whitespace). Essentially a
   // linked list.
   ////////////////////////////////////////////////////////////////////////////
-  class Context;
-  class Selector_Combination : public Selector {
+  struct Context;
+  class Complex_Selector : public Selector {
   public:
     enum Combinator { ANCESTOR_OF, PARENT_OF, PRECEDES, ADJACENT_TO };
   private:
     ADD_PROPERTY(Combinator, combinator);
-    ADD_PROPERTY(Simple_Selector_Sequence*, head);
-    ADD_PROPERTY(Selector_Combination*, tail);
+    ADD_PROPERTY(Compound_Selector*, head);
+    ADD_PROPERTY(Complex_Selector*, tail);
   public:
-    Selector_Combination(string p, size_t l,
+    Complex_Selector(string path, Position position,
                          Combinator c,
-                         Simple_Selector_Sequence* h,
-                         Selector_Combination* t)
-    : Selector(p, l), combinator_(c), head_(h), tail_(t)
+                         Compound_Selector* h,
+                         Complex_Selector* t)
+    : Selector(path, position), combinator_(c), head_(h), tail_(t)
     {
       if ((h && h->has_reference())   || (t && t->has_reference()))   has_reference(true);
       if ((h && h->has_placeholder()) || (t && t->has_placeholder())) has_placeholder(true);
     }
-    Simple_Selector_Sequence* base();
-    Selector_Combination* context(Context&);
-    Selector_Combination* innermost();
+    Compound_Selector* base();
+    Complex_Selector* context(Context&);
+    Complex_Selector* innermost();
     virtual Selector_Placeholder* find_placeholder();
     ATTACH_OPERATIONS();
   };
@@ -1182,19 +1210,25 @@ namespace Sass {
   ///////////////////////////////////
   // Comma-separated selector groups.
   ///////////////////////////////////
-  class Selector_Group
-      : public Selector, public Vectorized<Selector_Combination*> {
+  class Selector_List
+      : public Selector, public Vectorized<Complex_Selector*> {
   protected:
-    void adjust_after_pushing(Selector_Combination* c)
+    void adjust_after_pushing(Complex_Selector* c)
     {
       if (c->has_reference())   has_reference(true);
       if (c->has_placeholder()) has_placeholder(true);
     }
   public:
-    Selector_Group(string p, size_t l, size_t s = 0)
-    : Selector(p, l), Vectorized<Selector_Combination*>(s)
+    Selector_List(string path, Position position, size_t s = 0)
+    : Selector(path, position), Vectorized<Complex_Selector*>(s)
     { }
     virtual Selector_Placeholder* find_placeholder();
     ATTACH_OPERATIONS();
   };
 }
+
+#ifdef __clang__
+
+#pragma clang diagnostic pop
+
+#endif

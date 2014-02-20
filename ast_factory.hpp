@@ -56,7 +56,7 @@ namespace Sass {
 		Number* new_Number(string p, size_t l, double val);
 		Percentage* new_Percentage(string p, size_t l, double val);
 		Dimension* new_Dimension(string p, size_t l, double val, string unit);
-		Color* new_Color(string p, size_t l, double r, double g, double b, double a = 1);
+		Color* new_Color(string p, size_t l, double r, double g, double b, double a = 1, string disp = "");
 		Boolean* new_Boolean(string p, size_t l, bool val);
 		String_Schema* new_String_Schema(string p, size_t l, size_t size = 0);
 		String_Constant* new_String_Constant(string p, size_t l, string val);
@@ -75,8 +75,8 @@ namespace Sass {
 		Placeholder_Selector* new_Placeholder_Selector(string p, size_t l, string n);
 		Pseudo_Selector* new_Pseudo_Selector(string p, size_t l, string n, Expression* expr = 0);
 		Negated_Selector* new_Negated_Selector(string p, size_t l, Simple_Base* sel);
-		Simple_Selector_Sequence* new_Simple_Selector_Sequence(string p, size_t l, size_t s = 0);
-		Selector_Combination* new_Selector_Combination(string p, size_t l, Selector_Combination::Combinator c, Selector_Combination* ctx, Simple_Selector_Sequence* sel);
-		Selector_Group* new_Selector_Group(string p, size_t l, size_t s = 0);
+		Compound_Selector* new_Compound_Selector(string p, size_t l, size_t s = 0);
+		Complex_Selector* new_Complex_Selector(string p, size_t l, Complex_Selector::Combinator c, Complex_Selector* ctx, Compound_Selector* sel);
+		Selector_List* new_Selector_List(string p, size_t l, size_t s = 0);
 	};
 }

@@ -13,12 +13,12 @@ To be released.
 - Now builder creates target recursive subdirectories even if it doesn't
   exist yet, rather than siliently fails.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
-- Merged recent changes from libsass upstream:
-  `57a2f62--4ad3577`_.
+- Merged recent changes from libsass v1.0.1: `57a2f62--v1.0.1`_.
             
   - Supports `variable arguments`_.
+  - Supports sourcemaps.
 
-.. _57a2f62--4ad3577: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...4ad3577cc4bf36356f166939f02d4a7fafd121e0
+.. _57a2f62--v1.0.1: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
 .. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
 
 

@@ -10,7 +10,7 @@
 
 namespace Sass {
 	using namespace std;
-	class Context;
+	struct Context;
 
 	class Inspect : public Operation_CRTP<void, Inspect> {
 		// import all the class-specific methods and override as desired
@@ -23,6 +23,9 @@ namespace Sass {
 		void indent();
 
 		void fallback_impl(AST_Node* n);
+    
+    void append_singleline_part_to_buffer(const string& text);
+    void append_multiline_part_to_buffer(const string& text);
 
 	public:
 
@@ -67,7 +70,7 @@ namespace Sass {
 		virtual void operator()(String_Constant*);
 		virtual void operator()(Media_Query*);
 		virtual void operator()(Media_Query_Expression*);
-		// virtual void operator()(Null*);
+		virtual void operator()(Null*);
 		// parameters and arguments
 		virtual void operator()(Parameter*);
 		virtual void operator()(Parameters*);
@@ -82,9 +85,9 @@ namespace Sass {
 		virtual void operator()(Attribute_Selector*);
 		virtual void operator()(Pseudo_Selector*);
 		virtual void operator()(Negated_Selector*);
-		virtual void operator()(Simple_Selector_Sequence*);
-		virtual void operator()(Selector_Combination*);
-		virtual void operator()(Selector_Group*);
+		virtual void operator()(Compound_Selector*);
+		virtual void operator()(Complex_Selector*);
+		virtual void operator()(Selector_List*);
 
 		template <typename U>
 		void fallback(U x) { fallback_impl(x); }
