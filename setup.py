@@ -114,7 +114,7 @@ class upload_doc(distutils.cmd.Command):
         build = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              'build', 'sphinx', 'html')
         os.chdir(path)
-        os.system('git clone -b gh-pages '
+        os.system('git clone -b gh-pages --depth 5 '
                   'git@github.com:dahlia/libsass-python.git .')
         os.system('git rm -r .')
         os.system('touch .nojekyll')
