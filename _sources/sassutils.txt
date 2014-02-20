@@ -6,5 +6,4 @@
 
       sassutils/builder
       sassutils/distutils
-      sassutils/utils
       sassutils/wsgi

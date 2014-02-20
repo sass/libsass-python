@@ -1,6 +1,27 @@
 Changelog
 =========
 
+Version 0.3.0
+-------------
+
+Released on February 21, 2014.
+
+- Added support for Python 3.3.
+- Dropped support for Python 2.5.
+- Fixed build failing on Mac OS X.
+  [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
+- Now builder creates target recursive subdirectories even if it doesn't
+  exist yet, rather than siliently fails.
+  [:issue:`8`, :issue:`9` by Philipp Volguine]
+- Merged recent changes from libsass v1.0.1: `57a2f62--v1.0.1`_.
+            
+  - Supports `variable arguments`_.
+  - Supports sourcemaps.
+
+.. _57a2f62--v1.0.1: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
+.. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
+
+
 Version 0.2.4
 -------------
 

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using with Flask &mdash; libsass 0.2.4 documentation</title>
+    <title>Using with Flask &mdash; libsass 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.4',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.2.4 documentation" href="../index.html" />
+    <link rel="top" title="libsass 0.3.0 documentation" href="../index.html" />
     <link rel="next" title="Changelog" href="../changes.html" />
     <link rel="prev" title="libsass" href="../index.html" /> 
   </head>
@@ -45,7 +43,7 @@
         <li class="right" >
           <a href="../index.html" title="libsass"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
@@ -160,13 +158,13 @@ Keys are packages names.  Values are tuples of paths.</p>
 </div>
 <div class="section" id="building-sass-scss-for-each-request">
 <h2><a class="toc-backref" href="#id5">Building SASS/SCSS for each request</a><a class="headerlink" href="#building-sass-scss-for-each-request" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
 <dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
 <dd>The section which explains how to integrate WSGI middlewares to
 Flask.</dd>
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.9dev)"><em>Application Dispatching</em></a></dt>
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.11-dev)"><em>Application Dispatching</em></a></dt>
 <dd>The documentation which explains how Flask dispatch each
 request internally.</dd>
 </dl>
@@ -192,7 +190,7 @@ Flask.</p>
 <span class="p">})</span>
 </pre></div>
 </div>
-<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v0.9dev)"><tt class="xref py py-func docutils literal"><span class="pre">url_for()</span></tt></a>
+<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v0.11-dev)"><tt class="xref py py-func docutils literal"><span class="pre">url_for()</span></tt></a>
 function:</p>
 <div class="highlight-html+jinja"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
       <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
@@ -211,10 +209,10 @@ All compiled filenames have trailing <tt class="docutils literal"><span class="p
 <p class="last">This section assumes that you use <a class="reference external" href="http://pypi.python.org/pypi/distribute">distribute</a> (<tt class="xref py py-mod docutils literal"><span class="pre">setuptools</span></tt>)
 for deployment.</p>
 </div>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.9dev)"><em>Deploying with Distribute</em></a></dt>
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.11-dev)"><em>Deploying with Distribute</em></a></dt>
 <dd>How to deploy Flask application using <a class="reference external" href="http://pypi.python.org/pypi/distribute">distribute</a>.</dd>
 </dl>
 </div>
@@ -280,12 +278,12 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
         <li class="right" >
           <a href="../index.html" title="libsass"
              >previous</a> |</li>
-        <li><a href="../index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
     </div>
   </body>
 </html>

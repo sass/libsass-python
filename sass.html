@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.2.4 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.2.4',
+        URL_ROOT:    './',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.2.4 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.3.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" /> 
   </head>
@@ -45,14 +43,14 @@
         <li class="right" >
           <a href="sassc.html" title="sassc — SassC compliant command line interface"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="sassc.html"
-                        title="previous chapter"><tt class="docutils literal docutils literal"><span class="pre">sassc</span></tt> &#8212; SassC compliant command line interface</a></p>
+                        title="previous chapter"><tt class="docutils literal"><span class="pre">sassc</span></tt> &#8212; SassC compliant command line interface</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="sassutils.html"
                         title="next chapter"><tt class="docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a></p>
@@ -89,13 +87,60 @@ which is written in C/C++.  It contains only one function and one exception
 type.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
-<span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
+<span class="go">&#39;a b {</span>
+<span class="go">  color: blue; }</span>
+<span class="go">&#39;</span>
 </pre></div>
 </div>
+<dl class="data">
+<dt id="sass.MODES">
+<tt class="descclassname">sass.</tt><tt class="descname">MODES</tt><em class="property"> = set(['dirname', 'string', 'filename'])</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> can take.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sass.OUTPUT_STYLES">
+<tt class="descclassname">sass.</tt><tt class="descname">OUTPUT_STYLES</tt><em class="property"> = {'compact': 2, 'expanded': 1, 'compressed': 3, 'nested': 0}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of output styles.
+Keys are output name strings, and values are flag integers.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sass.CompileError">
+<em class="property">exception </em><tt class="descclassname">sass.</tt><tt class="descname">CompileError</tt><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a>.
+It is a subtype of <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><tt class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sass.and_join">
+<tt class="descclassname">sass.</tt><tt class="descname">and_join</tt><big>(</big><em>strings</em><big>)</big><a class="headerlink" href="#sass.and_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join the given <tt class="docutils literal"><span class="pre">strings</span></tt> by commas with last <cite>&#8216; and &#8216;</cite> conjuction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s">&#39;Korea&#39;</span><span class="p">,</span> <span class="s">&#39;Japan&#39;</span><span class="p">,</span> <span class="s">&#39;China&#39;</span><span class="p">,</span> <span class="s">&#39;Taiwan&#39;</span><span class="p">])</span>
+<span class="go">&#39;Korea, Japan, China, and Taiwan&#39;</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>strings</strong> &#8211; a list of words to join</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a joined string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="sass.compile">
-<tt class="descclassname">sass.</tt><tt class="descname">compile</tt><big>(</big><em>string</em>, <em>filename</em>, <em>output_style</em>, <em>include_paths</em>, <em>image_path</em><big>)</big><a class="headerlink" href="#sass.compile" title="Permalink to this definition">¶</a></dt>
-<dd><p>It takes a source <tt class="docutils literal"><span class="pre">string</span></tt> or a <tt class="docutils literal"><span class="pre">filename</span></tt> and returns the compiled
+<tt class="descclassname">sass.</tt><tt class="descname">compile</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sass.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>There are three modes of parameters <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> can take:
+<tt class="docutils literal"><span class="pre">string</span></tt>, <tt class="docutils literal"><span class="pre">filename</span></tt>, and <tt class="docutils literal"><span class="pre">dirname</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">string</span></tt> parameter is the most basic way to compile SASS.
+It simply takes a string of SASS code, and then returns a compiled
 CSS string.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -103,11 +148,40 @@ CSS string.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>string</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; SASS source code to compile.  it&#8217;s exclusive to
-<tt class="docutils literal"><span class="pre">filename</span></tt> parameter</li>
-<li><strong>filename</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; the filename of SASS source code to compile.
-it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</span></tt> parameter</li>
+<tt class="docutils literal"><span class="pre">filename</span></tt> and <tt class="docutils literal"><span class="pre">dirname</span></tt> parameters</li>
 <li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
-choose one in: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
+choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
+<tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
+<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
+SASS/CSS source files</li>
+<li><strong>image_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional path to find images</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
+(for example the given SASS has broken syntax)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <tt class="docutils literal"><span class="pre">filename</span></tt> is the most commonly used way.  It takes a string of
+SASS filename, and then returns a compiled CSS string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; the filename of SASS source code to compile.
+it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</span></tt> and <tt class="docutils literal"><span class="pre">dirname</span></tt> parameters</li>
+<li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
+choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
 <tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
 <li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
 SASS/CSS source files</li>
@@ -131,20 +205,37 @@ cannot be read</li>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="data">
-<dt id="sass.OUTPUT_STYLES">
-<tt class="descclassname">sass.</tt><tt class="descname">OUTPUT_STYLES</tt><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of output styles.
-Keys are output name strings, and values are flag integers.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="sass.CompileError">
-<em class="property">exception </em><tt class="descclassname">sass.</tt><tt class="descname">CompileError</tt><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a>.  It is a subtype
-of <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><tt class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></tt></a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">dirname</span></tt> is useful for automation.  It takes a pair of paths.
+The first of the <tt class="docutils literal"><span class="pre">dirname</span></tt> pair refers the source directory, contains
+several SASS source files to compiled.  SASS source files can be nested
+in directories.  The second of the pair refers the output directory
+that compiled CSS files would be saved.  Directory tree structure of
+the source directory will be maintained in the output directory as well.
+If <tt class="docutils literal"><span class="pre">dirname</span></tt> parameter is used the function returns <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dirname</strong> (<tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt>) &#8211; a pair of <tt class="docutils literal"><span class="pre">(source_dir,</span> <span class="pre">output_dir)</span></tt>.
+it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</span></tt> and <tt class="docutils literal"><span class="pre">filename</span></tt>
+parameters</li>
+<li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
+choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
+<tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
+<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
+SASS/CSS source files</li>
+<li><strong>image_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional path to find images</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
+(for example the given SASS has broken syntax)</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -170,12 +261,12 @@ of <a class="reference external" href="http://docs.python.org/library/exceptions
         <li class="right" >
           <a href="sassc.html" title="sassc — SassC compliant command line interface"
              >previous</a> |</li>
-        <li><a href="index.html">libsass 0.2.4 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
     </div>
   </body>
 </html>
