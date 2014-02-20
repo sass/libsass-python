@@ -110,8 +110,8 @@ class upload_doc(distutils.cmd.Command):
         build = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              'build', 'sphinx', 'html')
         os.chdir(path)
-        os.system('git clone git@github.com:dahlia/libsass-python.git .')
-        os.system('git checkout gh-pages')
+        os.system('git clone -b gh-pages '
+                  'git@github.com:dahlia/libsass-python.git .')
         os.system('git rm -r .')
         os.system('touch .nojekyll')
         os.system('cp -r ' + build + '/* .')
@@ -153,7 +153,7 @@ setup(
     tests_require=['Werkzeug >= 0.9'],
     test_suite='sasstests.suite',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
