@@ -50,6 +50,13 @@ if sys.platform == 'win32':
         except KeyError:
             warnings.warn('You probably need Visual Studio 2010 (10.0) '
                           'or higher')
+    # vsvarsall.bat might not exist in %VS...CMNTOOLS% directory
+    if not os.path.isfile(os.path.join(os.environ[vccmntools_env],
+                                       'vcvarsall.bat')):
+        os.environ[vccmntools_env] = os.path.join(
+            os.environ[vccmntools_env],
+            '..', '..', 'VC'
+        )
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
