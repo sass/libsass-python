@@ -1,5 +1,6 @@
 include *.h
 include *.hpp
 include *.cpp
+include win32/*.h
 include test/*.sass
 include README.rst

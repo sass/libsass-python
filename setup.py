@@ -123,7 +123,7 @@ setup(
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
-    package_data={'': ['README.rst', 'test/*.sass']},
+    package_data={'': ['README.rst', 'win32/*.h', 'test/*.sass']},
     scripts=['sassc.py'],
     license='MIT License',
     author='Hong Minhee',
