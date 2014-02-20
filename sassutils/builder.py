@@ -9,6 +9,8 @@ import os
 import os.path
 import re
 
+from six import string_types
+
 from sass import compile
 
 __all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
@@ -27,9 +29,9 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
 
     :param sass_path: the path of the directory which contains source files
                       to compile
-    :type sass_path: :class:`basestring`
+    :type sass_path: :class:`str`, :class:`basestring`
     :param css_path: the path of the directory compiled CSS files will go
-    :type css_path: :class:`basestring`
+    :type css_path: :class:`str`, :class:`basestring`
     :returns: a dictionary of source filenames to compiled CSS filenames
     :rtype: :class:`collections.Mapping`
 
@@ -64,10 +66,10 @@ class Manifest(object):
 
     :param sass_path: the path of the directory that contains SASS/SCSS
                       source files
-    :type sass_path: :class:`basestring`
+    :type sass_path: :class:`str`, :class:`basestring`
     :param css_path: the path of the directory to store compiled CSS
                      files
-    :type css_path: :class:`basestring`
+    :type css_path: :class:`str`, :class:`basestring`
 
     """
 
@@ -81,14 +83,14 @@ class Manifest(object):
             raise TypeError('manifests must be a mapping object, not ' +
                             repr(manifests))
         for package_name, manifest in manifests.items():
-            if not isinstance(package_name, basestring):
+            if not isinstance(package_name, string_types):
                 raise TypeError('manifest keys must be a string of package '
                                 'name, not ' + repr(package_name))
             if isinstance(manifest, Manifest):
                 continue
             elif isinstance(manifest, tuple):
                 manifest = Manifest(*manifest)
-            elif isinstance(manifest, basestring):
+            elif isinstance(manifest, string_types):
                 manifest = Manifest(manifest)
             else:
                 raise TypeError(
@@ -100,17 +102,17 @@ class Manifest(object):
         return manifests
 
     def __init__(self, sass_path, css_path=None, wsgi_path=None):
-        if not isinstance(sass_path, basestring):
+        if not isinstance(sass_path, string_types):
             raise TypeError('sass_path must be a string, not ' +
                             repr(sass_path))
         if css_path is None:
             css_path = sass_path
-        elif not isinstance(css_path, basestring):
+        elif not isinstance(css_path, string_types):
             raise TypeError('css_path must be a string, not ' +
                             repr(css_path))
         if wsgi_path is None:
             wsgi_path = css_path
-        elif not isinstance(wsgi_path, basestring):
+        elif not isinstance(wsgi_path, string_types):
             raise TypeError('wsgi_path must be a string, not ' +
                             repr(wsgi_path))
         self.sass_path = sass_path
@@ -123,9 +125,9 @@ class Manifest(object):
         and ``filename``.
 
         :param package_dir: the path of package directory
-        :type package_dir: :class:`basestring`
+        :type package_dir: :class:`str`, :class:`basestring`
         :param filename: the filename of SASS/SCSS source to compile
-        :type filename: :class:`basestring`
+        :type filename: :class:`str`, :class:`basestring`
         :returns: a pair of (sass, css) path
         :rtype: :class:`tuple`
 
@@ -141,7 +143,7 @@ class Manifest(object):
         as relative to the given ``package_dir``.
 
         :param package_dir: the path of package directory
-        :type package_dir: :class:`basestring`
+        :type package_dir: :class:`str`, :class:`basestring`
         :returns: the set of compiled CSS filenames
         :rtype: :class:`collections.Set`
 
@@ -156,11 +158,11 @@ class Manifest(object):
         """Builds one SASS/SCSS file.
 
         :param package_dir: the path of package directory
-        :type package_dir: :class:`basestring`
+        :type package_dir: :class:`str`, :class:`basestring`
         :param filename: the filename of SASS/SCSS source to compile
-        :type filename: :class:`basestring`
+        :type filename: :class:`str`, :class:`basestring`
         :returns: the filename of compiled CSS
-        :rtype: :class:`basestring`
+        :rtype: :class:`str`, :class:`basestring`
 
         """
         sass_filename, css_filename = self.resolve_filename(

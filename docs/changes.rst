@@ -6,6 +6,7 @@ Version 0.3.0
 
 To be released.
 
+- Added support for Python 3.3.
 - Dropped support for Python 2.5.
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]

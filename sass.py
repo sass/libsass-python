@@ -12,6 +12,9 @@ type.
 """
 import collections
 import os.path
+import sys
+
+from six import string_types, text_type
 
 from _sass import (OUTPUT_STYLES, compile_dirname, compile_filename,
                    compile_string)
@@ -120,7 +123,7 @@ def compile(**kwargs):
         output_style = kwargs.pop('output_style')
     except KeyError:
         output_style = 'nested'
-    if not isinstance(output_style, basestring):
+    if not isinstance(output_style, string_types):
         raise TypeError('output_style must be a string, not ' +
                         repr(output_style))
     try:
@@ -128,32 +131,43 @@ def compile(**kwargs):
     except KeyError:
         raise CompileError('{0} is unsupported output_style; choose one of {1}'
                            ''.format(output_style, and_join(OUTPUT_STYLES)))
+    fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     try:
         include_paths = kwargs.pop('include_paths')
     except KeyError:
-        include_paths = ''
+        include_paths = b''
     else:
         if isinstance(include_paths, collections.Sequence):
             include_paths = ':'.join(include_paths)
-        elif not isinstance(include_paths, basestring):
+        elif not isinstance(include_paths, string_types):
             raise TypeError('include_paths must be a sequence of strings, or '
                             'a colon-separated string, not ' +
                             repr(include_paths))
+        if isinstance(include_paths, text_type):
+            include_paths = include_paths.encode(fs_encoding)
     try:
         image_path = kwargs.pop('image_path')
     except KeyError:
-        image_path = '.'
+        image_path = b'.'
     else:
-        if not isinstance(image_path, basestring):
+        if not isinstance(image_path, string_types):
             raise TypeError('image_path must be a string, not ' +
                             repr(image_path))
+        elif isinstance(image_path, text_type):
+            image_path = image_path.encode(fs_encoding)
     if 'string' in modes:
         string = kwargs.pop('string')
+        if isinstance(string, text_type):
+            string = string.encode('utf-8')
         s, v = compile_string(string, output_style, include_paths, image_path)
     elif 'filename' in modes:
         filename = kwargs.pop('filename')
-        if not os.path.isfile(filename):
+        if not isinstance(filename, string_types):
+            raise TypeError('filename must be a string, not ' + repr(filename))
+        elif not os.path.isfile(filename):
             raise IOError('{0!r} seems not a file'.format(filename))
+        elif isinstance(filename, text_type):
+            filename = filename.encode(fs_encoding)
         s, v = compile_filename(filename,
                                 output_style, include_paths, image_path)
     elif 'dirname' in modes:
@@ -162,12 +176,17 @@ def compile(**kwargs):
         except ValueError:
             raise ValueError('dirname must be a pair of (source_dir, '
                              'output_dir)')
+        else:
+            if isinstance(search_path, text_type):
+                search_path = search_path.encode(fs_encoding)
+            if isinstance(output_path, text_type):
+                output_path = output_path.encode(fs_encoding)
         s, v = compile_dirname(search_path, output_path,
                                output_style, include_paths, image_path)
     else:
         raise TypeError('something went wrong')
     if s:
-        return v
+        return None if v is None else v.decode('utf-8')
     raise CompileError(v)
 
 

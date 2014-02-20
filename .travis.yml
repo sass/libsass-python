@@ -3,9 +3,10 @@ branches:
   - python
 language: python
 python:
+- pypy
 - 2.6
 - 2.7
-- pypy
+- 3.3
 script:
 - python setup.py test
 notifications:

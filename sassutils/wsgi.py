@@ -8,7 +8,7 @@ import collections
 import os
 import os.path
 
-import pkg_resources
+from pkg_resources import resource_filename
 
 from sass import CompileError
 from .builder import Manifest
@@ -49,10 +49,10 @@ class SassMiddleware(object):
         for package_name in self.manifests:
             if package_name in self.package_dir:
                 continue
-            path = pkg_resources.resource_filename(package_name, '')
+            path = resource_filename(package_name, '')
             self.package_dir[package_name] = path
         self.paths = []
-        for package_name, manifest in self.manifests.iteritems():
+        for package_name, manifest in self.manifests.items():
             wsgi_path = manifest.wsgi_path
             if not wsgi_path.startswith('/'):
                 wsgi_path = '/' + wsgi_path
@@ -73,7 +73,7 @@ class SassMiddleware(object):
                     result = manifest.build_one(package_dir, sass_filename)
                 except (IOError, OSError):
                     break
-                except CompileError, e:
+                except CompileError as e:
                     start_response(self.error_status,
                                    [('Content-Type', 'text/css')])
                     return [

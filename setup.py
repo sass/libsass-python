@@ -135,7 +135,8 @@ setup(
             ['sassc = sassc:main']
         ]
     },
-    tests_require=['Werkzeug < 0.9'],
+    install_requires=['six'],
+    tests_require=['Werkzeug >= 0.9'],
     test_suite='sasstests.suite',
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -147,7 +148,7 @@ setup(
         'Programming Language :: C++',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 2 :: Only',
+        'Programming Language :: Python :: 3.3',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Code Generators',

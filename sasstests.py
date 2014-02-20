@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import unittest
 
+from six import b
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -194,17 +195,17 @@ class WsgiTestCase(unittest.TestCase):
         })
         client = Client(app, Response)
         r = client.get('/asdf')
-        assert r.status_code == 200
-        assert r.data == '/asdf'
-        assert r.mimetype == 'text/plain'
+        self.assertEquals(200, r.status_code)
+        self.assertEquals(b'/asdf', r.data)
+        self.assertEquals('text/plain', r.mimetype)
         r = client.get('/static/a.sass.css')
-        assert r.status_code == 200
-        assert r.data == A_EXPECTED_CSS
-        assert r.mimetype == 'text/css'
+        self.assertEquals(200, r.status_code)
+        self.assertEquals(b(A_EXPECTED_CSS), r.data)
+        self.assertEquals('text/css', r.mimetype)
         r = client.get('/static/not-exists.sass.css')
-        assert r.status_code == 200
-        assert r.data == '/static/not-exists.sass.css'
-        assert r.mimetype == 'text/plain'
+        self.assertEquals(200, r.status_code)
+        self.assertEquals(b'/static/not-exists.sass.css', r.data)
+        self.assertEquals('text/plain', r.mimetype)
         shutil.rmtree(css_dir)
 
 
