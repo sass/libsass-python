@@ -43,9 +43,13 @@ if sys.platform == 'win32':
         int(get_build_version() * 10) % 10
     )
     try:
-        os.environ[vccmntools_env] = os.environ['VS110COMNTOOLS']
+        os.environ[vccmntools_env] = os.environ['VS100COMNTOOLS']
     except KeyError:
-        warnings.warn('You probably need Visual Studio 2012 (11.0) or higher')
+        try:
+            os.environ[vccmntools_env] = os.environ['VS110COMNTOOLS']
+        except KeyError:
+            warnings.warn('You probably need Visual Studio 2010 (10.0) '
+                          'or higher')
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
