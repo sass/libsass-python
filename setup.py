@@ -142,6 +142,7 @@ setup(
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
     url='http://dahlia.kr/libsass-python/',
+    download_url='https://github.com/dahlia/libsass-python/releases',
     entry_points={
         'distutils.commands': [
             'build_sass = sassutils.distutils:build_sass'
