@@ -133,7 +133,7 @@ def compile(**kwargs):
                            ''.format(output_style, and_join(OUTPUT_STYLES)))
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     try:
-        include_paths = kwargs.pop('include_paths')
+        include_paths = kwargs.pop('include_paths') or b''
     except KeyError:
         include_paths = b''
     else:
