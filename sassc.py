@@ -36,6 +36,8 @@ There are options as well:
 .. _SassC: https://github.com/hcatlin/sassc
 
 """
+from __future__ import print_function
+
 import optparse
 import sys
 
@@ -60,13 +62,13 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     options, args = parser.parse_args(argv[1:])
     if not args:
         parser.print_usage(stderr)
-        print >> stderr, parser.get_prog_name() + ': error:', \
-                         'too few arguments'
+        print(parser.get_prog_name() + ': error:', 'too few arguments',
+              file=stderr)
         return 2
     elif len(args) > 1:
         parser.print_usage(stderr)
-        print >> stderr, parser.get_prog_name() + ': error:', \
-                         'too many arguments'
+        print(parser.get_prog_name() + ': error:', 'too many arguments',
+              file=stderr)
         return 2
     for filename in args:
         try:
@@ -77,10 +79,11 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 image_path=options.image_path
             )
         except CompileError as e:
-            print >> stderr, parser.get_prog_name() + ': error:', e
+            print(parser.get_prog_name() + ': error:', e,
+                  file=stderr)
             return 1
         else:
-            print css
+            print(css, file=stdout)
     return 0
 
 

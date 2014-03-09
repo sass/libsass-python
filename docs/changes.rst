@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.3.1
+-------------
+
+To be released.
+
+- Fixed Python 3 incompatibility of :program:`sassc` program.
+
+
 Version 0.3.0
 -------------
 

@@ -7,11 +7,12 @@ import shutil
 import tempfile
 import unittest
 
-from six import b
+from six import StringIO, b
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
 import sass
+import sassc
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -209,12 +210,49 @@ class WsgiTestCase(unittest.TestCase):
         shutil.rmtree(css_dir)
 
 
+class SasscTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.out = StringIO()
+        self.err = StringIO()
+
+    def test_no_args(self):
+        exit_code = sassc.main(['sassc', ], self.out, self.err)
+        self.assertEqual(2, exit_code)
+        err = self.err.getvalue()
+        assert err.strip().endswith('error: too few arguments'), \
+               'actual error message is: ' + repr(err)
+        self.assertEqual('', self.out.getvalue())
+
+    def test_two_args(self):
+        exit_code = sassc.main(
+            ['sassc', 'a.scss', 'b.scss'],
+            self.out, self.err
+        )
+        self.assertEqual(2, exit_code)
+        err = self.err.getvalue()
+        assert err.strip().endswith('error: too many arguments'), \
+               'actual error message is: ' + repr(err)
+        self.assertEqual('', self.out.getvalue())
+
+    def test_sassc(self):
+        exit_code = sassc.main(['sassc', 'test/a.sass'], self.out, self.err)
+        self.assertEqual(0, exit_code)
+        self.assertEqual('', self.err.getvalue())
+        self.assertEqual(
+            'body {\n  background-color: green; }\n'
+            '  body a {\n    color: blue; }\n\n',
+            self.out.getvalue()
+        )
+
+
 test_cases = [
     SassTestCase,
     CompileTestCase,
     BuilderTestCase,
     ManifestTestCase,
-    WsgiTestCase
+    WsgiTestCase,
+    SasscTestCase
 ]
 loader = unittest.defaultTestLoader
 suite = unittest.TestSuite()
