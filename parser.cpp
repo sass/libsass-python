@@ -132,6 +132,17 @@ namespace Sass {
           imp->urls().push_back(new_url);
         }
         else {
+          #ifdef _WIN32
+          // Ugly hack to make this usable in python-libsass
+          // As there were problems with ../ in @import path.
+          size_t idx = 0;
+          while (true) {
+              idx = import_path.find("/", idx);
+              if (idx == string::npos) break;
+              import_path.replace(idx, 1, "\\");
+              idx += 1;
+          }
+          #endif
           string current_dir = File::dir_name(path);
           // string resolved(ctx.add_file(File::join_paths(current_dir, unquote(import_path))));
           string resolved(ctx.add_file(current_dir, unquote(import_path)));

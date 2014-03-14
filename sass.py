@@ -12,6 +12,7 @@ type.
 """
 import collections
 import os.path
+from os import pathsep
 import sys
 
 from six import string_types, text_type
@@ -138,7 +139,7 @@ def compile(**kwargs):
         include_paths = b''
     else:
         if isinstance(include_paths, collections.Sequence):
-            include_paths = ':'.join(include_paths)
+            include_paths = pathsep.join(include_paths)
         elif not isinstance(include_paths, string_types):
             raise TypeError('include_paths must be a sequence of strings, or '
                             'a colon-separated string, not ' +
@@ -162,6 +163,8 @@ def compile(**kwargs):
         s, v = compile_string(string, output_style, include_paths, image_path)
     elif 'filename' in modes:
         filename = kwargs.pop('filename')
+        if sys.platform == 'win32':
+            include_paths += pathsep + os.path.join(os.path.dirname(filename))
         if not isinstance(filename, string_types):
             raise TypeError('filename must be a string, not ' + repr(filename))
         elif not os.path.isfile(filename):
