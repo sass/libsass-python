@@ -66,7 +66,8 @@ if sys.platform == 'win32':
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
 else:
-    flags = ['-fPIC', '-Wall', '-Wno-parentheses']
+    flags = ['-fPIC', '-Wall', '-Wno-parentheses',
+             '-Wno-error=unused-command-line-argument-hard-error-in-future']
     link_flags = ['-fPIC', '-lstdc++']
 
 sass_extension = Extension(
@@ -167,7 +168,9 @@ setup(
         'Programming Language :: C++',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Code Generators',

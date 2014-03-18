@@ -8,7 +8,7 @@ distribution/deployment.  That means you can add just ``libsass`` into
 your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
 Need no Ruby nor Node.js.
 
-It currently supports CPython 2.6, 2.7, 3.3, and PyPy 1.9+!
+It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 1.9+!
 
 .. image:: https://travis-ci.org/dahlia/libsass-python.png?branch=python
    :target: https://travis-ci.org/dahlia/libsass-python
