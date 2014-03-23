@@ -12,6 +12,8 @@
 #include "context.hpp"
 #endif
 
+#include "parser.hpp"
+
 namespace Sass {
 
   Expand::Expand(Context& ctx, Eval* eval, Contextualize* contextualize, Env* env, Backtrace* bt)
@@ -22,8 +24,7 @@ namespace Sass {
     block_stack(vector<Block*>()),
     property_stack(vector<String*>()),
     selector_stack(vector<Selector*>()),
-    backtrace(bt),
-    extensions(multimap<Compound_Selector, Complex_Selector*>())
+    backtrace(bt)
   { selector_stack.push_back(0); }
 
   Statement* Expand::operator()(Block* b)
@@ -44,6 +45,8 @@ namespace Sass {
     To_String to_string;
     // if (selector_stack.back()) cerr << "expanding " << selector_stack.back()->perform(&to_string) << " and " << r->selector()->perform(&to_string) << endl;
     Selector* sel_ctx = r->selector()->perform(contextualize->with(selector_stack.back(), env, backtrace));
+    // re-parse in order to restructure parent nodes correctly
+    sel_ctx = Parser::from_c_str((sel_ctx->perform(&to_string) + ";").c_str(), ctx, r->selector()->path(), r->selector()->position()).parse_selector_group();
     selector_stack.push_back(sel_ctx);
     Ruleset* rr = new (ctx.mem) Ruleset(r->path(),
                                         r->position(),
@@ -101,13 +104,16 @@ namespace Sass {
     Block* ab = a->block();
     selector_stack.push_back(0);
     Selector* as = a->selector();
+    Expression* av = a->value();
     if (as) as = as->perform(contextualize->with(0, env, backtrace));
+    else if (av) av = av->perform(eval->with(env, backtrace));
     Block* bb = ab ? ab->perform(this)->block() : 0;
     At_Rule* aa = new (ctx.mem) At_Rule(a->path(),
                                         a->position(),
                                         a->keyword(),
                                         as,
                                         bb);
+    if (av) aa->value(av);
     selector_stack.pop_back();
     return aa;
   }
@@ -156,7 +162,7 @@ namespace Sass {
   Statement* Expand::operator()(Comment* c)
   {
     // TODO: eval the text, once we're parsing/storing it as a String_Schema
-    return c;
+    return new (ctx.mem) Comment(c->path(), c->position(), static_cast<String*>(c->text()->perform(eval->with(env, backtrace))));
   }
 
   Statement* Expand::operator()(If* i)
@@ -242,6 +248,7 @@ namespace Sass {
 
   Statement* Expand::operator()(Extension* e)
   {
+    To_String to_string;
     Selector_List* extender = static_cast<Selector_List*>(selector_stack.back());
     if (!extender) return 0;
     Selector_List* extendee = static_cast<Selector_List*>(e->selector()->perform(contextualize->with(0, env, backtrace)));
@@ -253,9 +260,17 @@ namespace Sass {
       error("nested selectors may not be extended", c->path(), c->position(), backtrace);
     }
     Compound_Selector* s = c->head();
+
+    // // need to convert the compound selector into a by-value data structure
+    // vector<string> target_vec;
+    // for (size_t i = 0, L = s->length(); i < L; ++i)
+    // { target_vec.push_back((*s)[i]->perform(&to_string)); }
+
     for (size_t i = 0, L = extender->length(); i < L; ++i) {
-      extensions.insert(make_pair(*s, (*extender)[i]));
-      To_String to_string;
+      ctx.extensions.insert(make_pair(*s, (*extender)[i]));
+      // let's test this out
+      // cerr << "REGISTERING EXTENSION REQUEST: " << (*extender)[i]->perform(&to_string) << " <- " << s->perform(&to_string) << endl;
+      ctx.subset_map.put(s->to_str_vec(), make_pair((*extender)[i], s));
     }
     return 0;
   }

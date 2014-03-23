@@ -20,3 +20,4 @@ notifications:
     - "irc.ozinger.org:8080#hongminhee"
     on_success: change
     on_failure: always
+
