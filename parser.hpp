@@ -99,6 +99,9 @@ namespace Sass {
       else if (mx == optional_spaces) {
         after_whitespace = optional_spaces(start);
       }
+      else if (mx == line_comment_prefix || mx == block_comment_prefix) {
+        after_whitespace = position;
+      }
       else {
         after_whitespace = spaces_and_comments(start);
       }
@@ -118,6 +121,9 @@ namespace Sass {
       if (mx == block_comment) {
         after_whitespace = // position;
           zero_plus< alternatives<spaces, line_comment> >(position);
+      }
+      else if (mx == url) {
+        after_whitespace = position;
       }
       else if (mx == ancestor_of || mx == no_spaces) {
         after_whitespace = position;
@@ -143,7 +149,7 @@ namespace Sass {
       if (after_token) {
         size_t previous_line = source_position.line;
         source_position.line += count_interval<'\n'>(position, after_token);
-        
+
         size_t whitespace = 0;
         const char* ptr = after_whitespace - 1;
         while (ptr >= position) {
@@ -155,7 +161,7 @@ namespace Sass {
         if (previous_line != source_position.line) {
           column = 1;
         }
-        
+
         source_position.column = column + whitespace;
         column += after_token - after_whitespace + whitespace;
         lexed = Token(after_whitespace, after_token);
@@ -207,8 +213,10 @@ namespace Sass {
     Expression* parse_term();
     Expression* parse_factor();
     Expression* parse_value();
+    Function_Call* parse_calc_function();
     Function_Call* parse_function_call();
     Function_Call_Schema* parse_function_call_schema();
+    String* parse_interpolated_chunk(Token);
     String* parse_string();
     String* parse_ie_stuff();
     String_Schema* parse_value_schema();

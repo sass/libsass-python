@@ -9,91 +9,90 @@
 // #endif
 
 namespace Sass {
-	using namespace std;
-	struct Context;
+  using namespace std;
+  struct Context;
 
-	class Inspect : public Operation_CRTP<void, Inspect> {
-		// import all the class-specific methods and override as desired
-		using Operation_CRTP<void, Inspect>::operator();
+  class Inspect : public Operation_CRTP<void, Inspect> {
+    // import all the class-specific methods and override as desired
+    using Operation_CRTP<void, Inspect>::operator();
 
-		// To_String* to_string;
-		string buffer;
-		size_t indentation;
-		Context* ctx;
-		void indent();
+    // To_String* to_string;
+    string buffer;
+    size_t indentation;
+    Context* ctx;
+    void indent();
 
-		void fallback_impl(AST_Node* n);
-    
-    void append_singleline_part_to_buffer(const string& text);
-    void append_multiline_part_to_buffer(const string& text);
+    void fallback_impl(AST_Node* n);
 
-	public:
+    void append_to_buffer(const string& text);
 
-		Inspect(Context* ctx = 0);
-		virtual ~Inspect();
+  public:
 
-		string get_buffer() { return buffer; }
+    Inspect(Context* ctx = 0);
+    virtual ~Inspect();
 
-		// statements
-		virtual void operator()(Block*);
-		virtual void operator()(Ruleset*);
-		virtual void operator()(Propset*);
-		virtual void operator()(Media_Block*);
-		virtual void operator()(At_Rule*);
-		virtual void operator()(Declaration*);
-		virtual void operator()(Assignment*);
-		virtual void operator()(Import*);
-		virtual void operator()(Import_Stub*);
-		virtual void operator()(Warning*);
-		virtual void operator()(Comment*);
-		virtual void operator()(If*);
-		virtual void operator()(For*);
-		virtual void operator()(Each*);
-		virtual void operator()(While*);
-		virtual void operator()(Return*);
-		virtual void operator()(Extension*);
-		virtual void operator()(Definition*);
-		virtual void operator()(Mixin_Call*);
-		virtual void operator()(Content*);
-		// expressions
-		virtual void operator()(List*);
-		virtual void operator()(Binary_Expression*);
-		virtual void operator()(Unary_Expression*);
-		virtual void operator()(Function_Call*);
-		virtual void operator()(Function_Call_Schema*);
-		virtual void operator()(Variable*);
-		virtual void operator()(Textual*);
-		virtual void operator()(Number*);
-		virtual void operator()(Color*);
-		virtual void operator()(Boolean*);
-		virtual void operator()(String_Schema*);
-		virtual void operator()(String_Constant*);
-		virtual void operator()(Media_Query*);
-		virtual void operator()(Media_Query_Expression*);
-		virtual void operator()(Null*);
-		// parameters and arguments
-		virtual void operator()(Parameter*);
-		virtual void operator()(Parameters*);
-		virtual void operator()(Argument*);
-		virtual void operator()(Arguments*);
-		// selectors
-		virtual void operator()(Selector_Schema*);
-		virtual void operator()(Selector_Reference*);
-		virtual void operator()(Selector_Placeholder*);
-		virtual void operator()(Type_Selector*);
-		virtual void operator()(Selector_Qualifier*);
-		virtual void operator()(Attribute_Selector*);
-		virtual void operator()(Pseudo_Selector*);
-		virtual void operator()(Negated_Selector*);
-		virtual void operator()(Compound_Selector*);
-		virtual void operator()(Complex_Selector*);
-		virtual void operator()(Selector_List*);
+    string get_buffer() { return buffer; }
 
-		template <typename U>
-		void fallback(U x) { fallback_impl(x); }
-	};
+    // statements
+    virtual void operator()(Block*);
+    virtual void operator()(Ruleset*);
+    virtual void operator()(Propset*);
+    virtual void operator()(Media_Block*);
+    virtual void operator()(At_Rule*);
+    virtual void operator()(Declaration*);
+    virtual void operator()(Assignment*);
+    virtual void operator()(Import*);
+    virtual void operator()(Import_Stub*);
+    virtual void operator()(Warning*);
+    virtual void operator()(Comment*);
+    virtual void operator()(If*);
+    virtual void operator()(For*);
+    virtual void operator()(Each*);
+    virtual void operator()(While*);
+    virtual void operator()(Return*);
+    virtual void operator()(Extension*);
+    virtual void operator()(Definition*);
+    virtual void operator()(Mixin_Call*);
+    virtual void operator()(Content*);
+    // expressions
+    virtual void operator()(List*);
+    virtual void operator()(Binary_Expression*);
+    virtual void operator()(Unary_Expression*);
+    virtual void operator()(Function_Call*);
+    virtual void operator()(Function_Call_Schema*);
+    virtual void operator()(Variable*);
+    virtual void operator()(Textual*);
+    virtual void operator()(Number*);
+    virtual void operator()(Color*);
+    virtual void operator()(Boolean*);
+    virtual void operator()(String_Schema*);
+    virtual void operator()(String_Constant*);
+    virtual void operator()(Media_Query*);
+    virtual void operator()(Media_Query_Expression*);
+    virtual void operator()(Null*);
+    // parameters and arguments
+    virtual void operator()(Parameter*);
+    virtual void operator()(Parameters*);
+    virtual void operator()(Argument*);
+    virtual void operator()(Arguments*);
+    // selectors
+    virtual void operator()(Selector_Schema*);
+    virtual void operator()(Selector_Reference*);
+    virtual void operator()(Selector_Placeholder*);
+    virtual void operator()(Type_Selector*);
+    virtual void operator()(Selector_Qualifier*);
+    virtual void operator()(Attribute_Selector*);
+    virtual void operator()(Pseudo_Selector*);
+    virtual void operator()(Negated_Selector*);
+    virtual void operator()(Compound_Selector*);
+    virtual void operator()(Complex_Selector*);
+    virtual void operator()(Selector_List*);
 
-	string unquote(const string&);
-	string quote(const string&, char);
+    template <typename U>
+    void fallback(U x) { fallback_impl(x); }
+  };
+
+  string unquote(const string&);
+  string quote(const string&, char);
 
 }

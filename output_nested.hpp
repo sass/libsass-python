@@ -17,22 +17,27 @@ namespace Sass {
     using Operation_CRTP<void, Output_Nested>::operator();
 
     string buffer;
+    string rendered_imports;
     size_t indentation;
     bool source_comments;
     Context* ctx;
     void indent();
 
     void fallback_impl(AST_Node* n);
-    
-    void append_singleline_part_to_buffer(const string& text);
-    void append_multiline_part_to_buffer(const string& text);
+
+    void append_to_buffer(const string& text);
 
   public:
 
     Output_Nested(bool source_comments = false, Context* ctx = 0);
     virtual ~Output_Nested();
 
-    string get_buffer() { return buffer; }
+    string get_buffer() {
+        if (!rendered_imports.empty() && !buffer.empty()) {
+            rendered_imports += "\n";
+        }
+        return rendered_imports + buffer;
+    }
 
     // statements
     virtual void operator()(Block*);
@@ -42,7 +47,7 @@ namespace Sass {
     virtual void operator()(At_Rule*);
     // virtual void operator()(Declaration*);
     // virtual void operator()(Assignment*);
-    // virtual void operator()(Import*);
+    virtual void operator()(Import*);
     // virtual void operator()(Import_Stub*);
     // virtual void operator()(Warning*);
     // virtual void operator()(Comment*);
