@@ -23,10 +23,10 @@ namespace Sass {
 
     // Match a single character satisfying the ctype predicates.
     const char* space(const char* src) { return std::isspace(*src) ? src+1 : 0; }
-    const char* alpha(const char* src) { return std::isalpha(*src) ? src+1 : 0; }
+    const char* alpha(const char* src) { return std::isalpha(*src) || !isascii(*src) ? src+1 : 0; }
     const char* digit(const char* src) { return std::isdigit(*src) ? src+1 : 0; }
     const char* xdigit(const char* src) { return std::isxdigit(*src) ? src+1 : 0; }
-    const char* alnum(const char* src) { return std::isalnum(*src) ? src+1 : 0; }
+    const char* alnum(const char* src) { return std::isalnum(*src) || !isascii(*src) ? src+1 : 0; }
     const char* punct(const char* src) { return std::ispunct(*src) ? src+1 : 0; }
     // Match multiple ctype characters.
     const char* spaces(const char* src) { return one_plus<space>(src); }
@@ -37,13 +37,17 @@ namespace Sass {
     const char* puncts(const char* src) { return one_plus<punct>(src); }
 
     // Match a line comment.
-
     const char* line_comment(const char* src) { return to_endl<slash_slash>(src); }
+    // Match a line comment prefix.
+    const char* line_comment_prefix(const char* src) { return exactly<slash_slash>(src); }
+
+
     // Match a block comment.
-
-
     const char* block_comment(const char* src) {
       return sequence< optional_spaces, delimited_by<slash_star, star_slash, false> >(src);
+    }
+    const char* block_comment_prefix(const char* src) {
+      return exactly<slash_star>(src);
     }
     // Match either comment.
     const char* comment(const char* src) {
@@ -252,6 +256,11 @@ namespace Sass {
     const char* class_name(const char* src) {
       return sequence<exactly<'.'>, identifier>(src);
     }
+    // Attribute name in an attribute selector.
+    const char* attribute_name(const char* src) {
+      return alternatives< sequence< optional<namespace_prefix>, identifier>, 
+                           identifier >(src);
+    }
     // match placeholder selectors
     const char* placeholder(const char* src) {
       return sequence<exactly<'%'>, identifier>(src);
@@ -432,7 +441,7 @@ namespace Sass {
     // }
 
     const char* ie_keyword_arg(const char* src) {
-      return sequence< alternatives< variable, identifier_schema, identifier >, spaces_and_comments, exactly<'='>, spaces_and_comments, alternatives< variable, identifier_schema, identifier, number > >(src);
+      return sequence< alternatives< variable, identifier_schema, identifier >, spaces_and_comments, exactly<'='>, spaces_and_comments, alternatives< variable, identifier_schema, identifier, number, hex > >(src);
     }
 
     // Path matching functions.
@@ -471,9 +480,48 @@ namespace Sass {
       return 0;
     }
 
-    // const char* balanced_parens(const char* src) {
-    //   size_t depth = 0;
-    //   while (*src
-    // }
+    // follow the CSS spec more closely and see if this helps us scan URLs correctly
+    const char* NL(const char* src) {
+      return alternatives< exactly<'\n'>,
+                           sequence< exactly<'\r'>, exactly<'\n'> >,
+                           exactly<'\r'>,
+                           exactly<'\f'> >(src);
+    }
+
+    const char* H(const char* src) {
+      return std::isxdigit(*src) ? src+1 : 0;
+    }
+
+    const char* unicode(const char* src) {
+      return sequence< exactly<'\\'>,
+                       between<H, 1, 6>,
+                       optional< class_char<url_space_chars> > >(src);
+    }
+
+    const char* ESCAPE(const char* src) {
+      return alternatives< unicode, class_char<escape_chars> >(src);
+    }
+
+    const char* url(const char* src) {
+      // using (more or less) the algorithm described at this url:
+      // http://www.w3.org/TR/css3-syntax/#consume-a-url-token
+      const char* pos = src;
+      pos = zero_plus<spaces>(pos);
+      if (*pos == '"' || *pos == '\'') return string_constant(pos); // let the parser handle the rparen
+      while (*pos != ')') {
+        if (space(pos)) {
+          ++pos;
+          continue;
+        }
+        if (*pos == '\\') {
+          pos = ESCAPE(pos);
+          if (!pos) return 0; // invalid escape sequence
+          continue;
+        }
+        if (*pos == '"' || *pos == '\'' || *pos == '(') return 0;
+        ++pos;
+      }
+      return pos;
+    }
   }
 }

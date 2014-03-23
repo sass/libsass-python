@@ -7,9 +7,10 @@
 #define PATH_SEP ':'
 #endif
 
-#include <cstring>
-#include <iostream>
-#include <sstream>
+#ifndef SASS_AST
+#include "ast.hpp"
+#endif
+
 #include "context.hpp"
 #include "constants.hpp"
 #include "parser.hpp"
@@ -32,6 +33,8 @@
 
 #include <iomanip>
 #include <iostream>
+#include <cstring>
+#include <sstream>
 
 namespace Sass {
   using namespace Constants;
@@ -45,17 +48,20 @@ namespace Sass {
     include_paths   (initializers.include_paths()),
     queue           (vector<pair<string, const char*> >()),
     style_sheets    (map<string, Block*>()),
-    source_map(File::base_name(initializers.entry_point())),
+    source_map(File::base_name(initializers.output_path())),
     image_path      (initializers.image_path()),
     source_comments (initializers.source_comments()),
     source_maps     (initializers.source_maps()),
     output_style    (initializers.output_style()),
     source_map_file (initializers.source_map_file()),
     names_to_colors (map<string, Color*>()),
-    colors_to_names (map<int, string>())
+    colors_to_names (map<int, string>()),
+    precision       (initializers.precision()),
+    extensions(multimap<Compound_Selector, Complex_Selector*>()),
+    subset_map(Subset_Map<string, pair<Complex_Selector*, Compound_Selector*> >())
   {
     cwd = get_cwd();
-    
+
     collect_include_paths(initializers.include_paths_c_str());
     collect_include_paths(initializers.include_paths_array());
 
@@ -210,11 +216,11 @@ namespace Sass {
     Contextualize contextualize(*this, &eval, &tge, &backtrace);
     Expand expand(*this, &eval, &contextualize, &tge, &backtrace);
     // Inspect inspect(this);
-    Output_Nested output_nested;
+    // Output_Nested output_nested(*this);
 
     root = root->perform(&expand)->block();
-    if (expand.extensions.size()) {
-      Extend extend(*this, expand.extensions, &backtrace);
+    if (extensions.size()) {
+      Extend extend(*this, extensions, subset_map, &backtrace);
       root->perform(&extend);
     }
     char* result = 0;
@@ -249,7 +255,7 @@ namespace Sass {
   {
     if (!source_maps) return 0;
     char* result = 0;
-    string map = source_map.generate_source_map(this);
+    string map = source_map.generate_source_map();
     result = copy_c_str(map.c_str());
     return result;
   }

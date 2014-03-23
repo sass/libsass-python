@@ -52,7 +52,6 @@ extern "C" {
   {
     if (ctx->output_string)     free(ctx->output_string);
     if (ctx->source_map_string) free(ctx->source_map_string);
-    if (ctx->source_map_file)   free(ctx->source_map_file);
     if (ctx->error_message)     free(ctx->error_message);
 
     free_string_array(ctx->included_files, ctx->num_included_files);
@@ -97,6 +96,7 @@ extern "C" {
                        .include_paths_c_str(c_ctx->options.include_paths)
                        .include_paths_array(0)
                        .include_paths(vector<string>())
+                       .precision(c_ctx->options.precision ? c_ctx->options.precision : 5)
       );
       c_ctx->output_string = cpp_ctx.compile_string();
       c_ctx->error_message = 0;
@@ -132,8 +132,10 @@ extern "C" {
         source_maps = true;
         source_map_file = c_ctx->source_map_file;
       }
+      string output_path = c_ctx->output_path ? c_ctx->output_path : "";
       Context cpp_ctx(
         Context::Data().entry_point(c_ctx->input_path)
+	               .output_path(output_path)
                        .output_style((Output_Style) c_ctx->options.output_style)
                        .source_comments(c_ctx->options.source_comments == SASS_SOURCE_COMMENTS_DEFAULT)
                        .source_maps(source_maps)
@@ -142,6 +144,7 @@ extern "C" {
                        .include_paths_c_str(c_ctx->options.include_paths)
                        .include_paths_array(0)
                        .include_paths(vector<string>())
+                       .precision(c_ctx->options.precision ? c_ctx->options.precision : 5)
       );
       c_ctx->output_string = cpp_ctx.compile_file();
       c_ctx->source_map_string = cpp_ctx.generate_source_map();
