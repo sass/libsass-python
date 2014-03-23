@@ -163,6 +163,8 @@ def compile(**kwargs):
         s, v = compile_string(string, output_style, include_paths, image_path)
     elif 'filename' in modes:
         filename = kwargs.pop('filename')
+        if sys.platform == 'win32':
+            include_paths += pathsep + os.path.join(os.path.dirname(filename))
         if not isinstance(filename, string_types):
             raise TypeError('filename must be a string, not ' + repr(filename))
         elif not os.path.isfile(filename):
