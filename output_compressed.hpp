@@ -14,17 +14,18 @@ namespace Sass {
     using Operation_CRTP<void, Output_Compressed>::operator();
 
     string buffer;
+    string rendered_imports;
     Context* ctx;
 
     void fallback_impl(AST_Node* n);
-    
+
     void append_singleline_part_to_buffer(const string& text);
 
   public:
     Output_Compressed(Context* ctx = 0);
     virtual ~Output_Compressed();
 
-    string get_buffer() { return buffer; }
+    string get_buffer() { return rendered_imports + buffer; }
 
     // statements
     virtual void operator()(Block*);
@@ -34,7 +35,7 @@ namespace Sass {
     virtual void operator()(At_Rule*);
     virtual void operator()(Declaration*);
     // virtual void operator()(Assignment*);
-    // virtual void operator()(Import*);
+    virtual void operator()(Import*);
     // virtual void operator()(Import_Stub*);
     // virtual void operator()(Warning*);
     virtual void operator()(Comment*);

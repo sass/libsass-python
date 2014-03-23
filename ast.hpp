@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <set>
 #include <algorithm>
 
 #ifdef __clang__
@@ -12,7 +13,7 @@
  * hiding warning. Specifically:
  *
  * Type type() which hides string type() from Expression
- * 
+ *
  * and
  *
  * Block* block() which hides virtual Block* block() from Statement
@@ -24,6 +25,9 @@
 
 #endif
 
+#ifndef SASS_CONSTANTS
+#include "constants.hpp"
+#endif
 
 #ifndef SASS_OPERATION
 #include "operation.hpp"
@@ -89,6 +93,7 @@ namespace Sass {
       return *this;
     }
     vector<T>& elements() { return elements_; }
+    vector<T>& elements(vector<T>& e) { elements_ = e; return elements_; }
   };
   template <typename T>
   inline Vectorized<T>::~Vectorized() { }
@@ -214,9 +219,10 @@ namespace Sass {
   class At_Rule : public Has_Block {
     ADD_PROPERTY(string, keyword);
     ADD_PROPERTY(Selector*, selector);
+    ADD_PROPERTY(Expression*, value);
   public:
     At_Rule(string path, Position position, string kwd, Selector* sel = 0, Block* b = 0)
-    : Has_Block(path, position, b), keyword_(kwd), selector_(sel)
+    : Has_Block(path, position, b), keyword_(kwd), selector_(sel), value_(0) // set value manually if needed
     { }
     ATTACH_OPERATIONS();
   };
@@ -540,6 +546,7 @@ namespace Sass {
     string type() { return is_arglist_ ? "arglist" : "list"; }
     static string type_name() { return "list"; }
     bool is_invisible() { return !length(); }
+    Expression* value_at_index(size_t i);
     ATTACH_OPERATIONS();
   };
 
@@ -983,6 +990,11 @@ namespace Sass {
     ATTACH_OPERATIONS();
   };
 
+  //////////////////////////////////////////////////////////////////////////////////////////
+  // Additional method on Lists to retrieve values directly or from an encompassed Argument.
+  //////////////////////////////////////////////////////////////////////////////////////////
+  inline Expression* List::value_at_index(size_t i) { return is_arglist_ ? ((Argument*)(*this)[i])->value() : (*this)[i]; }
+
   ////////////////////////////////////////////////////////////////////////
   // Argument lists -- in their own class to facilitate context-sensitive
   // error checking (e.g., ensuring that all ordinal arguments precede all
@@ -1040,12 +1052,13 @@ namespace Sass {
     { }
     virtual ~Selector() = 0;
     virtual Selector_Placeholder* find_placeholder();
+    virtual int specificity() { return Constants::SPECIFICITY_BASE; }
   };
   inline Selector::~Selector() { }
 
   /////////////////////////////////////////////////////////////////////////
   // Interpolated selectors -- the interpolated String will be expanded and
-  // re-parsed into a normal selector classure.
+  // re-parsed into a normal selector class.
   /////////////////////////////////////////////////////////////////////////
   class Selector_Schema : public Selector {
     ADD_PROPERTY(String*, contents);
@@ -1065,6 +1078,8 @@ namespace Sass {
     : Selector(path, position)
     { }
     virtual ~Simple_Selector() = 0;
+    virtual Compound_Selector* unify_with(Compound_Selector*, Context&);
+    virtual bool is_pseudo_element() { return false; }
   };
   inline Simple_Selector::~Simple_Selector() { }
 
@@ -1077,6 +1092,11 @@ namespace Sass {
     Selector_Reference(string path, Position position, Selector* r = 0)
     : Simple_Selector(path, position), selector_(r)
     { has_reference(true); }
+    virtual int specificity()
+    {
+      if (selector()) return selector()->specificity();
+      else            return 0;
+    }
     ATTACH_OPERATIONS();
   };
 
@@ -1102,6 +1122,12 @@ namespace Sass {
     Type_Selector(string path, Position position, string n)
     : Simple_Selector(path, position), name_(n)
     { }
+    virtual int specificity()
+    {
+      if (name() == "*") return 0;
+      else               return 1;
+    }
+    virtual Compound_Selector* unify_with(Compound_Selector*, Context&);
     ATTACH_OPERATIONS();
   };
 
@@ -1114,6 +1140,12 @@ namespace Sass {
     Selector_Qualifier(string path, Position position, string n)
     : Simple_Selector(path, position), name_(n)
     { }
+    virtual int specificity()
+    {
+      if (name()[0] == '#') return Constants::SPECIFICITY_BASE * Constants::SPECIFICITY_BASE;
+      else                  return Constants::SPECIFICITY_BASE;
+    }
+    virtual Compound_Selector* unify_with(Compound_Selector*, Context&);
     ATTACH_OPERATIONS();
   };
 
@@ -1123,9 +1155,9 @@ namespace Sass {
   class Attribute_Selector : public Simple_Selector {
     ADD_PROPERTY(string, name);
     ADD_PROPERTY(string, matcher);
-    ADD_PROPERTY(string, value);
+    ADD_PROPERTY(String*, value); // might be interpolated
   public:
-    Attribute_Selector(string path, Position position, string n, string m, string v)
+    Attribute_Selector(string path, Position position, string n, string m, String* v)
     : Simple_Selector(path, position), name_(n), matcher_(m), value_(v)
     { }
     ATTACH_OPERATIONS();
@@ -1141,6 +1173,25 @@ namespace Sass {
     Pseudo_Selector(string path, Position position, string n, String* expr = 0)
     : Simple_Selector(path, position), name_(n), expression_(expr)
     { }
+    virtual int specificity()
+    {
+      // TODO: clean up the pseudo-element checking
+      if (name() == ":before"       || name() == "::before"     ||
+          name() == ":after"        || name() == "::after"      ||
+          name() == ":first-line"   || name() == "::first-line" ||
+          name() == ":first-letter" || name() == "::first-letter")
+        return 1;
+      else
+        return Constants::SPECIFICITY_BASE;
+    }
+    virtual bool is_pseudo_element()
+    {
+      return name() == ":before"       || name() == "::before"     ||
+             name() == ":after"        || name() == "::after"      ||
+             name() == ":first-line"   || name() == "::first-line" ||
+             name() == ":first-letter" || name() == "::first-letter";
+    }
+    virtual Compound_Selector* unify_with(Compound_Selector*, Context&);
     ATTACH_OPERATIONS();
   };
 
@@ -1161,6 +1212,8 @@ namespace Sass {
   // any parent references or placeholders, to simplify expansion.
   ////////////////////////////////////////////////////////////////////////////
   class Compound_Selector : public Selector, public Vectorized<Simple_Selector*> {
+  private:
+    set<Complex_Selector> sources_;
   protected:
     void adjust_after_pushing(Simple_Selector* s)
     {
@@ -1173,7 +1226,32 @@ namespace Sass {
       Vectorized<Simple_Selector*>(s)
     { }
     bool operator<(const Compound_Selector& rhs) const;
+    Compound_Selector* unify_with(Compound_Selector* rhs, Context& ctx);
     virtual Selector_Placeholder* find_placeholder();
+    Simple_Selector* base()
+    {
+      if (length() > 0 && typeid(*(*this)[0]) == typeid(Type_Selector))
+        return (*this)[0];
+      return 0;
+    }
+    bool is_superselector_of(Compound_Selector* rhs);
+    virtual int specificity()
+    {
+      int sum = 0;
+      for (size_t i = 0, L = length(); i < L; ++i)
+      { sum += (*this)[i]->specificity(); }
+      return sum;
+    }
+    bool is_empty_reference()
+    {
+      return length() == 1 &&
+             typeid(*(*this)[0]) == typeid(Selector_Reference) &&
+             !static_cast<Selector_Reference*>((*this)[0])->selector();
+    }
+    vector<string> to_str_vec(); // sometimes need to convert to a flat "by-value" data structure
+
+    set<Complex_Selector>& sources() { return sources_; }
+    Compound_Selector* minus(Compound_Selector* rhs, Context& ctx);
     ATTACH_OPERATIONS();
   };
 
@@ -1203,7 +1281,42 @@ namespace Sass {
     Compound_Selector* base();
     Complex_Selector* context(Context&);
     Complex_Selector* innermost();
+    size_t length();
+    bool is_superselector_of(Compound_Selector*);
+    bool is_superselector_of(Complex_Selector*);
     virtual Selector_Placeholder* find_placeholder();
+    Combinator clear_innermost();
+    void set_innermost(Complex_Selector*, Combinator);
+    virtual int specificity()
+    {
+      int sum = 0;
+      if (head()) sum += head()->specificity();
+      if (tail()) sum += tail()->specificity();
+      return sum;
+    }
+    bool operator<(const Complex_Selector& rhs) const;
+    set<Complex_Selector> sources()
+    {
+      set<Complex_Selector> srcs;
+      Compound_Selector* h = head();
+      Complex_Selector*  t = tail();
+      if (!h && !t) return srcs;
+      if (!h && t)  return srcs = t->sources();
+      if (h && !t)  return srcs = h->sources();
+      if (h && t)
+      {
+        vector<Complex_Selector> vec;
+        set_union(h->sources().begin(), h->sources().end(),
+                  t->sources().begin(), t->sources().end(),
+                  vec.begin());
+        for (size_t i = 0, S = vec.size(); i < S; ++i) srcs.insert(vec[i]);
+        return srcs;
+      }
+      // fallback
+      return srcs;
+    }
+    Complex_Selector* clone(Context&);
+    vector<Compound_Selector*> to_vector();
     ATTACH_OPERATIONS();
   };
 
@@ -1223,6 +1336,14 @@ namespace Sass {
     : Selector(path, position), Vectorized<Complex_Selector*>(s)
     { }
     virtual Selector_Placeholder* find_placeholder();
+    virtual int specificity()
+    {
+      int sum = 0;
+      for (size_t i = 0, L = length(); i < L; ++i)
+      { sum += (*this)[i]->specificity(); }
+      return sum;
+    }
+    // vector<Complex_Selector*> members() { return elements_; }
     ATTACH_OPERATIONS();
   };
 }

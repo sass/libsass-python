@@ -751,21 +751,21 @@ namespace Sass {
       List* arglist = ARG("$x2", List);
       Number* least = x1;
       for (size_t i = 0, L = arglist->length(); i < L; ++i) {
-        Number* xi = dynamic_cast<Number*>((*arglist)[i]);
+        Number* xi = dynamic_cast<Number*>(arglist->value_at_index(i));
         if (!xi) error("`" + string(sig) + "` only takes numeric arguments", path, position);
         if (lt(xi, least, ctx)) least = xi;
       }
       return least;
     }
 
-    Signature max_sig = "max($x2, $x2...)";
+    Signature max_sig = "max($x1, $x2...)";
     BUILT_IN(max)
     {
       Number* x1 = ARG("$x1", Number);
       List* arglist = ARG("$x2", List);
       Number* greatest = x1;
       for (size_t i = 0, L = arglist->length(); i < L; ++i) {
-        Number* xi = dynamic_cast<Number*>((*arglist)[i]);
+        Number* xi = dynamic_cast<Number*>(arglist->value_at_index(i));
         if (!xi) error("`" + string(sig) + "` only takes numeric arguments", path, position);
         if (lt(greatest, xi, ctx)) greatest = xi;
       }
@@ -790,13 +790,16 @@ namespace Sass {
     {
       List* l = dynamic_cast<List*>(env["$list"]);
       Number* n = ARG("$n", Number);
+      if (n->value() == 0) error("argument `$n` of `" + string(sig) + "` must be non-zero", path, position);
+      // if the argument isn't a list, then wrap it in a singleton list
       if (!l) {
         l = new (ctx.mem) List(path, position, 1);
         *l << ARG("$list", Expression);
       }
       if (l->empty()) error("argument `$list` of `" + string(sig) + "` must not be empty", path, position);
-      if (n->value() < 1) error("argument `$n` of `" + string(sig) + "` must be greater than or equal to 1", path, position);
-      return (*l)[std::floor(n->value() - 1)];
+      size_t index = std::floor(n->value() < 0 ? l->length() + n->value() : n->value() - 1);
+      if (index < 0 || index > l->length() - 1) error("index out of bounds for `" + string(sig) + "`", path, position);
+      return l->value_at_index(index);
     }
 
     Signature index_sig = "index($list, $value)";
@@ -809,7 +812,7 @@ namespace Sass {
         *l << ARG("$list", Expression);
       }
       for (size_t i = 0, L = l->length(); i < L; ++i) {
-        if (eq((*l)[i], v, ctx)) return new (ctx.mem) Number(path, position, i+1);
+        if (eq(l->value_at_index(i), v, ctx)) return new (ctx.mem) Number(path, position, i+1);
       }
       return new (ctx.mem) Boolean(path, position, false);
     }
@@ -851,7 +854,7 @@ namespace Sass {
         l = new (ctx.mem) List(path, position, 1);
         *l << ARG("$list", Expression);
       }
-      List* result = new (ctx.mem) List(path, position, l->length() + 1);
+      List* result = new (ctx.mem) List(path, position, l->length() + 1, l->separator());
       string sep_str(unquote(sep->value()));
       if (sep_str == "space") result->separator(List::SPACE);
       else if (sep_str == "comma") result->separator(List::COMMA);
@@ -867,11 +870,15 @@ namespace Sass {
       List* arglist = new (ctx.mem) List(*ARG("$lists", List));
       size_t shortest = 0;
       for (size_t i = 0, L = arglist->length(); i < L; ++i) {
-        List* ith = dynamic_cast<List*>((*arglist)[i]);
+        List* ith = dynamic_cast<List*>(arglist->value_at_index(i));
         if (!ith) {
           ith = new (ctx.mem) List(path, position, 1);
-          *ith << (*arglist)[i];
-          (*arglist)[i] = ith;
+          *ith << arglist->value_at_index(i);
+          if (arglist->is_arglist()) {
+            ((Argument*)(*arglist)[i])->value(ith);
+          } else {
+            (*arglist)[i] = ith;
+          }
         }
         shortest = (i ? std::min(shortest, ith->length()) : ith->length());
       }
@@ -880,7 +887,7 @@ namespace Sass {
       for (size_t i = 0; i < shortest; ++i) {
         List* zipper = new (ctx.mem) List(path, position, L);
         for (size_t j = 0; j < L; ++j) {
-          *zipper << (*static_cast<List*>((*arglist)[j]))[i];
+          *zipper << (*static_cast<List*>(arglist->value_at_index(j)))[i];
         }
         *zippers << zipper;
       }
@@ -891,20 +898,22 @@ namespace Sass {
     BUILT_IN(compact)
     {
       List* arglist = ARG("$values", List);
+      List::Separator sep = List::COMMA;
       if (arglist->length() == 1) {
-        Expression* the_arg = (*arglist)[0];
+        Expression* the_arg = arglist->value_at_index(0);
         arglist = dynamic_cast<List*>(the_arg);
         if (!arglist) {
           List* result = new (ctx.mem) List(path, position, 1, List::COMMA);
           *result << the_arg;
           return result;
         }
+        sep = arglist->separator();
       }
-      List* result = new (ctx.mem) List(path, position, 0, List::COMMA);
+      List* result = new (ctx.mem) List(path, position, 0, sep);
       for (size_t i = 0, L = arglist->length(); i < L; ++i) {
-        Boolean* ith = dynamic_cast<Boolean*>((*arglist)[i]);
+        Boolean* ith = dynamic_cast<Boolean*>(arglist->value_at_index(i));
         if (ith && ith->value() == false) continue;
-        *result << (*arglist)[i];
+        *result << arglist->value_at_index(i);
       }
       return result;
     }
