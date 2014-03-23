@@ -12,6 +12,7 @@ type.
 """
 import collections
 import os.path
+from os import pathsep
 import sys
 
 from six import string_types, text_type
@@ -138,7 +139,7 @@ def compile(**kwargs):
         include_paths = b''
     else:
         if isinstance(include_paths, collections.Sequence):
-            include_paths = ':'.join(include_paths)
+            include_paths = pathsep.join(include_paths)
         elif not isinstance(include_paths, string_types):
             raise TypeError('include_paths must be a sequence of strings, or '
                             'a colon-separated string, not ' +
