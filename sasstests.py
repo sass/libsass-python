@@ -26,6 +26,14 @@ body {
     color: blue; }
 '''
 
+A_EXPECTED_CSS_WITH_MAP = '''\
+body {
+  background-color: green; }
+  body a {
+    color: blue; }
+
+/*# sourceMappingURL=a.sass.css.map */'''
+
 B_EXPECTED_CSS = '''\
 b i {
   font-size: 20px; }
@@ -151,12 +159,9 @@ a {
         actual, source_map = sass.compile(
             filename='test/a.sass',
             source_comments='map',
-            source_map_filename='source_map_filename'
+            source_map_filename='a.sass.css.map'
         )
-        self.assertEqual(
-            A_EXPECTED_CSS + '\n/*# sourceMappingURL=source_map_filename */',
-            actual
-        )
+        self.assertEqual(A_EXPECTED_CSS_WITH_MAP, actual)
         self.assertEqual(
             {
                 'version': 3,
@@ -272,23 +277,25 @@ class WsgiTestCase(unittest.TestCase):
 
     def test_wsgi_sass_middleware(self):
         css_dir = tempfile.mkdtemp()
-        app = SassMiddleware(self.sample_wsgi_app, {
-            __name__: ('test', css_dir, '/static')
-        })
-        client = Client(app, Response)
-        r = client.get('/asdf')
-        self.assertEquals(200, r.status_code)
-        self.assertEquals(b'/asdf', r.data)
-        self.assertEquals('text/plain', r.mimetype)
-        r = client.get('/static/a.sass.css')
-        self.assertEquals(200, r.status_code)
-        self.assertEquals(b(A_EXPECTED_CSS), r.data)
-        self.assertEquals('text/css', r.mimetype)
-        r = client.get('/static/not-exists.sass.css')
-        self.assertEquals(200, r.status_code)
-        self.assertEquals(b'/static/not-exists.sass.css', r.data)
-        self.assertEquals('text/plain', r.mimetype)
-        shutil.rmtree(css_dir)
+        try:
+            app = SassMiddleware(self.sample_wsgi_app, {
+                __name__: ('test', css_dir, '/static')
+            })
+            client = Client(app, Response)
+            r = client.get('/asdf')
+            self.assertEquals(200, r.status_code)
+            self.assertEquals(b'/asdf', r.data)
+            self.assertEquals('text/plain', r.mimetype)
+            r = client.get('/static/a.sass.css')
+            self.assertEquals(200, r.status_code)
+            self.assertEquals(b(A_EXPECTED_CSS_WITH_MAP), r.data)
+            self.assertEquals('text/css', r.mimetype)
+            r = client.get('/static/not-exists.sass.css')
+            self.assertEquals(200, r.status_code)
+            self.assertEquals(b'/static/not-exists.sass.css', r.data)
+            self.assertEquals('text/plain', r.mimetype)
+        finally:
+            shutil.rmtree(css_dir)
 
 
 class SasscTestCase(unittest.TestCase):

@@ -32,6 +32,10 @@ class SassMiddleware(object):
                         ``package_dir`` option
     :type package_dir: :class:`collections.Mapping`
 
+    .. versionchanged:: 0.4.0
+       It creates also source map files with filenames followed by
+       :file:`.map` suffix.
+
     """
 
     def __init__(self, app, manifests, package_dir={},
@@ -70,7 +74,9 @@ class SassMiddleware(object):
                 css_filename = path[len(prefix):]
                 sass_filename = css_filename[:-4]
                 try:
-                    result = manifest.build_one(package_dir, sass_filename)
+                    result = manifest.build_one(package_dir,
+                                                sass_filename,
+                                                source_map=True)
                 except (IOError, OSError):
                     break
                 except CompileError as e:

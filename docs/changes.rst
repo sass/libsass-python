@@ -8,6 +8,8 @@ To be released.
 
 - Expose source maps support:
 
+  - :class:`~sassutils.wsgi.SassMiddleware` now also creates source map files
+    with filenames followed by :file:`.map` suffix.
   - :meth:`Manifest.build_one() <sassutils.builder.Manifest.build_one>` method
     has a new ``source_map`` option.  This option builds also a source map
     file with the filename followed by :file:`.map` suffix.
