@@ -21,6 +21,7 @@ To be released.
     ``source_comments='map'``.
 
 - Fixed Python 3 incompatibility of :program:`sassc` program.
+- Fixed a bug that multiple ``include_paths`` doesn't work on Windows.
 
 
 Version 0.3.0

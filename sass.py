@@ -11,6 +11,7 @@ type.
 
 """
 import collections
+import os
 import os.path
 import sys
 
@@ -201,11 +202,11 @@ def compile(**kwargs):
         include_paths = b''
     else:
         if isinstance(include_paths, collections.Sequence):
-            include_paths = ':'.join(include_paths)
+            include_paths = os.pathsep.join(include_paths)
         elif not isinstance(include_paths, string_types):
             raise TypeError('include_paths must be a sequence of strings, or '
-                            'a colon-separated string, not ' +
-                            repr(include_paths))
+                            'a colon-separated (or semicolon-separated if '
+                            'Windows) string, not ' + repr(include_paths))
         if isinstance(include_paths, text_type):
             include_paths = include_paths.encode(fs_encoding)
     try:
