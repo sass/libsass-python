@@ -6,6 +6,13 @@ Version 0.4.0
 
 To be released.
 
+- Expose source maps support:
+
+  - :func:`sass.compile()` has a new optional parameter ``source_comments``.
+    It can be one of :const:`sass.SOURCE_COMMENTS` keys.  It also has
+    a new parameter ``source_map_filename`` which is required only when
+    ``source_comments='map'``.
+
 - Fixed Python 3 incompatibility of :program:`sassc` program.
 
 

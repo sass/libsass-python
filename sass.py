@@ -16,16 +16,23 @@ import sys
 
 from six import string_types, text_type
 
-from _sass import (OUTPUT_STYLES, compile_dirname, compile_filename,
-                   compile_string)
+from _sass import (OUTPUT_STYLES, SOURCE_COMMENTS, compile_dirname,
+                   compile_filename, compile_string)
 
-__all__ = 'MODES', 'OUTPUT_STYLES', 'CompileError', 'and_join', 'compile'
+__all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
+           'and_join', 'compile')
 __version__ = '0.4.0'
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
 #: Keys are output name strings, and values are flag integers.
 OUTPUT_STYLES = OUTPUT_STYLES
+
+#: (:class:`collections.Mapping`) The dictionary of source comments styles.
+#: Keys are mode names, and values are corresponding flag integers.
+#:
+#: .. versionadded:: 0.4.0
+SOURCE_COMMENTS = SOURCE_COMMENTS
 
 #: (:class:`collections.Set`) The set of keywords :func:`compile()` can take.
 MODES = set(['string', 'filename', 'dirname'])
@@ -53,6 +60,11 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
+    :param source_comments: an optional source comments mode of the compiled
+                            result.  choose one of ``'none'`` (default) or
+                            ``'line_numbers'``.  ``'map'`` is unavailable for
+                            ``string``
+    :type source_comments: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
@@ -73,13 +85,28 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
+    :param source_comments: an optional source comments mode of the compiled
+                            result.  choose one of ``'none'`` (default),
+                            ``'line_numbers'``, ``'map'``.
+                            if ``'map'`` is used it requires
+                            ``source_map_filename`` argument as well and
+                            returns a (compiled CSS string,
+                            source map string) pair instead of a string
+    :type source_comments: :class:`str`
+    :param source_map_filename: indicate the source map output filename.
+                                it's only available and required
+                                when ``source_comments`` is ``'map'``.
+                                note that it will ignore all other parts of
+                                the path except for its basename
+    :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
-    :returns: the compiled CSS string
-    :rtype: :class:`str`
+    :returns: the compiled CSS string, or a pair of the compiled CSS string
+              and the source map string if ``source_comments='map'``
+    :rtype: :class:`str`, :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
     :raises exceptions.IOError: when the ``filename`` doesn't exist or
@@ -101,6 +128,11 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
+    :param source_comments: an optional source comments mode of the compiled
+                            result.  choose one of ``'none'`` (default) or
+                            ``'line_numbers'``.  ``'map'`` is unavailable for
+                            ``dirname``
+    :type source_comments: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
@@ -108,6 +140,9 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
+
+    .. versionadded:: 0.4.0
+       Added ``source_comments`` and ``source_map_filename`` parameters.
 
     """
     modes = set()
@@ -119,10 +154,7 @@ def compile(**kwargs):
     elif len(modes) > 1:
         raise TypeError(and_join(modes) + ' are exclusive each other; '
                         'cannot be used at a time')
-    try:
-        output_style = kwargs.pop('output_style')
-    except KeyError:
-        output_style = 'nested'
+    output_style = kwargs.pop('output_style', 'nested')
     if not isinstance(output_style, string_types):
         raise TypeError('output_style must be a string, not ' +
                         repr(output_style))
@@ -131,7 +163,38 @@ def compile(**kwargs):
     except KeyError:
         raise CompileError('{0} is unsupported output_style; choose one of {1}'
                            ''.format(output_style, and_join(OUTPUT_STYLES)))
+    source_comments = kwargs.pop('source_comments', 'none')
+    if not isinstance(source_comments, string_types):
+        raise TypeError('source_comments must be a string, not ' +
+                        repr(source_comments))
+    if 'filename' not in modes and source_comments == 'map':
+        raise CompileError('source_comments="map" is only available with '
+                           'filename= keyword argument since it has to be '
+                           'aware of it')
+    try:
+        source_comments = SOURCE_COMMENTS[source_comments]
+    except KeyError:
+        raise CompileError(
+            '{0} is unsupported source_comments; choose one of '
+            '{1}'.format(source_comments, and_join(SOURCE_COMMENTS))
+        )
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
+    try:
+        source_map_filename = kwargs.pop('source_map_filename') or b''
+    except KeyError:
+        if source_comments == SOURCE_COMMENTS['map']:
+            raise TypeError('source_comments="map" requires '
+                            'source_map_filename argument')
+        source_map_filename = b''
+    else:
+        if source_comments != SOURCE_COMMENTS['map']:
+            raise TypeError('source_map_filename is available only with '
+                            'source_comments="map"')
+        elif not isinstance(source_map_filename, string_types):
+            raise TypeError('source_map_filename must be a string, not ' +
+                            repr(source_map_filename))
+        if isinstance(source_map_filename, text_type):
+            source_map_filename = source_map_filename.encode(fs_encoding)
     try:
         include_paths = kwargs.pop('include_paths') or b''
     except KeyError:
@@ -159,7 +222,11 @@ def compile(**kwargs):
         string = kwargs.pop('string')
         if isinstance(string, text_type):
             string = string.encode('utf-8')
-        s, v = compile_string(string, output_style, include_paths, image_path)
+        s, v = compile_string(string,
+                              output_style, source_comments,
+                              include_paths, image_path)
+        if s:
+            return v.decode('utf-8')
     elif 'filename' in modes:
         filename = kwargs.pop('filename')
         if not isinstance(filename, string_types):
@@ -168,8 +235,16 @@ def compile(**kwargs):
             raise IOError('{0!r} seems not a file'.format(filename))
         elif isinstance(filename, text_type):
             filename = filename.encode(fs_encoding)
-        s, v = compile_filename(filename,
-                                output_style, include_paths, image_path)
+        s, v, source_map = compile_filename(
+            filename,
+            output_style, source_comments,
+            include_paths, image_path, source_map_filename
+        )
+        if s:
+            v = v.decode('utf-8')
+            if source_map_filename:
+                v = v, source_map.decode('utf-8')
+            return v
     elif 'dirname' in modes:
         try:
             search_path, output_path = kwargs.pop('dirname')
@@ -182,11 +257,13 @@ def compile(**kwargs):
             if isinstance(output_path, text_type):
                 output_path = output_path.encode(fs_encoding)
         s, v = compile_dirname(search_path, output_path,
-                               output_style, include_paths, image_path)
+                               output_style, source_comments,
+                               include_paths, image_path)
+        if s:
+            return
     else:
         raise TypeError('something went wrong')
-    if s:
-        return None if v is None else v.decode('utf-8')
+    assert not s
     raise CompileError(v)
 
 

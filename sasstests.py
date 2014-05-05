@@ -1,6 +1,8 @@
 from __future__ import with_statement
 
 import collections
+import json
+import os
 import os.path
 import re
 import shutil
@@ -89,6 +91,20 @@ class CompileTestCase(unittest.TestCase):
         self.assertRaises(ValueError,  sass.compile,
                           string='a { color: blue; }', output_style='invalid')
 
+    def test_compile_invalid_source_comments(self):
+        self.assertRaises(TypeError, sass.compile,
+                          string='a { color: blue; }',
+                          source_comments=['line_numbers'])
+        self.assertRaises(TypeError,  sass.compile,
+                          string='a { color: blue; }', source_comments=123j)
+        self.assertRaises(ValueError,  sass.compile,
+                          string='a { color: blue; }',
+                          source_comments='invalid')
+        # map requires source_map_filename
+        self.assertRaises(ValueError,  sass.compile,
+                          string='a { color: blue; }',
+                          source_comments='map')
+
     def test_compile_invalid_image_path(self):
         self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }', image_path=[])
@@ -98,6 +114,17 @@ class CompileTestCase(unittest.TestCase):
     def test_compile_string(self):
         actual = sass.compile(string='a { b { color: blue; } }')
         assert actual == 'a b {\n  color: blue; }\n'
+        commented = sass.compile(string='''a {
+            b { color: blue; }
+            color: red;
+        }''', source_comments='line_numbers')
+        assert commented == '''/* line 1, source string */
+a {
+  color: red; }
+  /* line 2, source string */
+  a b {
+    color: blue; }
+'''
         self.assertRaises(sass.CompileError, sass.compile,
                           string='a { b { color: blue; }')
         # sass.CompileError should be a subtype of ValueError
@@ -105,6 +132,10 @@ class CompileTestCase(unittest.TestCase):
                           string='a { b { color: blue; }')
         self.assertRaises(TypeError, sass.compile, string=1234)
         self.assertRaises(TypeError, sass.compile, string=[])
+        # source maps are available only when the input is a filename
+        self.assertRaises(sass.CompileError, sass.compile,
+                          string='a { b { color: blue; }',
+                          source_comments='map')
 
     def test_compile_filename(self):
         actual = sass.compile(filename='test/a.sass')
@@ -115,6 +146,27 @@ class CompileTestCase(unittest.TestCase):
                           filename='test/not-exist.sass')
         self.assertRaises(TypeError, sass.compile, filename=1234)
         self.assertRaises(TypeError, sass.compile, filename=[])
+
+    def test_compile_source_map(self):
+        actual, source_map = sass.compile(
+            filename='test/a.sass',
+            source_comments='map',
+            source_map_filename='source_map_filename'
+        )
+        self.assertEqual(
+            A_EXPECTED_CSS + '\n/*# sourceMappingURL=source_map_filename */',
+            actual
+        )
+        self.assertEqual(
+            {
+                'version': 3,
+                'file': 'a.sass',
+                'sources': ['test/a.sass'],
+                'names': [],
+                'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,OAAO'
+            },
+            json.loads(source_map)
+        )
 
     def test_regression_issue_2(self):
         actual = sass.compile(string='''
