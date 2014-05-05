@@ -8,6 +8,9 @@ To be released.
 
 - Expose source maps support:
 
+  - :meth:`Manifest.build_one() <sassutils.builder.Manifest.build_one>` method
+    has a new ``source_map`` option.  This option builds also a source map
+    file with the filename followed by :file:`.map` suffix.
   - :func:`sass.compile()` has a new optional parameter ``source_comments``.
     It can be one of :const:`sass.SOURCE_COMMENTS` keys.  It also has
     a new parameter ``source_map_filename`` which is required only when

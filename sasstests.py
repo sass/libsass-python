@@ -233,6 +233,35 @@ class ManifestTestCase(unittest.TestCase):
         assert manifests['package.name2'].sass_path == 'sass/path'
         assert manifests['package.name2'].css_path == 'css/path'
 
+    def test_build_one(self):
+        d = tempfile.mkdtemp()
+        try:
+            shutil.copytree('test', os.path.join(d, 'test'))
+            m = Manifest(sass_path='test', css_path='css')
+            m.build_one(d, 'a.sass')
+            with open(os.path.join(d, 'css', 'a.sass.css')) as f:
+                self.assertEqual(A_EXPECTED_CSS, f.read())
+            m.build_one(d, 'b.sass', source_map=True)
+            with open(os.path.join(d, 'css', 'b.sass.css')) as f:
+                self.assertEqual(
+                    B_EXPECTED_CSS +
+                    '\n/*# sourceMappingURL=b.sass.css.map */',
+                    f.read()
+                )
+            with open(os.path.join(d, 'css', 'b.sass.css.map')) as f:
+                self.assertEqual(
+                    {
+                        'version': 3,
+                        'file': 'b.sass',
+                        'sources': ['../test/b.sass'],
+                        'names': [],
+                        'mappings': 'AAAA,EACE;EACE,WAAW'
+                    },
+                    json.load(f)
+                )
+        finally:
+            shutil.rmtree(d)
+
 
 class WsgiTestCase(unittest.TestCase):
 
