@@ -8,6 +8,8 @@ To be released.
 
 - Expose source maps support:
 
+  - :program:`sassc` has a new :option:`-m <sassc -m>`/:option:`-g
+    <sassc -g>`/:option:`--sourcemap <sassc --sourcemap>` option.
   - :class:`~sassutils.wsgi.SassMiddleware` now also creates source map files
     with filenames followed by :file:`.map` suffix.
   - :meth:`Manifest.build_one() <sassutils.builder.Manifest.build_one>` method

@@ -34,6 +34,14 @@ body {
 
 /*# sourceMappingURL=a.sass.css.map */'''
 
+A_EXPECTED_MAP = {
+    'version': 3,
+    'file': 'a.sass',
+    'sources': ['test/a.sass'],
+    'names': [],
+    'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,OAAO'
+}
+
 B_EXPECTED_CSS = '''\
 b i {
   font-size: 20px; }
@@ -163,13 +171,7 @@ a {
         )
         self.assertEqual(A_EXPECTED_CSS_WITH_MAP, actual)
         self.assertEqual(
-            {
-                'version': 3,
-                'file': 'a.sass',
-                'sources': ['test/a.sass'],
-                'names': [],
-                'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,OAAO'
-            },
+            A_EXPECTED_MAP,
             json.loads(source_map)
         )
 
@@ -312,9 +314,9 @@ class SasscTestCase(unittest.TestCase):
                'actual error message is: ' + repr(err)
         self.assertEqual('', self.out.getvalue())
 
-    def test_two_args(self):
+    def test_three_args(self):
         exit_code = sassc.main(
-            ['sassc', 'a.scss', 'b.scss'],
+            ['sassc', 'a.scss', 'b.scss', 'c.scss'],
             self.out, self.err
         )
         self.assertEqual(2, exit_code)
@@ -323,15 +325,58 @@ class SasscTestCase(unittest.TestCase):
                'actual error message is: ' + repr(err)
         self.assertEqual('', self.out.getvalue())
 
-    def test_sassc(self):
+    def test_sassc_stdout(self):
         exit_code = sassc.main(['sassc', 'test/a.sass'], self.out, self.err)
         self.assertEqual(0, exit_code)
         self.assertEqual('', self.err.getvalue())
-        self.assertEqual(
-            'body {\n  background-color: green; }\n'
-            '  body a {\n    color: blue; }\n\n',
-            self.out.getvalue()
-        )
+        self.assertEqual(A_EXPECTED_CSS.strip(), self.out.getvalue().strip())
+
+    def test_sassc_output(self):
+        fd, tmp = tempfile.mkstemp('.css')
+        try:
+            os.close(fd)
+            exit_code = sassc.main(['sassc', 'test/a.sass', tmp],
+                                   self.out, self.err)
+            self.assertEqual(0, exit_code)
+            self.assertEqual('', self.err.getvalue())
+            self.assertEqual('', self.out.getvalue())
+            with open(tmp) as f:
+                self.assertEqual(A_EXPECTED_CSS.strip(), f.read().strip())
+        finally:
+            os.remove(tmp)
+
+    def test_sassc_source_map_without_css_filename(self):
+        exit_code = sassc.main(['sassc', '-m', 'a.scss'], self.out, self.err)
+        self.assertEqual(2, exit_code)
+        err = self.err.getvalue()
+        assert err.strip().endswith('error: -m/-g/--sourcemap requires '
+                                    'the second argument, the output css '
+                                    'filename.'), \
+               'actual error message is: ' + repr(err)
+        self.assertEqual('', self.out.getvalue())
+
+    def test_sassc_sourcemap(self):
+        fd, tmp = tempfile.mkstemp('.css')
+        try:
+            os.close(fd)
+            exit_code = sassc.main(['sassc', '-m', 'test/a.sass', tmp],
+                                   self.out, self.err)
+            self.assertEqual(0, exit_code)
+            self.assertEqual('', self.err.getvalue())
+            self.assertEqual('', self.out.getvalue())
+            with open(tmp) as f:
+                self.assertEqual(
+                    A_EXPECTED_CSS + '\n/*# sourceMappingURL=' + 
+                    os.path.basename(tmp) + '.map */',
+                    f.read().strip()
+                )
+            with open(tmp + '.map') as f:
+                self.assertEqual(
+                    dict(A_EXPECTED_MAP, sources=None),
+                    dict(json.load(f), sources=None)
+                )
+        finally:
+            os.remove(tmp)
 
 
 test_cases = [
