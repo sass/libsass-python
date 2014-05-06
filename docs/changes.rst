@@ -4,7 +4,7 @@ Changelog
 Version 0.4.0
 -------------
 
-To be released.
+Released on May 6, 2014.
 
 - :program:`sassc` has a new :option:`-w <sassc -w>`/:option:`--watch
   <sassc --watch>` option.
