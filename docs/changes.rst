@@ -6,6 +6,8 @@ Version 0.4.0
 
 To be released.
 
+- :program:`sassc` has a new :option:`-w <sassc -w>`/:option:`--watch
+  <sassc --watch>` option.
 - Expose source maps support:
 
   - :program:`sassc` has a new :option:`-m <sassc -m>`/:option:`-g

@@ -33,6 +33,13 @@ There are options as well:
 
    .. versionadded:: 0.4.0
 
+.. option:: -w, --watch
+
+   Watch file for changes.  Requires the second argument (output CSS
+   filename).
+
+   .. versionadded:: 0.4.0
+
 .. option:: -v, --version
 
    Prints the program version.
@@ -48,7 +55,9 @@ from __future__ import print_function
 
 import functools
 import optparse
+import os
 import sys
+import time
 
 from sass import __version__ as VERSION, OUTPUT_STYLES, CompileError, compile
 
@@ -74,6 +83,9 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                            'Can be multiply used.')
     parser.add_option('-i', '--image-path', metavar='DIR', default='./',
                       help='Path to find images. [default: %default]')
+    parser.add_option('-w', '--watch', action='store_true',
+                      help='Watch file for changes.  Requires the second '
+                           'argument (output css filename).')
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',
@@ -92,39 +104,69 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         error('-m/-g/--sourcemap requires the second argument, the output '
               'css filename.')
         return 2
-    try:
-        if options.source_map:
-            source_map_filename = args[1] + '.map'  # FIXME
-            css, source_map = compile(
-                filename=filename,
-                output_style=options.output_style,
-                source_comments='map',
-                source_map_filename=source_map_filename,
-                include_paths=options.include_paths,
-                image_path=options.image_path
-            )
-        else:
-            source_map_filename = None
-            source_map = None
-            css = compile(
-                filename=filename,
-                output_style=options.output_style,
-                include_paths=options.include_paths,
-                image_path=options.image_path
-            )
-    except CompileError as e:
-        print(parser.get_prog_name() + ': error:', e,
-              file=stderr)
-        return 1
+    elif options.watch and len(args) < 2:
+        parser.print_usage(stderr)
+        error('-w/--watch requires the second argument, the output css '
+              'filename.')
+        return 2
     else:
-        if len(args) < 2:
-            print(css, file=stdout)
+        pass
+    while True:
+        try:
+            if options.source_map:
+                source_map_filename = args[1] + '.map'  # FIXME
+                css, source_map = compile(
+                    filename=filename,
+                    output_style=options.output_style,
+                    source_comments='map',
+                    source_map_filename=source_map_filename,
+                    include_paths=options.include_paths,
+                    image_path=options.image_path
+                )
+            else:
+                source_map_filename = None
+                source_map = None
+                css = compile(
+                    filename=filename,
+                    output_style=options.output_style,
+                    include_paths=options.include_paths,
+                    image_path=options.image_path
+                )
+            mtime = os.stat(filename).st_mtime
+        except (IOError, OSError) as e:
+            error(e)
+            return 3
+        except CompileError as e:
+            error(e)
+            if not options.watch:
+                return 1
+        except KeyboardInterrupt:
+            break
         else:
-            with open(args[1], 'w') as f:
-                print(css, file=f)
-        if source_map_filename:
-            with open(source_map_filename, 'w') as f:
-                f.write(source_map)
+            if len(args) < 2:
+                print(css, file=stdout)
+            else:
+                with open(args[1], 'w') as f:
+                    print(css, file=f)
+                if options.watch:
+                    print(filename, 'is just compiled to', args[1],
+                          file=stdout)
+            if source_map_filename:
+                with open(source_map_filename, 'w') as f:
+                    f.write(source_map)
+        if options.watch:
+            # FIXME: we should utilize inotify on Linux, and FSEvents on Mac
+            while True:
+                try:
+                    st = os.stat(filename)
+                    if st.st_mtime > mtime:
+                        print(filename, 'changed; recompile...', file=stdout)
+                        break
+                    time.sleep(0.5)
+                except KeyboardInterrupt:
+                    return 0
+        else:
+            break
     return 0
 
 
