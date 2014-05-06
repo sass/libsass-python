@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; libsass 0.3.0 documentation</title>
+    <title>Changelog &mdash; libsass 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.0',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.3.0 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.4.0 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.4.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
@@ -51,6 +51,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-0-4-0">Version 0.4.0</a></li>
 <li><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
 <li><a class="reference internal" href="#version-0-2-4">Version 0.2.4</a></li>
 <li><a class="reference internal" href="#version-0-2-3">Version 0.2.3</a></li>
@@ -97,11 +98,33 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-4-0">
+<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 6, 2014.</p>
+<ul class="simple">
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-w"><em class="xref std std-option">-w</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--watch"><em class="xref std std-option">--watch</em></a> option.</li>
+<li>Expose source maps support:<ul>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><em class="xref std std-option">-m</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-g"><em class="xref std std-option">-g</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--sourcemap"><em class="xref std std-option">--sourcemap</em></a> option.</li>
+<li><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> now also creates source map files
+with filenames followed by <tt class="file docutils literal"><span class="pre">.map</span></tt> suffix.</li>
+<li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><tt class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></tt></a> method
+has a new <tt class="docutils literal"><span class="pre">source_map</span></tt> option.  This option builds also a source map
+file with the filename followed by <tt class="file docutils literal"><span class="pre">.map</span></tt> suffix.</li>
+<li><a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a> has a new optional parameter <tt class="docutils literal"><span class="pre">source_comments</span></tt>.
+It can be one of <a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS" title="sass.SOURCE_COMMENTS"><tt class="xref py py-const docutils literal"><span class="pre">sass.SOURCE_COMMENTS</span></tt></a> keys.  It also has
+a new parameter <tt class="docutils literal"><span class="pre">source_map_filename</span></tt> which is required only when
+<tt class="docutils literal"><span class="pre">source_comments='map'</span></tt>.</li>
+</ul>
+</li>
+<li>Fixed Python 3 incompatibility of <strong class="program">sassc</strong> program.</li>
+<li>Fixed a bug that multiple <tt class="docutils literal"><span class="pre">include_paths</span></tt> doesn&#8217;t work on Windows.</li>
+</ul>
+</div>
 <div class="section" id="version-0-3-0">
 <h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Permalink to this headline">¶</a></h2>
 <p>Released on February 21, 2014.</p>
 <ul class="simple">
-<li>Added support for Python 3.3.</li>
+<li>Added support for Python 3.3.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/7">#7</a>]</li>
 <li>Dropped support for Python 2.5.</li>
 <li>Fixed build failing on Mac OS X.
 [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/4">#4</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/5">#5</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/6">#6</a> by Hyungoo Kang]</li>
@@ -200,12 +223,12 @@ Now it raises a proper <tt class="docutils literal"><span class="pre">exceptions
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              >previous</a> |</li>
-        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.4.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

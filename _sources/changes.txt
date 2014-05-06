@@ -1,12 +1,37 @@
 Changelog
 =========
 
+Version 0.4.0
+-------------
+
+Released on May 6, 2014.
+
+- :program:`sassc` has a new :option:`-w <sassc -w>`/:option:`--watch
+  <sassc --watch>` option.
+- Expose source maps support:
+
+  - :program:`sassc` has a new :option:`-m <sassc -m>`/:option:`-g
+    <sassc -g>`/:option:`--sourcemap <sassc --sourcemap>` option.
+  - :class:`~sassutils.wsgi.SassMiddleware` now also creates source map files
+    with filenames followed by :file:`.map` suffix.
+  - :meth:`Manifest.build_one() <sassutils.builder.Manifest.build_one>` method
+    has a new ``source_map`` option.  This option builds also a source map
+    file with the filename followed by :file:`.map` suffix.
+  - :func:`sass.compile()` has a new optional parameter ``source_comments``.
+    It can be one of :const:`sass.SOURCE_COMMENTS` keys.  It also has
+    a new parameter ``source_map_filename`` which is required only when
+    ``source_comments='map'``.
+
+- Fixed Python 3 incompatibility of :program:`sassc` program.
+- Fixed a bug that multiple ``include_paths`` doesn't work on Windows.
+
+
 Version 0.3.0
 -------------
 
 Released on February 21, 2014.
 
-- Added support for Python 3.3.
+- Added support for Python 3.3.  [:issue:`7`]
 - Dropped support for Python 2.5.
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]

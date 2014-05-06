@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.3.0 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.0',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.3.0 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.4.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="sassc.html" title="sassc — SassC compliant command line interface"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.4.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
@@ -94,15 +94,25 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<tt class="descclassname">sass.</tt><tt class="descname">MODES</tt><em class="property"> = set(['dirname', 'string', 'filename'])</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">sass.</tt><tt class="descname">MODES</tt><em class="property"> = {'string', 'dirname', 'filename'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> can take.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.OUTPUT_STYLES">
-<tt class="descclassname">sass.</tt><tt class="descname">OUTPUT_STYLES</tt><em class="property"> = {'compact': 2, 'expanded': 1, 'compressed': 3, 'nested': 0}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">sass.</tt><tt class="descname">OUTPUT_STYLES</tt><em class="property"> = {'expanded': 1, 'nested': 0, 'compressed': 3, 'compact': 2}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of output styles.
 Keys are output name strings, and values are flag integers.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sass.SOURCE_COMMENTS">
+<tt class="descclassname">sass.</tt><tt class="descname">SOURCE_COMMENTS</tt><em class="property"> = {'none': 0, 'line_numbers': 1, 'default': 1, 'map': 2}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of source comments styles.
+Keys are mode names, and values are corresponding flag integers.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.4.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="exception">
@@ -152,6 +162,10 @@ CSS string.</p>
 <li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
 choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
 <tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
+<li><strong>source_comments</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional source comments mode of the compiled
+result.  choose one of <tt class="docutils literal"><span class="pre">'none'</span></tt> (default) or
+<tt class="docutils literal"><span class="pre">'line_numbers'</span></tt>.  <tt class="docutils literal"><span class="pre">'map'</span></tt> is unavailable for
+<tt class="docutils literal"><span class="pre">string</span></tt></li>
 <li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
 SASS/CSS source files</li>
 <li><strong>image_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional path to find images</li>
@@ -183,16 +197,29 @@ it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</s
 <li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
 choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
 <tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
+<li><strong>source_comments</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional source comments mode of the compiled
+result.  choose one of <tt class="docutils literal"><span class="pre">'none'</span></tt> (default),
+<tt class="docutils literal"><span class="pre">'line_numbers'</span></tt>, <tt class="docutils literal"><span class="pre">'map'</span></tt>.
+if <tt class="docutils literal"><span class="pre">'map'</span></tt> is used it requires
+<tt class="docutils literal"><span class="pre">source_map_filename</span></tt> argument as well and
+returns a (compiled CSS string,
+source map string) pair instead of a string</li>
+<li><strong>source_map_filename</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; indicate the source map output filename.
+it&#8217;s only available and required
+when <tt class="docutils literal"><span class="pre">source_comments</span></tt> is <tt class="docutils literal"><span class="pre">'map'</span></tt>.
+note that it will ignore all other parts of
+the path except for its basename</li>
 <li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
 SASS/CSS source files</li>
 <li><strong>image_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional path to find images</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string, or a pair of the compiled CSS string
+and the source map string if <tt class="docutils literal"><span class="pre">source_comments='map'</span></tt></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt></p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
@@ -223,6 +250,10 @@ parameters</li>
 <li><strong>output_style</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional coding style of the compiled result.
 choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
 <tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
+<li><strong>source_comments</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional source comments mode of the compiled
+result.  choose one of <tt class="docutils literal"><span class="pre">'none'</span></tt> (default) or
+<tt class="docutils literal"><span class="pre">'line_numbers'</span></tt>.  <tt class="docutils literal"><span class="pre">'map'</span></tt> is unavailable for
+<tt class="docutils literal"><span class="pre">dirname</span></tt></li>
 <li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
 SASS/CSS source files</li>
 <li><strong>image_path</strong> (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) &#8211; an optional path to find images</li>
@@ -236,6 +267,9 @@ SASS/CSS source files</li>
 </tr>
 </tbody>
 </table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.4.0: </span>Added <tt class="docutils literal"><span class="pre">source_comments</span></tt> and <tt class="docutils literal"><span class="pre">source_map_filename</span></tt> parameters.</p>
+</div>
 </dd></dl>
 
 </div>
@@ -261,12 +295,12 @@ SASS/CSS source files</li>
         <li class="right" >
           <a href="sassc.html" title="sassc — SassC compliant command line interface"
              >previous</a> |</li>
-        <li><a href="index.html">libsass 0.3.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.4.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
