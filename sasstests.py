@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
 
 import collections
@@ -9,7 +10,7 @@ import shutil
 import tempfile
 import unittest
 
-from six import StringIO, b
+from six import StringIO, b, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -55,6 +56,13 @@ body {
 
 h1 a {
   color: green; }
+'''
+
+D_EXPECTED_CSS = '''\
+body {
+  background-color: green; }
+  body a {
+    font: '나눔고딕', sans-serif; }
 '''
 
 
@@ -141,6 +149,14 @@ a {
   a b {
     color: blue; }
 '''
+        actual = sass.compile(string=u'a { color: blue; } /* 유니코드 */')
+        self.assertEqual(
+            u'''a {
+  color: blue; }
+
+/* 유니코드 */''',
+            actual
+        )
         self.assertRaises(sass.CompileError, sass.compile,
                           string='a { b { color: blue; }')
         # sass.CompileError should be a subtype of ValueError
@@ -158,6 +174,11 @@ a {
         assert actual == A_EXPECTED_CSS
         actual = sass.compile(filename='test/c.sass')
         assert actual == C_EXPECTED_CSS
+        actual = sass.compile(filename='test/d.sass')
+        if text_type is str:
+            self.assertEqual(D_EXPECTED_CSS, actual)
+        else:
+            self.assertEqual(D_EXPECTED_CSS.decode('utf-8'), actual)
         self.assertRaises(IOError, sass.compile,
                           filename='test/not-exist.sass')
         self.assertRaises(TypeError, sass.compile, filename=1234)
@@ -205,7 +226,7 @@ class BuilderTestCase(unittest.TestCase):
         css_path = os.path.join(temp_path, 'css')
         shutil.copytree('test', sass_path)
         result_files = build_directory(sass_path, css_path)
-        assert len(result_files) == 3
+        assert len(result_files) == 4
         assert result_files['a.sass'] == 'a.sass.css'
         with open(os.path.join(css_path, 'a.sass.css')) as f:
             css = f.read()
@@ -218,6 +239,10 @@ class BuilderTestCase(unittest.TestCase):
         with open(os.path.join(css_path, 'c.sass.css')) as f:
             css = f.read()
         assert css == C_EXPECTED_CSS
+        assert result_files['d.sass'] == 'd.sass.css'
+        with open(os.path.join(css_path, 'd.sass.css')) as f:
+            css = f.read()
+        self.assertEqual(D_EXPECTED_CSS, css)
         shutil.rmtree(temp_path)
 
 
@@ -342,6 +367,23 @@ class SasscTestCase(unittest.TestCase):
             self.assertEqual('', self.out.getvalue())
             with open(tmp) as f:
                 self.assertEqual(A_EXPECTED_CSS.strip(), f.read().strip())
+        finally:
+            os.remove(tmp)
+
+    def test_sassc_output_unicode(self):
+        fd, tmp = tempfile.mkstemp('.css')
+        try:
+            os.close(fd)
+            exit_code = sassc.main(['sassc', 'test/d.sass', tmp],
+                                   self.out, self.err)
+            self.assertEqual(0, exit_code)
+            self.assertEqual('', self.err.getvalue())
+            self.assertEqual('', self.out.getvalue())
+            with open(tmp) as f:
+                self.assertEqual(
+                    D_EXPECTED_CSS.strip(),
+                    f.read().strip()
+                )
         finally:
             os.remove(tmp)
 

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.4.1
+-------------
+
+To be released.
+
+- Fixed :exc:`UnicodeEncodeError` that rise when the input source contains
+  any non-ASCII Unicode characters.
+
+
 Version 0.4.0
 -------------
 

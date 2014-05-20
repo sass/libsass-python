@@ -147,7 +147,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 print(css, file=stdout)
             else:
                 with open(args[1], 'w') as f:
-                    print(css, file=f)
+                    try:
+                        print(css, file=f)
+                    except UnicodeEncodeError:
+                        print(css.encode('utf-8'), file=f)
                 if options.watch:
                     print(filename, 'is just compiled to', args[1],
                           file=stdout)

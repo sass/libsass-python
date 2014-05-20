@@ -50,7 +50,10 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
             css_fullname = os.path.join(css_path, name) + '.css'
             css = compile(filename=sass_fullname, include_paths=[_root_sass])
             with open(css_fullname, 'w') as css_file:
-                css_file.write(css)
+                try:
+                    css_file.write(css)
+                except UnicodeEncodeError:
+                    css_file.write(css.encode('utf-8'))
             result[os.path.relpath(sass_fullname, _root_sass)] = \
                 os.path.relpath(css_fullname, _root_css)
         elif os.path.isdir(sass_fullname):
