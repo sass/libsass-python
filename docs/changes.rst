@@ -4,7 +4,7 @@ Changelog
 Version 0.4.1
 -------------
 
-To be released.
+Released on May 20, 2014.
 
 - Fixed :exc:`UnicodeEncodeError` that rise when the input source contains
   any non-ASCII Unicode characters.
