@@ -6,6 +6,7 @@ import distutils.log
 import glob
 import os
 import os.path
+import platform
 import re
 import shutil
 import sys
@@ -67,7 +68,9 @@ if sys.platform == 'win32':
     link_flags = []
 else:
     flags = ['-fPIC', '-Wall', '-Wno-parentheses']
-    if sys.platform == 'darwin':
+    platform.mac_ver()
+    if platform.system() == 'Darwin' and \
+       tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
         flags.append(
             '-Wno-error=unused-command-line-argument-hard-error-in-future'
         )

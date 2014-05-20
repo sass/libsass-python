@@ -6,6 +6,8 @@ Version 0.4.2
 
 To be released.
 
+- Fixed build failing on Mac OS X 10.8 or earlier.  [:issue:`19`]
+
 
 Version 0.4.1
 -------------
