@@ -22,7 +22,7 @@ from _sass import (OUTPUT_STYLES, SOURCE_COMMENTS, compile_dirname,
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
            'and_join', 'compile')
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
