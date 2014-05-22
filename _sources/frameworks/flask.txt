@@ -118,13 +118,12 @@ Building SASS/SCSS for each deployment
 
 .. note::
 
-   This section assumes that you use distribute_ (:mod:`setuptools`)
-   for deployment.
+   This section assumes that you use setuptools_ for deployment.
 
 .. seealso::
 
    Flask --- :ref:`flask:distribute-deployment`
-      How to deploy Flask application using distribute_.
+      How to deploy Flask application using setuptools_.
 
 If libsass has been installed in the :file:`site-packages` (for example,
 your virtualenv), :file:`setup.py` script also gets had new command
@@ -173,4 +172,4 @@ command before.  Make :file:`setup.cfg` config:
 Now it automatically builds SASS/SCSS sources and include compiled CSS files
 to the package archive when you run :program:`setup.py sdist`.
 
-.. _distribute: http://pypi.python.org/pypi/distribute
+.. _setuptools: https://pypi.python.org/pypi/setuptools
