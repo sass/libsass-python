@@ -157,7 +157,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             if source_map_filename:
                 with open(source_map_filename, 'w') as f:
                     f.write(source_map)
-        if options.watch:
+        if options.watch:  # pragma: no cover
             # FIXME: we should utilize inotify on Linux, and FSEvents on Mac
             while True:
                 try:

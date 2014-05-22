@@ -9,9 +9,11 @@ python:
 - 3.3
 - 3.4
 install:
-- pip install -e . "Werkzeug >= 0.9"
+- pip install -e . "Werkzeug >= 0.9" coverage coveralls
 script:
-- python setup.py test
+- coverage run --source sass,sassc,sassutils setup.py test
+after_success:
+- coveralls
 notifications:
   irc:
     channels:

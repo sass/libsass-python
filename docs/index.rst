@@ -79,14 +79,25 @@ GitHub (Git repository + issues)
    https://github.com/dahlia/libsass-python
 
 Travis CI
-   http://travis-ci.org/dahlia/libsass-python
+   https://travis-ci.org/dahlia/libsass-python
 
-   .. image:: https://secure.travis-ci.org/dahlia/libsass-python.png?branch=python
+   .. image:: https://travis-ci.org/dahlia/libsass-python.svg?branch=python
+      :target: https://travis-ci.org/dahlia/libsass-python
       :alt: Build Status
-      :target: http://travis-ci.org/dahlia/libsass-python
+
+Coveralls (Test coverage)
+   https://coveralls.io/r/dahlia/libsass-python
+
+   .. image:: https://img.shields.io/coveralls/dahlia/libsass-python.svg
+      :target: https://coveralls.io/r/dahlia/libsass-python
+      :alt: Coverage Status
 
 PyPI
-   http://pypi.python.org/pypi/libsass
+   https://pypi.python.org/pypi/libsass
+
+   .. image:: https://img.shields.io/pypi/v/libsass.svg
+      :target: https://pypi.python.org/pypi/libsass
+      :alt: The latest PyPI release
 
 Changelog
    :doc:`changes`

@@ -1,6 +1,18 @@
 libsass: SASS_ for Python
 =========================
 
+.. image:: https://img.shields.io/pypi/v/libsass.svg
+   :target: https://pypi.python.org/pypi/libsass
+   :alt: The latest PyPI release
+
+.. image:: https://travis-ci.org/dahlia/libsass-python.svg?branch=python
+   :target: https://travis-ci.org/dahlia/libsass-python
+   :alt: Build Status
+
+.. image:: https://img.shields.io/coveralls/dahlia/libsass-python.svg
+   :target: https://coveralls.io/r/dahlia/libsass-python
+   :alt: Coverage Status
+
 This package provides a simple Python extension module ``sass`` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
@@ -9,10 +21,6 @@ your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
 Need no Ruby nor Node.js.
 
 It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 1.9+!
-
-.. image:: https://travis-ci.org/dahlia/libsass-python.png?branch=python
-   :target: https://travis-ci.org/dahlia/libsass-python
-   :alt: Build Status
 
 .. _SASS: http://sass-lang.com/
 .. _Libsass: https://github.com/hcatlin/libsass

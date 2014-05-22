@@ -53,6 +53,7 @@ support/libsass.pc
 build/
 dist/
 docs/_build
+.coverage
 .tox
 .*.swp
 *.egg

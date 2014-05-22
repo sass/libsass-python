@@ -1,0 +1,8 @@
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise TypeError
+    except UnicodeEncodeError
+    except KeyboardInterrupt
+    if __name__ == .__main__.:
