@@ -77,16 +77,16 @@ class SassTestCase(unittest.TestCase):
         assert 'nested' in sass.OUTPUT_STYLES
 
     def test_and_join(self):
-        self.assertEquals(
+        self.assertEqual(
             'Korea, Japan, China, and Taiwan',
             sass.and_join(['Korea', 'Japan', 'China', 'Taiwan'])
         )
-        self.assertEquals(
+        self.assertEqual(
             'Korea, and Japan',
             sass.and_join(['Korea', 'Japan'])
         )
-        self.assertEquals('Korea', sass.and_join(['Korea']))
-        self.assertEquals('', sass.and_join([]))
+        self.assertEqual('Korea', sass.and_join(['Korea']))
+        self.assertEqual('', sass.and_join([]))
 
 
 class CompileTestCase(unittest.TestCase):
@@ -310,17 +310,17 @@ class WsgiTestCase(unittest.TestCase):
             })
             client = Client(app, Response)
             r = client.get('/asdf')
-            self.assertEquals(200, r.status_code)
-            self.assertEquals(b'/asdf', r.data)
-            self.assertEquals('text/plain', r.mimetype)
+            self.assertEqual(200, r.status_code)
+            self.assertEqual(b'/asdf', r.data)
+            self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.sass.css')
-            self.assertEquals(200, r.status_code)
-            self.assertEquals(b(A_EXPECTED_CSS_WITH_MAP), r.data)
-            self.assertEquals('text/css', r.mimetype)
+            self.assertEqual(200, r.status_code)
+            self.assertEqual(b(A_EXPECTED_CSS_WITH_MAP), r.data)
+            self.assertEqual('text/css', r.mimetype)
             r = client.get('/static/not-exists.sass.css')
-            self.assertEquals(200, r.status_code)
-            self.assertEquals(b'/static/not-exists.sass.css', r.data)
-            self.assertEquals('text/plain', r.mimetype)
+            self.assertEqual(200, r.status_code)
+            self.assertEqual(b'/static/not-exists.sass.css', r.data)
+            self.assertEqual('text/plain', r.mimetype)
         finally:
             shutil.rmtree(css_dir)
 
