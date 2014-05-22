@@ -4,7 +4,7 @@ Changelog
 Version 0.4.2
 -------------
 
-To be released.
+Released on May 22, 2014.
 
 - Fixed build failing on Mac OS X 10.8 or earlier.  [:issue:`19`]
 - Fixed :exc:`UnicodeEncodeError` that :meth:`Manifest.build_one()
