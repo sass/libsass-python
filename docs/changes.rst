@@ -7,6 +7,9 @@ Version 0.4.2
 To be released.
 
 - Fixed build failing on Mac OS X 10.8 or earlier.  [:issue:`19`]
+- Fixed :exc:`UnicodeEncodeError` that :meth:`Manifest.build_one()
+  <sassutils.builder.Manifest.build_one>` method rises when the input source
+  contains any non-ASCII Unicode characters.
 
 
 Version 0.4.1

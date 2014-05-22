@@ -291,6 +291,24 @@ class ManifestTestCase(unittest.TestCase):
                     },
                     json.load(f)
                 )
+            m.build_one(d, 'd.sass', source_map=True)
+            with open(os.path.join(d, 'css', 'd.sass.css')) as f:
+                self.assertEqual(
+                    D_EXPECTED_CSS +
+                    '\n/*# sourceMappingURL=d.sass.css.map */',
+                    f.read()
+                )
+            with open(os.path.join(d, 'css', 'd.sass.css.map')) as f:
+                self.assertEqual(
+                    {
+                        'version': 3,
+                        'file': 'd.sass',
+                        'sources': ['../test/d.sass'],
+                        'names': [],
+                        'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,MAAM'
+                    },
+                    json.load(f)
+                )
         finally:
             shutil.rmtree(d)
 

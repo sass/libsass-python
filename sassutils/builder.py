@@ -196,8 +196,12 @@ class Manifest(object):
         if not os.path.exists(css_folder):
             os.makedirs(css_folder)
         with open(css_path, 'w') as f:
-            f.write(css)
+            try:
+                f.write(css)
+            except UnicodeEncodeError:
+                f.write(css.encode('utf-8'))
         if source_map:
-            with open(source_map_path, 'w') as f:
-                f.write(source_map)
+            with open(source_map_path, 'wb') as f:
+                # Source maps are JSON, and JSON has to be UTF-8 encoded
+                f.write(source_map.encode('utf-8'))
         return css_filename
