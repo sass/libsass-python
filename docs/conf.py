@@ -249,7 +249,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('http://docs.python.org/', None),
-    'distribute': ('http://packages.python.org/distribute/', None),
+    'setuptools': ('http://pythonhosted.org/setuptools/', None),
     'flask': ('http://flask.pocoo.org/docs/', None)
 }
 
