@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Bleeding Edge: 0.4.2-cd3ee1cbe3
+-------------------------------
+
+To be released.
+
+- Follow up the libsass upstream:
+  :commit:`cd3ee1cbe34d5316eb762a43127a3de9575454ee`.
+
+
 Version 0.4.2
 -------------
 

@@ -2,6 +2,7 @@
 
 namespace Sass {
   namespace Constants {
+    extern const int SPECIFICITY_BASE = 1000;
 
     // hidden variable name for the image path (for the image-url built-in)
     extern const char image_path_var[] = "$[image path]";
@@ -53,18 +54,22 @@ namespace Sass {
     extern const char vendor_khtml_kwd[]    = "-khtml-";
 
     // css functions and keywords
-    extern const char charset_kwd[]    = "@charset";
-    extern const char media_kwd[]      = "@media";
-    extern const char keyframes_kwd[]  = "keyframes";
-    extern const char only_kwd[]       = "only";
-    extern const char rgb_kwd[]        = "rgb(";
-    extern const char url_kwd[]        = "url(";
-    extern const char image_url_kwd[]  = "image-url(";
-    extern const char important_kwd[]  = "important";
-    extern const char pseudo_not_kwd[] = ":not(";
-    extern const char even_kwd[]       = "even";
-    extern const char odd_kwd[]        = "odd";
-    extern const char progid_kwd[]     = "progid";
+    extern const char charset_kwd[]      = "@charset";
+    extern const char media_kwd[]        = "@media";
+    extern const char keyframes_kwd[]    = "keyframes";
+    extern const char only_kwd[]         = "only";
+    extern const char rgb_kwd[]          = "rgb(";
+    extern const char url_kwd[]          = "url(";
+    extern const char image_url_kwd[]    = "image-url(";
+    extern const char important_kwd[]    = "important";
+    extern const char pseudo_not_kwd[]   = ":not(";
+    extern const char even_kwd[]         = "even";
+    extern const char odd_kwd[]          = "odd";
+    extern const char progid_kwd[]       = "progid";
+    extern const char expression_kwd[]   = "expression";
+    extern const char calc_kwd[]         = "calc(";
+    extern const char moz_calc_kwd[]     = "-moz-calc(";
+    extern const char webkit_calc_kwd[]  = "-webkit-calc(";
 
     // css attribute-matching operators
     extern const char tilde_equal[]  = "~=";
@@ -87,18 +92,19 @@ namespace Sass {
     extern const char false_kwd[] = "false";
 
     // miscellaneous punctuation and delimiters
-    extern const char percent_str[] = "%";
-    extern const char empty_str[]   = "";
-    extern const char slash_slash[] = "//";
-    extern const char slash_star[]  = "/*";
-    extern const char star_slash[]  = "*/";
-    extern const char hash_lbrace[] = "#{";
-    extern const char rbrace[]      = "}";
-    extern const char rparen[]      = ")";
-    extern const char sign_chars[]  = "-+";
-    extern const char hyphen[]      = "-";
-    extern const char ellipsis[]    = "...";
-
+    extern const char percent_str[]     = "%";
+    extern const char empty_str[]       = "";
+    extern const char slash_slash[]     = "//";
+    extern const char slash_star[]      = "/*";
+    extern const char star_slash[]      = "*/";
+    extern const char hash_lbrace[]     = "#{";
+    extern const char rbrace[]          = "}";
+    extern const char rparen[]          = ")";
+    extern const char sign_chars[]      = "-+";
+    extern const char hyphen[]          = "-";
+    extern const char ellipsis[]        = "...";
+    extern const char url_space_chars[] = " \t\r\n\f";
+    extern const char escape_chars[]    = " -~"; // need to include unicode spaces too
     // type names
     extern const char numeric_name[]    = "numeric value";
     extern const char number_name[]     = "number";

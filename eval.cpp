@@ -7,11 +7,12 @@
 #include "context.hpp"
 #include "backtrace.hpp"
 #include "prelexer.hpp"
+
 #include <cstdlib>
 #include <cmath>
-
 #include <iostream>
 #include <iomanip>
+#include <typeinfo>
 
 namespace Sass {
   using namespace std;
@@ -150,7 +151,6 @@ namespace Sass {
     Expression* message = w->message()->perform(this);
     To_String to_string;
     string prefix("WARNING: ");
-    string indent("         ");
     string result(unquote(message->perform(&to_string)));
     cerr << prefix << result;
     Backtrace top(backtrace, w->path(), w->position(), "");
@@ -262,7 +262,6 @@ namespace Sass {
 
   Expression* Eval::operator()(Function_Call* c)
   {
-    if (c->name() == "calc") return c;
     Arguments* args = static_cast<Arguments*>(c->arguments()->perform(this));
     string full_name(c->name() + "[f]");
 
@@ -341,7 +340,7 @@ namespace Sass {
       backtrace = &here;
 
       To_C to_c;
-      Sass_Value c_val = c_func(args->perform(&to_c));
+      Sass_Value c_val = c_func(args->perform(&to_c), def->cookie());
       if (c_val.unknown.tag == SASS_ERROR) {
         error("error in C function " + c->name() + ": " + c_val.error.message, c->path(), c->position(), backtrace);
       }
@@ -391,14 +390,14 @@ namespace Sass {
 
   Expression* Eval::operator()(Variable* v)
   {
-    // To_String to_string;
-    // cerr << "looking up " << v->name() << endl;
+    To_String to_string;
     string name(v->name());
     Expression* value = 0;
     if (env->has(name)) value = static_cast<Expression*>((*env)[name]);
     else error("unbound variable " + v->name(), v->path(), v->position());
-    // cerr << "fetched a value of type " << typeid(*value).name() << endl;
-    // if (value) cerr << "fetched a value: " << value->perform(&to_string) << endl;
+    // cerr << "name: " << v->name() << "; type: " << typeid(*value).name() << "; value: " << value->perform(&to_string) << endl;
+    if (typeid(*value) == typeid(Argument)) value = static_cast<Argument*>(value)->value();
+    // cerr << "\ttype is now: " << typeid(*value).name() << endl << endl;
     return value;
   }
 
@@ -478,7 +477,7 @@ namespace Sass {
   Expression* Eval::operator()(String_Schema* s)
   {
     string acc;
-    To_String to_string;
+    To_String to_string(0);
     for (size_t i = 0, L = s->length(); i < L; ++i) {
       string chunk((*s)[i]->perform(this)->perform(&to_string));
       if (((s->quote_mark() && is_quoted(chunk)) || !s->quote_mark()) && (*s)[i]->is_interpolant()) { // some redundancy in that test

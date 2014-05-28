@@ -6,7 +6,7 @@
 namespace Sass {
   using namespace std;
 
-  Output_Compressed::Output_Compressed(Context* ctx) : buffer(""), ctx(ctx) { }
+  Output_Compressed::Output_Compressed(Context* ctx) : buffer(""), rendered_imports(""), ctx(ctx) { }
   Output_Compressed::~Output_Compressed() { }
 
   inline void Output_Compressed::fallback_impl(AST_Node* n)
@@ -14,6 +14,13 @@ namespace Sass {
     Inspect i(ctx);
     n->perform(&i);
     buffer += i.get_buffer();
+  }
+
+  void Output_Compressed::operator()(Import* imp)
+  {
+    Inspect insp(ctx);
+    imp->perform(&insp);
+    rendered_imports += insp.get_buffer();
   }
 
   void Output_Compressed::operator()(Block* b)
@@ -29,7 +36,23 @@ namespace Sass {
     Selector* s     = r->selector();
     Block*    b     = r->block();
 
-    if (s->has_placeholder()) return;
+    // In case the extend visitor isn't called (if there are no @extend
+    // directives in the entire document), check for placeholders here and
+    // make sure they aren't output.
+    // TODO: investigate why I decided to duplicate this logic in the extend visitor
+    Selector_List* sl = static_cast<Selector_List*>(s);
+    if (!ctx->extensions.size()) {
+      Selector_List* new_sl = new (ctx->mem) Selector_List(sl->path(), sl->position());
+      for (size_t i = 0, L = sl->length(); i < L; ++i) {
+        if (!(*sl)[i]->has_placeholder()) {
+          *new_sl << (*sl)[i];
+        }
+      }
+      s = new_sl;
+      sl = new_sl;
+      r->selector(new_sl);
+    }
+    if (sl->length() == 0) return;
 
     if (b->has_non_hoistable()) {
       s->perform(this);
@@ -94,14 +117,19 @@ namespace Sass {
 
   void Output_Compressed::operator()(At_Rule* a)
   {
-    string    kwd   = a->keyword();
-    Selector* s     = a->selector();
-    Block*    b     = a->block();
+    string      kwd   = a->keyword();
+    Selector*   s     = a->selector();
+    Expression* v     = a->value();
+    Block*      b     = a->block();
 
     append_singleline_part_to_buffer(kwd);
     if (s) {
       append_singleline_part_to_buffer(" ");
       s->perform(this);
+    }
+    else if (v) {
+      append_singleline_part_to_buffer(" ");
+      v->perform(this);
     }
 
     if (!b) {
@@ -217,15 +245,31 @@ namespace Sass {
 
   void Output_Compressed::operator()(Complex_Selector* c)
   {
-    Compound_Selector*        head = c->head();
+    Compound_Selector*           head = c->head();
     Complex_Selector*            tail = c->tail();
     Complex_Selector::Combinator comb = c->combinator();
-    if (head) head->perform(this);
+    if (head && head->is_empty_reference() && tail)
+    {
+      tail->perform(this);
+      return;
+    } 
+    if (head && !head->is_empty_reference()) head->perform(this);
     switch (comb) {
-      case Complex_Selector::ANCESTOR_OF: append_singleline_part_to_buffer(" "); break;
-      case Complex_Selector::PARENT_OF:   append_singleline_part_to_buffer(">"); break;
-      case Complex_Selector::PRECEDES:    append_singleline_part_to_buffer("~"); break;
-      case Complex_Selector::ADJACENT_TO: append_singleline_part_to_buffer("+"); break;
+      case Complex_Selector::ANCESTOR_OF:
+        if (tail) append_singleline_part_to_buffer(" ");
+        break;
+      case Complex_Selector::PARENT_OF:
+        append_singleline_part_to_buffer(">");
+        break;
+      case Complex_Selector::PRECEDES:
+        // Apparently need to preserve spaces around this combinator?
+        if (head && !head->is_empty_reference()) append_singleline_part_to_buffer(" ");
+        append_singleline_part_to_buffer("~");
+        if (tail) append_singleline_part_to_buffer(" ");
+        break;
+      case Complex_Selector::ADJACENT_TO:
+        append_singleline_part_to_buffer("+");
+        break;
     }
     if (tail) tail->perform(this);
   }
@@ -239,7 +283,7 @@ namespace Sass {
       (*g)[i]->perform(this);
     }
   }
-  
+
   void Output_Compressed::append_singleline_part_to_buffer(const string& text)
   {
     buffer += text;

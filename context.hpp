@@ -17,6 +17,12 @@
 #include "source_map.hpp"
 #endif
 
+#ifndef SASS_SUBSET_MAP
+#include "subset_map.hpp"
+#endif
+
+struct Sass_C_Function_Descriptor;
+
 namespace Sass {
   using namespace std;
   class AST_Node;
@@ -40,6 +46,7 @@ namespace Sass {
     vector<pair<string, const char*> > queue; // queue of files to be parsed
     map<string, Block*> style_sheets; // map of paths to ASTs
     SourceMap source_map;
+    vector<Sass_C_Function_Descriptor> c_functions;
 
     string       image_path; // for the image-url Sass function
     bool         source_comments;
@@ -50,9 +57,12 @@ namespace Sass {
     map<string, Color*> names_to_colors;
     map<int, string>    colors_to_names;
 
+    size_t precision; // precision for outputting fractional numbers
+
     KWD_ARG_SET(Data) {
       KWD_ARG(Data, const char*,     source_c_str);
       KWD_ARG(Data, string,          entry_point);
+      KWD_ARG(Data, string,          output_path);
       KWD_ARG(Data, string,          image_path);
       KWD_ARG(Data, const char*,     include_paths_c_str);
       KWD_ARG(Data, const char**,    include_paths_array);
@@ -60,7 +70,8 @@ namespace Sass {
       KWD_ARG(Data, bool,            source_comments);
       KWD_ARG(Data, bool,            source_maps);
       KWD_ARG(Data, Output_Style,    output_style);
-      KWD_ARG(Data, string,          source_map_file)
+      KWD_ARG(Data, string,          source_map_file);
+      KWD_ARG(Data, size_t,          precision);
     };
 
     Context(Data);
@@ -79,7 +90,7 @@ namespace Sass {
   private:
     string format_source_mapping_url(const string& file) const;
     string get_cwd();
-    
+
     vector<string> included_files;
     string cwd;
 
@@ -88,6 +99,9 @@ namespace Sass {
     // void register_function(Signature sig, Native_Function f, size_t arity, Env* env);
     // void register_overload_stub(string name, Env* env);
 
+  public:
+    multimap<Compound_Selector, Complex_Selector*> extensions;
+    Subset_Map<string, pair<Complex_Selector*, Compound_Selector*> > subset_map;
   };
 
 }

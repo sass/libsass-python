@@ -7,9 +7,10 @@
 #define PATH_SEP ':'
 #endif
 
-#include <cstring>
-#include <iostream>
-#include <sstream>
+#ifndef SASS_AST
+#include "ast.hpp"
+#endif
+
 #include "context.hpp"
 #include "constants.hpp"
 #include "parser.hpp"
@@ -32,6 +33,8 @@
 
 #include <iomanip>
 #include <iostream>
+#include <cstring>
+#include <sstream>
 
 namespace Sass {
   using namespace Constants;
@@ -42,20 +45,24 @@ namespace Sass {
   : mem(Memory_Manager<AST_Node>()),
     source_c_str    (initializers.source_c_str()),
     sources         (vector<const char*>()),
+    c_functions     (vector<Sass_C_Function_Descriptor>()),
     include_paths   (initializers.include_paths()),
     queue           (vector<pair<string, const char*> >()),
     style_sheets    (map<string, Block*>()),
-    source_map(File::base_name(initializers.entry_point())),
+    source_map(File::base_name(initializers.output_path())),
     image_path      (initializers.image_path()),
     source_comments (initializers.source_comments()),
     source_maps     (initializers.source_maps()),
     output_style    (initializers.output_style()),
     source_map_file (initializers.source_map_file()),
     names_to_colors (map<string, Color*>()),
-    colors_to_names (map<int, string>())
+    colors_to_names (map<int, string>()),
+    precision       (initializers.precision()),
+    extensions(multimap<Compound_Selector, Complex_Selector*>()),
+    subset_map(Subset_Map<string, pair<Complex_Selector*, Compound_Selector*> >())
   {
     cwd = get_cwd();
-    
+
     collect_include_paths(initializers.include_paths_c_str());
     collect_include_paths(initializers.include_paths_array());
 
@@ -206,15 +213,18 @@ namespace Sass {
     Env tge;
     Backtrace backtrace(0, "", Position(), "");
     register_built_in_functions(*this, &tge);
+    for (size_t i = 0, S = c_functions.size(); i < S; ++i) {
+    	register_c_function(*this, &tge, c_functions[i]);
+    }
     Eval eval(*this, &tge, &backtrace);
     Contextualize contextualize(*this, &eval, &tge, &backtrace);
     Expand expand(*this, &eval, &contextualize, &tge, &backtrace);
     // Inspect inspect(this);
-    Output_Nested output_nested;
+    // Output_Nested output_nested(*this);
 
     root = root->perform(&expand)->block();
-    if (expand.extensions.size()) {
-      Extend extend(*this, expand.extensions, &backtrace);
+    if (extensions.size()) {
+      Extend extend(*this, extensions, subset_map, &backtrace);
       root->perform(&extend);
     }
     char* result = 0;
@@ -249,7 +259,7 @@ namespace Sass {
   {
     if (!source_maps) return 0;
     char* result = 0;
-    string map = source_map.generate_source_map(this);
+    string map = source_map.generate_source_map();
     result = copy_c_str(map.c_str());
     return result;
   }
@@ -275,6 +285,9 @@ namespace Sass {
     char wd[wd_len];
     string cwd = getcwd(wd, wd_len);
     if (cwd[cwd.length() - 1] != '/') cwd += '/';
+#ifdef _WIN32
+    replace(cwd.begin(), cwd.end(), '\\', '/');    //convert Windows backslashes to URL forward slashes
+#endif
     return cwd;
   }
 
@@ -311,7 +324,7 @@ namespace Sass {
   {
     using namespace Functions;
     // RGB Functions
-    register_function(ctx, rgb_sig,  rgb, env);
+    register_function(ctx, rgb_sig, rgb, env);
     register_overload_stub(ctx, "rgba", env);
     register_function(ctx, rgba_4_sig, rgba_4, 4, env);
     register_function(ctx, rgba_2_sig, rgba_2, 2, env);
@@ -348,6 +361,7 @@ namespace Sass {
     // String Functions
     register_function(ctx, unquote_sig, sass_unquote, env);
     register_function(ctx, quote_sig, sass_quote, env);
+    register_function(ctx, str_length_sig, str_length, env);
     // Number Functions
     register_function(ctx, percentage_sig, percentage, env);
     register_function(ctx, round_sig, round, env);
@@ -385,7 +399,7 @@ namespace Sass {
   }
   void register_c_function(Context& ctx, Env* env, Sass_C_Function_Descriptor descr)
   {
-    Definition* def = make_c_function(descr.signature, descr.function, ctx);
+    Definition* def = make_c_function(descr.signature, descr.function, descr.cookie, ctx);
     def->environment(env);
     (*env)[def->name() + "[f]"] = def;
   }

@@ -36,6 +36,9 @@ libsass_headers = [
     'sass_interface.h', 'sass.h', 'win32/unistd.h'
 ]
 libsass_headers.extend(glob.glob('*.hpp'))
+include_dirs = ['sass2scss']
+sources = ['pysass.c', 'sass2scss/sass2scss.cpp']
+sources.extend(libsass_sources)
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -78,7 +81,7 @@ else:
 
 sass_extension = Extension(
     '_sass',
-    ['pysass.c'] + libsass_sources,
+    sources,
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,

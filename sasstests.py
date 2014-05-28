@@ -33,14 +33,14 @@ body {
   body a {
     color: blue; }
 
-/*# sourceMappingURL=a.sass.css.map */'''
+/*# sourceMappingURL=a.scss.css.map */'''
 
 A_EXPECTED_MAP = {
     'version': 3,
-    'file': 'a.sass',
-    'sources': ['test/a.sass'],
+    'file': '',
+    'sources': ['test/a.scss'],
     'names': [],
-    'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,OAAO'
+    'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,OAAO'
 }
 
 B_EXPECTED_CSS = '''\
@@ -100,11 +100,11 @@ class CompileTestCase(unittest.TestCase):
 
     def test_compile_exclusive_arguments(self):
         self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }', filename='test/a.sass')
+                          string='a { color: blue; }', filename='test/a.scss')
         self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }', dirname='test/')
         self.assertRaises(TypeError,  sass.compile,
-                          filename='test/a.sass', dirname='test/')
+                          filename='test/a.scss', dirname='test/')
 
     def test_compile_invalid_output_style(self):
         self.assertRaises(TypeError, sass.compile,
@@ -170,11 +170,11 @@ a {
                           source_comments='map')
 
     def test_compile_filename(self):
-        actual = sass.compile(filename='test/a.sass')
+        actual = sass.compile(filename='test/a.scss')
         assert actual == A_EXPECTED_CSS
-        actual = sass.compile(filename='test/c.sass')
+        actual = sass.compile(filename='test/c.scss')
         assert actual == C_EXPECTED_CSS
-        actual = sass.compile(filename='test/d.sass')
+        actual = sass.compile(filename='test/d.scss')
         if text_type is str:
             self.assertEqual(D_EXPECTED_CSS, actual)
         else:
@@ -186,9 +186,9 @@ a {
 
     def test_compile_source_map(self):
         actual, source_map = sass.compile(
-            filename='test/a.sass',
+            filename='test/a.scss',
             source_comments='map',
-            source_map_filename='a.sass.css.map'
+            source_map_filename='a.scss.css.map'
         )
         self.assertEqual(A_EXPECTED_CSS_WITH_MAP, actual)
         self.assertEqual(
@@ -227,20 +227,20 @@ class BuilderTestCase(unittest.TestCase):
         shutil.copytree('test', sass_path)
         result_files = build_directory(sass_path, css_path)
         assert len(result_files) == 4
-        assert result_files['a.sass'] == 'a.sass.css'
-        with open(os.path.join(css_path, 'a.sass.css')) as f:
+        assert result_files['a.scss'] == 'a.scss.css'
+        with open(os.path.join(css_path, 'a.scss.css')) as f:
             css = f.read()
         assert css == A_EXPECTED_CSS
-        assert result_files['b.sass'] == 'b.sass.css'
-        with open(os.path.join(css_path, 'b.sass.css')) as f:
+        assert result_files['b.scss'] == 'b.scss.css'
+        with open(os.path.join(css_path, 'b.scss.css')) as f:
             css = f.read()
         assert css == B_EXPECTED_CSS
-        assert result_files['c.sass'] == 'c.sass.css'
-        with open(os.path.join(css_path, 'c.sass.css')) as f:
+        assert result_files['c.scss'] == 'c.scss.css'
+        with open(os.path.join(css_path, 'c.scss.css')) as f:
             css = f.read()
         assert css == C_EXPECTED_CSS
-        assert result_files['d.sass'] == 'd.sass.css'
-        with open(os.path.join(css_path, 'd.sass.css')) as f:
+        assert result_files['d.scss'] == 'd.scss.css'
+        with open(os.path.join(css_path, 'd.scss.css')) as f:
             css = f.read()
         self.assertEqual(D_EXPECTED_CSS, css)
         shutil.rmtree(temp_path)
@@ -270,42 +270,42 @@ class ManifestTestCase(unittest.TestCase):
         try:
             shutil.copytree('test', os.path.join(d, 'test'))
             m = Manifest(sass_path='test', css_path='css')
-            m.build_one(d, 'a.sass')
-            with open(os.path.join(d, 'css', 'a.sass.css')) as f:
+            m.build_one(d, 'a.scss')
+            with open(os.path.join(d, 'css', 'a.scss.css')) as f:
                 self.assertEqual(A_EXPECTED_CSS, f.read())
-            m.build_one(d, 'b.sass', source_map=True)
-            with open(os.path.join(d, 'css', 'b.sass.css')) as f:
+            m.build_one(d, 'b.scss', source_map=True)
+            with open(os.path.join(d, 'css', 'b.scss.css')) as f:
                 self.assertEqual(
                     B_EXPECTED_CSS +
-                    '\n/*# sourceMappingURL=b.sass.css.map */',
+                    '\n/*# sourceMappingURL=b.scss.css.map */',
                     f.read()
                 )
-            with open(os.path.join(d, 'css', 'b.sass.css.map')) as f:
+            with open(os.path.join(d, 'css', 'b.scss.css.map')) as f:
                 self.assertEqual(
                     {
                         'version': 3,
-                        'file': 'b.sass',
-                        'sources': ['../test/b.sass'],
+                        'file': '',
+                        'sources': ['../test/b.scss'],
                         'names': [],
-                        'mappings': 'AAAA,EACE;EACE,WAAW'
+                        'mappings': 'AAAA,EAAE;EAEE,WAAW'
                     },
                     json.load(f)
                 )
-            m.build_one(d, 'd.sass', source_map=True)
-            with open(os.path.join(d, 'css', 'd.sass.css')) as f:
+            m.build_one(d, 'd.scss', source_map=True)
+            with open(os.path.join(d, 'css', 'd.scss.css')) as f:
                 self.assertEqual(
                     D_EXPECTED_CSS +
-                    '\n/*# sourceMappingURL=d.sass.css.map */',
+                    '\n/*# sourceMappingURL=d.scss.css.map */',
                     f.read()
                 )
-            with open(os.path.join(d, 'css', 'd.sass.css.map')) as f:
+            with open(os.path.join(d, 'css', 'd.scss.css.map')) as f:
                 self.assertEqual(
                     {
                         'version': 3,
-                        'file': 'd.sass',
-                        'sources': ['../test/d.sass'],
+                        'file': '',
+                        'sources': ['../test/d.scss'],
                         'names': [],
-                        'mappings': 'AAKA;EAHE,kBAAkB;EAGpB,KAEE;IACE,MAAM'
+                        'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,MAAM'
                     },
                     json.load(f)
                 )
@@ -331,7 +331,7 @@ class WsgiTestCase(unittest.TestCase):
             self.assertEqual(200, r.status_code)
             self.assertEqual(b'/asdf', r.data)
             self.assertEqual('text/plain', r.mimetype)
-            r = client.get('/static/a.sass.css')
+            r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
             self.assertEqual(b(A_EXPECTED_CSS_WITH_MAP), r.data)
             self.assertEqual('text/css', r.mimetype)
@@ -369,7 +369,7 @@ class SasscTestCase(unittest.TestCase):
         self.assertEqual('', self.out.getvalue())
 
     def test_sassc_stdout(self):
-        exit_code = sassc.main(['sassc', 'test/a.sass'], self.out, self.err)
+        exit_code = sassc.main(['sassc', 'test/a.scss'], self.out, self.err)
         self.assertEqual(0, exit_code)
         self.assertEqual('', self.err.getvalue())
         self.assertEqual(A_EXPECTED_CSS.strip(), self.out.getvalue().strip())
@@ -378,7 +378,7 @@ class SasscTestCase(unittest.TestCase):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(['sassc', 'test/a.sass', tmp],
+            exit_code = sassc.main(['sassc', 'test/a.scss', tmp],
                                    self.out, self.err)
             self.assertEqual(0, exit_code)
             self.assertEqual('', self.err.getvalue())
@@ -392,7 +392,7 @@ class SasscTestCase(unittest.TestCase):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(['sassc', 'test/d.sass', tmp],
+            exit_code = sassc.main(['sassc', 'test/d.scss', tmp],
                                    self.out, self.err)
             self.assertEqual(0, exit_code)
             self.assertEqual('', self.err.getvalue())
@@ -419,7 +419,7 @@ class SasscTestCase(unittest.TestCase):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(['sassc', '-m', 'test/a.sass', tmp],
+            exit_code = sassc.main(['sassc', '-m', 'test/a.scss', tmp],
                                    self.out, self.err)
             self.assertEqual(0, exit_code)
             self.assertEqual('', self.err.getvalue())

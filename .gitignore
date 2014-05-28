@@ -4,7 +4,6 @@
 .sass-cache
 *.gem
 .svn/*
-.gitattributes
 
 # Configuration stuff
 
@@ -38,6 +37,7 @@ libsass/*
 *.lo
 *.a
 a.out
+libsass.js
 
 bin/*
 .deps/
@@ -48,6 +48,10 @@ bin/*
 sassc++
 libsass.la
 support/libsass.pc
+
+# Cloned testing dirs
+sassc/
+sass-spec/
 
 # libsass-python
 build/
