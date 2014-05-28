@@ -1,10 +1,10 @@
 Changelog
 =========
 
-Bleeding Edge: 0.4.2-YYYYMMDD-cd3ee1cbe3
-----------------------------------------
+Unstable Version 0.4.2-20140528-cd3ee1cbe3
+------------------------------------------
 
-To be released.
+Released on May 28, 2014.
 
 - Follow up the libsass upstream:
   :commit:`cd3ee1cbe34d5316eb762a43127a3de9575454ee`.
