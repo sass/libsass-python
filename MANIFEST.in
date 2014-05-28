@@ -3,6 +3,6 @@ include *.hpp
 include *.cpp
 include Makefile.am
 include win32/*.h
-include test/*.sass
+include test/*.scss
 include sass2scss/sass2scss.*
 include README.rst

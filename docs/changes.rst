@@ -1,8 +1,8 @@
 Changelog
 =========
 
-Bleeding Edge: 0.4.2-cd3ee1cbe3
--------------------------------
+Bleeding Edge: 0.4.2-YYYYMMDD-cd3ee1cbe3
+----------------------------------------
 
 To be released.
 

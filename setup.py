@@ -11,6 +11,7 @@ import re
 import shutil
 import sys
 import tempfile
+import time
 
 try:
     from setuptools import Extension, setup
@@ -99,6 +100,22 @@ def version(sass_filename='sass.py'):
                 return node.value.s
 
 
+def current_branch():
+    if os.path.isdir('.git'):
+        try:
+            with os.popen('git branch') as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith('*'):
+                        return line.split()[1]
+        except (IOError, OSError):
+            pass
+    return
+
+
+unstable = current_branch() == 'unstable'
+
+
 def readme():
     try:
         with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
@@ -136,11 +153,11 @@ class upload_doc(distutils.cmd.Command):
 
 
 setup(
-    name='libsass',
+    name='libsass' + ('-unstable' if unstable else ''),
     description='SASS for Python: '
                 'A straightforward binding of libsass for Python.',
     long_description=readme(),
-    version=version(),
+    version=version() + (time.strftime('-%Y%m%d') if unstable else ''),
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
