@@ -17,14 +17,24 @@ It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 2.2!
 Install
 -------
 
-It's available on PyPI_, so you can install it using :program:`easy_install`
-or :program:`pip`:
+It's available on PyPI_, so you can install it using :program:`pip`:
 
-.. sourcecode:: console
+.. code-block:: console
 
-   $ easy_install libsass
+   $ pip install libsass
 
-.. _PyPI: http://pypi.python.org/pypi/libsass
+.. note::
+
+   Every release of libsass-python uses the most recent release of Libsass_.
+   If you want bleeding edge features of libsass master, try installing
+   libsass-unstable_ package instead:
+
+   .. code-block:: console
+
+      $ pip install libsass-unstable
+
+.. _PyPI: https://pypi.python.org/pypi/libsass
+.. _libsass-unstable: https://pypi.python.org/pypi/libsass-unstable
 
 
 Example
