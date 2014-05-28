@@ -36,7 +36,16 @@ It's available on PyPI_, so you can install it using ``pip`` (or
 
    $ pip install libsass
 
+Every release of libsass-python uses the most recent release of Libsass_.
+If you want bleeding edge features of libsass master, try installing
+libsass-unstable_ package instead:
+
+.. code-block:: console
+
+  $ pip install libsass-unstable
+
 .. _PyPI: https://pypi.python.org/pypi/libsass
+.. _libsass-unstable: https://pypi.python.org/pypi/libsass-unstable
 
 
 Example
