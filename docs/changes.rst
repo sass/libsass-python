@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Unstable version 0.4.2.20140529.cd3ee1cbe3
+------------------------------------------
+
+Released on May 29, 2014.
+
+- Version scheme changed to use periods (``.``) instead of hyphens (``-``)
+  due to setuptools seems to treat hyphens special.
+- Fixed malformed packaging that doesn't correctly preserve the package name
+  and version.
+
+
 Unstable Version 0.4.2-20140528-cd3ee1cbe3
 ------------------------------------------
 

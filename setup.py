@@ -100,20 +100,15 @@ def version(sass_filename='sass.py'):
                 return node.value.s
 
 
-def current_branch():
-    if os.path.isdir('.git'):
-        try:
-            with os.popen('git branch') as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith('*'):
-                        return line.split()[1]
-        except (IOError, OSError):
-            pass
-    return
+def get_unstable_commit():
+    try:
+        with open('.unstable-release') as f:
+            return f.read().strip() or None
+    except (IOError, OSError):
+        return
 
 
-unstable = current_branch() == 'unstable'
+unstable_commit = get_unstable_commit()
 
 
 def readme():
@@ -153,11 +148,12 @@ class upload_doc(distutils.cmd.Command):
 
 
 setup(
-    name='libsass' + ('-unstable' if unstable else ''),
+    name='libsass' + ('-unstable' if unstable_commit else ''),
     description='SASS for Python: '
                 'A straightforward binding of libsass for Python.',
     long_description=readme(),
-    version=version() + (time.strftime('-%Y%m%d') if unstable else ''),
+    version=version() + (time.strftime('.%Y%m%d.') + unstable_commit
+                         if unstable_commit else ''),
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
