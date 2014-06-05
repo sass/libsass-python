@@ -22,23 +22,26 @@ except ImportError:
 
 
 MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
-    (?: ^ | \n ) libsass_la_SOURCES [ \t]* = [ \t]*
+    (?: ^ | \n ) (?: libsass_la_ )? SOURCES [ \t]* = [ \t]*
     (?P<sources> (?: (?: $ | [ \t] | \\ [\n] )+
                      [^ \n\t\\]+ )+ )
 ''', re.VERBOSE)
 
 
-with open('Makefile.am') as makefile:
-    sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
-    sources_list = sources_match.group('sources').replace('\\\n', ' ')
-    libsass_sources = sources_list.split()
+libsass_sources = set()
+for makefilename in 'Makefile', 'Makefile.am':
+    with open(makefilename) as makefile:
+        sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
+        sources_list = sources_match.group('sources').replace('\\\n', ' ')
+        libsass_sources.update(sources_list.split())
+libsass_sources = list(libsass_sources)
 
 libsass_headers = [
     'sass_interface.h', 'sass.h', 'win32/unistd.h'
 ]
 libsass_headers.extend(glob.glob('*.hpp'))
 include_dirs = ['sass2scss']
-sources = ['pysass.c', 'sass2scss/sass2scss.cpp']
+sources = ['pysass.c']
 sources.extend(libsass_sources)
 
 if sys.platform == 'win32':
@@ -158,7 +161,10 @@ setup(
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
     package_data={
-        '': ['README.rst', 'Makefile.am', 'win32/*.h', 'test/*.sass']
+        '': [
+            'README.rst', 'Makefile', 'Makefile.am',
+            'win32/*.h', 'test/*.sass'
+        ]
     },
     scripts=['sassc.py'],
     license='MIT License',

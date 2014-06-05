@@ -1,6 +1,7 @@
 include *.h
 include *.hpp
 include *.cpp
+include Makefile
 include Makefile.am
 include win32/*.h
 include test/*.scss

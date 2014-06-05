@@ -1,6 +1,23 @@
 Changelog
 =========
 
+Version 0.5.0
+-------------
+
+To be released.
+
+- Follow up the libsass upstream: :commit:`v2.0` --- See the `release note`__
+  of Libsass.
+
+  - Added indented syntax support (:file:`*.sass` files).
+  - Added expanded selector support (BEM).
+  - Added string functions.
+  - Fixed UTF-8 support.
+  - Backward incompatibility: broken extends.
+
+__ https://github.com/hcatlin/libsass/releases/tag/v2.0
+
+
 Unstable version 0.4.2.20140529.cd3ee1cbe3
 ------------------------------------------
 

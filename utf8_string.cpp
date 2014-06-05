@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cmath>
+#include <cstdlib>
 
 namespace Sass {
   namespace UTF_8 {
