@@ -411,14 +411,26 @@ namespace Sass {
   Compound_Selector* Parser::parse_simple_selector_sequence()
   {
     Compound_Selector* seq = new (ctx.mem) Compound_Selector(path, source_position);
-    // check for backref or type selector, which are only allowed at the front
+    bool sawsomething = false;
     if (lex< exactly<'&'> >()) {
+      // if you see a &
       (*seq) << new (ctx.mem) Selector_Reference(path, source_position);
+      sawsomething = true;
+      // if you see a space after a &, then you're done
+      if(lex< spaces >()) {
+        return seq;
+      }
     }
-    else if (lex< sequence< negate< functional >, alternatives< type_selector, universal, string_constant, dimension, percentage, number > > >()) {
+    if (sawsomething && lex< sequence< negate< functional >, alternatives< hyphens_and_identifier, universal, string_constant, dimension, percentage, number > > >()) {
+      // saw an ampersand, then allow type selectors with arbitrary number of hyphens at the beginning
       (*seq) << new (ctx.mem) Type_Selector(path, source_position, lexed);
+    } else if (lex< sequence< negate< functional >, alternatives< type_selector, universal, string_constant, dimension, percentage, number > > >()) {
+      // if you see a type selector
+      (*seq) << new (ctx.mem) Type_Selector(path, source_position, lexed);
+      sawsomething = true;
     }
-    else {
+    if (!sawsomething) {
+      // don't blindly do this if you saw a & or selector
       (*seq) << parse_simple_selector();
     }
 
@@ -1475,6 +1487,7 @@ namespace Sass {
     bool saw_interpolant = false;
 
     while ((q = peek< identifier >(p))                             ||
+           (q = peek< hyphens_and_identifier >(p))                 ||
            (q = peek< type_selector >(p))                          ||
            (q = peek< id_name >(p))                                ||
            (q = peek< class_name >(p))                             ||

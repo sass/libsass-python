@@ -45,11 +45,11 @@ namespace Sass {
   : mem(Memory_Manager<AST_Node>()),
     source_c_str    (initializers.source_c_str()),
     sources         (vector<const char*>()),
-    c_functions     (vector<Sass_C_Function_Descriptor>()),
     include_paths   (initializers.include_paths()),
     queue           (vector<pair<string, const char*> >()),
     style_sheets    (map<string, Block*>()),
     source_map(File::base_name(initializers.output_path())),
+    c_functions     (vector<Sass_C_Function_Descriptor>()),
     image_path      (initializers.image_path()),
     source_comments (initializers.source_comments()),
     source_maps     (initializers.source_maps()),
@@ -362,6 +362,11 @@ namespace Sass {
     register_function(ctx, unquote_sig, sass_unquote, env);
     register_function(ctx, quote_sig, sass_quote, env);
     register_function(ctx, str_length_sig, str_length, env);
+    register_function(ctx, str_insert_sig, str_insert, env);
+    register_function(ctx, str_index_sig, str_index, env);
+    register_function(ctx, str_slice_sig, str_slice, env);
+    register_function(ctx, to_upper_case_sig, to_upper_case, env);
+    register_function(ctx, to_lower_case_sig, to_lower_case, env);
     // Number Functions
     register_function(ctx, percentage_sig, percentage, env);
     register_function(ctx, round_sig, round, env);
