@@ -4,7 +4,7 @@ Changelog
 Version 0.5.0
 -------------
 
-To be released.
+Released on June 6, 2014.
 
 - Follow up the libsass upstream: :commit:`v2.0` --- See the `release note`__
   of Libsass.
