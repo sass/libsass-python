@@ -54,6 +54,7 @@ sassc/
 sass-spec/
 
 # libsass-python
+._.DS_Store
 build/
 dist/
 docs/_build

@@ -1,4 +1,4 @@
-from __future__ import with_statement
+from __future__ import print_function, with_statement
 
 import ast
 import distutils.cmd
@@ -43,6 +43,13 @@ libsass_headers.extend(glob.glob('*.hpp'))
 include_dirs = ['sass2scss']
 sources = ['pysass.c']
 sources.extend(libsass_sources)
+
+if not os.path.isdir('sass2scss') and os.path.isdir('.git'):
+    print('Submodules seem not initialized yet.'
+          'You can initialize it by the following command:',
+          file=sys.stderr)
+    print('\tgit submodule update --init', file=sys.stderr)
+    raise SystemExit(1)
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
