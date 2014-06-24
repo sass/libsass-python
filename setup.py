@@ -177,7 +177,7 @@ setup(
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
-    url='http://dahlia.kr/libsass-python/',
+    url='http://hongminhee.org/libsass-python/',
     download_url='https://github.com/dahlia/libsass-python/releases',
     entry_points={
         'distutils.commands': [

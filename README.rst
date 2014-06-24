@@ -64,7 +64,7 @@ Docs
 
 There's the user guide manual and the full API reference for ``libsass``:
 
-http://dahlia.kr/libsass-python/
+http://hongminhee.org/libsass-python/
 
 You can build the docs by yourself:
 
