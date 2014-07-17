@@ -217,6 +217,22 @@ a {
         normalized = re.sub(r'\s+', '', actual)
         assert normalized == '@media(max-width:3){body{color:black;}}'
 
+    def test_nested_media_extend(self):
+        actual = sass.compile(string='''
+            %foo {
+                color: red;
+                @media print {
+                  color: black;
+                }
+            }
+            .hey {
+                @extend %foo;
+            }
+        ''')
+        normalized = re.sub(r'\s+', '', actual)
+        expected = u'.hey{color:red;}@mediaprint{.hey{color:black;}}'
+        assert normalized == expected, '\n%r is not\n%r' % (normalized, expected)
+
 
 class BuilderTestCase(unittest.TestCase):
 
