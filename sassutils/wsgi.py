@@ -80,16 +80,18 @@ class SassMiddleware(object):
                 except (IOError, OSError):
                     break
                 except CompileError as e:
-                    start_response(self.error_status,
-                                   [('Content-Type', 'text/css')])
+                    start_response(
+                        self.error_status,
+                        [('Content-Type', 'text/css; charset=utf-8')]
+                    )
                     return [
-                        '/*\n', str(e), '\n*/\n\n',
-                        'body:before { content: ',
-                        self.quote_css_string(str(e)),
-                        '; color: maroon; background-color: white; }'
+                        b'/*\n', str(e).encode('utf-8'), b'\n*/\n\n',
+                        b'body:before { content: ',
+                        self.quote_css_string(str(e)).encode('utf-8'),
+                        b'; color: maroon; background-color: white; }'
                     ]
                 out = start_response('200 OK', [('Content-Type', 'text/css')])
-                with open(os.path.join(package_dir, result), 'r') as in_:
+                with open(os.path.join(package_dir, result), 'rb') as in_:
                     while 1:
                         chunk = in_.read(4096)
                         if chunk:
