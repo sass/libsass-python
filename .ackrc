@@ -1,1 +1,3 @@
 --ignore-dir=.tox
+--ignore-dir=build
+--ignore-dir=libsass.egg-info

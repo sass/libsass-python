@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.5.1
+-------------
+
+To be released.
+
+- Fixed a bug that :class:`~sassutils.wsgi.SassMiddleware` yielded
+  :class:`str` instead of :class:`bytes` on Python 3.
+
+
 Version 0.5.0
 -------------
 
