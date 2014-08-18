@@ -27,11 +27,16 @@ import contextlib
 from distutils import log
 
 try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+
+try:
     from site import USER_SITE
 except ImportError:
     USER_SITE = None
 
-DEFAULT_VERSION = "3.6"
+DEFAULT_VERSION = "5.7"
 DEFAULT_URL = "https://pypi.python.org/packages/source/s/setuptools/"
 
 def _python_cmd(*args):
@@ -64,17 +69,24 @@ def _build_egg(egg, archive_filename, to_dir):
         raise IOError('Could not build the egg.')
 
 
-def get_zip_class():
+class ContextualZipFile(zipfile.ZipFile):
     """
     Supplement ZipFile class to support context manager for Python 2.6
     """
-    class ContextualZipFile(zipfile.ZipFile):
-        def __enter__(self):
-            return self
-        def __exit__(self, type, value, traceback):
-            self.close
-    return zipfile.ZipFile if hasattr(zipfile.ZipFile, '__exit__') else \
-        ContextualZipFile
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.close()
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Construct a ZipFile or ContextualZipFile as appropriate
+        """
+        if hasattr(zipfile.ZipFile, '__exit__'):
+            return zipfile.ZipFile(*args, **kwargs)
+        return super(ContextualZipFile, cls).__new__(cls)
 
 
 @contextlib.contextmanager
@@ -85,7 +97,7 @@ def archive_context(filename):
     old_wd = os.getcwd()
     try:
         os.chdir(tmpdir)
-        with get_zip_class()(filename) as archive:
+        with ContextualZipFile(filename) as archive:
             archive.extractall()
 
         # going in the directory
@@ -183,14 +195,11 @@ def has_powershell():
     if platform.system() != 'Windows':
         return False
     cmd = ['powershell', '-Command', 'echo test']
-    devnull = open(os.path.devnull, 'wb')
-    try:
+    with open(os.path.devnull, 'wb') as devnull:
         try:
             subprocess.check_call(cmd, stdout=devnull, stderr=devnull)
         except Exception:
             return False
-    finally:
-        devnull.close()
     return True
 
 download_file_powershell.viable = has_powershell
@@ -201,14 +210,11 @@ def download_file_curl(url, target):
 
 def has_curl():
     cmd = ['curl', '--version']
-    devnull = open(os.path.devnull, 'wb')
-    try:
+    with open(os.path.devnull, 'wb') as devnull:
         try:
             subprocess.check_call(cmd, stdout=devnull, stderr=devnull)
         except Exception:
             return False
-    finally:
-        devnull.close()
     return True
 
 download_file_curl.viable = has_curl
@@ -219,14 +225,11 @@ def download_file_wget(url, target):
 
 def has_wget():
     cmd = ['wget', '--version']
-    devnull = open(os.path.devnull, 'wb')
-    try:
+    with open(os.path.devnull, 'wb') as devnull:
         try:
             subprocess.check_call(cmd, stdout=devnull, stderr=devnull)
         except Exception:
             return False
-    finally:
-        devnull.close()
     return True
 
 download_file_wget.viable = has_wget
@@ -236,37 +239,28 @@ def download_file_insecure(url, target):
     Use Python to download the file, even though it cannot authenticate the
     connection.
     """
+    src = urlopen(url)
     try:
-        from urllib.request import urlopen
-    except ImportError:
-        from urllib2 import urlopen
-    src = dst = None
-    try:
-        src = urlopen(url)
-        # Read/write all in one block, so we don't create a corrupt file
-        # if the download is interrupted.
+        # Read all the data in one block.
         data = src.read()
-        dst = open(target, "wb")
-        dst.write(data)
     finally:
-        if src:
-            src.close()
-        if dst:
-            dst.close()
+        src.close()
+
+    # Write all the data in one block to avoid creating a partial file.
+    with open(target, "wb") as dst:
+        dst.write(data)
 
 download_file_insecure.viable = lambda: True
 
 def get_best_downloader():
-    downloaders = [
+    downloaders = (
         download_file_powershell,
         download_file_curl,
         download_file_wget,
         download_file_insecure,
-    ]
-
-    for dl in downloaders:
-        if dl.viable():
-            return dl
+    )
+    viable_downloaders = (dl for dl in downloaders if dl.viable())
+    return next(viable_downloaders, None)
 
 def download_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
         to_dir=os.curdir, delay=15, downloader_factory=get_best_downloader):
@@ -274,7 +268,7 @@ def download_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
     Download setuptools from a specified location and return its filename
 
     `version` should be a valid setuptools version number that is available
-    as an egg for download under the `download_base` URL (which should end
+    as an sdist for download under the `download_base` URL (which should end
     with a '/'). `to_dir` is the directory where the egg will be downloaded.
     `delay` is the number of seconds to pause before an actual download
     attempt.

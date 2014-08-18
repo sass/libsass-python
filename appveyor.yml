@@ -1,0 +1,32 @@
+version: "{build}"
+environment:
+  global:
+    VS90COMNTOOLS: "%VS110COMNTOOLS%"
+    VS100COMNTOOLS: "%VS110COMNTOOLS%"
+  matrix:
+  - PYTHON: "C:\\Python34_32"
+    PYTHON_VERSION: "3.4.1"
+    PYTHON_ARCH: "32"
+  - PYTHON: "C:\\Python34_64"
+    PYTHON_VERSION: "3.4.1"
+    PYTHON_ARCH: "64"
+matrix:
+  fast_finish: true
+init:
+- "ECHO %PYTHON%"
+- ps: "ls C:/Python*"
+install:
+- "git -C %APPVEYOR_BUILD_FOLDER% submodule update --init"
+- ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/ogrisel/python-appveyor-demo/master/appveyor/install.ps1', 'C:/python-install.ps1')
+- "powershell C:/python-install.ps1"
+build: false
+test_script:
+- "%PYTHON%\\python.exe setup.py test"
+after_test:
+- ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
+- "%PYTHON%\\python.exe C:/get-pip.py"
+- "%PYTHON%\\Scripts\\pip.exe --version"
+- "%PYTHON%\\Scripts\\pip.exe install wheel"
+- "%PYTHON%\\python.exe setup.py bdist_wheel"
+artifects:
+- path: dist\*

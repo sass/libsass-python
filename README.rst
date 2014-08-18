@@ -9,6 +9,10 @@ libsass: SASS_ for Python
    :target: https://travis-ci.org/dahlia/libsass-python
    :alt: Build Status
 
+.. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia
+   :target: https://ci.appveyor.com/project/dahlia/libsass-python
+   :alt: Build Status (Windows)
+
 .. image:: https://img.shields.io/coveralls/dahlia/libsass-python.svg
    :target: https://coveralls.io/r/dahlia/libsass-python
    :alt: Coverage Status

@@ -52,6 +52,7 @@ if not os.path.isdir('sass2scss') and os.path.isdir('.git'):
     raise SystemExit(1)
 
 if sys.platform == 'win32':
+    from distutils.msvccompiler import MSVCCompiler
     from distutils.msvc9compiler import get_build_version
     vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
         int(get_build_version()),
@@ -65,6 +66,9 @@ if sys.platform == 'win32':
     distutils.log.warn('%%%s%%=%s',
                        vscomntools_env,
                        os.environ.get(vscomntools_env, ''))
+    c = MSVCCompiler()
+    c.initialize()
+    distutils.log.warn('msvc_paths = %r', c.get_msvc_paths('path'))
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
