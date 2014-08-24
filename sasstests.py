@@ -2,6 +2,7 @@
 from __future__ import with_statement
 
 import collections
+import io
 import json
 import os
 import os.path
@@ -10,7 +11,7 @@ import shutil
 import tempfile
 import unittest
 
-from six import StringIO, b, text_type
+from six import PY3, StringIO, b, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -64,6 +65,8 @@ body {
   body a {
     font: '나눔고딕', sans-serif; }
 '''
+
+utf8_if_py3 = {'encoding': 'utf-8'} if PY3 else {}
 
 
 class SassTestCase(unittest.TestCase):
@@ -221,26 +224,26 @@ a {
 class BuilderTestCase(unittest.TestCase):
 
     def test_builder_build_directory(self):
-        temp_path= tempfile.mkdtemp()
+        temp_path = tempfile.mkdtemp()
         sass_path = os.path.join(temp_path, 'sass')
         css_path = os.path.join(temp_path, 'css')
         shutil.copytree('test', sass_path)
         result_files = build_directory(sass_path, css_path)
         assert len(result_files) == 4
         assert result_files['a.scss'] == 'a.scss.css'
-        with open(os.path.join(css_path, 'a.scss.css')) as f:
+        with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         assert css == A_EXPECTED_CSS
         assert result_files['b.scss'] == 'b.scss.css'
-        with open(os.path.join(css_path, 'b.scss.css')) as f:
+        with open(os.path.join(css_path, 'b.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         assert css == B_EXPECTED_CSS
         assert result_files['c.scss'] == 'c.scss.css'
-        with open(os.path.join(css_path, 'c.scss.css')) as f:
+        with open(os.path.join(css_path, 'c.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         assert css == C_EXPECTED_CSS
         assert result_files['d.scss'] == 'd.scss.css'
-        with open(os.path.join(css_path, 'd.scss.css')) as f:
+        with open(os.path.join(css_path, 'd.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         self.assertEqual(D_EXPECTED_CSS, css)
         shutil.rmtree(temp_path)
@@ -267,50 +270,67 @@ class ManifestTestCase(unittest.TestCase):
 
     def test_build_one(self):
         d = tempfile.mkdtemp()
+        src_path = os.path.join(d, 'test')
+        if os.sep != '/' and os.altsep:
+            normalize = lambda p: os.path.abspath(
+                os.path.normpath(os.path.join(src_path, p))
+            ).replace(os.sep, os.altsep)
+        else:
+            normalize = lambda p: p
         try:
-            shutil.copytree('test', os.path.join(d, 'test'))
+            shutil.copytree('test', src_path)
             m = Manifest(sass_path='test', css_path='css')
             m.build_one(d, 'a.scss')
             with open(os.path.join(d, 'css', 'a.scss.css')) as f:
                 self.assertEqual(A_EXPECTED_CSS, f.read())
             m.build_one(d, 'b.scss', source_map=True)
-            with open(os.path.join(d, 'css', 'b.scss.css')) as f:
+            with open(os.path.join(d, 'css', 'b.scss.css'),
+                      **utf8_if_py3) as f:
                 self.assertEqual(
                     B_EXPECTED_CSS +
                     '\n/*# sourceMappingURL=b.scss.css.map */',
                     f.read()
                 )
-            with open(os.path.join(d, 'css', 'b.scss.css.map')) as f:
-                self.assertEqual(
-                    {
-                        'version': 3,
-                        'file': '',
-                        'sources': ['../test/b.scss'],
-                        'names': [],
-                        'mappings': 'AAAA,EAAE;EAEE,WAAW'
-                    },
-                    json.load(f)
-                )
+            self.assert_json_file(
+                {
+                    'version': 3,
+                    'file': '',
+                    'sources': [normalize('../test/b.scss')],
+                    'names': [],
+                    'mappings': 'AAAA,EAAE;EAEE,WAAW'
+                },
+                os.path.join(d, 'css', 'b.scss.css.map')
+            )
             m.build_one(d, 'd.scss', source_map=True)
-            with open(os.path.join(d, 'css', 'd.scss.css')) as f:
+            with open(os.path.join(d, 'css', 'd.scss.css'),
+                      **utf8_if_py3) as f:
                 self.assertEqual(
                     D_EXPECTED_CSS +
                     '\n/*# sourceMappingURL=d.scss.css.map */',
                     f.read()
                 )
-            with open(os.path.join(d, 'css', 'd.scss.css.map')) as f:
-                self.assertEqual(
-                    {
-                        'version': 3,
-                        'file': '',
-                        'sources': ['../test/d.scss'],
-                        'names': [],
-                        'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,MAAM'
-                    },
-                    json.load(f)
-                )
+            self.assert_json_file(
+                {
+                    'version': 3,
+                    'file': '',
+                    'sources': [normalize('../test/d.scss')],
+                    'names': [],
+                    'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,MAAM'
+                },
+                os.path.join(d, 'css', 'd.scss.css.map')
+            )
         finally:
             shutil.rmtree(d)
+
+    def assert_json_file(self, expected, filename):
+        with open(filename) as f:
+            try:
+                tree = json.load(f)
+            except ValueError as e:
+                f.seek(0)
+                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
+                raise ValueError(msg)
+        self.assertEqual(expected, tree)
 
 
 class WsgiTestCase(unittest.TestCase):
@@ -329,18 +349,23 @@ class WsgiTestCase(unittest.TestCase):
             client = Client(app, Response)
             r = client.get('/asdf')
             self.assertEqual(200, r.status_code)
-            self.assertEqual(b'/asdf', r.data)
+            self.assert_bytes_equal(b'/asdf', r.data)
             self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
-            self.assertEqual(b(A_EXPECTED_CSS_WITH_MAP), r.data)
+            self.assert_bytes_equal(b(A_EXPECTED_CSS_WITH_MAP), r.data)
             self.assertEqual('text/css', r.mimetype)
             r = client.get('/static/not-exists.sass.css')
             self.assertEqual(200, r.status_code)
-            self.assertEqual(b'/static/not-exists.sass.css', r.data)
+            self.assert_bytes_equal(b'/static/not-exists.sass.css', r.data)
             self.assertEqual('text/plain', r.mimetype)
         finally:
             shutil.rmtree(css_dir)
+
+    def assert_bytes_equal(self, expected, actual, *args):
+        self.assertEqual(expected.replace(b'\r\n', b'\n'),
+                         actual.replace(b'\r\n', b'\n'),
+                         *args)
 
 
 class SasscTestCase(unittest.TestCase):
@@ -397,7 +422,7 @@ class SasscTestCase(unittest.TestCase):
             self.assertEqual(0, exit_code)
             self.assertEqual('', self.err.getvalue())
             self.assertEqual('', self.out.getvalue())
-            with open(tmp) as f:
+            with open(tmp, **utf8_if_py3) as f:
                 self.assertEqual(
                     D_EXPECTED_CSS.strip(),
                     f.read().strip()

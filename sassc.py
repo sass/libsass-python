@@ -54,6 +54,7 @@ There are options as well:
 from __future__ import print_function
 
 import functools
+import io
 import optparse
 import os
 import sys
@@ -146,16 +147,13 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             if len(args) < 2:
                 print(css, file=stdout)
             else:
-                with open(args[1], 'w') as f:
-                    try:
-                        print(css, file=f)
-                    except UnicodeEncodeError:
-                        print(css.encode('utf-8'), file=f)
+                with io.open(args[1], 'w', encoding='utf-8') as f:
+                    f.write(css)
                 if options.watch:
                     print(filename, 'is just compiled to', args[1],
                           file=stdout)
             if source_map_filename:
-                with open(source_map_filename, 'w') as f:
+                with io.open(source_map_filename, 'w', encoding='utf-8') as f:
                     f.write(source_map)
         if options.watch:  # pragma: no cover
             # FIXME: we should utilize inotify on Linux, and FSEvents on Mac

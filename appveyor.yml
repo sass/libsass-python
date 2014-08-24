@@ -4,6 +4,9 @@ environment:
     VS90COMNTOOLS: "%VS110COMNTOOLS%"
     VS100COMNTOOLS: "%VS110COMNTOOLS%"
   matrix:
+  - PYTHON: "C:\\Python27_32"
+    PYTHON_VERSION: "2.7.8"
+    PYTHON_ARCH: "32"
   - PYTHON: "C:\\Python34_32"
     PYTHON_VERSION: "3.4.1"
     PYTHON_ARCH: "32"
@@ -13,6 +16,8 @@ environment:
 matrix:
   fast_finish: true
 init:
+- ps: "$env:Path = \"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\bin;\" + $env:Path"
+- "ECHO %PATH%"
 - "ECHO %PYTHON%"
 - ps: "ls C:/Python*"
 install:
@@ -21,6 +26,8 @@ install:
 - "powershell C:/python-install.ps1"
 build: false
 test_script:
+- "dir \"C:\\Program Files (x86)\""
+- "%PYTHON%\\python.exe -c \"import os,pprint;pprint.pprint(os.environ)\""
 - "%PYTHON%\\python.exe setup.py test"
 after_test:
 - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')

@@ -5,6 +5,7 @@
 from __future__ import with_statement
 
 import collections
+import io
 import os
 import os.path
 import re
@@ -49,11 +50,8 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
         if os.path.isfile(sass_fullname):
             css_fullname = os.path.join(css_path, name) + '.css'
             css = compile(filename=sass_fullname, include_paths=[_root_sass])
-            with open(css_fullname, 'w') as css_file:
-                try:
-                    css_file.write(css)
-                except UnicodeEncodeError:
-                    css_file.write(css.encode('utf-8'))
+            with io.open(css_fullname, 'w', encoding='utf-8') as css_file:
+                css_file.write(css)
             result[os.path.relpath(sass_fullname, _root_sass)] = \
                 os.path.relpath(css_fullname, _root_css)
         elif os.path.isdir(sass_fullname):
@@ -195,13 +193,10 @@ class Manifest(object):
         css_folder = os.path.dirname(css_path)
         if not os.path.exists(css_folder):
             os.makedirs(css_folder)
-        with open(css_path, 'w') as f:
-            try:
-                f.write(css)
-            except UnicodeEncodeError:
-                f.write(css.encode('utf-8'))
+        with io.open(css_path, 'w', encoding='utf-8') as f:
+            f.write(css)
         if source_map:
-            with open(source_map_path, 'wb') as f:
-                # Source maps are JSON, and JSON has to be UTF-8 encoded
-                f.write(source_map.encode('utf-8'))
+            # Source maps are JSON, and JSON has to be UTF-8 encoded
+            with io.open(source_map_path, 'w', encoding='utf-8') as f:
+                f.write(source_map)
         return css_filename

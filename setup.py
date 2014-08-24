@@ -52,7 +52,6 @@ if not os.path.isdir('sass2scss') and os.path.isdir('.git'):
     raise SystemExit(1)
 
 if sys.platform == 'win32':
-    from distutils.msvccompiler import MSVCCompiler
     from distutils.msvc9compiler import get_build_version
     vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
         int(get_build_version()),
@@ -63,12 +62,12 @@ if sys.platform == 'win32':
     except KeyError:
         distutils.log.warn('You probably need Visual Studio 2012 (11.0) '
                            'or higher')
-    distutils.log.warn('%%%s%%=%s',
-                       vscomntools_env,
-                       os.environ.get(vscomntools_env, ''))
-    c = MSVCCompiler()
-    c.initialize()
-    distutils.log.warn('msvc_paths = %r', c.get_msvc_paths('path'))
+    from distutils import msvccompiler, msvc9compiler
+    if msvccompiler.get_build_version() < 11.0:
+        msvccompiler.get_build_version = lambda: 11.0
+    if get_build_version() < 11.0:
+        msvc9compiler.get_build_version = lambda: 11.0
+        msvc9compiler.VERSION = 11.0
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
