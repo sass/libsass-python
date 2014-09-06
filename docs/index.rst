@@ -98,11 +98,9 @@ Travis CI
 AppVeyor (CI for Windows)
    https://ci.appveyor.com/project/dahlia/libsass-python
 
-   .. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia?retina=true
+   .. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia/branch/python?svg=true
       :target: https://ci.appveyor.com/project/dahlia/libsass-python
       :alt: Build Status (Windows)
-      :width: 100
-      :height: 18
 
 Coveralls (Test coverage)
    https://coveralls.io/r/dahlia/libsass-python
