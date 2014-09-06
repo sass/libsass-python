@@ -8,6 +8,7 @@ To be released.
 
 - Fixed a bug that :class:`~sassutils.wsgi.SassMiddleware` yielded
   :class:`str` instead of :class:`bytes` on Python 3.
+- Fixed several Unicode-related bugs on Windows.
 
 
 Version 0.5.0
