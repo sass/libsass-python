@@ -4,15 +4,18 @@ environment:
     VS90COMNTOOLS: "%VS110COMNTOOLS%"
     VS100COMNTOOLS: "%VS110COMNTOOLS%"
   matrix:
+  - PYTHON: "C:\\Python26_32"
+    PYTHON_VERSION: "2.6.6"
+    PYTHON_ARCH: "32"
   - PYTHON: "C:\\Python27_32"
     PYTHON_VERSION: "2.7.8"
+    PYTHON_ARCH: "32"
+  - PYTHON: "C:\\Python33_32"
+    PYTHON_VERSION: "3.3.5"
     PYTHON_ARCH: "32"
   - PYTHON: "C:\\Python34_32"
     PYTHON_VERSION: "3.4.1"
     PYTHON_ARCH: "32"
-  - PYTHON: "C:\\Python34_64"
-    PYTHON_VERSION: "3.4.1"
-    PYTHON_ARCH: "64"
 matrix:
   fast_finish: true
 init:
@@ -35,5 +38,5 @@ after_test:
 - "%PYTHON%\\Scripts\\pip.exe --version"
 - "%PYTHON%\\Scripts\\pip.exe install wheel"
 - "%PYTHON%\\python.exe setup.py bdist_wheel"
-artifects:
+artifacts:
 - path: dist\*
