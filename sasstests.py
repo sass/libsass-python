@@ -66,6 +66,11 @@ body {
     font: '나눔고딕', sans-serif; }
 '''
 
+SUBDIR_RECUR_EXPECTED_CSS = '''\
+body p {
+  color: blue; }
+'''
+
 utf8_if_py3 = {'encoding': 'utf-8'} if PY3 else {}
 
 
@@ -229,7 +234,7 @@ class BuilderTestCase(unittest.TestCase):
         css_path = os.path.join(temp_path, 'css')
         shutil.copytree('test', sass_path)
         result_files = build_directory(sass_path, css_path)
-        assert len(result_files) == 4
+        assert len(result_files) == 5
         assert result_files['a.scss'] == 'a.scss.css'
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
@@ -246,6 +251,12 @@ class BuilderTestCase(unittest.TestCase):
         with open(os.path.join(css_path, 'd.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         self.assertEqual(D_EXPECTED_CSS, css)
+        assert (result_files[os.path.join('subdir', 'recur.scss')] ==
+                os.path.join('subdir', 'recur.scss.css'))
+        with open(os.path.join(css_path, 'subdir', 'recur.scss.css'),
+                  **utf8_if_py3) as f:
+            css = f.read()
+        self.assertEqual(SUBDIR_RECUR_EXPECTED_CSS, css)
         shutil.rmtree(temp_path)
 
 
