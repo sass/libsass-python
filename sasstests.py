@@ -66,6 +66,11 @@ body {
     font: '나눔고딕', sans-serif; }
 '''
 
+E_EXPECTED_CSS = '''\
+a {
+  color: red; }
+'''
+
 SUBDIR_RECUR_EXPECTED_CSS = '''\
 body p {
   color: blue; }
@@ -187,6 +192,8 @@ a {
             self.assertEqual(D_EXPECTED_CSS, actual)
         else:
             self.assertEqual(D_EXPECTED_CSS.decode('utf-8'), actual)
+        actual = sass.compile(filename='test/e.scss')
+        assert actual == E_EXPECTED_CSS
         self.assertRaises(IOError, sass.compile,
                           filename='test/not-exist.sass')
         self.assertRaises(TypeError, sass.compile, filename=1234)
@@ -234,7 +241,7 @@ class BuilderTestCase(unittest.TestCase):
         css_path = os.path.join(temp_path, 'css')
         shutil.copytree('test', sass_path)
         result_files = build_directory(sass_path, css_path)
-        assert len(result_files) == 5
+        assert len(result_files) == 6
         assert result_files['a.scss'] == 'a.scss.css'
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
@@ -251,6 +258,10 @@ class BuilderTestCase(unittest.TestCase):
         with open(os.path.join(css_path, 'd.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         self.assertEqual(D_EXPECTED_CSS, css)
+        assert result_files['e.scss'] == 'e.scss.css'
+        with open(os.path.join(css_path, 'e.scss.css'), **utf8_if_py3) as f:
+            css = f.read()
+        assert css == E_EXPECTED_CSS
         assert (result_files[os.path.join('subdir', 'recur.scss')] ==
                 os.path.join('subdir', 'recur.scss.css'))
         with open(os.path.join(css_path, 'subdir', 'recur.scss.css'),
