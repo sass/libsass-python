@@ -46,6 +46,9 @@ def build_directory(sass_path, css_path, _root_sass=None, _root_css=None):
     for name in os.listdir(sass_path):
         sass_fullname = os.path.join(sass_path, name)
         if SUFFIX_PATTERN.search(name) and os.path.isfile(sass_fullname):
+            if name[0] == '_':
+                # Do not compile if it's partial
+                continue
             css_fullname = os.path.join(css_path, name) + '.css'
             css = compile(filename=sass_fullname, include_paths=[_root_sass])
             with io.open(css_fullname, 'w', encoding='utf-8') as css_file:

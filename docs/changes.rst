@@ -6,6 +6,10 @@ Version 0.5.2
 
 To be released.
 
+- Added missing `partial import`_ support.  [:issue:`27` by item4]
+
+.. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
+
 
 Version 0.5.1
 -------------
