@@ -184,7 +184,6 @@ class Manifest(object):
             css, source_map = compile(
                 filename=sass_filename,
                 include_paths=[root_path],
-                source_comments='map',
                 source_map_filename=source_map_path  # FIXME
             )
         else:

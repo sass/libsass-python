@@ -18,6 +18,10 @@ To be released.
 
 - Added missing `partial import`_ support.  [:issue:`27` by item4]
 - :const:`~sass.SOURCE_COMMENTS` became deprecated.
+- :func:`sass.compile()`'s parameter ``source_comments`` now can take only
+  :const:`bool` instead of :const:`str`.  String values like ``'none'``,
+  ``'line_numbers'``, and ``'map'`` become deprecated, and will be obsolete
+  soon.
 
 __ https://github.com/sass/libsass/releases/tag/3.0
 .. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials

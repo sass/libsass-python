@@ -119,7 +119,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 css, source_map = compile(
                     filename=filename,
                     output_style=options.output_style,
-                    source_comments='map',
                     source_map_filename=source_map_filename,
                     include_paths=options.include_paths,
                     image_path=options.image_path

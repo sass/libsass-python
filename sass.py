@@ -15,6 +15,7 @@ import os
 import os.path
 import re
 import sys
+import warnings
 
 from six import string_types, text_type
 
@@ -64,11 +65,9 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
-    :param source_comments: an optional source comments mode of the compiled
-                            result.  choose one of ``'none'`` (default) or
-                            ``'line_numbers'``.  ``'map'`` is unavailable for
-                            ``string``
-    :type source_comments: :class:`str`
+    :param source_comments: whether to add comments about source lines.
+                            :const:`False` by default
+    :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
@@ -89,19 +88,14 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
-    :param source_comments: an optional source comments mode of the compiled
-                            result.  choose one of ``'none'`` (default),
-                            ``'line_numbers'``, ``'map'``.
-                            if ``'map'`` is used it requires
-                            ``source_map_filename`` argument as well and
-                            returns a (compiled CSS string,
-                            source map string) pair instead of a string
-    :type source_comments: :class:`str`
-    :param source_map_filename: indicate the source map output filename.
-                                it's only available and required
-                                when ``source_comments`` is ``'map'``.
-                                note that it will ignore all other parts of
-                                the path except for its basename
+    :param source_comments: whether to add comments about source lines.
+                            :const:`False` by default
+    :type source_comments: :class:`bool`
+    :param source_map_filename: use source maps and indicate the source map
+                                output filename.  :const:`None` means not
+                                using source maps.  :const:`None` by default.
+                                note that it implies ``source_comments``
+                                is also :const:`True`
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
@@ -132,11 +126,9 @@ def compile(**kwargs):
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
-    :param source_comments: an optional source comments mode of the compiled
-                            result.  choose one of ``'none'`` (default) or
-                            ``'line_numbers'``.  ``'map'`` is unavailable for
-                            ``dirname``
-    :type source_comments: :class:`str`
+    :param source_comments: whether to add comments about source lines.
+                            :const:`False` by default
+    :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
@@ -147,6 +139,14 @@ def compile(**kwargs):
 
     .. versionadded:: 0.4.0
        Added ``source_comments`` and ``source_map_filename`` parameters.
+
+    .. versionchanged:: 0.6.0
+       The ``source_comments`` parameter becomes to take only :class:`bool`
+       instead of :class:`str`.
+
+    .. deprecated:: 0.6.0
+       Values like ``'none'``, ``'line_numbers'``, and ``'map'`` for
+       the ``source_comments`` parameter are deprecated.
 
     """
     modes = set()
@@ -167,38 +167,45 @@ def compile(**kwargs):
     except KeyError:
         raise CompileError('{0} is unsupported output_style; choose one of {1}'
                            ''.format(output_style, and_join(OUTPUT_STYLES)))
-    source_comments = kwargs.pop('source_comments', 'none')
-    if not isinstance(source_comments, string_types):
-        raise TypeError('source_comments must be a string, not ' +
+    source_comments = kwargs.pop('source_comments', False)
+    if source_comments in SOURCE_COMMENTS:
+        if source_comments == 'none':
+            deprecation_message = ('you can simply pass False to '
+                                   "source_comments instead of 'none'")
+            source_comments = False
+        elif source_comments in ('line_numbers', 'default'):
+            deprecation_message = ('you can simply pass True to '
+                                   "source_comments instead of " +
+                                   repr(source_comments))
+            source_comments = True
+        else:
+            deprecation_message = ("you don't have to pass 'map' to "
+                                   'source_comments but just need to '
+                                   'specify source_map_filename')
+            source_comments = False
+        warnings.warn(
+            "values like 'none', 'line_numbers', and 'map' for "
+            'the source_comments parameter are deprecated; ' +
+            deprecation_message,
+            DeprecationWarning
+        )
+    if not isinstance(source_comments, bool):
+        raise TypeError('source_comments must be bool, not ' +
                         repr(source_comments))
-    if 'filename' not in modes and source_comments == 'map':
-        raise CompileError('source_comments="map" is only available with '
+    fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
+    source_map_filename = kwargs.pop('source_map_filename', None)
+    if not (source_map_filename is None or
+            isinstance(source_map_filename, string_types)):
+        raise TypeError('source_map_filename must be a string, not ' +
+                        repr(source_map_filename))
+    elif isinstance(source_map_filename, text_type):
+        source_map_filename = source_map_filename.encode(fs_encoding)
+    if not ('filename' in modes or source_map_filename is None):
+        raise CompileError('source_map_filename is only available with '
                            'filename= keyword argument since it has to be '
                            'aware of it')
-    try:
-        source_comments = SOURCE_COMMENTS[source_comments]
-    except KeyError:
-        raise CompileError(
-            '{0} is unsupported source_comments; choose one of '
-            '{1}'.format(source_comments, and_join(SOURCE_COMMENTS))
-        )
-    fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
-    try:
-        source_map_filename = kwargs.pop('source_map_filename') or b''
-    except KeyError:
-        if source_comments == SOURCE_COMMENTS['map']:
-            raise TypeError('source_comments="map" requires '
-                            'source_map_filename argument')
-        source_map_filename = b''
-    else:
-        if source_comments != SOURCE_COMMENTS['map']:
-            raise TypeError('source_map_filename is available only with '
-                            'source_comments="map"')
-        elif not isinstance(source_map_filename, string_types):
-            raise TypeError('source_map_filename must be a string, not ' +
-                            repr(source_map_filename))
-        if isinstance(source_map_filename, text_type):
-            source_map_filename = source_map_filename.encode(fs_encoding)
+    if source_map_filename is not None:
+        source_comments = True
     try:
         include_paths = kwargs.pop('include_paths') or b''
     except KeyError:

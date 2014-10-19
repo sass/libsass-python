@@ -2,7 +2,6 @@
 from __future__ import with_statement
 
 import collections
-import io
 import json
 import os
 import os.path
@@ -10,6 +9,7 @@ import re
 import shutil
 import tempfile
 import unittest
+import warnings
 
 from six import PY3, StringIO, b, text_type
 from werkzeug.test import Client
@@ -29,25 +29,34 @@ body {
 '''
 
 A_EXPECTED_CSS_WITH_MAP = '''\
+/* line 6, SOURCE */
 body {
   background-color: green; }
+  /* line 8, SOURCE */
   body a {
     color: blue; }
 
-/*# sourceMappingURL=a.scss.css.map */'''
+/*# sourceMappingURL=../a.scss.css.map */'''
 
 A_EXPECTED_MAP = {
     'version': 3,
-    'file': '',
+    'file': 'test/a.css',
     'sources': ['test/a.scss'],
     'names': [],
-    'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,OAAO'
+    'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,OAAO'
 }
 
 B_EXPECTED_CSS = '''\
 b i {
   font-size: 20px; }
 '''
+
+B_EXPECTED_CSS_WITH_MAP = '''\
+/* line 2, SOURCE */
+b i {
+  font-size: 20px; }
+
+/*# sourceMappingURL=../css/b.scss.css.map */'''
 
 C_EXPECTED_CSS = '''\
 body {
@@ -65,6 +74,16 @@ body {
   body a {
     font: '나눔고딕', sans-serif; }
 '''
+
+D_EXPECTED_CSS_WITH_MAP = '''\
+/* line 6, SOURCE */
+body {
+  background-color: green; }
+  /* line 8, SOURCE */
+  body a {
+    font: '나눔고딕', sans-serif; }
+
+/*# sourceMappingURL=../css/d.scss.css.map */'''
 
 E_EXPECTED_CSS = '''\
 a {
@@ -134,13 +153,9 @@ class CompileTestCase(unittest.TestCase):
                           source_comments=['line_numbers'])
         self.assertRaises(TypeError,  sass.compile,
                           string='a { color: blue; }', source_comments=123j)
-        self.assertRaises(ValueError,  sass.compile,
+        self.assertRaises(TypeError,  sass.compile,
                           string='a { color: blue; }',
                           source_comments='invalid')
-        # map requires source_map_filename
-        self.assertRaises(ValueError,  sass.compile,
-                          string='a { color: blue; }',
-                          source_comments='map')
 
     def test_compile_invalid_image_path(self):
         self.assertRaises(TypeError, sass.compile,
@@ -154,11 +169,11 @@ class CompileTestCase(unittest.TestCase):
         commented = sass.compile(string='''a {
             b { color: blue; }
             color: red;
-        }''', source_comments='line_numbers')
-        assert commented == '''/* line 1, source string */
+        }''', source_comments=True)
+        assert commented == '''/* line 1, stdin */
 a {
   color: red; }
-  /* line 2, source string */
+  /* line 2, stdin */
   a b {
     color: blue; }
 '''
@@ -177,10 +192,20 @@ a {
                           string='a { b { color: blue; }')
         self.assertRaises(TypeError, sass.compile, string=1234)
         self.assertRaises(TypeError, sass.compile, string=[])
-        # source maps are available only when the input is a filename
-        self.assertRaises(sass.CompileError, sass.compile,
-                          string='a { b { color: blue; }',
-                          source_comments='map')
+
+    def test_compile_string_deprecated_source_comments_line_numbers(self):
+        source = '''a {
+            b { color: blue; }
+            color: red;
+        }'''
+        expected = sass.compile(string=source, source_comments=True)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            actual = sass.compile(string=source,
+                                  source_comments='line_numbers')
+            self.assertEqual(1, len(w))
+            assert issubclass(w[-1].category, DeprecationWarning)
+        self.assertEqual(expected, actual)
 
     def test_compile_filename(self):
         actual = sass.compile(filename='test/a.scss')
@@ -200,16 +225,40 @@ a {
         self.assertRaises(TypeError, sass.compile, filename=[])
 
     def test_compile_source_map(self):
+        filename = 'test/a.scss'
         actual, source_map = sass.compile(
-            filename='test/a.scss',
-            source_comments='map',
+            filename=filename,
             source_map_filename='a.scss.css.map'
         )
-        self.assertEqual(A_EXPECTED_CSS_WITH_MAP, actual)
+        self.assertEqual(
+            A_EXPECTED_CSS_WITH_MAP.replace(
+                'SOURCE',
+                os.path.abspath(filename)
+            ),
+            actual
+        )
         self.assertEqual(
             A_EXPECTED_MAP,
             json.loads(source_map)
         )
+
+    def test_compile_source_map_deprecated_source_comments_map(self):
+        filename = 'test/a.scss'
+        expected, expected_map = sass.compile(
+            filename=filename,
+            source_map_filename='a.scss.css.map'
+        )
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            actual, actual_map = sass.compile(
+                filename=filename,
+                source_comments='map',
+                source_map_filename='a.scss.css.map'
+            )
+            self.assertEqual(1, len(w))
+            assert issubclass(w[-1].category, DeprecationWarning)
+        self.assertEqual(expected, actual)
+        self.assertEqual(expected_map, actual_map)
 
     def test_regression_issue_2(self):
         actual = sass.compile(string='''
@@ -299,6 +348,13 @@ class ManifestTestCase(unittest.TestCase):
             ).replace(os.sep, os.altsep)
         else:
             normalize = lambda p: p
+        test_source_path = lambda *path: normalize(
+            os.path.join(d, 'test', *path)
+        )
+        replace_source_path = lambda s, name: s.replace(
+            'SOURCE',
+            test_source_path(name)
+        )
         try:
             shutil.copytree('test', src_path)
             m = Manifest(sass_path='test', css_path='css')
@@ -309,17 +365,16 @@ class ManifestTestCase(unittest.TestCase):
             with open(os.path.join(d, 'css', 'b.scss.css'),
                       **utf8_if_py3) as f:
                 self.assertEqual(
-                    B_EXPECTED_CSS +
-                    '\n/*# sourceMappingURL=b.scss.css.map */',
+                    replace_source_path(B_EXPECTED_CSS_WITH_MAP, 'b.scss'),
                     f.read()
                 )
             self.assert_json_file(
                 {
                     'version': 3,
-                    'file': '',
+                    'file': '../test/b.css',
                     'sources': [normalize('../test/b.scss')],
                     'names': [],
-                    'mappings': 'AAAA,EAAE;EAEE,WAAW'
+                    'mappings': ';AAAA,EAAE;EAEE,WAAW'
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -327,17 +382,16 @@ class ManifestTestCase(unittest.TestCase):
             with open(os.path.join(d, 'css', 'd.scss.css'),
                       **utf8_if_py3) as f:
                 self.assertEqual(
-                    D_EXPECTED_CSS +
-                    '\n/*# sourceMappingURL=d.scss.css.map */',
+                    replace_source_path(D_EXPECTED_CSS_WITH_MAP, 'd.scss'),
                     f.read()
                 )
             self.assert_json_file(
                 {
                     'version': 3,
-                    'file': '',
+                    'file': '../test/d.css',
                     'sources': [normalize('../test/d.scss')],
                     'names': [],
-                    'mappings': 'AAKA;EAHE,kBAAkB;EAIpB,KAAK;IAED,MAAM'
+                    'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,MAAM'
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -364,9 +418,11 @@ class WsgiTestCase(unittest.TestCase):
 
     def test_wsgi_sass_middleware(self):
         css_dir = tempfile.mkdtemp()
+        src_dir = os.path.join(css_dir, 'src')
+        shutil.copytree('test', src_dir)
         try:
             app = SassMiddleware(self.sample_wsgi_app, {
-                __name__: ('test', css_dir, '/static')
+                __name__: (src_dir, css_dir, '/static')
             })
             client = Client(app, Response)
             r = client.get('/asdf')
@@ -375,7 +431,11 @@ class WsgiTestCase(unittest.TestCase):
             self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
-            self.assert_bytes_equal(b(A_EXPECTED_CSS_WITH_MAP), r.data)
+            src_path = os.path.abspath(os.path.join(src_dir, 'a.scss'))
+            self.assert_bytes_equal(
+                b(A_EXPECTED_CSS_WITH_MAP.replace('SOURCE', src_path)),
+                r.data
+            )
             self.assertEqual('text/css', r.mimetype)
             r = client.get('/static/not-exists.sass.css')
             self.assertEqual(200, r.status_code)
@@ -463,27 +523,31 @@ class SasscTestCase(unittest.TestCase):
         self.assertEqual('', self.out.getvalue())
 
     def test_sassc_sourcemap(self):
-        fd, tmp = tempfile.mkstemp('.css')
+        tmp_dir = tempfile.mkdtemp()
+        src_dir = os.path.join(tmp_dir, 'test')
+        shutil.copytree('test', src_dir)
+        src_filename = os.path.join(src_dir, 'a.scss')
+        out_filename = os.path.join(tmp_dir, 'a.scss.css')
         try:
-            os.close(fd)
-            exit_code = sassc.main(['sassc', '-m', 'test/a.scss', tmp],
-                                   self.out, self.err)
+            exit_code = sassc.main(
+                ['sassc', '-m', src_filename, out_filename],
+                self.out, self.err
+            )
             self.assertEqual(0, exit_code)
             self.assertEqual('', self.err.getvalue())
             self.assertEqual('', self.out.getvalue())
-            with open(tmp) as f:
+            with open(out_filename) as f:
                 self.assertEqual(
-                    A_EXPECTED_CSS + '\n/*# sourceMappingURL=' + 
-                    os.path.basename(tmp) + '.map */',
+                    A_EXPECTED_CSS_WITH_MAP.replace('SOURCE', src_filename),
                     f.read().strip()
                 )
-            with open(tmp + '.map') as f:
+            with open(out_filename + '.map') as f:
                 self.assertEqual(
                     dict(A_EXPECTED_MAP, sources=None),
                     dict(json.load(f), sources=None)
                 )
         finally:
-            os.remove(tmp)
+            shutil.rmtree(tmp_dir)
 
 
 test_cases = [
