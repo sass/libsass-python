@@ -5,6 +5,7 @@
 #include "inspect.hpp"
 #include "to_string.hpp"
 #include "constants.hpp"
+#include "util.hpp"
 
 #ifndef SASS_PRELEXER
 #include "prelexer.hpp"
@@ -138,7 +139,7 @@ namespace Sass {
         else {
           string current_dir = File::dir_name(path);
           string resolved(ctx.add_file(current_dir, unquote(import_path)));
-          if (resolved.empty()) error("file to import not found or unreadable: " + import_path);
+          if (resolved.empty()) error("file to import not found or unreadable: " + import_path + "\nCurrent dir: " + current_dir);
           imp->files().push_back(resolved);
         }
       }
@@ -161,7 +162,7 @@ namespace Sass {
     else if (lex< function >()) which_type = Definition::FUNCTION;
     string which_str(lexed);
     if (!lex< identifier >()) error("invalid name in " + which_str + " definition");
-    string name(lexed);
+    string name(Util::normalize_underscores(lexed));
     Position source_position_of_def = source_position;
     Parameters* params = parse_parameters();
     if (!peek< exactly<'{'> >()) error("body for " + which_str + " " + name + " must begin with a '{'");
@@ -191,7 +192,7 @@ namespace Sass {
   Parameter* Parser::parse_parameter()
   {
     lex< variable >();
-    string name(lexed);
+    string name(Util::normalize_underscores(lexed));
     Position pos = source_position;
     Expression* val = 0;
     bool is_rest = false;
@@ -211,7 +212,7 @@ namespace Sass {
     lex< include >() /* || lex< exactly<'+'> >() */;
     if (!lex< identifier >()) error("invalid name in @include directive");
     Position source_position_of_call = source_position;
-    string name(lexed);
+    string name(Util::normalize_underscores(lexed));
     Arguments* args = parse_arguments();
     Block* content = 0;
     if (peek< exactly<'{'> >()) {
@@ -243,7 +244,7 @@ namespace Sass {
     Argument* arg;
     if (peek< sequence < variable, spaces_and_comments, exactly<':'> > >()) {
       lex< variable >();
-      string name(lexed);
+      string name(Util::normalize_underscores(lexed));
       Position p = source_position;
       lex< exactly<':'> >();
       Expression* val = parse_space_list();
@@ -265,13 +266,14 @@ namespace Sass {
   Assignment* Parser::parse_assignment()
   {
     lex< variable >();
-    string name(lexed);
+    string name(Util::normalize_underscores(lexed));
     Position var_source_position = source_position;
     if (!lex< exactly<':'> >()) error("expected ':' after " + name + " in assignment statement");
     Expression* val = parse_list();
     val->is_delayed(false);
     bool is_guarded = lex< default_flag >();
-    Assignment* var = new (ctx.mem) Assignment(path, var_source_position, name, val, is_guarded);
+    bool is_global = lex< global_flag >();
+    Assignment* var = new (ctx.mem) Assignment(path, var_source_position, name, val, is_guarded, is_global);
     return var;
   }
 
@@ -367,6 +369,7 @@ namespace Sass {
       (*group) << comb;
     }
     while (lex< one_plus< sequence< spaces_and_comments, exactly<','> > > >());
+    while (lex< optional >());    // JMA - ignore optional flag if it follows the selector group
     return group;
   }
 
@@ -396,7 +399,8 @@ namespace Sass {
         peek< exactly<')'> >() ||
         peek< exactly<'{'> >() ||
         peek< exactly<'}'> >() ||
-        peek< exactly<';'> >()) {
+        peek< exactly<';'> >() ||
+        peek< optional >()) {
       // no selector after the combinator
       rhs = 0;
     }
@@ -475,22 +479,24 @@ namespace Sass {
     return 0;
   }
 
-  Negated_Selector* Parser::parse_negated_selector()
+  Wrapped_Selector* Parser::parse_negated_selector()
   {
     lex< pseudo_not >();
+    string name(lexed);
     Position nsource_position = source_position;
     Selector* negated = parse_selector_group();
     if (!lex< exactly<')'> >()) {
       error("negated selector is missing ')'");
     }
-    return new (ctx.mem) Negated_Selector(path, nsource_position, negated);
+    return new (ctx.mem) Wrapped_Selector(path, nsource_position, name, negated);
   }
 
-  Pseudo_Selector* Parser::parse_pseudo_selector() {
+  Simple_Selector* Parser::parse_pseudo_selector() {
     if (lex< sequence< pseudo_prefix, functional > >() || lex< functional >()) {
       string name(lexed);
       String* expr = 0;
       Position p = source_position;
+      Selector* wrapped = 0;
       if (lex< alternatives< even, odd > >()) {
         expr = new (ctx.mem) String_Constant(path, p, lexed);
       }
@@ -520,7 +526,8 @@ namespace Sass {
       else if (lex< sequence< optional<sign>, digits > >()) {
         expr = new (ctx.mem) String_Constant(path, p, lexed);
       }
-      else if (lex< identifier >()) {
+      else if (peek< sequence< identifier, spaces_and_comments, exactly<')'> > >()) {
+        lex< identifier >();
         expr = new (ctx.mem) String_Constant(path, p, lexed);
       }
       else if (lex< string_constant >()) {
@@ -530,9 +537,12 @@ namespace Sass {
         expr = new (ctx.mem) String_Constant(path, p, "");
       }
       else {
-        error("invalid argument to " + name + "...)");
+        wrapped = parse_selector_group();
       }
       if (!lex< exactly<')'> >()) error("unterminated argument to " + name + "...)");
+      if (wrapped) {
+        return new (ctx.mem) Wrapped_Selector(path, p, name, wrapped);
+      }
       return new (ctx.mem) Pseudo_Selector(path, p, name, expr);
     }
     else if (lex < sequence< pseudo_prefix, identifier > >()) {
@@ -579,6 +589,14 @@ namespace Sass {
     bool semicolon = false;
     Selector_Lookahead lookahead_result;
     Block* block = new (ctx.mem) Block(path, source_position);
+    
+    // JMA - ensure that a block containing only block_comments is parsed 
+    while (lex< block_comment >()) {
+      String*  contents = parse_interpolated_chunk(lexed);
+      Comment* comment  = new (ctx.mem) Comment(path, source_position, contents);
+      (*block) << comment;
+    }
+    
     while (!lex< exactly<'}'> >()) {
       if (semicolon) {
         if (!lex< exactly<';'> >()) {
@@ -727,6 +745,9 @@ namespace Sass {
     else if (lex< sequence< optional< exactly<'*'> >, identifier > >()) {
       prop = new (ctx.mem) String_Constant(path, source_position, lexed);
     }
+    else if (lex< custom_property_name >()) {
+      prop = new (ctx.mem) String_Constant(path, source_position, lexed);
+    }
     else {
       error("invalid property name");
     }
@@ -734,6 +755,69 @@ namespace Sass {
     if (peek< exactly<';'> >()) error("style declaration must contain a value");
     Expression* list = parse_list();
     return new (ctx.mem) Declaration(path, prop->position(), prop, list/*, lex<important>()*/);
+  }
+
+  Expression* Parser::parse_map()
+  {
+    if (!(peek< map_key >(position)))
+    { return parse_list(); }
+
+    lex< exactly<'('> >();
+
+    // empty maps so treat it like an empty list
+    if (peek< exactly<')'> >(position))
+    {
+      lex< exactly<')'> >();
+      return new (ctx.mem) List(path, source_position, 0);
+    }
+
+    Expression* key = parse_list();
+
+    // it's not a map so return the lexed value as a list value
+    if (!lex< exactly<':'> >())
+    {
+      if (!lex< exactly<')'> >()) error("unclosed parenthesis");
+      return key;
+    }
+
+    Expression* value;
+    if (peek< map_key >(position))
+    {
+      value = parse_map();
+    } else {
+      value = parse_space_list();
+    }
+
+    KeyValuePair* pair = new (ctx.mem) KeyValuePair(path, source_position, key, value);
+
+    Map* map = new (ctx.mem) Map(path, source_position, 1);
+    (*map) << pair;
+
+    while (lex< exactly<','> >())
+    {
+      // allow trailing commas - #495
+      if (peek< exactly<')'> >(position))
+      { break; }
+
+      Expression* key = parse_list();
+
+      if (!(lex< exactly<':'> >()))
+      { error("invalid syntax"); }
+
+      Expression* value;
+      if (peek< map_key >(position))
+      {
+        value = parse_map();
+      } else {
+        value = parse_space_list();
+      }
+
+      (*map) << new (ctx.mem) KeyValuePair(path, source_position, key, value);
+    }
+
+    if (!lex< exactly<')'> >()) error("unclosed parenthesis 3");
+
+    return map;
   }
 
   Expression* Parser::parse_list()
@@ -760,6 +844,15 @@ namespace Sass {
 
     while (lex< exactly<','> >())
     {
+      if (//peek< exactly<'!'> >(position) ||
+          peek< exactly<';'> >(position) ||
+          peek< exactly<'}'> >(position) ||
+          peek< exactly<'{'> >(position) ||
+          peek< exactly<')'> >(position) ||
+          //peek< exactly<':'> >(position) ||
+          peek< exactly<ellipsis> >(position)) {
+        break;
+      }
       Expression* list = parse_space_list();
       (*comma_list) << list;
     }
@@ -769,7 +862,9 @@ namespace Sass {
 
   Expression* Parser::parse_space_list()
   {
-    Expression* disj1 = parse_disjunction();
+    Expression* disj1;
+    if (peek< map_key >(position)) disj1 = parse_map();
+    else disj1 = parse_disjunction();
     // if it's a singleton, return it directly; don't wrap it
     if (//peek< exactly<'!'> >(position) ||
         peek< exactly<';'> >(position) ||
@@ -777,9 +872,10 @@ namespace Sass {
         peek< exactly<'{'> >(position) ||
         peek< exactly<')'> >(position) ||
         peek< exactly<','> >(position) ||
-        // peek< exactly<':'> >(position) ||
+        peek< exactly<':'> >(position) ||
         peek< exactly<ellipsis> >(position) ||
-        peek< default_flag >(position))
+        peek< default_flag >(position) ||
+        peek< global_flag >(position))
     { return disj1; }
 
     List* space_list = new (ctx.mem) List(path, source_position, 2, List::SPACE);
@@ -791,9 +887,10 @@ namespace Sass {
              peek< exactly<'{'> >(position) ||
              peek< exactly<')'> >(position) ||
              peek< exactly<','> >(position) ||
-             // peek< exactly<':'> >(position) ||
+             peek< exactly<':'> >(position) ||
              peek< exactly<ellipsis> >(position) ||
-             peek< default_flag >(position)))
+             peek< default_flag >(position) ||
+             peek< global_flag >(position)))
     {
       (*space_list) << parse_disjunction();
     }
@@ -858,7 +955,8 @@ namespace Sass {
     Expression* term1 = parse_term();
     // if it's a singleton, return it directly; don't wrap it
     if (!(peek< exactly<'+'> >(position) ||
-          peek< sequence< negate< number >, exactly<'-'> > >(position)))
+          peek< sequence< negate< number >, exactly<'-'> > >(position)) ||
+          peek< identifier >(position))
     { return term1; }
 
     vector<Expression*> operands;
@@ -895,7 +993,7 @@ namespace Sass {
   Expression* Parser::parse_factor()
   {
     if (lex< exactly<'('> >()) {
-      Expression* value = parse_comma_list();
+      Expression* value = parse_list();
       if (!lex< exactly<')'> >()) error("unclosed parenthesis");
       value->is_delayed(false);
       // make sure wrapped lists and division expressions are non-delayed within parentheses
@@ -914,14 +1012,14 @@ namespace Sass {
     }
     else if (peek< ie_keyword_arg >()) {
       String_Schema* kwd_arg = new (ctx.mem) String_Schema(path, source_position, 3);
-      if (lex< variable >()) *kwd_arg << new (ctx.mem) Variable(path, source_position, lexed);
+      if (lex< variable >()) *kwd_arg << new (ctx.mem) Variable(path, source_position, Util::normalize_underscores(lexed));
       else {
         lex< alternatives< identifier_schema, identifier > >();
         *kwd_arg << new (ctx.mem) String_Constant(path, source_position, lexed);
       }
       lex< exactly<'='> >();
       *kwd_arg << new (ctx.mem) String_Constant(path, source_position, lexed);
-      if (lex< variable >()) *kwd_arg << new (ctx.mem) Variable(path, source_position, lexed);
+      if (lex< variable >()) *kwd_arg << new (ctx.mem) Variable(path, source_position, Util::normalize_underscores(lexed));
       else {
         lex< alternatives< identifier_schema, identifier, number, hex > >();
         *kwd_arg << new (ctx.mem) String_Constant(path, source_position, lexed);
@@ -1029,7 +1127,7 @@ namespace Sass {
     { return parse_string(); }
 
     if (lex< variable >())
-    { return new (ctx.mem) Variable(path, source_position, lexed); }
+    { return new (ctx.mem) Variable(path, source_position, Util::normalize_underscores(lexed)); }
 
     error("error reading values after " + lexed.to_string());
 
@@ -1194,7 +1292,7 @@ namespace Sass {
         if (!num_items) schema->quote_mark(*lexed.begin);
       }
       else if (lex< variable >()) {
-        (*schema) << new (ctx.mem) Variable(path, source_position, lexed);
+        (*schema) << new (ctx.mem) Variable(path, source_position, Util::normalize_underscores(lexed));
       }
       else {
         error("error parsing interpolated value");
@@ -1293,7 +1391,7 @@ namespace Sass {
   Function_Call* Parser::parse_function_call()
   {
     lex< identifier >();
-    string name(lexed);
+    string name(Util::normalize_underscores(lexed));
     Position source_position_of_call = source_position;
 
     Function_Call* the_call = new (ctx.mem) Function_Call(path, source_position_of_call, name, parse_arguments());
@@ -1338,14 +1436,14 @@ namespace Sass {
     lex< for_directive >();
     Position for_source_position = source_position;
     if (!lex< variable >()) error("@for directive requires an iteration variable");
-    string var(lexed);
+    string var(Util::normalize_underscores(lexed));
     if (!lex< from >()) error("expected 'from' keyword in @for directive");
     Expression* lower_bound = parse_expression();
     lower_bound->is_delayed(false);
     bool inclusive = false;
     if (lex< through >()) inclusive = true;
     else if (lex< to >()) inclusive = false;
-    else                  error("expected 'through' or 'to' keywod in @for directive");
+    else                  error("expected 'through' or 'to' keyword in @for directive");
     Expression* upper_bound = parse_expression();
     upper_bound->is_delayed(false);
     if (!peek< exactly<'{'> >()) error("expected '{' after the upper bound in @for directive");
@@ -1358,7 +1456,7 @@ namespace Sass {
     lex < each_directive >();
     Position each_source_position = source_position;
     if (!lex< variable >()) error("@each directive requires an iteration variable");
-    string var(lexed);
+    string var(Util::normalize_underscores(lexed));
     if (!lex< in >()) error("expected 'in' keyword in @each directive");
     Expression* list = parse_list();
     list->is_delayed(false);
@@ -1521,7 +1619,7 @@ namespace Sass {
                                    substring_match> >(p))          ||
            (q = peek< sequence< exactly<'.'>, interpolant > >(p))  ||
            (q = peek< sequence< exactly<'#'>, interpolant > >(p))  ||
-           (q = peek< sequence< exactly<'-'>, interpolant > >(p))  ||
+           (q = peek< sequence< one_plus< exactly<'-'> >, interpolant > >(p))  ||
            (q = peek< sequence< pseudo_prefix, interpolant > >(p)) ||
            (q = peek< interpolant >(p))) {
       saw_stuff = true;
@@ -1577,9 +1675,10 @@ namespace Sass {
                                    substring_match> >(p))          ||
            (q = peek< sequence< exactly<'.'>, interpolant > >(p))  ||
            (q = peek< sequence< exactly<'#'>, interpolant > >(p))  ||
-           (q = peek< sequence< exactly<'-'>, interpolant > >(p))  ||
+           (q = peek< sequence< one_plus< exactly<'-'> >, interpolant > >(p))  ||
            (q = peek< sequence< pseudo_prefix, interpolant > >(p)) ||
-           (q = peek< interpolant >(p))) {
+           (q = peek< interpolant >(p))                            ||
+           (q = peek< optional >(p))) {
       p = q;
       if (*(p - 1) == '}') saw_interpolant = true;
       saw_stuff = true;

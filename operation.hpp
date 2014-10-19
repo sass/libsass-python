@@ -36,6 +36,7 @@ namespace Sass {
     virtual T operator()(Mixin_Call* x)             = 0;
     // expressions
     virtual T operator()(List* x)                   = 0;
+    virtual T operator()(Map* x)                    = 0;
     virtual T operator()(Binary_Expression* x)      = 0;
     virtual T operator()(Unary_Expression* x)       = 0;
     virtual T operator()(Function_Call* x)          = 0;
@@ -63,7 +64,7 @@ namespace Sass {
     virtual T operator()(Selector_Qualifier* x)     = 0;
     virtual T operator()(Attribute_Selector* x)     = 0;
     virtual T operator()(Pseudo_Selector* x)        = 0;
-    virtual T operator()(Negated_Selector* x)       = 0;
+    virtual T operator()(Wrapped_Selector* x)       = 0;
     virtual T operator()(Compound_Selector* x)      = 0;
     virtual T operator()(Complex_Selector* x)       = 0;
     virtual T operator()(Selector_List* x)          = 0;
@@ -100,6 +101,7 @@ namespace Sass {
     virtual T operator()(Mixin_Call* x)             { return static_cast<D*>(this)->fallback(x); }
     // expressions
     virtual T operator()(List* x)                   { return static_cast<D*>(this)->fallback(x); }
+    virtual T operator()(Map* x)                    { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Binary_Expression* x)      { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Unary_Expression* x)       { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Function_Call* x)          { return static_cast<D*>(this)->fallback(x); }
@@ -127,7 +129,7 @@ namespace Sass {
     virtual T operator()(Selector_Qualifier* x)     { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Attribute_Selector* x)     { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Pseudo_Selector* x)        { return static_cast<D*>(this)->fallback(x); }
-    virtual T operator()(Negated_Selector* x)       { return static_cast<D*>(this)->fallback(x); }
+    virtual T operator()(Wrapped_Selector* x)       { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Compound_Selector* x)      { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Complex_Selector* x)       { return static_cast<D*>(this)->fallback(x); }
     virtual T operator()(Selector_List* x)          { return static_cast<D*>(this)->fallback(x); }

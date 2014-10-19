@@ -57,12 +57,13 @@ namespace Sass {
     // virtual void operator()(Variable*);
     // virtual void operator()(Textual*);
     // virtual void operator()(Number*);
-    // virtual void operator()(Color*);
+    virtual void operator()(Color*);
     // virtual void operator()(Boolean*);
     // virtual void operator()(String_Schema*);
     // virtual void operator()(String_Constant* x);
     // virtual void operator()(Media_Query*);
     virtual void operator()(Media_Query_Expression*);
+    virtual void operator()(Null*);
     // // parameters and arguments
     // virtual void operator()(Parameter*);
     // virtual void operator()(Parameters*);
@@ -76,7 +77,7 @@ namespace Sass {
     // virtual void operator()(Selector_Qualifier*);
     // virtual void operator()(Attribute_Selector*);
     // virtual void operator()(Pseudo_Selector*);
-    // virtual void operator()(Negated_Selector*);
+    // virtual void operator()(Wrapped_Selector*);
     // virtual void operator()(Compound_Selector*);
     virtual void operator()(Complex_Selector*);
     virtual void operator()(Selector_List*);

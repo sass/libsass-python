@@ -15,7 +15,7 @@
 #endif
 
 #define BUILT_IN(name) Expression*\
-name(Env& env, Context& ctx, Signature sig, const string& path, Position position, Backtrace* backtrace)
+name(Env& env, Env& d_env, Context& ctx, Signature sig, const string& path, Position position, Backtrace* backtrace)
 
 namespace Sass {
   struct Context;
@@ -25,7 +25,7 @@ namespace Sass {
   class Definition;
   typedef Environment<AST_Node*> Env;
   typedef const char* Signature;
-  typedef Expression* (*Native_Function)(Env&, Context&, Signature, const string&, Position, Backtrace*);
+  typedef Expression* (*Native_Function)(Env&, Env&, Context&, Signature, const string&, Position, Backtrace*);
 
   Definition* make_native_function(Signature, Native_Function, Context&);
   Definition* make_c_function(Signature sig, Sass_C_Function f, void* cookie, Context& ctx);
@@ -84,13 +84,26 @@ namespace Sass {
     extern Signature append_sig;
     extern Signature zip_sig;
     extern Signature compact_sig;
+    extern Signature list_separator_sig;
     extern Signature type_of_sig;
     extern Signature unit_sig;
     extern Signature unitless_sig;
     extern Signature comparable_sig;
+    extern Signature variable_exists_sig;
+    extern Signature global_variable_exists_sig;
+    extern Signature function_exists_sig;
+    extern Signature mixin_exists_sig;
+    extern Signature call_sig;
     extern Signature not_sig;
     extern Signature if_sig;
     extern Signature image_url_sig;
+    extern Signature map_get_sig;
+    extern Signature map_merge_sig;
+    extern Signature map_remove_sig;
+    extern Signature map_keys_sig;
+    extern Signature map_values_sig;
+    extern Signature map_has_key_sig;
+    extern Signature keywords_sig;
 
     BUILT_IN(rgb);
     BUILT_IN(rgba_4);
@@ -141,13 +154,26 @@ namespace Sass {
     BUILT_IN(append);
     BUILT_IN(zip);
     BUILT_IN(compact);
+    BUILT_IN(list_separator);
     BUILT_IN(type_of);
     BUILT_IN(unit);
     BUILT_IN(unitless);
     BUILT_IN(comparable);
+    BUILT_IN(variable_exists);
+    BUILT_IN(global_variable_exists);
+    BUILT_IN(function_exists);
+    BUILT_IN(mixin_exists);
+    BUILT_IN(call);
     BUILT_IN(sass_not);
     BUILT_IN(sass_if);
     BUILT_IN(image_url);
+    BUILT_IN(map_get);
+    BUILT_IN(map_merge);
+    BUILT_IN(map_remove);
+    BUILT_IN(map_keys);
+    BUILT_IN(map_values);
+    BUILT_IN(map_has_key);
+    BUILT_IN(keywords);
 
   }
 }

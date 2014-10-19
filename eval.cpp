@@ -172,6 +172,21 @@ namespace Sass {
     return ll;
   }
 
+  Expression* Eval::operator()(Map* m)
+  {
+    Map* mm = new (ctx.mem) Map(m->path(),
+                                  m->position(),
+                                  m->length());
+    for (size_t i = 0, L = m->length(); i < L; ++i) {
+      KeyValuePair* kvp = new (ctx.mem) KeyValuePair(m->path(),
+                                                      m->position(),
+                                                      (*m)[i]->key()->perform(this),
+                                                      (*m)[i]->value()->perform(this));
+      *mm << kvp;
+    }
+    return mm;
+  }
+
   // -- only need to define two comparisons, and the rest can be implemented in terms of them
   bool eq(Expression*, Expression*, Context&, Eval*);
   bool lt(Expression*, Expression*, Context&);
@@ -262,8 +277,11 @@ namespace Sass {
 
   Expression* Eval::operator()(Function_Call* c)
   {
-    Arguments* args = static_cast<Arguments*>(c->arguments()->perform(this));
     string full_name(c->name() + "[f]");
+    Arguments* args = c->arguments();
+    if (full_name != "if[f]") {
+      args = static_cast<Arguments*>(args->perform(this));
+    }
 
     // if it doesn't exist, just pass it through as a literal
     if (!env->has(full_name)) {
@@ -283,8 +301,10 @@ namespace Sass {
     Native_Function func   = def->native_function();
     Sass_C_Function c_func = def->c_function();
 
-    for (size_t i = 0, L = args->length(); i < L; ++i) {
-      (*args)[i]->value((*args)[i]->value()->perform(this));
+    if (full_name != "if[f]") {
+      for (size_t i = 0, L = args->length(); i < L; ++i) {
+        (*args)[i]->value((*args)[i]->value()->perform(this));
+      }
     }
 
     Parameters* params = def->parameters();
@@ -324,7 +344,7 @@ namespace Sass {
       Backtrace here(backtrace, c->path(), c->position(), ", in function `" + c->name() + "`");
       backtrace = &here;
 
-      result = func(*env, ctx, def->signature(), c->path(), c->position(), backtrace);
+      result = func(*env, *old_env, ctx, def->signature(), c->path(), c->position(), backtrace);
 
       backtrace = here.parent;
       env = old_env;
@@ -367,7 +387,7 @@ namespace Sass {
       Backtrace here(backtrace, c->path(), c->position(), ", in function `" + c->name() + "`");
       backtrace = &here;
 
-      result = resolved_def->native_function()(*env, ctx, resolved_def->signature(), c->path(), c->position(), backtrace);
+      result = resolved_def->native_function()(*env, *old_env, ctx, resolved_def->signature(), c->path(), c->position(), backtrace);
 
       backtrace = here.parent;
       env = old_env;
@@ -397,6 +417,7 @@ namespace Sass {
     else error("unbound variable " + v->name(), v->path(), v->position());
     // cerr << "name: " << v->name() << "; type: " << typeid(*value).name() << "; value: " << value->perform(&to_string) << endl;
     if (typeid(*value) == typeid(Argument)) value = static_cast<Argument*>(value)->value();
+
     // cerr << "\ttype is now: " << typeid(*value).name() << endl << endl;
     return value;
   }
@@ -498,6 +519,7 @@ namespace Sass {
       Color* c = new (ctx.mem) Color(*ctx.names_to_colors[s->value()]);
       c->path(s->path());
       c->position(s->position());
+      c->disp(s->value());
       return c;
     }
     return s;
@@ -622,6 +644,16 @@ namespace Sass {
         return true;
       } break;
 
+      case Expression::MAP: {
+        Map* l = static_cast<Map*>(lhs);
+        Map* r = static_cast<Map*>(rhs);
+        if (l->length() != r->length()) return false;
+        for (size_t i = 0, L = l->length(); i < L; ++i) {
+          if (!eq((*l)[i]->key(), (*r)[i]->key(), ctx)) return false;
+          if (!eq((*l)[i]->value(), (*r)[i]->value(), ctx)) return false;
+        }
+        return true;
+      } break;
       case Expression::NULL_VAL: {
         return true;
       } break;
@@ -838,6 +870,15 @@ namespace Sass {
           *l << cval_to_astnode(v.list.values[i], ctx, backtrace, path, position);
         }
         e = l;
+      } break;
+      case SASS_MAP: {
+        Map* m = new (ctx.mem) Map(path, position, v.map.length);
+        for (size_t i = 0, L = v.map.length; i < L; ++i) {
+          *m << new (ctx.mem) KeyValuePair(path, position,
+            cval_to_astnode(v.map.pairs[i].key, ctx, backtrace, path, position),
+            cval_to_astnode(v.map.pairs[i].value, ctx, backtrace, path, position));
+        }
+        e = m;
       } break;
       case SASS_NULL: {
         e = new (ctx.mem) Null(path, position);

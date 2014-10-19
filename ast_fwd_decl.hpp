@@ -29,6 +29,7 @@ namespace Sass {
   // expressions
   class Expression;
   class List;
+  class Map;
   class Binary_Expression;
   class Unary_Expression;
   class Function_Call;
@@ -58,7 +59,7 @@ namespace Sass {
   class Selector_Qualifier;
   class Attribute_Selector;
   class Pseudo_Selector;
-  class Negated_Selector;
+  class Wrapped_Selector;
   class Compound_Selector;
   class Complex_Selector;
   class Selector_List;

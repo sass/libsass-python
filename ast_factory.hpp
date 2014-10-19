@@ -34,6 +34,7 @@ namespace Sass {
     Mixin_Call* new_Mixin_Call(string p, size_t l, string n, Arguments* args, Block* b = 0);
     // expressions
     List* new_List(string p, size_t l, size_t size = 0, List::Separator sep = List::space, bool argl = false);
+    Map* new_Map(string p, size_t l, size_t size = 0);
     Binary_Expression<AND>* new_And(string p, size_t l, Expression* lhs, Expression* rhs);
     Binary_Expression<OR>* new_Or(string p, size_t l, Expression* lhs, Expression* rhs);
     Binary_Expression<EQ>* new_Eq(string p, size_t l, Expression* lhs, Expression* rhs);
@@ -74,7 +75,7 @@ namespace Sass {
     Reference_Selector* new_Reference_Selector(string p, size_t l);
     Placeholder_Selector* new_Placeholder_Selector(string p, size_t l, string n);
     Pseudo_Selector* new_Pseudo_Selector(string p, size_t l, string n, Expression* expr = 0);
-    Negated_Selector* new_Negated_Selector(string p, size_t l, Simple_Base* sel);
+    Wrapped_Selector* new_Wrapped_Selector(string p, size_t l, string n, Simple_Base* sel);
     Compound_Selector* new_Compound_Selector(string p, size_t l, size_t s = 0);
     Complex_Selector* new_Complex_Selector(string p, size_t l, Complex_Selector::Combinator c, Complex_Selector* ctx, Compound_Selector* sel);
     Selector_List* new_Selector_List(string p, size_t l, size_t s = 0);

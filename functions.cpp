@@ -7,16 +7,21 @@
 #include "to_string.hpp"
 #include "inspect.hpp"
 #include "eval.hpp"
+#include "util.hpp"
 #include "utf8_string.hpp"
+#include "utf8.h"
 
+#include <cstdlib>
 #include <cmath>
 #include <cctype>
 #include <sstream>
+#include <string>
 #include <iomanip>
 #include <iostream>
 
 #define ARG(argname, argtype) get_arg<argtype>(argname, env, sig, path, position, backtrace)
 #define ARGR(argname, argtype, lo, hi) get_arg_r(argname, env, sig, path, position, lo, hi, backtrace)
+#define ARGM(argname, argtype, ctx) get_arg_m(argname, env, sig, path, position, backtrace, ctx)
 
 namespace Sass {
   using std::stringstream;
@@ -26,7 +31,7 @@ namespace Sass {
   {
     Parser sig_parser = Parser::from_c_str(sig, ctx, "[built-in function]");
     sig_parser.lex<Prelexer::identifier>();
-    string name(sig_parser.lexed);
+    string name(Util::normalize_underscores(sig_parser.lexed));
     Parameters* params = sig_parser.parse_parameters();
     return new (ctx.mem) Definition("[built-in function]",
                                     Position(),
@@ -41,7 +46,7 @@ namespace Sass {
   {
     Parser sig_parser = Parser::from_c_str(sig, ctx, "[c function]");
     sig_parser.lex<Prelexer::identifier>();
-    string name(sig_parser.lexed);
+    string name(Util::normalize_underscores(sig_parser.lexed));
     Parameters* params = sig_parser.parse_parameters();
     return new (ctx.mem) Definition("[c function]",
                                     Position(),
@@ -69,6 +74,20 @@ namespace Sass {
         msg += T::type_name();
         error(msg, path, position, backtrace);
       }
+      return val;
+    }
+
+    Map* get_arg_m(const string& argname, Env& env, Signature sig, const string& path, Position position, Backtrace* backtrace, Context& ctx)
+    {
+      // Minimal error handling -- the expectation is that built-ins will be written correctly!
+      Map* val = dynamic_cast<Map*>(env[argname]);
+      if (val) return val;
+
+      List* lval = dynamic_cast<List*>(env[argname]);
+      if (lval && lval->length() == 0) return new (ctx.mem) Map(path, position, 1);
+
+      // fallback on get_arg for error handling
+      val = get_arg<Map>(argname, env, sig, path, position, backtrace);
       return val;
     }
 
@@ -163,36 +182,33 @@ namespace Sass {
     struct HSL { double h; double s; double l; };
     HSL rgb_to_hsl(double r, double g, double b)
     {
+
+      // Algorithm from http://en.wikipedia.org/wiki/wHSL_and_HSV#Conversion_from_RGB_to_HSL_or_HSV
       r /= 255.0; g /= 255.0; b /= 255.0;
 
       double max = std::max(r, std::max(g, b));
       double min = std::min(r, std::min(g, b));
       double del = max - min;
 
-      double h = 0, s = 0, l = (max + min)/2;
+      double h = 0, s = 0, l = (max + min) / 2.0;
 
       if (max == min) {
         h = s = 0; // achromatic
       }
       else {
-        if (l < 0.5) s = del / (max + min);
-        else         s = del / (2.0 - max - min);
+        if (l < 0.5) s = del / (2.0 * l);
+        else         s = del / (2.0 - 2.0 * l);
 
-        double dr = (((max - r)/6.0) + (del/2.0))/del;
-        double dg = (((max - g)/6.0) + (del/2.0))/del;
-        double db = (((max - b)/6.0) + (del/2.0))/del;
-
-        if      (r == max) h = db - dg;
-        else if (g == max) h = (1.0/3.0) + dr - db;
-        else if (b == max) h = (2.0/3.0) + dg - dr;
-
-        if      (h < 0) h += 1;
-        else if (h > 1) h -= 1;
+        if      (r == max) h = 60 * (g - b) / del;
+        else if (g == max) h = 60 * (b - r) / del + 120;
+        else if (b == max) h = 60 * (r - g) / del + 240;
       }
+
       HSL hsl_struct;
-      hsl_struct.h = static_cast<int>(h*360)%360;
-      hsl_struct.s = s*100;
-      hsl_struct.l = l*100;
+      hsl_struct.h = h;
+      hsl_struct.s = s * 100;
+      hsl_struct.l = l * 100;
+
       return hsl_struct;
     }
 
@@ -208,14 +224,15 @@ namespace Sass {
 
     Color* hsla_impl(double h, double s, double l, double a, Context& ctx, const string& path, Position position)
     {
-      h = static_cast<double>(((static_cast<int>(h) % 360) + 360) % 360) / 360.0;
+      h /= 360.0;
       s /= 100.0;
       l /= 100.0;
 
+      // Algorithm from the CSS3 spec: http://www.w3.org/TR/css3-color/#hsl-color.
       double m2;
       if (l <= 0.5) m2 = l*(s+1.0);
-      else m2 = l+s-l*s;
-      double m1 = l*2-m2;
+      else m2 = (l+s)-(l*s);
+      double m1 = (l*2)-m2;
       // round the results -- consider moving this into the Color constructor
       double r = (h_to_rgb(m1, m2, h+1.0/3.0) * 255.0);
       double g = (h_to_rgb(m1, m2, h) * 255.0);
@@ -342,11 +359,18 @@ namespace Sass {
                        position);
     }
 
-    Signature saturate_sig = "saturate($color, $amount)";
+    Signature saturate_sig = "saturate($color, $amount: false)";
     BUILT_IN(saturate)
     {
+      // CSS3 filter function overload: pass literal through directly
+      Number* amount = dynamic_cast<Number*>(env["$amount"]);
+      if (!amount) {
+        To_String to_string(&ctx);
+        return new (ctx.mem) String_Constant(path, position, "saturate(" + env["$color"]->perform(&to_string) + ")");
+      }
+
+      ARGR("$amount", Number, 0, 100);
       Color* rgb_color = ARG("$color", Color);
-      Number* amount = ARGR("$amount", Number, 0, 100);
       HSL hsl_color = rgb_to_hsl(rgb_color->r(),
                                  rgb_color->g(),
                                  rgb_color->b());
@@ -392,6 +416,13 @@ namespace Sass {
     Signature grayscale_sig = "grayscale($color)";
     BUILT_IN(grayscale)
     {
+      // CSS3 filter function overload: pass literal through directly
+      Number* amount = dynamic_cast<Number*>(env["$color"]);
+      if (amount) {
+        To_String to_string(&ctx);
+        return new (ctx.mem) String_Constant(path, position, "grayscale(" + amount->perform(&to_string) + ")");
+      }
+
       Color* rgb_color = ARG("$color", Color);
       HSL hsl_color = rgb_to_hsl(rgb_color->r(),
                                  rgb_color->g(),
@@ -424,6 +455,13 @@ namespace Sass {
     Signature invert_sig = "invert($color)";
     BUILT_IN(invert)
     {
+      // CSS3 filter function overload: pass literal through directly
+      Number* amount = dynamic_cast<Number*>(env["$color"]);
+      if (amount) {
+        To_String to_string(&ctx);
+        return new (ctx.mem) String_Constant(path, position, "invert(" + amount->perform(&to_string) + ")");
+      }
+
       Color* rgb_color = ARG("$color", Color);
       return new (ctx.mem) Color(path,
                                  position,
@@ -444,9 +482,15 @@ namespace Sass {
       if (ie_kwd) {
         return new (ctx.mem) String_Constant(path, position, "alpha(" + ie_kwd->value() + ")");
       }
-      else {
-        return new (ctx.mem) Number(path, position, ARG("$color", Color)->a());
+
+      // CSS3 filter function overload: pass literal through directly
+      Number* amount = dynamic_cast<Number*>(env["$color"]);
+      if (amount) {
+        To_String to_string(&ctx);
+        return new (ctx.mem) String_Constant(path, position, "opacity(" + amount->perform(&to_string) + ")");
       }
+
+      return new (ctx.mem) Number(path, position, ARG("$color", Color)->a());
     }
 
     Signature opacify_sig = "opacify($color, $amount)";
@@ -694,110 +738,166 @@ namespace Sass {
     Signature str_length_sig = "str-length($string)";
     BUILT_IN(str_length)
     {
-      String_Constant* s = ARG("$string", String_Constant);
-      string str = s->value();
-      size_t length_of_s = str.size();
-      size_t i = 0;
+      size_t len = string::npos;
+      try {
+        String_Constant* s = ARG("$string", String_Constant);
+        string str = s->value();
+        size_t length_of_s = str.size();
+        size_t i = 0;
 
-      if (s->is_quoted()) {
-        ++i;
-        --length_of_s;
+        if (s->is_quoted()) {
+          ++i;
+          --length_of_s;
+        }
+
+        len = UTF_8::code_point_count(str, i, length_of_s);
+
       }
-
-      size_t len = UTF_8::code_point_count(str, i, length_of_s);
-
+      catch (utf8::invalid_code_point) {
+        string msg("utf8::invalid_code_point");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::not_enough_room) {
+        string msg("utf8::not_enough_room");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::invalid_utf8) {
+        string msg("utf8::invalid_utf8");
+        error(msg, path, position, backtrace);
+      }
+      // return something even if we had an error (-1)
       return new (ctx.mem) Number(path, position, len);
     }
 
     Signature str_insert_sig = "str-insert($string, $insert, $index)";
     BUILT_IN(str_insert)
     {
-      String_Constant* s = ARG("$string", String_Constant);
-      string str = s->value();
-      char quotemark = s->quote_mark();
-      str = unquote(str);
-      String_Constant* i = ARG("$insert", String_Constant);
-      string ins = i->value();
-      ins = unquote(ins);
-      Number* ind = ARG("$index", Number);
-      double index = ind->value();
-      size_t len = UTF_8::code_point_count(str, 0, str.size());
+      string str;
+      try {
+        String_Constant* s = ARG("$string", String_Constant);
+        str = s->value();
+        char quotemark = s->quote_mark();
+        str = unquote(str);
+        String_Constant* i = ARG("$insert", String_Constant);
+        string ins = i->value();
+        ins = unquote(ins);
+        Number* ind = ARG("$index", Number);
+        double index = ind->value();
+        size_t len = UTF_8::code_point_count(str, 0, str.size());
 
-      if (index > 0 && index <= len) {
-        // positive and within string length
-        str.insert(UTF_8::code_point_offset_to_byte_offset(str, index-1), ins);
-      } 
-      else if (index > len) {
-        // positive and past string length
-        str += ins;
-      }
-      else if (index == 0) {
-        str = ins + str;
-      }
-      else if (std::abs(index) <= len) {
-        // negative and within string length
-        index += len + 1;
-        str.insert(UTF_8::code_point_offset_to_byte_offset(str, index), ins);
-      }
-      else {
-        // negative and past string length
-        str = ins + str;
-      }
+        if (index > 0 && index <= len) {
+          // positive and within string length
+          str.insert(UTF_8::offset_at_position(str, index - 1), ins);
+        }
+        else if (index > len) {
+          // positive and past string length
+          str += ins;
+        }
+        else if (index == 0) {
+          str = ins + str;
+        }
+        else if (std::abs(index) <= len) {
+          // negative and within string length
+          index += len + 1;
+          str.insert(UTF_8::offset_at_position(str, index), ins);
+        }
+        else {
+          // negative and past string length
+          str = ins + str;
+        }
 
-      if (quotemark) {
-        str = quote(str, quotemark);
+        if (quotemark) {
+          str = quote(str, quotemark);
+        }
       }
-
+      catch (utf8::invalid_code_point) {
+        string msg("utf8::invalid_code_point");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::not_enough_room) {
+        string msg("utf8::not_enough_room");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::invalid_utf8) {
+        string msg("utf8::invalid_utf8");
+        error(msg, path, position, backtrace);
+      }
       return new (ctx.mem) String_Constant(path, position, str);
-
     }
 
     Signature str_index_sig = "str-index($string, $substring)";
     BUILT_IN(str_index)
     {
-      String_Constant* s = ARG("$string", String_Constant);
-      String_Constant* t = ARG("$substring", String_Constant);
-      string str = s->value();
-      str = unquote(str);
-      string substr = t->value();
-      substr = unquote(substr);
+      size_t index = string::npos;
+      try {
+        String_Constant* s = ARG("$string", String_Constant);
+        String_Constant* t = ARG("$substring", String_Constant);
+        string str = s->value();
+        str = unquote(str);
+        string substr = t->value();
+        substr = unquote(substr);
 
-      size_t c_index = str.find(substr);
-      if(c_index == string::npos) {
-        return new (ctx.mem) Null(path, position);
+        size_t c_index = str.find(substr);
+        if(c_index == string::npos) {
+          return new (ctx.mem) Null(path, position);
+        }
+        index = UTF_8::code_point_count(str, 0, c_index) + 1;
       }
-      size_t index = UTF_8::code_point_count(str, 0, c_index + 1);
-
+      catch (utf8::invalid_code_point) {
+        string msg("utf8::invalid_code_point");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::not_enough_room) {
+        string msg("utf8::not_enough_room");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::invalid_utf8) {
+        string msg("utf8::invalid_utf8");
+        error(msg, path, position, backtrace);
+      }
+      // return something even if we had an error (-1)
       return new (ctx.mem) Number(path, position, index);
     }
 
     Signature str_slice_sig = "str-slice($string, $start-at, $end-at:-1)";
     BUILT_IN(str_slice)
     {
-      String_Constant* s = ARG("$string", String_Constant);
-      Number* n = ARG("$start-at", Number);
-      Number* m = ARG("$end-at", Number);
-
-      string str = s->value();
-      char quotemark = s->quote_mark();
-      str = unquote(str);
-
-      // normalize into 0-based indices
-      size_t start = UTF_8::code_point_offset_to_byte_offset(str, UTF_8::normalize_index(n->value(), UTF_8::code_point_count(str)));
-      size_t end = UTF_8::code_point_offset_to_byte_offset(str, UTF_8::normalize_index(m->value(), UTF_8::code_point_count(str)));
-
       string newstr;
-      if(start - end == 0) {
-        newstr = str.substr(start, end - start);
-      } else {
-        newstr = str.substr(start, end - start + UTF_8::length_of_code_point_at(str, end));
-      }
-      if(quotemark) {
-        newstr = quote(newstr, quotemark);
-      }
+      try {
+        String_Constant* s = ARG("$string", String_Constant);
+        Number* n = ARG("$start-at", Number);
+        Number* m = ARG("$end-at", Number);
 
+        string str = s->value();
+        char quotemark = s->quote_mark();
+        str = unquote(str);
+
+        // normalize into 0-based indices
+        size_t start = UTF_8::offset_at_position(str, UTF_8::normalize_index(n->value(), UTF_8::code_point_count(str)));
+        size_t end = UTF_8::offset_at_position(str, UTF_8::normalize_index(m->value(), UTF_8::code_point_count(str)));
+
+        if(start - end == 0) {
+          newstr = str.substr(start, end - start);
+        } else {
+          newstr = str.substr(start, end - start + UTF_8::code_point_size_at_offset(str, end));
+        }
+        if(quotemark) {
+          newstr = quote(newstr, quotemark);
+        }
+      }
+      catch (utf8::invalid_code_point) {
+        string msg("utf8::invalid_code_point");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::not_enough_room) {
+        string msg("utf8::not_enough_room");
+        error(msg, path, position, backtrace);
+      }
+      catch (utf8::invalid_utf8) {
+        string msg("utf8::invalid_utf8");
+        error(msg, path, position, backtrace);
+      }
       return new (ctx.mem) String_Constant(path, position, newstr);
-
     }
 
     Signature to_upper_case_sig = "to-upper-case($string)";
@@ -807,7 +907,9 @@ namespace Sass {
       string str = s->value();
 
       for (size_t i = 0, L = str.length(); i < L; ++i) {
-        str[i] = std::toupper(str[i]);
+        if (isascii(str[i])) {
+          str[i] = std::toupper(str[i]);
+        }
       }
 
       return new (ctx.mem) String_Constant(path, position, str);
@@ -820,7 +922,9 @@ namespace Sass {
       string str = s->value();
 
       for (size_t i = 0, L = str.length(); i < L; ++i) {
-        str[i] = std::tolower(str[i]);
+        if (isascii(str[i])) {
+          str[i] = std::tolower(str[i]);
+        }
       }
 
       return new (ctx.mem) String_Constant(path, position, str);
@@ -917,6 +1021,14 @@ namespace Sass {
     Signature length_sig = "length($list)";
     BUILT_IN(length)
     {
+      Expression* v = ARG("$list", Expression);
+      if (v->concrete_type() == Expression::MAP) {
+        Map* map = dynamic_cast<Map*>(env["$list"]);
+        return new (ctx.mem) Number(path,
+                                    position,
+                                    map ? map->length() : 1);
+      }
+
       List* list = dynamic_cast<List*>(env["$list"]);
       return new (ctx.mem) Number(path,
                                   position,
@@ -935,7 +1047,7 @@ namespace Sass {
         *l << ARG("$list", Expression);
       }
       if (l->empty()) error("argument `$list` of `" + string(sig) + "` must not be empty", path, position);
-      size_t index = std::floor(n->value() < 0 ? l->length() + n->value() : n->value() - 1);
+      double index = std::floor(n->value() < 0 ? l->length() + n->value() : n->value() - 1);
       if (index < 0 || index > l->length() - 1) error("index out of bounds for `" + string(sig) + "`", path, position);
       return l->value_at_index(index);
     }
@@ -952,7 +1064,7 @@ namespace Sass {
       for (size_t i = 0, L = l->length(); i < L; ++i) {
         if (eq(l->value_at_index(i), v, ctx)) return new (ctx.mem) Number(path, position, i+1);
       }
-      return new (ctx.mem) Boolean(path, position, false);
+      return new (ctx.mem) Null(path, position);
     }
 
     Signature join_sig = "join($list1, $list2, $separator: auto)";
@@ -1056,6 +1168,117 @@ namespace Sass {
       return result;
     }
 
+    Signature list_separator_sig = "list_separator($list)";
+    BUILT_IN(list_separator)
+    {
+      List* l = dynamic_cast<List*>(env["$list"]);
+      if (!l) {
+        l = new (ctx.mem) List(path, position, 1);
+        *l << ARG("$list", Expression);
+      }
+      return new (ctx.mem) String_Constant(path,
+                                           position,
+                                           l->separator() == List::COMMA ? "comma" : "space");
+    }
+
+    /////////////////
+    // MAP FUNCTIONS
+    /////////////////
+
+    Signature map_get_sig = "map-get($map, $key)";
+    BUILT_IN(map_get)
+    {
+      Map* m = ARGM("$map", Map, ctx);
+      Expression* v = ARG("$key", Expression);
+      if (!m || m->empty()) return new (ctx.mem) Null(path, position);
+      for (size_t i = 0, L = m->length(); i < L; ++i) {
+        if (eq((*m)[i]->key(), v, ctx)) return m->value_at_index(i);
+      }
+      return new (ctx.mem) Null(path, position);
+    }
+
+    Signature map_has_key_sig = "map-has-key($map, $key)";
+    BUILT_IN(map_has_key)
+    {
+      Map* m = ARGM("$map", Map, ctx);
+      Expression* v = ARG("$key", Expression);
+      if (!m || m->empty()) return new (ctx.mem) Boolean(path, position, false);
+      for (size_t i = 0, L = m->length(); i < L; ++i) {
+        if (eq((*m)[i]->key(), v, ctx)) return new (ctx.mem) Boolean(path, position, true);
+      }
+      return new (ctx.mem) Boolean(path, position, false);
+    }
+
+    Signature map_keys_sig = "map-keys($map)";
+    BUILT_IN(map_keys)
+    {
+      Map* m = ARGM("$map", Map, ctx);
+      List* result = new (ctx.mem) List(path, position, 1, List::COMMA);
+      if (!m || m->empty()) return result;
+      for (size_t i = 0, L = m->length(); i < L; ++i) {
+        *result << (*m)[i]->key();
+      }
+      return result;
+    }
+
+    Signature map_values_sig = "map-values($map)";
+    BUILT_IN(map_values)
+    {
+      Map* m = ARGM("$map", Map, ctx);
+      List* result = new (ctx.mem) List(path, position, 1, List::COMMA);
+      if (!m || m->empty()) return result;
+      for (size_t i = 0, L = m->length(); i < L; ++i) {
+        *result << (*m)[i]->value();
+      }
+      return result;
+    }
+
+    Signature map_merge_sig = "map-merge($map1, $map2)";
+    BUILT_IN(map_merge)
+    {
+      Map* m1 = ARGM("$map1", Map, ctx);
+      Map* m2 = ARGM("$map2", Map, ctx);
+
+      size_t len = m1->length() + m2->length();
+      Map* result = new (ctx.mem) Map(path, position, len);
+      *result += m1;
+      *result += m2;
+      return result;
+    }
+
+    Signature map_remove_sig = "map-remove($map, $keys...)";
+    BUILT_IN(map_remove)
+    {
+      bool remove;
+      Map* m = ARGM("$map", Map, ctx);
+      List* arglist = ARG("$keys", List);
+      Map* result = new (ctx.mem) Map(path, position, 1);
+      for (size_t i = 0, L = m->length(); i < L; ++i) {
+        remove = false;
+        for (size_t j = 0, K = arglist->length(); j < K && !remove; ++j) {
+          remove = eq((*m)[i]->key(), arglist->value_at_index(j), ctx);
+        }
+        if (!remove) *result << (*m)[i];
+      }
+      return result;
+    }
+
+    Signature keywords_sig = "keywords($args)";
+    BUILT_IN(keywords)
+    {
+      List* arglist = new (ctx.mem) List(*ARG("$args", List));
+      Map* result = new (ctx.mem) Map(path, position, 1);
+      for (size_t i = 0, L = arglist->length(); i < L; ++i) {
+        string name = string(((Argument*)(*arglist)[i])->name());
+        string sanitized_name = string(name, 1);
+        *result << new (ctx.mem) KeyValuePair(path,
+                                              position,
+                                              new (ctx.mem) String_Constant(path, position, sanitized_name),
+                                              ((Argument*)(*arglist)[i])->value());
+      }
+      return result;
+    }
+
     //////////////////////////
     // INTROSPECTION FUNCTIONS
     //////////////////////////
@@ -1095,6 +1318,75 @@ namespace Sass {
       return new (ctx.mem) Boolean(path, position, n1->unit() == tmp_n2.unit());
     }
 
+    Signature variable_exists_sig = "variable-exists($name)";
+    BUILT_IN(variable_exists)
+    {
+      string s = unquote(ARG("$name", String_Constant)->value());
+
+      if(d_env.has("$"+s)) {
+        return new (ctx.mem) Boolean(path, position, true);
+      }
+      else {
+        return new (ctx.mem) Boolean(path, position, false);
+      }
+    }
+
+    Signature global_variable_exists_sig = "global-variable-exists($name)";
+    BUILT_IN(global_variable_exists)
+    {
+      string s = unquote(ARG("$name", String_Constant)->value());
+
+      if(d_env.global_frame_has("$"+s)) {
+        return new (ctx.mem) Boolean(path, position, true);
+      }
+      else {
+        return new (ctx.mem) Boolean(path, position, false);
+      }
+    }
+
+    Signature function_exists_sig = "function-exists($name)";
+    BUILT_IN(function_exists)
+    {
+      string s = unquote(ARG("$name", String_Constant)->value());
+
+      if(d_env.global_frame_has(s+"[f]")) {
+        return new (ctx.mem) Boolean(path, position, true);
+      }
+      else {
+        return new (ctx.mem) Boolean(path, position, false);
+      }
+    }
+
+    Signature mixin_exists_sig = "mixin-exists($name)";
+    BUILT_IN(mixin_exists)
+    {
+      string s = unquote(ARG("$name", String_Constant)->value());
+
+      if(d_env.global_frame_has(s+"[m]")) {
+        return new (ctx.mem) Boolean(path, position, true);
+      }
+      else {
+        return new (ctx.mem) Boolean(path, position, false);
+      }
+    }
+
+    Signature call_sig = "call($name, $args...)";
+    BUILT_IN(call)
+    {
+      string name = unquote(ARG("$name", String_Constant)->value());
+      List* arglist = new (ctx.mem) List(*ARG("$args", List));
+
+      Arguments* args = new (ctx.mem) Arguments(path, position);
+      for (size_t i = 0, L = arglist->length(); i < L; ++i) {
+        Argument* arg = new (ctx.mem) Argument(path, position, arglist->value_at_index(i));
+        *args << arg;
+      }
+      Function_Call* func = new (ctx.mem) Function_Call(path, position, name, args);
+      Eval eval(ctx, &d_env, backtrace);
+      return func->perform(&eval);
+
+    }
+
     ////////////////////
     // BOOLEAN FUNCTIONS
     ////////////////////
@@ -1104,8 +1396,19 @@ namespace Sass {
     { return new (ctx.mem) Boolean(path, position, ARG("$value", Expression)->is_false()); }
 
     Signature if_sig = "if($condition, $if-true, $if-false)";
+    // BUILT_IN(sass_if)
+    // { return ARG("$condition", Expression)->is_false() ? ARG("$if-false", Expression) : ARG("$if-true", Expression); }
     BUILT_IN(sass_if)
-    { return ARG("$condition", Expression)->is_false() ? ARG("$if-false", Expression) : ARG("$if-true", Expression); }
+    {
+      Eval eval(ctx, &d_env, backtrace);
+      bool is_true = !ARG("$condition", Expression)->perform(&eval)->is_false();
+      if (is_true) {
+        return ARG("$if-true", Expression)->perform(&eval);
+      }
+      else {
+        return ARG("$if-false", Expression)->perform(&eval);
+      }
+    }
 
     ////////////////
     // URL FUNCTIONS

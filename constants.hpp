@@ -27,6 +27,7 @@ namespace Sass {
     extern const char while_kwd[];
     extern const char warn_kwd[];
     extern const char default_kwd[];
+    extern const char global_kwd[];
     extern const char null_kwd[];
     extern const char optional_kwd[];
 
@@ -115,6 +116,7 @@ namespace Sass {
     extern const char bool_name[];
     extern const char color_name[];
     extern const char list_name[];
+    extern const char map_name[];
     extern const char arglist_name[];
 
     // byte order marks

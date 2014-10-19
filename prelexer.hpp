@@ -320,6 +320,10 @@ namespace Sass {
 
     const char* backslash_something(const char* src);
 
+    const char* map_key(const char* src);
+
+    // Match CSS css variables.
+    const char* custom_property_name(const char* src);
     // Match a CSS identifier.
     const char* identifier(const char* src);
     // Match selector names.
@@ -395,8 +399,11 @@ namespace Sass {
     const char* url(const char* src);
     // Match CSS "!important" keyword.
     const char* important(const char* src);
+    // Match CSS "!optional" keyword.
+    const char* optional(const char* src);
     // Match Sass "!default" keyword.
     const char* default_flag(const char* src);
+    const char* global_flag(const char* src);
     // Match CSS pseudo-class/element prefixes
     const char* pseudo_prefix(const char* src);
     // Match CSS function call openers.

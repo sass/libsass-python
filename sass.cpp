@@ -45,10 +45,15 @@ extern "C" {
                                                c_ctx->output_style)
 
                          .source_comments     (c_ctx->source_comments)
-                         .source_maps         (c_ctx->source_maps)
+                         .source_map_file     (c_ctx->source_map_file)
+                         .omit_source_map_url (c_ctx->omit_source_map_url)
 
                          .image_path          (c_ctx->image_path ?
                                                c_ctx->image_path :
+                                               "")
+
+                         .output_path         (c_ctx->output_path ?
+                                               c_ctx->output_path :
                                                "")
 
                          .include_paths_c_str (c_ctx->include_paths_string)
@@ -134,6 +139,15 @@ extern "C" {
     v.list.length = len;
     v.list.separator = sep;
     v.list.values = (union Sass_Value*) malloc(sizeof(union Sass_Value)*len);
+    return v;
+  }
+
+  union Sass_Value make_sass_map(size_t len)
+  {
+    union Sass_Value v;
+    v.map.tag = SASS_MAP;
+    v.map.length = len;
+    v.map.pairs = (struct Sass_KeyValuePair*) malloc(sizeof(struct Sass_KeyValuePair)*len);
     return v;
   }
 
