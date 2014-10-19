@@ -18,7 +18,7 @@ import sys
 
 from six import string_types, text_type
 
-from _sass import (OUTPUT_STYLES, SOURCE_COMMENTS, compile_dirname,
+from _sass import (OUTPUT_STYLES, compile_dirname,
                    compile_filename, compile_string)
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
@@ -34,7 +34,9 @@ OUTPUT_STYLES = OUTPUT_STYLES
 #: Keys are mode names, and values are corresponding flag integers.
 #:
 #: .. versionadded:: 0.4.0
-SOURCE_COMMENTS = SOURCE_COMMENTS
+#:
+#: .. deprecated:: 0.6.0
+SOURCE_COMMENTS = {'none': 0, 'line_numbers': 1, 'default': 1, 'map': 2}
 
 #: (:class:`collections.Set`) The set of keywords :func:`compile()` can take.
 MODES = set(['string', 'filename', 'dirname'])

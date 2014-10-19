@@ -6,8 +6,20 @@ Version 0.6.0
 
 To be released.
 
-- Added missing `partial import`_ support.  [:issue:`27` by item4]
+- Follow up the libsass upstream: :commit:`3.0` --- See the `release note`__
+  of Libsass.
 
+  - Decent extends support
+  - Basic Sass Maps Support 
+  - Better UTF-8 Support
+  - ``call()`` function
+  - Better Windows Support
+  - Spec Enhancements
+
+- Added missing `partial import`_ support.  [:issue:`27` by item4]
+- :const:`~sass.SOURCE_COMMENTS` became deprecated.
+
+__ https://github.com/sass/libsass/releases/tag/3.0
 .. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
 
 

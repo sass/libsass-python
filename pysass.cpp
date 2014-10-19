@@ -18,24 +18,20 @@
 #define PySass_Bytes_AS_STRING(o) PyString_AS_STRING(o)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct PySass_Pair {
     char *label;
     int value;
 };
 
 static struct PySass_Pair PySass_output_style_enum[] = {
-    {"nested", SASS_STYLE_NESTED},
-    {"expanded", SASS_STYLE_EXPANDED},
-    {"compact", SASS_STYLE_COMPACT},
-    {"compressed", SASS_STYLE_COMPRESSED},
-    {NULL}
-};
-
-static struct PySass_Pair PySass_source_comments_enum[] = {
-    {"none", SASS_SOURCE_COMMENTS_NONE},
-    {"line_numbers", SASS_SOURCE_COMMENTS_DEFAULT},  /* alias of "default" */
-    {"default", SASS_SOURCE_COMMENTS_DEFAULT},
-    {"map", SASS_SOURCE_COMMENTS_MAP},
+    {(char *) "nested", SASS_STYLE_NESTED},
+    {(char *) "expanded", SASS_STYLE_EXPANDED},
+    {(char *) "compact", SASS_STYLE_COMPACT},
+    {(char *) "compressed", SASS_STYLE_COMPRESSED},
     {NULL}
 };
 
@@ -87,17 +83,16 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
 
     context = sass_new_file_context();
     context->input_path = filename;
-    if (source_comments == SASS_SOURCE_COMMENTS_MAP &&
-        PySass_Bytes_Check(source_map_filename)) {
+    if (source_comments && PySass_Bytes_Check(source_map_filename)) {
         size_t source_map_file_len = PySass_Bytes_GET_SIZE(source_map_filename);
         if (source_map_file_len) {
-            char *source_map_file = malloc(source_map_file_len + 1);
+            char *source_map_file = (char *) malloc(source_map_file_len + 1);
             strncpy(
                 source_map_file, 
                 PySass_Bytes_AS_STRING(source_map_filename),
                 source_map_file_len + 1
             );
-            context->source_map_file = source_map_file;
+            context->options.source_map_file = source_map_file;
         }
     }
     context->options.output_style = output_style;
@@ -178,13 +173,10 @@ void PySass_make_enum_dict(PyObject *enum_dict, struct PySass_Pair *pairs) {
 }
 
 void PySass_init_module(PyObject *module) {
-    PyObject *output_styles, *source_comments;
+    PyObject *output_styles;
     output_styles = PyDict_New();
     PySass_make_enum_dict(output_styles, PySass_output_style_enum);
     PyModule_AddObject(module, "OUTPUT_STYLES", output_styles);
-    source_comments = PyDict_New();
-    PySass_make_enum_dict(source_comments, PySass_source_comments_enum);
-    PyModule_AddObject(module, "SOURCE_COMMENTS", source_comments);
 }
 
 #if PY_MAJOR_VERSION >= 3
@@ -219,4 +211,8 @@ init_sass()
     }
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

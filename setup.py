@@ -40,16 +40,9 @@ libsass_headers = [
     'sass_interface.h', 'sass.h', 'win32/unistd.h'
 ]
 libsass_headers.extend(glob.glob('*.hpp'))
-include_dirs = ['sass2scss']
-sources = ['pysass.c']
+include_dirs = ['utf8']
+sources = ['pysass.cpp']
 sources.extend(libsass_sources)
-
-if not os.path.isdir('sass2scss') and os.path.isdir('.git'):
-    print('Submodules seem not initialized yet.'
-          'You can initialize it by the following command:',
-          file=sys.stderr)
-    print('\tgit submodule update --init', file=sys.stderr)
-    raise SystemExit(1)
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -84,13 +77,17 @@ if sys.platform == 'win32':
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
 else:
-    flags = ['-fPIC', '-Wall', '-Wno-parentheses']
+    flags = ['-fPIC', '-xc++', '-std=c++11', '-Wall', '-Wno-parentheses']
     platform.mac_ver()
-    if platform.system() == 'Darwin' and \
-       tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
-        flags.append(
-            '-Wno-error=unused-command-line-argument-hard-error-in-future'
-        )
+    if platform.system() == 'Darwin':
+        flags.extend([
+            '-stdlib=libc++',
+            '-mmacosx-version-min=10.7',
+        ])
+        if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+            flags.append(
+                '-Wno-error=unused-command-line-argument-hard-error-in-future',
+            )
     link_flags = ['-fPIC', '-lstdc++']
 
 sass_extension = Extension(
@@ -99,6 +96,7 @@ sass_extension = Extension(
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,
+    language='c++',
 )
 
 
