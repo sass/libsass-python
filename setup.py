@@ -20,6 +20,7 @@ except ImportError:
     use_setuptools()
     from setuptools import Extension, setup
 
+LIBSASS_DIR = 'libsass'
 
 MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
     (?: ^ | \n ) (?: libsass_la_ )? SOURCES [ \t]* = [ \t]*
@@ -29,7 +30,9 @@ MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
 
 
 libsass_sources = set()
-for makefilename in 'Makefile', 'Makefile.am':
+for makefilename in [
+        os.path.join(LIBSASS_DIR, 'Makefile'),
+        os.path.join(LIBSASS_DIR, 'Makefile.am')]:
     with open(makefilename) as makefile:
         sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
         sources_list = sources_match.group('sources').replace('\\\n', ' ')
@@ -37,12 +40,14 @@ for makefilename in 'Makefile', 'Makefile.am':
 libsass_sources = list(libsass_sources)
 
 libsass_headers = [
-    'sass_interface.h', 'sass.h', 'win32/unistd.h'
+    os.path.join(LIBSASS_DIR, 'sass_interface.h'),
+    os.path.join(LIBSASS_DIR, 'sass.h'),
+    os.path.join(LIBSASS_DIR, 'win32', 'unistd.h'),
 ]
 libsass_headers.extend(glob.glob('*.hpp'))
 include_dirs = ['utf8']
 sources = ['pysass.cpp']
-sources.extend(libsass_sources)
+sources.extend([os.path.join(LIBSASS_DIR, s) for s in libsass_sources])
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -93,6 +98,8 @@ else:
 sass_extension = Extension(
     '_sass',
     sources,
+    library_dirs=['./libsass'],
+    include_dirs=['.', 'libsass'],
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,
