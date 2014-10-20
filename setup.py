@@ -82,7 +82,7 @@ if sys.platform == 'win32':
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
 else:
-    flags = ['-fPIC', '-xc++', '-std=c++11', '-Wall', '-Wno-parentheses']
+    flags = ['-fPIC', '-std=c++11', '-Wall', '-Wno-parentheses']
     platform.mac_ver()
     if platform.system() == 'Darwin':
         flags.extend([
