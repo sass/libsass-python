@@ -9,7 +9,12 @@ python:
 - 2.7
 - 3.3
 - 3.4
+before_install:
+- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+- sudo apt-get update -qq
 install:
+- sudo apt-get install -qq g++-4.8 libstdc++-4.8-dev
+- export CC="gcc-4.8" CXX="g++-4.8"
 - pip install -e . "Werkzeug >= 0.9" coverage coveralls
 script:
 - coverage run --source sass,sassc,sassutils setup.py test
