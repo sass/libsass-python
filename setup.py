@@ -64,16 +64,16 @@ if sys.platform == 'win32':
         int(get_build_version() * 10) % 10
     )
     try:
-        os.environ[vscomntools_env] = os.environ['VS110COMNTOOLS']
+        os.environ[vscomntools_env] = os.environ['VS120COMNTOOLS']
     except KeyError:
-        distutils.log.warn('You probably need Visual Studio 2012 (11.0) '
+        distutils.log.warn('You probably need Visual Studio 2013 (12.0) '
                            'or higher')
     from distutils import msvccompiler, msvc9compiler
-    if msvccompiler.get_build_version() < 11.0:
-        msvccompiler.get_build_version = lambda: 11.0
-    if get_build_version() < 11.0:
-        msvc9compiler.get_build_version = lambda: 11.0
-        msvc9compiler.VERSION = 11.0
+    if msvccompiler.get_build_version() < 12.0:
+        msvccompiler.get_build_version = lambda: 12.0
+    if get_build_version() < 12.0:
+        msvc9compiler.get_build_version = lambda: 12.0
+        msvc9compiler.VERSION = 12.0
     # Workaround http://bugs.python.org/issue4431 under Python <= 2.6
     if sys.version_info < (2, 7):
         def spawn(self, cmd):
