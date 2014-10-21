@@ -1,9 +1,9 @@
-include *.h
-include *.hpp
-include *.cpp
-include Makefile
-include Makefile.am
-include utf8/*.h
+include libsass/*.h
+include libsass/*.hpp
+include libsass/*.cpp
+include libsass/Makefile
+include libsass/Makefile.am
+include libsass/utf8/*.h
 include win32/*.h
 include test/*.scss
 include README.rst

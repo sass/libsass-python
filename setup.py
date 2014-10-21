@@ -29,6 +29,13 @@ MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
 ''', re.VERBOSE)
 
 
+if not os.path.isdir(LIBSASS_DIR) and os.path.isdir('.git'):
+    print(file=sys.stderr)
+    print('You seem to miss initializing submodules; '
+          'try the following command', file=sys.stderr)
+    print('  git submodule update --init', file=sys.stderr)
+    print(file=sys.stderr)
+
 libsass_sources = set()
 for makefilename in [
         os.path.join(LIBSASS_DIR, 'Makefile'),
