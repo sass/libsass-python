@@ -21,6 +21,24 @@ from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
 
+if os.sep != '/' and os.altsep:
+    def normalize_path(path):
+        path = os.path.abspath(os.path.normpath(path))
+        return path.replace(os.sep, os.altsep)
+
+    def normalize_source_map_path(path):
+        """To workaround strange path separators made by libsass ---
+        which seems a bug of libsass on win32.
+
+        """
+        return path.replace(os.altsep, '//')
+else:
+    def normalize_path(path):
+        return path
+
+    normalize_source_map_path = normalize_path
+
+
 A_EXPECTED_CSS = '''\
 body {
   background-color: green; }
@@ -41,7 +59,7 @@ body {
 A_EXPECTED_MAP = {
     'version': 3,
     'file': 'test/a.css',
-    'sources': ['test/a.scss'],
+    'sources': [normalize_source_map_path('test/a.scss')],
     'names': [],
     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,OAAO'
 }
@@ -233,7 +251,7 @@ a {
         self.assertEqual(
             A_EXPECTED_CSS_WITH_MAP.replace(
                 'SOURCE',
-                os.path.abspath(filename)
+                normalize_path(filename)
             ),
             actual
         )
@@ -342,13 +360,7 @@ class ManifestTestCase(unittest.TestCase):
     def test_build_one(self):
         d = tempfile.mkdtemp()
         src_path = os.path.join(d, 'test')
-        if os.sep != '/' and os.altsep:
-            normalize = lambda p: os.path.abspath(
-                os.path.normpath(os.path.join(src_path, p))
-            ).replace(os.sep, os.altsep)
-        else:
-            normalize = lambda p: p
-        test_source_path = lambda *path: normalize(
+        test_source_path = lambda *path: normalize_path(
             os.path.join(d, 'test', *path)
         )
         replace_source_path = lambda s, name: s.replace(
@@ -372,7 +384,7 @@ class ManifestTestCase(unittest.TestCase):
                 {
                     'version': 3,
                     'file': '../test/b.css',
-                    'sources': [normalize('../test/b.scss')],
+                    'sources': [normalize_source_map_path('../test/b.scss')],
                     'names': [],
                     'mappings': ';AAAA,EAAE;EAEE,WAAW'
                 },
@@ -389,7 +401,7 @@ class ManifestTestCase(unittest.TestCase):
                 {
                     'version': 3,
                     'file': '../test/d.css',
-                    'sources': [normalize('../test/d.scss')],
+                    'sources': [normalize_source_map_path('../test/d.scss')],
                     'names': [],
                     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,MAAM'
                 },
@@ -431,7 +443,7 @@ class WsgiTestCase(unittest.TestCase):
             self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
-            src_path = os.path.abspath(os.path.join(src_dir, 'a.scss'))
+            src_path = normalize_path(os.path.join(src_dir, 'a.scss'))
             self.assert_bytes_equal(
                 b(A_EXPECTED_CSS_WITH_MAP.replace('SOURCE', src_path)),
                 r.data
@@ -538,7 +550,9 @@ class SasscTestCase(unittest.TestCase):
             self.assertEqual('', self.out.getvalue())
             with open(out_filename) as f:
                 self.assertEqual(
-                    A_EXPECTED_CSS_WITH_MAP.replace('SOURCE', src_filename),
+                    A_EXPECTED_CSS_WITH_MAP.replace(
+                        'SOURCE', normalize_path(src_filename)
+                    ),
                     f.read().strip()
                 )
             with open(out_filename + '.map') as f:
