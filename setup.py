@@ -106,8 +106,8 @@ else:
 sass_extension = Extension(
     '_sass',
     sources,
-    library_dirs=['./libsass'],
-    include_dirs=['.', 'libsass'],
+    library_dirs=[os.path.join('.', LIBSASS_DIR)],
+    include_dirs=[os.path.join('.', LIBSASS_DIR)],
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,
@@ -185,7 +185,9 @@ setup(
     py_modules=['sass', 'sassc', 'sasstests'],
     package_data={
         '': [
-            'README.rst', 'Makefile', 'Makefile.am',
+            'README.rst',
+            os.path.join(LIBSASS_DIR, 'Makefile'),
+            os.path.join(LIBSASS_DIR, 'Makefile.am'),
             'win32/*.h', 'test/*.sass'
         ]
     },
