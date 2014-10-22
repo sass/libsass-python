@@ -251,7 +251,7 @@ a {
         self.assertEqual(
             A_EXPECTED_CSS_WITH_MAP.replace(
                 'SOURCE',
-                normalize_path(filename)
+                normalize_path(os.path.abspath(filename))
             ),
             actual
         )
