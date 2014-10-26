@@ -305,40 +305,58 @@ a {
 
 class BuilderTestCase(unittest.TestCase):
 
+    def setUp(self):
+        self.temp_path = tempfile.mkdtemp()
+        self.sass_path = os.path.join(self.temp_path, 'sass')
+        self.css_path = os.path.join(self.temp_path, 'css')
+        shutil.copytree('test', self.sass_path)
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_path)
+
     def test_builder_build_directory(self):
-        temp_path = tempfile.mkdtemp()
-        sass_path = os.path.join(temp_path, 'sass')
-        css_path = os.path.join(temp_path, 'css')
-        shutil.copytree('test', sass_path)
-        result_files = build_directory(sass_path, css_path)
-        assert len(result_files) == 6
-        assert result_files['a.scss'] == 'a.scss.css'
+        css_path = self.css_path
+        result_files = build_directory(self.sass_path, css_path)
+        self.assertEqual(6, len(result_files))
+        self.assertEqual('a.scss.css', result_files['a.scss'])
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
-        assert css == A_EXPECTED_CSS
-        assert result_files['b.scss'] == 'b.scss.css'
+        self.assertEqual(A_EXPECTED_CSS, css)
+        self.assertEqual('b.scss.css', result_files['b.scss'])
         with open(os.path.join(css_path, 'b.scss.css'), **utf8_if_py3) as f:
             css = f.read()
-        assert css == B_EXPECTED_CSS
-        assert result_files['c.scss'] == 'c.scss.css'
+        self.assertEqual(B_EXPECTED_CSS, css)
+        self.assertEqual('c.scss.css', result_files['c.scss'])
         with open(os.path.join(css_path, 'c.scss.css'), **utf8_if_py3) as f:
             css = f.read()
-        assert css == C_EXPECTED_CSS
-        assert result_files['d.scss'] == 'd.scss.css'
+        self.assertEqual(C_EXPECTED_CSS, css)
+        self.assertEqual('d.scss.css', result_files['d.scss'])
         with open(os.path.join(css_path, 'd.scss.css'), **utf8_if_py3) as f:
             css = f.read()
         self.assertEqual(D_EXPECTED_CSS, css)
-        assert result_files['e.scss'] == 'e.scss.css'
+        self.assertEqual('e.scss.css', result_files['e.scss'])
         with open(os.path.join(css_path, 'e.scss.css'), **utf8_if_py3) as f:
             css = f.read()
-        assert css == E_EXPECTED_CSS
-        assert (result_files[os.path.join('subdir', 'recur.scss')] ==
-                os.path.join('subdir', 'recur.scss.css'))
+        self.assertEqual(E_EXPECTED_CSS, css)
+        self.assertEqual(
+            os.path.join('subdir', 'recur.scss.css'),
+            result_files[os.path.join('subdir', 'recur.scss')]
+        )
         with open(os.path.join(css_path, 'subdir', 'recur.scss.css'),
                   **utf8_if_py3) as f:
             css = f.read()
         self.assertEqual(SUBDIR_RECUR_EXPECTED_CSS, css)
-        shutil.rmtree(temp_path)
+
+    def test_output_style(self):
+        css_path = self.css_path
+        result_files = build_directory(self.sass_path, css_path,
+                                       output_style='compressed')
+        self.assertEqual(6, len(result_files))
+        self.assertEqual('a.scss.css', result_files['a.scss'])
+        with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
+            css = f.read()
+        self.assertEqual('body{background-color:green}body a{color:blue}',
+                         css)
 
 
 class ManifestTestCase(unittest.TestCase):

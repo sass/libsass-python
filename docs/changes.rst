@@ -22,6 +22,8 @@ To be released.
   :const:`bool` instead of :const:`str`.  String values like ``'none'``,
   ``'line_numbers'``, and ``'map'`` become deprecated, and will be obsolete
   soon.
+- :func:`~sassutils.builder.build_directory()` function has a new optional
+  parameter ``output_style``.
 
 __ https://github.com/sass/libsass/releases/tag/3.0
 .. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
