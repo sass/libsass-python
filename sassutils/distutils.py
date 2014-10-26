@@ -1,5 +1,7 @@
-""":mod:`sassutils.distutils` --- :mod:`setuptools`/:mod:`distutils` integration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""":mod:`sassutils.distutils` --- :mod:`setuptools`/:mod:`distutils` integrat\
+ion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\
+~~~
 
 This module provides extensions (and some magical monkey-patches, sorry)
 of the standard :mod:`distutils` and :mod:`setuptools` (now it's named
@@ -50,7 +52,6 @@ The option should be a mapping of package names to pairs of paths, e.g.::
 """
 from __future__ import absolute_import
 
-import collections
 import distutils.errors
 import distutils.log
 import distutils.util

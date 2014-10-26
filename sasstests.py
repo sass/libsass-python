@@ -2,11 +2,14 @@
 from __future__ import with_statement
 
 import collections
+import glob
 import json
 import os
 import os.path
 import re
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 import warnings
@@ -462,6 +465,43 @@ class WsgiTestCase(unittest.TestCase):
                          *args)
 
 
+class DistutilsTestCase(unittest.TestCase):
+
+    def tearDown(self):
+        for filename in self.list_built_css():
+            os.remove(filename)
+
+    def css_path(self, *args):
+        return os.path.join(
+            os.path.dirname(__file__),
+            'testpkg', 'testpkg', 'static', 'css',
+            *args
+        )
+
+    def list_built_css(self):
+        return glob.glob(self.css_path('*.scss.css'))
+
+    def build_sass(self, *args):
+        testpkg_path = os.path.join(os.path.dirname(__file__), 'testpkg')
+        return subprocess.call(
+            [sys.executable, 'setup.py', 'build_sass'] + list(args),
+            cwd=os.path.abspath(testpkg_path)
+        )
+
+    def test_build_sass(self):
+        rv = self.build_sass()
+        self.assertEqual(0, rv)
+        self.assertEqual(
+            ['a.scss.css'],
+            list(map(os.path.basename, self.list_built_css()))
+        )
+        with open(self.css_path('a.scss.css')) as f:
+            self.assertEqual(
+                'p a {\n  color: red; }\np b {\n  color: blue; }\n',
+                f.read()
+            )
+
+
 class SasscTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -570,6 +610,7 @@ test_cases = [
     BuilderTestCase,
     ManifestTestCase,
     WsgiTestCase,
+    DistutilsTestCase,
     SasscTestCase
 ]
 loader = unittest.defaultTestLoader

@@ -1,6 +1,9 @@
 build/
 dist/
 docs/_build
+testpkg/build/
+testpkg/dist/
+testpkg/testpkg/static/css/*.scss.css
 ._.DS_Store
 .coverage
 .DS_Store
