@@ -135,7 +135,7 @@ Add these arguments to :file:`setup.py` script::
 
     setup(
         # ...,
-        setup_requires=['libsass >= 0.2.0'],
+        setup_requires=['libsass >= 0.6.0'],
         sass_manifests={
             'myapp': ('static/sass', 'static/css', '/static/css')
         }

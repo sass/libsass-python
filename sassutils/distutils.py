@@ -12,7 +12,7 @@ option of the :file:`setup.py` script::
 
     setup(
         # ...,
-        setup_requires=['libsass >= 0.2.0']
+        setup_requires=['libsass >= 0.6.0']
     )
 
 It will adds :class:`build_sass` command to the :file:`setup.py` script:
@@ -37,7 +37,7 @@ store compiled CSS files, specify ``sass_manifests`` option::
         sass_manifests={
             'your.webapp': ('static/sass', 'static/css')
         },
-        setup_requires=['libsass >= 0.2.0']
+        setup_requires=['libsass >= 0.6.0']
     )
 
 The option should be a mapping of package names to pairs of paths, e.g.::
