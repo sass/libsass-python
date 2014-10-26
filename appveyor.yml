@@ -27,16 +27,17 @@ install:
 - "git -C %APPVEYOR_BUILD_FOLDER% submodule update --init"
 - ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/ogrisel/python-appveyor-demo/master/appveyor/install.ps1', 'C:/python-install.ps1')
 - "powershell C:/python-install.ps1"
+- ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
+- "%PYTHON%\\python.exe C:/get-pip.py"
+- "%PYTHON%\\Scripts\\pip.exe --version"
+- "%PYTHON%\\Scripts\\pip.exe install wheel"
+- "%PYTHON%\\Scripts\\pip.exe install -e ."
 build: false
 test_script:
 - "dir \"C:\\Program Files (x86)\""
 - "%PYTHON%\\python.exe -c \"import os,pprint;pprint.pprint(os.environ)\""
 - "%PYTHON%\\python.exe setup.py test"
 after_test:
-- ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
-- "%PYTHON%\\python.exe C:/get-pip.py"
-- "%PYTHON%\\Scripts\\pip.exe --version"
-- "%PYTHON%\\Scripts\\pip.exe install wheel"
 - "%PYTHON%\\python.exe setup.py bdist_wheel"
 artifacts:
 - path: dist\*
