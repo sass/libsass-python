@@ -49,6 +49,9 @@ The option should be a mapping of package names to pairs of paths, e.g.::
         'package.name': ('static/scss', 'static')
     }
 
+.. versionadded:: 0.6.0
+   Added ``--output-style``/``-s`` option to :class:`build_sass` command.
+
 """
 from __future__ import absolute_import
 
@@ -61,6 +64,7 @@ import os.path
 from setuptools import Command
 from setuptools.command.sdist import sdist
 
+from sass import OUTPUT_STYLES
 from .builder import Manifest
 
 __all__ = 'build_sass', 'validate_manifests'
@@ -86,10 +90,17 @@ class build_sass(Command):
     """Builds SASS/SCSS files to CSS files."""
 
     descriptin = __doc__
-    user_options = []
+    user_options = [
+        (
+            'output-style=', 's',
+            'Coding style of the compiled result.  Choose one of ' +
+            ', '.join(OUTPUT_STYLES)
+        )
+    ]
 
     def initialize_options(self):
         self.package_dir = None
+        self.output_style = 'nested'
 
     def finalize_options(self):
         self.package_dir = {}
@@ -107,7 +118,10 @@ class build_sass(Command):
         for package_name, manifest in manifests.items():
             package_dir = self.get_package_dir(package_name)
             distutils.log.info("building '%s' sass", package_name)
-            css_files = manifest.build(package_dir)
+            css_files = manifest.build(
+                package_dir,
+                output_style=self.output_style
+            )
             map(distutils.log.info, css_files)
             package_data.setdefault(package_name, []).extend(css_files)
             data_files.extend((package_dir, f) for f in css_files)

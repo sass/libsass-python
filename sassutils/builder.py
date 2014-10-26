@@ -151,20 +151,30 @@ class Manifest(object):
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         return sass_path, css_path
 
-    def build(self, package_dir):
+    def build(self, package_dir, output_style='nested'):
         """Builds the SASS/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`
         as relative to the given ``package_dir``.
 
         :param package_dir: the path of package directory
         :type package_dir: :class:`str`, :class:`basestring`
+        :param output_style: an optional coding style of the compiled result.
+                             choose one of: ``'nested'`` (default),
+                             ``'expanded'``, ``'compact'``, ``'compressed'``
+        :type output_style: :class:`str`
         :returns: the set of compiled CSS filenames
         :rtype: :class:`collections.Set`
+
+        .. versionadded:: 0.6.0
+           The ``output_style`` parameter.
 
         """
         sass_path = os.path.join(package_dir, self.sass_path)
         css_path = os.path.join(package_dir, self.css_path)
-        css_files = build_directory(sass_path, css_path).values()
+        css_files = build_directory(
+            sass_path, css_path,
+            output_style=output_style
+        ).values()
         return frozenset(os.path.join(self.css_path, filename)
                          for filename in css_files)
 

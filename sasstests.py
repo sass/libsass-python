@@ -519,6 +519,15 @@ class DistutilsTestCase(unittest.TestCase):
                 f.read()
             )
 
+    def test_output_style(self):
+        rv = self.build_sass('--output-style', 'compressed')
+        self.assertEqual(0, rv)
+        with open(self.css_path('a.scss.css')) as f:
+            self.assertEqual(
+                'p a{color:red}p b{color:blue}',
+                f.read()
+            )
+
 
 class SasscTestCase(unittest.TestCase):
 

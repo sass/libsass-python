@@ -24,6 +24,10 @@ To be released.
   soon.
 - :func:`~sassutils.builder.build_directory()` function has a new optional
   parameter ``output_style``.
+- :meth:`~sassutils.builder.Build.build()` method has a new optional
+  parameter ``output_style``.
+- Added ``--output-style``/``-s`` option to
+  :class:`~sassutils.distutils.build_sass` command.
 
 __ https://github.com/sass/libsass/releases/tag/3.0
 .. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
