@@ -1,6 +1,38 @@
 Changelog
 =========
 
+Version 0.6.0
+-------------
+
+Released on October 27, 2014.
+
+- Follow up the libsass upstream: :commit:`3.0` --- See the `release note`__
+  of Libsass.
+
+  - Decent extends support
+  - Basic Sass Maps Support 
+  - Better UTF-8 Support
+  - ``call()`` function
+  - Better Windows Support
+  - Spec Enhancements
+
+- Added missing `partial import`_ support.  [:issue:`27` by item4]
+- :const:`~sass.SOURCE_COMMENTS` became deprecated.
+- :func:`sass.compile()`'s parameter ``source_comments`` now can take only
+  :const:`bool` instead of :const:`str`.  String values like ``'none'``,
+  ``'line_numbers'``, and ``'map'`` become deprecated, and will be obsolete
+  soon.
+- :func:`~sassutils.builder.build_directory()` function has a new optional
+  parameter ``output_style``.
+- :meth:`~sassutils.builder.Build.build()` method has a new optional
+  parameter ``output_style``.
+- Added ``--output-style``/``-s`` option to
+  :class:`~sassutils.distutils.build_sass` command.
+
+__ https://github.com/sass/libsass/releases/tag/3.0
+.. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
+
+
 Version 0.5.1
 -------------
 

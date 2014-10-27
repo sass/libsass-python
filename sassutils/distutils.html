@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sassutils.distutils — setuptools/distutils integration &mdash; libsass 0.5.1 documentation</title>
+    <title>sassutils.distutils — setuptools/distutils integration &mdash; libsass 0.6.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.5.1',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.5.1 documentation" href="../index.html" />
+    <link rel="top" title="libsass 0.6.0 documentation" href="../index.html" />
     <link rel="up" title="sassutils — Additional utilities related to SASS" href="../sassutils.html" />
     <link rel="next" title="sassutils.wsgi — WSGI middleware for development purpose" href="wsgi.html" />
     <link rel="prev" title="sassutils.builder — Build the whole directory" href="builder.html" /> 
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="builder.html" title="sassutils.builder — Build the whole directory"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">libsass 0.5.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">libsass 0.6.0 documentation</a> &raquo;</li>
           <li><a href="../sassutils.html" accesskey="U"><tt class="docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
     </div>
@@ -93,7 +93,7 @@ option of the <tt class="file docutils literal"><span class="pre">setup.py</span
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="c"># ...,</span>
-    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.2.0&#39;</span><span class="p">]</span>
+    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.6.0&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -115,7 +115,7 @@ store compiled CSS files, specify <tt class="docutils literal"><span class="pre"
     <span class="n">sass_manifests</span><span class="o">=</span><span class="p">{</span>
         <span class="s">&#39;your.webapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">)</span>
     <span class="p">},</span>
-    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.2.0&#39;</span><span class="p">]</span>
+    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.6.0&#39;</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -125,6 +125,9 @@ store compiled CSS files, specify <tt class="docutils literal"><span class="pre"
     <span class="s">&#39;package.name&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/scss&#39;</span><span class="p">,</span> <span class="s">&#39;static&#39;</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.6.0: </span>Added <tt class="docutils literal"><span class="pre">--output-style</span></tt>/<tt class="docutils literal"><span class="pre">-s</span></tt> option to <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a> command.</p>
 </div>
 <dl class="class">
 <dt id="sassutils.distutils.build_sass">
@@ -172,13 +175,13 @@ method.</p>
         <li class="right" >
           <a href="builder.html" title="sassutils.builder — Build the whole directory"
              >previous</a> |</li>
-        <li><a href="../index.html">libsass 0.5.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">libsass 0.6.0 documentation</a> &raquo;</li>
           <li><a href="../sassutils.html" ><tt class="docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
