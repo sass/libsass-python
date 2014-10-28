@@ -37,7 +37,7 @@ Visual Studio 2013+.
 - :meth:`~sassutils.builder.Build.build()` method has a new optional
   parameter ``output_style``.
 - Added ``--output-style``/``-s`` option to
-  :class:`~sassutils.distutils.build_sass` command.
+  :class:`~sassutils.distutils.build_sass` command.  [:issue:`25`]
 
 __ https://github.com/sass/libsass/releases/tag/3.0
 .. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
