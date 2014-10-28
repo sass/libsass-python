@@ -24,7 +24,7 @@ from _sass import (OUTPUT_STYLES, compile_dirname,
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
            'and_join', 'compile')
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
