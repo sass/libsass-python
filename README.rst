@@ -40,6 +40,12 @@ It's available on PyPI_, so you can install it using ``pip`` (or
 
    $ pip install libsass
 
+.. note::
+
+   libsass-python (and libsass) requires C++11 to compile.
+   It means you need install GCC (G++) 4.8+, LLVM Clang 3.3+,
+   or Visual Studio 2013+.
+
 Every release of libsass-python uses the most recent release of Libsass_.
 If you want bleeding edge features of libsass master, try installing
 libsass-unstable_ package instead:

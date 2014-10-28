@@ -12,6 +12,10 @@ Version 0.6.0
 
 Released on October 27, 2014.
 
+Note that since libsass-python 0.6.0 (and libsass 3.0) it requires C++11
+to compile.  It means you need GCC (G++) 4.8+, LLVM Clang 3.3+, or
+Visual Studio 2013+.
+
 - Follow up the libsass upstream: :commit:`3.0` --- See the `release note`__
   of Libsass.
 
