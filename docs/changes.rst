@@ -6,6 +6,11 @@ Version 0.6.1
 
 To be released.
 
+- Follow up the libsass upstream: :commit:`3.0.1` --- See the `release note`__
+  of Libsass.
+
+__ https://github.com/sass/libsass/releases/tag/3.0.1
+
 
 Version 0.6.0
 -------------
