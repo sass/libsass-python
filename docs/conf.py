@@ -258,5 +258,6 @@ extlinks = {
     'issue': ('https://github.com/dahlia/libsass-python/issues/%s', '#'),
     'branch': ('https://github.com/dahlia/libsass-python/compare/master...%s',
                ''),
-    'commit': ('https://github.com/dahlia/libsass-python/commit/%s', '')
+    'commit': ('https://github.com/dahlia/libsass-python/commit/%s', ''),
+    'upcommit': ('https://github.com/sass/libsass/commit/%s', ''),
 }

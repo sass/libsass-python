@@ -6,8 +6,8 @@ Version 0.6.1
 
 To be released.
 
-- Follow up the libsass upstream: :commit:`3.0.1` --- See the `release note`__
-  of Libsass.
+- Follow up the libsass upstream: :upcommit:`3.0.1` ---
+  See the `release note`__ of Libsass.
 
 __ https://github.com/sass/libsass/releases/tag/3.0.1
 
@@ -21,7 +21,7 @@ Note that since libsass-python 0.6.0 (and libsass 3.0) it requires C++11
 to compile.  It means you need GCC (G++) 4.8+, LLVM Clang 3.3+, or
 Visual Studio 2013+.
 
-- Follow up the libsass upstream: :commit:`3.0` --- See the `release note`__
+- Follow up the libsass upstream: :upcommit:`3.0` --- See the `release note`__
   of Libsass.
 
   - Decent extends support
@@ -67,8 +67,8 @@ Version 0.5.0
 
 Released on June 6, 2014.
 
-- Follow up the libsass upstream: :commit:`v2.0` --- See the `release note`__
-  of Libsass.
+- Follow up the libsass upstream: :upcommit:`v2.0` ---
+  See the `release note`__ of Libsass.
 
   - Added indented syntax support (:file:`*.sass` files).
   - Added expanded selector support (BEM).
@@ -96,7 +96,7 @@ Unstable Version 0.4.2-20140528-cd3ee1cbe3
 Released on May 28, 2014.
 
 - Follow up the libsass upstream:
-  :commit:`cd3ee1cbe34d5316eb762a43127a3de9575454ee`.
+  :upcommit:`cd3ee1cbe34d5316eb762a43127a3de9575454ee`.
 
 
 Version 0.4.2
@@ -156,7 +156,7 @@ Released on February 21, 2014.
 - Now builder creates target recursive subdirectories even if it doesn't
   exist yet, rather than siliently fails.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
-- Merged recent changes from libsass v1.0.1: `57a2f62--v1.0.1`_.
+- Merged recent changes from libsass :upcommit:`v1.0.1`: `57a2f62--v1.0.1`_.
             
   - Supports `variable arguments`_.
   - Supports sourcemaps.
