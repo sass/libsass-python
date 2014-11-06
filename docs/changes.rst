@@ -8,6 +8,8 @@ To be released.
 
 - Follow up the libsass upstream: :upcommit:`3.0.1` ---
   See the `release note`__ of Libsass.
+- Fixed a bug that :class:`~sassutils.wsgi.SassMiddleware` never closes
+  the socket on some WSGI servers e.g. ``eventlet.wsgi``.
 
 __ https://github.com/sass/libsass/releases/tag/3.0.1
 

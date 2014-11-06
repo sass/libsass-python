@@ -90,15 +90,17 @@ class SassMiddleware(object):
                         self.quote_css_string(str(e)).encode('utf-8'),
                         b'; color: maroon; background-color: white; }'
                     ]
-                out = start_response('200 OK', [('Content-Type', 'text/css')])
-                with open(os.path.join(package_dir, result), 'rb') as in_:
-                    while 1:
-                        chunk = in_.read(4096)
-                        if chunk:
-                            out(chunk)
-                        else:
-                            break
-                return ()
+
+                def read_file(path):
+                    with open(path, 'rb') as in_:
+                        while 1:
+                            chunk = in_.read(4096)
+                            if chunk:
+                                yield chunk
+                            else:
+                                break
+                start_response('200 OK', [('Content-Type', 'text/css')])
+                return read_file(os.path.join(package_dir, result))
         return self.app(environ, start_response)
 
     @staticmethod
