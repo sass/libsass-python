@@ -4,7 +4,7 @@ Changelog
 Version 0.6.1
 -------------
 
-To be released.
+Released on November 6, 2014.
 
 - Follow up the libsass upstream: :upcommit:`3.0.1` ---
   See the `release note`__ of Libsass.
