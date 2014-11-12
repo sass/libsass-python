@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.6.2
+-------------
+
+To be released.
+
+- Follow up the libsass upstream: :upcommit:`3.0.2` ---
+  See the `release note`__ of libsass.
+
+__ https://github.com/sass/libsass/releases/tag/3.0.2
+
+
 Version 0.6.1
 -------------
 
