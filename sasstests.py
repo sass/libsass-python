@@ -63,6 +63,7 @@ A_EXPECTED_MAP = {
     'version': 3,
     'file': 'test/a.css',
     'sources': [normalize_source_map_path('test/a.scss')],
+    'sourcesContent': [],
     'names': [],
     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,OAAO'
 }
@@ -146,7 +147,6 @@ class CompileTestCase(unittest.TestCase):
 
     def test_compile_required_arguments(self):
         self.assertRaises(TypeError, sass.compile)
-
 
     def test_compile_takes_only_keywords(self):
         self.assertRaises(TypeError, sass.compile, 'a { color: blue; }')
@@ -406,6 +406,7 @@ class ManifestTestCase(unittest.TestCase):
                     'version': 3,
                     'file': '../test/b.css',
                     'sources': [normalize_source_map_path('../test/b.scss')],
+                    'sourcesContent': [],
                     'names': [],
                     'mappings': ';AAAA,EAAE;EAEE,WAAW'
                 },
@@ -423,6 +424,7 @@ class ManifestTestCase(unittest.TestCase):
                     'version': 3,
                     'file': '../test/d.css',
                     'sources': [normalize_source_map_path('../test/d.scss')],
+                    'sourcesContent': [],
                     'names': [],
                     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,MAAM'
                 },
