@@ -9,6 +9,8 @@ To be released.
 - Follow up the libsass upstream: :upcommit:`3.0.2` ---
   See the `release note`__ of libsass.
   [:issue:`33` by Rodolphe Pelloux-Prayer]
+- Fixed a bug that :program:`sassc --watch` crashed when a file is not
+  compilable on the first try.  [:issue:`32` by Alan Justino da Silva]
 
 __ https://github.com/sass/libsass/releases/tag/3.0.2
 

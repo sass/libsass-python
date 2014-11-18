@@ -114,6 +114,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         pass
     while True:
         try:
+            mtime = os.stat(filename).st_mtime
             if options.source_map:
                 source_map_filename = args[1] + '.map'  # FIXME
                 css, source_map = compile(
@@ -132,7 +133,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     include_paths=options.include_paths,
                     image_path=options.image_path
                 )
-            mtime = os.stat(filename).st_mtime
         except (IOError, OSError) as e:
             error(e)
             return 3
