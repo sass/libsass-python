@@ -8,6 +8,7 @@ To be released.
 
 - Follow up the libsass upstream: :upcommit:`3.0.2` ---
   See the `release note`__ of libsass.
+  [:issue:`33` by Rodolphe Pelloux-Prayer]
 
 __ https://github.com/sass/libsass/releases/tag/3.0.2
 
