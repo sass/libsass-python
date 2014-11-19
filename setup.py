@@ -53,7 +53,7 @@ libsass_headers = [
     os.path.join(LIBSASS_DIR, 'win32', 'unistd.h'),
 ]
 libsass_headers.extend(glob.glob('*.hpp'))
-include_dirs = ['utf8']
+include_dirs = ['b64', 'utf8']
 sources = ['pysass.cpp']
 sources.extend([os.path.join(LIBSASS_DIR, s) for s in libsass_sources])
 
