@@ -3,6 +3,7 @@ from __future__ import print_function, with_statement
 import ast
 import distutils.cmd
 import distutils.log
+import distutils.sysconfig
 import glob
 import os
 import os.path
@@ -90,9 +91,20 @@ if sys.platform == 'win32':
     flags = ['-I' + os.path.abspath('win32')]
     link_flags = []
 else:
-    flags = ['-fPIC', '-std=c++11', '-Wall', '-Wno-parentheses']
+    flags = ['-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses']
     platform.mac_ver()
     if platform.system() == 'Darwin':
+        os.environ['CC'] = os.environ['CXX'] = 'c++'
+        orig_customize_compiler = distutils.sysconfig.customize_compiler
+
+        def customize_compiler(compiler):
+            orig_customize_compiler(compiler)
+            compiler.compiler[0] = 'c++'
+            compiler.compiler_so[0] = 'c++'
+            compiler.compiler_cxx[0] = 'c++'
+            compiler.linker_so[0] = 'c++'
+            return compiler
+        distutils.sysconfig.customize_compiler = customize_compiler
         flags.extend([
             '-stdlib=libc++',
             '-mmacosx-version-min=10.7',
@@ -111,7 +123,6 @@ sass_extension = Extension(
     depends=libsass_headers,
     extra_compile_args=['-c', '-O2'] + flags,
     extra_link_args=link_flags,
-    language='c++',
 )
 
 
