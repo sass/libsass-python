@@ -4,7 +4,7 @@ Changelog
 Version 0.6.2
 -------------
 
-To be released.
+Released on November 25, 2014.
 
 Although 0.6.0--0.6.1 have needed GCC (G++) 4.8+, LLVM Clang 3.3+,
 now it became back to only need GCC (G++) 4.3+, LLVM Clang 2.9+,
