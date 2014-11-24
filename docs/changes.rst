@@ -15,6 +15,7 @@ or Visual Studio 2013+.
   [:issue:`33` by Rodolphe Pelloux-Prayer]
 - Fixed a bug that :program:`sassc --watch` crashed when a file is not
   compilable on the first try.  [:issue:`32` by Alan Justino da Silva]
+- Fixed broken build on Windows.
 
 __ https://github.com/sass/libsass/releases/tag/3.0.2
 

@@ -14,7 +14,7 @@ import tempfile
 import unittest
 import warnings
 
-from six import PY3, StringIO, b, text_type
+from six import PY3, StringIO, b, string_types, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -28,18 +28,9 @@ if os.sep != '/' and os.altsep:
     def normalize_path(path):
         path = os.path.abspath(os.path.normpath(path))
         return path.replace(os.sep, os.altsep)
-
-    def normalize_source_map_path(path):
-        """To workaround strange path separators made by libsass ---
-        which seems a bug of libsass on win32.
-
-        """
-        return path.replace(os.altsep, '//')
 else:
     def normalize_path(path):
         return path
-
-    normalize_source_map_path = normalize_path
 
 
 A_EXPECTED_CSS = '''\
@@ -62,7 +53,7 @@ body {
 A_EXPECTED_MAP = {
     'version': 3,
     'file': 'test/a.css',
-    'sources': [normalize_source_map_path('test/a.scss')],
+    'sources': ['test/a.scss'],
     'sourcesContent': [],
     'names': [],
     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,OAAO'
@@ -120,7 +111,42 @@ body p {
 utf8_if_py3 = {'encoding': 'utf-8'} if PY3 else {}
 
 
-class SassTestCase(unittest.TestCase):
+class BaseTestCase(unittest.TestCase):
+
+    def assert_json_file(self, expected, filename):
+        with open(filename) as f:
+            try:
+                tree = json.load(f)
+            except ValueError as e:
+                f.seek(0)
+                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
+                raise ValueError(msg)
+        self.assertEqual(expected, tree)
+
+    def assert_source_map_equal(self, expected, actual, *args, **kwargs):
+        if isinstance(expected, string_types):
+            expected = json.loads(expected)
+        if isinstance(actual, string_types):
+            actual = json.loads(actual)
+        if sys.platform == 'win32':
+            # On Windows the result of "mappings" is strange;
+            # seems a bug of libsass itself
+            expected.pop('mappings', None)
+            actual.pop('mappings', None)
+        self.assertEqual(expected, actual, *args, **kwargs)
+
+    def assert_source_map_file(self, expected, filename):
+        with open(filename) as f:
+            try:
+                tree = json.load(f)
+            except ValueError as e:
+                f.seek(0)
+                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
+                raise ValueError(msg)
+        self.assert_source_map_equal(expected, tree)
+
+
+class SassTestCase(BaseTestCase):
 
     def test_version(self):
         assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
@@ -143,7 +169,7 @@ class SassTestCase(unittest.TestCase):
         self.assertEqual('', sass.and_join([]))
 
 
-class CompileTestCase(unittest.TestCase):
+class CompileTestCase(BaseTestCase):
 
     def test_compile_required_arguments(self):
         self.assertRaises(TypeError, sass.compile)
@@ -258,10 +284,7 @@ a {
             ),
             actual
         )
-        self.assertEqual(
-            A_EXPECTED_MAP,
-            json.loads(source_map)
-        )
+        self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
 
     def test_compile_source_map_deprecated_source_comments_map(self):
         filename = 'test/a.scss'
@@ -279,7 +302,7 @@ a {
             self.assertEqual(1, len(w))
             assert issubclass(w[-1].category, DeprecationWarning)
         self.assertEqual(expected, actual)
-        self.assertEqual(expected_map, actual_map)
+        self.assert_source_map_equal(expected_map, actual_map)
 
     def test_regression_issue_2(self):
         actual = sass.compile(string='''
@@ -303,7 +326,7 @@ a {
         assert normalized == '@media(max-width:3){body{color:black;}}'
 
 
-class BuilderTestCase(unittest.TestCase):
+class BuilderTestCase(BaseTestCase):
 
     def setUp(self):
         self.temp_path = tempfile.mkdtemp()
@@ -359,7 +382,7 @@ class BuilderTestCase(unittest.TestCase):
                          css)
 
 
-class ManifestTestCase(unittest.TestCase):
+class ManifestTestCase(BaseTestCase):
 
     def test_normalize_manifests(self):
         manifests = Manifest.normalize_manifests({
@@ -401,11 +424,11 @@ class ManifestTestCase(unittest.TestCase):
                     replace_source_path(B_EXPECTED_CSS_WITH_MAP, 'b.scss'),
                     f.read()
                 )
-            self.assert_json_file(
+            self.assert_source_map_file(
                 {
                     'version': 3,
                     'file': '../test/b.css',
-                    'sources': [normalize_source_map_path('../test/b.scss')],
+                    'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
                     'mappings': ';AAAA,EAAE;EAEE,WAAW'
@@ -419,11 +442,11 @@ class ManifestTestCase(unittest.TestCase):
                     replace_source_path(D_EXPECTED_CSS_WITH_MAP, 'd.scss'),
                     f.read()
                 )
-            self.assert_json_file(
+            self.assert_source_map_file(
                 {
                     'version': 3,
                     'file': '../test/d.css',
-                    'sources': [normalize_source_map_path('../test/d.scss')],
+                    'sources': ['../test/d.scss'],
                     'sourcesContent': [],
                     'names': [],
                     'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,MAAM'
@@ -433,18 +456,8 @@ class ManifestTestCase(unittest.TestCase):
         finally:
             shutil.rmtree(d)
 
-    def assert_json_file(self, expected, filename):
-        with open(filename) as f:
-            try:
-                tree = json.load(f)
-            except ValueError as e:
-                f.seek(0)
-                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
-                raise ValueError(msg)
-        self.assertEqual(expected, tree)
 
-
-class WsgiTestCase(unittest.TestCase):
+class WsgiTestCase(BaseTestCase):
 
     @staticmethod
     def sample_wsgi_app(environ, start_response):
@@ -485,7 +498,7 @@ class WsgiTestCase(unittest.TestCase):
                          *args)
 
 
-class DistutilsTestCase(unittest.TestCase):
+class DistutilsTestCase(BaseTestCase):
 
     def tearDown(self):
         for filename in self.list_built_css():
@@ -531,7 +544,7 @@ class DistutilsTestCase(unittest.TestCase):
             )
 
 
-class SasscTestCase(unittest.TestCase):
+class SasscTestCase(BaseTestCase):
 
     def setUp(self):
         self.out = StringIO()
@@ -625,7 +638,7 @@ class SasscTestCase(unittest.TestCase):
                     f.read().strip()
                 )
             with open(out_filename + '.map') as f:
-                self.assertEqual(
+                self.assert_source_map_equal(
                     dict(A_EXPECTED_MAP, sources=None),
                     dict(json.load(f), sources=None)
                 )
