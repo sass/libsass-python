@@ -8,7 +8,7 @@ distribution/deployment.  That means you can add just ``libsass`` into
 your :file:`setup.py`'s ``install_requires`` list or :file:`requirements.txt`
 file.
 
-It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 2.2!
+It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 2.3!
 
 .. _SASS: http://sass-lang.com/
 .. _Libsass: https://github.com/hcatlin/libsass
@@ -26,7 +26,7 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 .. note::
 
    libsass-python (and libsass) requires C++11 to compile.
-   It means you need install GCC (G++) 4.8+, LLVM Clang 3.3+,
+   It means you need install GCC (G++) 4.3+, LLVM Clang 2.9+,
    or Visual Studio 2013+.
 
 .. note::

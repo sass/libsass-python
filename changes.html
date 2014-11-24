@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; libsass 0.6.1 documentation</title>
+    <title>Changelog &mdash; libsass 0.6.2 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.6.1',
+        VERSION:     '0.6.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.6.1 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.6.2 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.6.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.6.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
@@ -51,6 +51,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-0-6-2">Version 0.6.2</a></li>
 <li><a class="reference internal" href="#version-0-6-1">Version 0.6.1</a></li>
 <li><a class="reference internal" href="#version-0-6-0">Version 0.6.0</a></li>
 <li><a class="reference internal" href="#version-0-5-1">Version 0.5.1</a></li>
@@ -106,6 +107,21 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-6-2">
+<h2>Version 0.6.2<a class="headerlink" href="#version-0-6-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on November 25, 2014.</p>
+<p>Although 0.6.0&#8211;0.6.1 have needed GCC (G++) 4.8+, LLVM Clang 3.3+,
+now it became back to only need GCC (G++) 4.3+, LLVM Clang 2.9+,
+or Visual Studio 2013+.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0.2">3.0.2</a> &#8212;
+See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0.2">release note</a> of libsass.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/33">#33</a> by Rodolphe Pelloux-Prayer]</li>
+<li>Fixed a bug that <strong class="program">sassc &#8211;watch</strong> crashed when a file is not
+compilable on the first try.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/32">#32</a> by Alan Justino da Silva]</li>
+<li>Fixed broken build on Windows.</li>
+</ul>
+</div>
 <div class="section" id="version-0-6-1">
 <h2>Version 0.6.1<a class="headerlink" href="#version-0-6-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on November 6, 2014.</p>
@@ -120,8 +136,9 @@ the socket on some WSGI servers e.g. <tt class="docutils literal"><span class="p
 <h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Permalink to this headline">¶</a></h2>
 <p>Released on October 27, 2014.</p>
 <p>Note that since libsass-python 0.6.0 (and libsass 3.0) it requires C++11
-to compile.  It means you need GCC (G++) 4.8+, LLVM Clang 3.3+, or
-Visual Studio 2013+.</p>
+to compile.  Although 0.6.2 became back to only need GCC (G++) 4.3+,
+LLVM Clang 2.9+, from 0.6.0 to 0.6.1 you need GCC (G++) 4.8+, LLVM Clang 3.3+,
+or Visual Studio 2013+.</p>
 <ul class="simple">
 <li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0">3.0</a> &#8212; See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0">release note</a>
 of Libsass.<ul>
@@ -335,7 +352,7 @@ Now it raises a proper <tt class="docutils literal"><span class="pre">exceptions
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              >previous</a> |</li>
-        <li><a href="index.html">libsass 0.6.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">libsass 0.6.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
