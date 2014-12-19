@@ -1,6 +1,7 @@
 branches:
   only:
   - python
+sudo: false
 language: python
 python:
 - pypy
