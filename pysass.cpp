@@ -39,13 +39,13 @@ static PyObject *
 PySass_compile_string(PyObject *self, PyObject *args) {
     struct sass_context *context;
     char *string, *include_paths, *image_path;
-    int output_style, source_comments;
+    int output_style, source_comments, precision;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyy", "siiss"),
+                          PySass_IF_PY3("yiiyyi", "siissi"),
                           &string, &output_style, &source_comments,
-                          &include_paths, &image_path)) {
+                          &include_paths, &image_path, &precision)) {
         return NULL;
     }
 
@@ -55,6 +55,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     context->options.source_comments = source_comments;
     context->options.include_paths = include_paths;
     context->options.image_path = image_path;
+    context->options.precision = precision;
 
     sass_compile(context);
 
@@ -71,13 +72,13 @@ static PyObject *
 PySass_compile_filename(PyObject *self, PyObject *args) {
     struct sass_file_context *context;
     char *filename, *include_paths, *image_path;
-    int output_style, source_comments, error_status;
+    int output_style, source_comments, error_status, precision;
     PyObject *source_map_filename, *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyyO", "siissO"),
+                          PySass_IF_PY3("yiiyyiO", "siissiO"),
                           &filename, &output_style, &source_comments,
-                          &include_paths, &image_path, &source_map_filename)) {
+                          &include_paths, &image_path, &precision, &source_map_filename)) {
         return NULL;
     }
 
@@ -99,6 +100,7 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     context->options.source_comments = source_comments;
     context->options.include_paths = include_paths;
     context->options.image_path = image_path;
+    context->options.precision = precision;
 
     sass_compile_file(context);
 
@@ -119,14 +121,14 @@ static PyObject *
 PySass_compile_dirname(PyObject *self, PyObject *args) {
     struct sass_folder_context *context;
     char *search_path, *output_path, *include_paths, *image_path;
-    int output_style, source_comments;
+    int output_style, source_comments, precision;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yyiyy", "ssiss"),
+                          PySass_IF_PY3("yyiiyyi", "ssiissi"),
                           &search_path, &output_path,
                           &output_style, &source_comments,
-                          &include_paths, &image_path)) {
+                          &include_paths, &image_path, precision)) {
         return NULL;
     }
 
@@ -137,6 +139,7 @@ PySass_compile_dirname(PyObject *self, PyObject *args) {
     context->options.source_comments = source_comments;
     context->options.include_paths = include_paths;
     context->options.image_path = image_path;
+    context->options.precision = precision;
 
     sass_compile_folder(context);
 

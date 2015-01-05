@@ -158,6 +158,7 @@ def compile(**kwargs):
     elif len(modes) > 1:
         raise TypeError(and_join(modes) + ' are exclusive each other; '
                         'cannot be used at a time')
+    precision = kwargs.pop('precision', 5)
     output_style = kwargs.pop('output_style', 'nested')
     if not isinstance(output_style, string_types):
         raise TypeError('output_style must be a string, not ' +
@@ -235,7 +236,7 @@ def compile(**kwargs):
             string = string.encode('utf-8')
         s, v = compile_string(string,
                               output_style, source_comments,
-                              include_paths, image_path)
+                              include_paths, image_path, precision)
         if s:
             return v.decode('utf-8')
     elif 'filename' in modes:
@@ -249,7 +250,7 @@ def compile(**kwargs):
         s, v, source_map = compile_filename(
             filename,
             output_style, source_comments,
-            include_paths, image_path, source_map_filename
+            include_paths, image_path, precision, source_map_filename
         )
         if s:
             v = v.decode('utf-8')
@@ -299,7 +300,7 @@ def compile(**kwargs):
                 output_path = output_path.encode(fs_encoding)
         s, v = compile_dirname(search_path, output_path,
                                output_style, source_comments,
-                               include_paths, image_path)
+                               include_paths, image_path, precision)
         if s:
             return
     else:
