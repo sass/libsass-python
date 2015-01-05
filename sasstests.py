@@ -103,6 +103,20 @@ a {
   color: red; }
 '''
 
+G_EXPECTED_CSS = '''\
+body {
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+  height: 1.42857; }
+'''
+
+G_EXPECTED_CSS_WITH_PRECISION_8 = '''\
+body {
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+  height: 1.42857143; }
+'''
+
 SUBDIR_RECUR_EXPECTED_CSS = '''\
 body p {
   color: blue; }
@@ -304,6 +318,12 @@ a {
         self.assertEqual(expected, actual)
         self.assert_source_map_equal(expected_map, actual_map)
 
+    def test_compile_with_precision(self):
+        actual = sass.compile(filename='test/g.scss')
+        assert actual == G_EXPECTED_CSS
+        actual = sass.compile(filename='test/g.scss', precision=8)
+        assert actual == G_EXPECTED_CSS_WITH_PRECISION_8
+
     def test_regression_issue_2(self):
         actual = sass.compile(string='''
             @media (min-width: 980px) {
@@ -340,7 +360,7 @@ class BuilderTestCase(BaseTestCase):
     def test_builder_build_directory(self):
         css_path = self.css_path
         result_files = build_directory(self.sass_path, css_path)
-        self.assertEqual(6, len(result_files))
+        self.assertEqual(7, len(result_files))
         self.assertEqual('a.scss.css', result_files['a.scss'])
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
@@ -365,6 +385,13 @@ class BuilderTestCase(BaseTestCase):
             os.path.join('subdir', 'recur.scss.css'),
             result_files[os.path.join('subdir', 'recur.scss')]
         )
+        with open(os.path.join(css_path, 'g.scss.css'), **utf8_if_py3) as f:
+            css = f.read()
+        self.assertEqual(G_EXPECTED_CSS, css)
+        self.assertEqual(
+            os.path.join('subdir', 'recur.scss.css'),
+            result_files[os.path.join('subdir', 'recur.scss')]
+        )
         with open(os.path.join(css_path, 'subdir', 'recur.scss.css'),
                   **utf8_if_py3) as f:
             css = f.read()
@@ -374,7 +401,7 @@ class BuilderTestCase(BaseTestCase):
         css_path = self.css_path
         result_files = build_directory(self.sass_path, css_path,
                                        output_style='compressed')
-        self.assertEqual(6, len(result_files))
+        self.assertEqual(7, len(result_files))
         self.assertEqual('a.scss.css', result_files['a.scss'])
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
