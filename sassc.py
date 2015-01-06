@@ -40,6 +40,12 @@ There are options as well:
 
    .. versionadded:: 0.4.0
 
+.. option:: -p, --precision
+
+   Set the precision for numbers. Default is 5.
+
+   .. versionadded:: 0.6.3
+
 .. option:: -v, --version
 
    Prints the program version.
@@ -88,7 +94,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                       help='Watch file for changes.  Requires the second '
                            'argument (output css filename).')
     parser.add_option('-p', '--precision', action='store', type="int", default=5,
-                      help='Set number of decimal places. [default: %default]')
+                      help='Set the precision for numbers. [default: %default]')
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',

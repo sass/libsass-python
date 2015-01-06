@@ -73,6 +73,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :returns: the compiled CSS string
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -102,6 +104,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -134,6 +138,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
 
