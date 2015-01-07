@@ -73,6 +73,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :returns: the compiled CSS string
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -102,6 +104,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -134,6 +138,8 @@ def compile(**kwargs):
     :type include_paths: :class:`collections.Sequence`, :class:`str`
     :param image_path: an optional path to find images
     :type image_path: :class:`str`
+    :param precision: optional precision for numbers. :const:`5` by default.
+    :type precision: :class:`int`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
 
@@ -148,6 +154,9 @@ def compile(**kwargs):
        Values like ``'none'``, ``'line_numbers'``, and ``'map'`` for
        the ``source_comments`` parameter are deprecated.
 
+    .. versionadded:: 0.6.3
+       Added ``precision`` parameter.
+
     """
     modes = set()
     for mode_name in MODES:
@@ -158,6 +167,7 @@ def compile(**kwargs):
     elif len(modes) > 1:
         raise TypeError(and_join(modes) + ' are exclusive each other; '
                         'cannot be used at a time')
+    precision = kwargs.pop('precision', 5)
     output_style = kwargs.pop('output_style', 'nested')
     if not isinstance(output_style, string_types):
         raise TypeError('output_style must be a string, not ' +
@@ -235,7 +245,7 @@ def compile(**kwargs):
             string = string.encode('utf-8')
         s, v = compile_string(string,
                               output_style, source_comments,
-                              include_paths, image_path)
+                              include_paths, image_path, precision)
         if s:
             return v.decode('utf-8')
     elif 'filename' in modes:
@@ -249,7 +259,7 @@ def compile(**kwargs):
         s, v, source_map = compile_filename(
             filename,
             output_style, source_comments,
-            include_paths, image_path, source_map_filename
+            include_paths, image_path, precision, source_map_filename
         )
         if s:
             v = v.decode('utf-8')
@@ -299,7 +309,7 @@ def compile(**kwargs):
                 output_path = output_path.encode(fs_encoding)
         s, v = compile_dirname(search_path, output_path,
                                output_style, source_comments,
-                               include_paths, image_path)
+                               include_paths, image_path, precision)
         if s:
             return
     else:

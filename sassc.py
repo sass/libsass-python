@@ -40,6 +40,12 @@ There are options as well:
 
    .. versionadded:: 0.4.0
 
+.. option:: -p, --precision
+
+   Set the precision for numbers. Default is 5.
+
+   .. versionadded:: 0.6.3
+
 .. option:: -v, --version
 
    Prints the program version.
@@ -87,6 +93,8 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     parser.add_option('-w', '--watch', action='store_true',
                       help='Watch file for changes.  Requires the second '
                            'argument (output css filename).')
+    parser.add_option('-p', '--precision', action='store', type="int", default=5,
+                      help='Set the precision for numbers. [default: %default]')
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',
@@ -122,7 +130,8 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     output_style=options.output_style,
                     source_map_filename=source_map_filename,
                     include_paths=options.include_paths,
-                    image_path=options.image_path
+                    image_path=options.image_path,
+                    precision=options.precision
                 )
             else:
                 source_map_filename = None
@@ -131,7 +140,8 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     filename=filename,
                     output_style=options.output_style,
                     include_paths=options.include_paths,
-                    image_path=options.image_path
+                    image_path=options.image_path,
+                    precision=options.precision
                 )
         except (IOError, OSError) as e:
             error(e)

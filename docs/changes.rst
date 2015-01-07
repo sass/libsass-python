@@ -6,6 +6,11 @@ Version 0.6.3
 
 To be released.
 
+- Added ``precision`` parameter to :func:`sass.compile()` function.
+  [:issue:`39` by Andrea Stagi]
+- :program:`sassc` has a new :option:`-p <sassc -p>`/:option:`--precision
+  <sassc --precision>` option.  [:issue:`39` by Andrea Stagi]
+
 
 Version 0.6.2
 -------------
