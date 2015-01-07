@@ -11,7 +11,7 @@ file.
 It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 2.3!
 
 .. _SASS: http://sass-lang.com/
-.. _Libsass: https://github.com/hcatlin/libsass
+.. _Libsass: https://github.com/sass/libsass
 
 
 Install

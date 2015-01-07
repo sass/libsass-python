@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.6.3
+-------------
+
+To be released.
+
+
 Version 0.6.2
 -------------
 
@@ -98,7 +104,7 @@ Released on June 6, 2014.
   - Fixed UTF-8 support.
   - Backward incompatibility: broken extends.
 
-__ https://github.com/hcatlin/libsass/releases/tag/v2.0
+__ https://github.com/sass/libsass/releases/tag/v2.0
 
 
 Unstable version 0.4.2.20140529.cd3ee1cbe3
@@ -183,7 +189,7 @@ Released on February 21, 2014.
   - Supports `variable arguments`_.
   - Supports sourcemaps.
 
-.. _57a2f62--v1.0.1: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
+.. _57a2f62--v1.0.1: https://github.com/sass/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
 .. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
 
 
@@ -197,7 +203,7 @@ Released on December 4, 2012.
 - Merged recent changes from libsass upstream:
   `e997102--a84b181`__.
 
-__ https://github.com/hcatlin/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84
+__ https://github.com/sass/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84
 
 
 Version 0.2.3

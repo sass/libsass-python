@@ -48,7 +48,7 @@ There are options as well:
 
    Prints the help message.
 
-.. _SassC: https://github.com/hcatlin/sassc
+.. _SassC: https://github.com/sass/sassc
 
 """
 from __future__ import print_function
