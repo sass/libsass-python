@@ -13,7 +13,7 @@ libsass: SASS_ for Python
    :target: https://ci.appveyor.com/project/dahlia/libsass-python
    :alt: Build Status (Windows)
 
-.. image:: https://img.shields.io/coveralls/dahlia/libsass-python.svg
+.. image:: https://img.shields.io/coveralls/dahlia/libsass-python/python.svg
    :target: https://coveralls.io/r/dahlia/libsass-python
    :alt: Coverage Status
 
