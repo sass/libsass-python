@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <Python.h>
-#include "sass_interface.h"
+#include "sass_context.h"
 
 #if PY_MAJOR_VERSION >= 3
 #define PySass_IF_PY3(three, two) (three)
@@ -37,9 +37,13 @@ static struct PySass_Pair PySass_output_style_enum[] = {
 
 static PyObject *
 PySass_compile_string(PyObject *self, PyObject *args) {
-    struct sass_context *context;
+    struct Sass_Context *ctx;
+    struct Sass_Data_Context *context;
+    struct Sass_Options *options;
     char *string, *include_paths, *image_path;
-    int output_style, source_comments, precision;
+    const char *error_message, *output_string;
+    Sass_Output_Style output_style;
+    int source_comments, error_status, precision;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
@@ -49,30 +53,38 @@ PySass_compile_string(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    context = sass_new_context();
-    context->source_string = string;
-    context->options.output_style = output_style;
-    context->options.source_comments = source_comments;
-    context->options.include_paths = include_paths;
-    context->options.image_path = image_path;
-    context->options.precision = precision;
+    context = sass_make_data_context(string);
+    options = sass_data_context_get_options(context);
+    sass_option_set_output_style(options, output_style);
+    sass_option_set_source_comments(options, source_comments);
+    sass_option_set_include_path(options, include_paths);
+    sass_option_set_image_path(options, image_path);
+    sass_option_set_precision(options, precision);
 
-    sass_compile(context);
+    sass_compile_data_context(context);
 
+    ctx = sass_data_context_get_context(context);
+    error_status = sass_context_get_error_status(ctx);
+    error_message = sass_context_get_error_message(ctx);
+    output_string = sass_context_get_output_string(ctx);
     result = Py_BuildValue(
         PySass_IF_PY3("hy", "hs"),
-        (short int) !context->error_status,
-        context->error_status ? context->error_message : context->output_string
+        (short int) !error_status,
+        error_status ? error_message : output_string
     );
-    sass_free_context(context);
+    sass_delete_data_context(context);
     return result;
 }
 
 static PyObject *
 PySass_compile_filename(PyObject *self, PyObject *args) {
-    struct sass_file_context *context;
+    struct Sass_Context *ctx;
+    struct Sass_File_Context *context;
+    struct Sass_Options *options;
     char *filename, *include_paths, *image_path;
-    int output_style, source_comments, error_status, precision;
+    const char *error_message, *output_string, *source_map_string;
+    Sass_Output_Style output_style;
+    int source_comments, error_status, precision;
     PyObject *source_map_filename, *result;
 
     if (!PyArg_ParseTuple(args,
@@ -82,73 +94,41 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    context = sass_new_file_context();
-    context->input_path = filename;
+    context = sass_make_file_context(filename);
+    options = sass_file_context_get_options(context);
+
     if (source_comments && PySass_Bytes_Check(source_map_filename)) {
         size_t source_map_file_len = PySass_Bytes_GET_SIZE(source_map_filename);
         if (source_map_file_len) {
             char *source_map_file = (char *) malloc(source_map_file_len + 1);
             strncpy(
-                source_map_file, 
+                source_map_file,
                 PySass_Bytes_AS_STRING(source_map_filename),
                 source_map_file_len + 1
             );
-            context->options.source_map_file = source_map_file;
+            sass_option_set_source_map_file(options, source_map_file);
         }
     }
-    context->options.output_style = output_style;
-    context->options.source_comments = source_comments;
-    context->options.include_paths = include_paths;
-    context->options.image_path = image_path;
-    context->options.precision = precision;
+    sass_option_set_output_style(options, output_style);
+    sass_option_set_source_comments(options, source_comments);
+    sass_option_set_include_path(options, include_paths);
+    sass_option_set_image_path(options, image_path);
+    sass_option_set_precision(options, precision);
 
-    sass_compile_file(context);
+    sass_compile_file_context(context);
 
-    error_status = context->error_status;
+    ctx = sass_file_context_get_context(context);
+    error_status = sass_context_get_error_status(ctx);
+    error_message = sass_context_get_error_message(ctx);
+    output_string = sass_context_get_output_string(ctx);
+    source_map_string = sass_context_get_source_map_string(ctx);
     result = Py_BuildValue(
         PySass_IF_PY3("hyy", "hss"),
-        (short int) !context->error_status,
-        error_status ? context->error_message : context->output_string,
-        error_status || context->source_map_string == NULL
-            ? ""
-            : context->source_map_string
+        (short int) !error_status,
+        error_status ? error_message : output_string,
+        error_status || source_map_string == NULL ? "" : source_map_string
     );
-    sass_free_file_context(context);
-    return result;
-}
-
-static PyObject *
-PySass_compile_dirname(PyObject *self, PyObject *args) {
-    struct sass_folder_context *context;
-    char *search_path, *output_path, *include_paths, *image_path;
-    int output_style, source_comments, precision;
-    PyObject *result;
-
-    if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yyiiyyi", "ssiissi"),
-                          &search_path, &output_path,
-                          &output_style, &source_comments,
-                          &include_paths, &image_path, precision)) {
-        return NULL;
-    }
-
-    context = sass_new_folder_context();
-    context->search_path = search_path;
-    context->output_path = output_path;
-    context->options.output_style = output_style;
-    context->options.source_comments = source_comments;
-    context->options.include_paths = include_paths;
-    context->options.image_path = image_path;
-    context->options.precision = precision;
-
-    sass_compile_folder(context);
-
-    result = Py_BuildValue(
-        PySass_IF_PY3("hy", "hs"),
-        (short int) !context->error_status,
-        context->error_status ? context->error_message : NULL
-    );
-    sass_free_folder_context(context);
+    sass_delete_file_context(context);
     return result;
 }
 
@@ -157,8 +137,6 @@ static PyMethodDef PySass_methods[] = {
      "Compile a SASS string."},
     {"compile_filename", PySass_compile_filename, METH_VARARGS,
      "Compile a SASS file."},
-    {"compile_dirname", PySass_compile_dirname, METH_VARARGS,
-     "Compile several SASS files."},
     {NULL, NULL, 0, NULL}
 };
 

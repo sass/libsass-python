@@ -19,8 +19,7 @@ import warnings
 
 from six import string_types, text_type
 
-from _sass import (OUTPUT_STYLES, compile_dirname,
-                   compile_filename, compile_string)
+from _sass import OUTPUT_STYLES, compile_filename, compile_string
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
            'and_join', 'compile')
@@ -46,9 +45,45 @@ MODES = set(['string', 'filename', 'dirname'])
 class CompileError(ValueError):
     """The exception type that is raised by :func:`compile()`.
     It is a subtype of :exc:`exceptions.ValueError`.
-
     """
 
+
+def mkdirp(path):
+    try:
+        os.makedirs(path)
+    except OSError:
+        if os.path.isdir(path):
+            return
+        raise
+
+
+def compile_dirname(
+    search_path, output_path, output_style, source_comments, include_paths,
+    image_path, precision,
+):
+    fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
+    for dirpath, _, filenames in os.walk(search_path):
+        filenames = [
+            filename for filename in filenames if filename.endswith('.scss')
+        ]
+        for filename in filenames:
+            input_filename = os.path.join(dirpath, filename)
+            relpath_to_file = os.path.relpath(input_filename, search_path)
+            output_filename = os.path.join(output_path, relpath_to_file)
+            output_filename = re.sub('.scss$', '.css', output_filename)
+            input_filename = input_filename.encode(fs_encoding)
+            s, v, _ = compile_filename(
+                input_filename, output_style, source_comments, include_paths,
+                image_path, precision, None,
+            )
+            if s:
+                v = v.decode('UTF-8')
+                mkdirp(os.path.dirname(output_filename))
+                with open(output_filename, 'w') as output_file:
+                    output_file.write(v)
+            else:
+                return False, v
+    return True, None
 
 def compile(**kwargs):
     """There are three modes of parameters :func:`compile()` can take:
@@ -302,11 +337,6 @@ def compile(**kwargs):
         except ValueError:
             raise ValueError('dirname must be a pair of (source_dir, '
                              'output_dir)')
-        else:
-            if isinstance(search_path, text_type):
-                search_path = search_path.encode(fs_encoding)
-            if isinstance(output_path, text_type):
-                output_path = output_path.encode(fs_encoding)
         s, v = compile_dirname(search_path, output_path,
                                output_style, source_comments,
                                include_paths, image_path, precision)

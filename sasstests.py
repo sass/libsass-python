@@ -2,6 +2,7 @@
 from __future__ import with_statement
 
 import collections
+import contextlib
 import glob
 import json
 import os
@@ -56,7 +57,7 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'sourcesContent': [],
     'names': [],
-    'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,OAAO'
+    'mappings': ';AAKA;EAHE,AAAkB;;EAKpB,AAAK;IACD,AAAO',
 }
 
 B_EXPECTED_CSS = '''\
@@ -82,6 +83,7 @@ h1 a {
 '''
 
 D_EXPECTED_CSS = '''\
+@charset "UTF-8";
 body {
   background-color: green; }
   body a {
@@ -89,6 +91,7 @@ body {
 '''
 
 D_EXPECTED_CSS_WITH_MAP = '''\
+@charset "UTF-8";
 /* line 6, SOURCE */
 body {
   background-color: green; }
@@ -240,7 +243,8 @@ a {
 '''
         actual = sass.compile(string=u'a { color: blue; } /* 유니코드 */')
         self.assertEqual(
-            u'''a {
+            u'''@charset "UTF-8";
+a {
   color: blue; }
 
 /* 유니코드 */''',
@@ -458,7 +462,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AAAA,EAAE;EAEE,WAAW'
+                    'mappings': ';AACA,AAAE;EACE,AAAW',
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -476,7 +480,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AAKA;EAHE,kBAAkB;;EAIpB,KAAK;IAED,MAAM'
+                    'mappings': ';AAKA;EAHE,AAAkB;;EAKpB,AAAK;IACD,AAAM',
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -673,6 +677,64 @@ class SasscTestCase(BaseTestCase):
             shutil.rmtree(tmp_dir)
 
 
+@contextlib.contextmanager
+def tempdir():
+    tmpdir = tempfile.mkdtemp()
+    try:
+        yield tmpdir
+    finally:
+        shutil.rmtree(tmpdir)
+
+
+def write_file(filename, contents):
+    with open(filename, 'w') as f:
+        f.write(contents)
+
+
+class CompileDirectoriesTest(unittest.TestCase):
+
+    def test_successful(self):
+        with tempdir() as tmpdir:
+            input_dir = os.path.join(tmpdir, 'input')
+            output_dir = os.path.join(tmpdir, 'output')
+            os.makedirs(os.path.join(input_dir, 'foo'))
+            write_file(os.path.join(input_dir, 'f1.scss'), 'a { b { width: 100%; } }')
+            write_file(os.path.join(input_dir, 'foo/f2.scss'), 'foo { width: 100%; }')
+            # Make sure we don't compile non-scss files
+            write_file(os.path.join(input_dir, 'baz.txt'), 'Hello der')
+
+            # the api for this is weird, why does it need source?
+            sass.compile(dirname=(input_dir, output_dir))
+            assert os.path.exists(output_dir)
+            assert os.path.exists(os.path.join(output_dir, 'foo'))
+            assert os.path.exists(os.path.join(output_dir, 'f1.css'))
+            assert os.path.exists(os.path.join(output_dir, 'foo/f2.css'))
+            assert not os.path.exists(os.path.join(output_dir, 'baz.txt'))
+
+            contentsf1 = open(os.path.join(output_dir, 'f1.css')).read()
+            contentsf2 = open(os.path.join(output_dir, 'foo/f2.css')).read()
+            self.assertEqual(contentsf1, 'a b {\n  width: 100%; }\n')
+            self.assertEqual(contentsf2, 'foo {\n  width: 100%; }\n')
+
+    def test_error(self):
+        with tempdir() as tmpdir:
+            input_dir = os.path.join(tmpdir, 'input')
+            os.makedirs(input_dir)
+            write_file(os.path.join(input_dir, 'bad.scss'), 'a {')
+
+            try:
+                sass.compile(dirname=(input_dir, os.path.join(tmpdir, 'output')))
+                assert False, 'Expected to raise'
+            except sass.CompileError as e:
+                msg, = e.args
+                assert msg.decode('UTF-8').endswith(
+                    'bad.scss:1: invalid property name\n'
+                ), msg
+                return
+            except Exception as e:
+                assert False, 'Expected to raise CompileError but got {0!r}'.format(e)
+
+
 test_cases = [
     SassTestCase,
     CompileTestCase,
@@ -680,7 +742,8 @@ test_cases = [
     ManifestTestCase,
     WsgiTestCase,
     DistutilsTestCase,
-    SasscTestCase
+    SasscTestCase,
+    CompileDirectoriesTest,
 ]
 loader = unittest.defaultTestLoader
 suite = unittest.TestSuite()
