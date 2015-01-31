@@ -21,6 +21,7 @@ from werkzeug.wrappers import Response
 
 import sass
 import sassc
+from sassutils import sass_types
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -735,6 +736,391 @@ class CompileDirectoriesTest(unittest.TestCase):
                 assert False, 'Expected to raise CompileError but got {0!r}'.format(e)
 
 
+class PrepareCustomFunctionListTest(unittest.TestCase):
+    def test_trivial(self):
+        self.assertEqual(
+            sass._prepare_custom_function_list({}),
+            [],
+        )
+
+    def test_noarg_functions(self):
+        func = lambda: 'bar'
+        self.assertEqual(
+            sass._prepare_custom_function_list({'foo': func}),
+            [(b'foo()', func)],
+        )
+
+    def test_functions_with_arguments(self):
+        func = lambda arg: 'baz'
+        self.assertEqual(
+            sass._prepare_custom_function_list({'foo': func}),
+            [(b'foo($arg)', func)],
+        )
+
+    def test_functions_many_arguments(self):
+        func = lambda foo, bar, baz: 'baz'
+        self.assertEqual(
+            sass._prepare_custom_function_list({'foo': func}),
+            [(b'foo($foo, $bar, $baz)', func)],
+        )
+
+    def test_raises_typeerror_kwargs(self):
+        self.assertRaises(
+            TypeError,
+            sass._prepare_custom_function_list,
+            {'foo': lambda bar='womp': 'baz'},
+        )
+
+    def test_raises_typerror_star_kwargs(self):
+        self.assertRaises(
+            TypeError,
+            sass._prepare_custom_function_list,
+            {'foo': lambda *args: 'baz'},
+        )
+
+    def test_raises_typeerror_star_kwargs(self):
+        self.assertRaises(
+            TypeError,
+            sass._prepare_custom_function_list,
+            {'foo': lambda *kwargs: 'baz'},
+        )
+
+
+class SassTypesTest(unittest.TestCase):
+    def test_number_no_conversion(self):
+        num = sass_types.SassNumber(123., u'px')
+        assert type(num.value) is float, type(num.value)
+        assert type(num.unit) is text_type, type(num.unit)
+
+    def test_number_conversion(self):
+        num = sass_types.SassNumber(123, b'px')
+        assert type(num.value) is float, type(num.value)
+        assert type(num.unit) is text_type, type(num.unit)
+
+    def test_color_no_conversion(self):
+        color = sass_types.SassColor(1., 2., 3., .5)
+        assert type(color.r) is float, type(color.r)
+        assert type(color.g) is float, type(color.g)
+        assert type(color.b) is float, type(color.b)
+        assert type(color.a) is float, type(color.a)
+
+    def test_color_conversion(self):
+        color = sass_types.SassColor(1, 2, 3, 1)
+        assert type(color.r) is float, type(color.r)
+        assert type(color.g) is float, type(color.g)
+        assert type(color.b) is float, type(color.b)
+        assert type(color.a) is float, type(color.a)
+
+    def test_sass_list_no_conversion(self):
+        lst = sass_types.SassList(
+            ('foo', 'bar'), sass_types.SASS_SEPARATOR_COMMA,
+        )
+        assert type(lst.items) is tuple, type(lst.items)
+        assert lst.separator is sass_types.SASS_SEPARATOR_COMMA, lst.separator
+
+    def test_sass_list_conversion(self):
+        lst = sass_types.SassList(
+            ['foo', 'bar'], sass_types.SASS_SEPARATOR_SPACE,
+        )
+        assert type(lst.items) is tuple, type(lst.items)
+        assert lst.separator is sass_types.SASS_SEPARATOR_SPACE, lst.separator
+
+    def test_sass_warning_no_conversion(self):
+        warn = sass_types.SassWarning(u'error msg')
+        assert type(warn.msg) is text_type, type(warn.msg)
+
+    def test_sass_warning_no_conversion(self):
+        warn = sass_types.SassWarning(b'error msg')
+        assert type(warn.msg) is text_type, type(warn.msg)
+
+    def test_sass_error_no_conversion(self):
+        err = sass_types.SassError(u'error msg')
+        assert type(err.msg) is text_type, type(err.msg)
+
+    def test_sass_error_conversion(self):
+        err = sass_types.SassError(b'error msg')
+        assert type(err.msg) is text_type, type(err.msg)
+
+
+def raise_exc(x):
+    raise x
+
+
+def identity(x):
+    # This has the side-effect of bubbling any exceptions we failed to process
+    # in C land
+    import sys
+    return x
+
+
+custom_functions = {
+    'raises': lambda: raise_exc(AssertionError('foo')),
+    'returns_warning': lambda: sass_types.SassWarning('This is a warning'),
+    'returns_error': lambda: sass_types.SassError('This is an error'),
+    # Tuples are a not-supported type.
+    'returns_unknown': lambda: (1, 2, 3),
+    'returns_true': lambda: True,
+    'returns_false': lambda: False,
+    'returns_none': lambda: None,
+    'returns_unicode': lambda: u'☃',
+    'returns_bytes': lambda: u'☃'.encode('UTF-8'),
+    'returns_number': lambda: sass_types.SassNumber(5, 'px'),
+    'returns_color': lambda: sass_types.SassColor(1, 2, 3, .5),
+    'returns_comma_list': lambda: sass_types.SassList(
+        ('Arial', 'sans-serif'), sass_types.SASS_SEPARATOR_COMMA,
+    ),
+    'returns_space_list': lambda: sass_types.SassList(
+        ('medium', 'none'), sass_types.SASS_SEPARATOR_SPACE,
+    ),
+    'returns_py_dict': lambda: {'foo': 'bar'},
+    'returns_map': lambda: sass_types.SassMap((('foo', 'bar'),)),
+    # TODO: returns SassMap
+    'identity': identity,
+}
+
+
+def compile_with_func(s):
+    return sass.compile(
+        string=s,
+        custom_functions=custom_functions,
+        output_style='compressed',
+    )
+
+
+@contextlib.contextmanager
+def assert_raises_compile_error(expected):
+    try:
+        yield
+        assert False, 'Expected to raise!'
+    except sass.CompileError as e:
+        msg, = e.args
+        assert msg.decode('UTF-8') == expected, (msg, expected)
+
+
+class RegexMatcher(object):
+    def __init__(self, reg, flags=None):
+        self.reg = re.compile(reg, re.MULTILINE | re.DOTALL)
+
+    def __eq__(self, other):
+        return bool(self.reg.match(other))
+
+
+class CustomFunctionsTest(unittest.TestCase):
+    def test_raises(self):
+        with assert_raises_compile_error(RegexMatcher(
+                r'^stdin:1: error in C function raises: \n'
+                r'Traceback \(most recent call last\):\n'
+                r'.+'
+                r'AssertionError: foo\n\n'
+                r'Backtrace:\n'
+                r'\tstdin:1, in function `raises`\n'
+                r'\tstdin:1\n$',
+        )):
+            compile_with_func('a { content: raises(); }')
+
+    def test_warning(self):
+        with assert_raises_compile_error(
+                'stdin:1: warning in C function returns-warning: '
+                'This is a warning\n'
+                'Backtrace:\n'
+                '\tstdin:1, in function `returns-warning`\n'
+                '\tstdin:1\n'
+        ):
+            compile_with_func('a { content: returns_warning(); }')
+
+    def test_error(self):
+        with assert_raises_compile_error(
+                'stdin:1: error in C function returns-error: '
+                'This is an error\n'
+                'Backtrace:\n'
+                '\tstdin:1, in function `returns-error`\n'
+                '\tstdin:1\n',
+        ):
+            compile_with_func('a { content: returns_error(); }')
+
+    def test_returns_unknown_object(self):
+        with assert_raises_compile_error(
+                'stdin:1: error in C function returns-unknown: '
+                'Unexpected type: `tuple`.\n'
+                'Expected one of:\n'
+                '- None\n'
+                '- bool\n'
+                '- str\n'
+                '- SassNumber\n'
+                '- SassColor\n'
+                '- SassList\n'
+                '- dict\n'
+                '- SassMap\n'
+                '- SassWarning\n'
+                '- SassError\n\n'
+                'Backtrace:\n'
+                '\tstdin:1, in function `returns-unknown`\n'
+                '\tstdin:1\n',
+        ):
+            compile_with_func('a { content: returns_unknown(); }')
+
+    def test_none(self):
+        self.assertEqual(
+            compile_with_func('a {color: #fff; content: returns_none();}'),
+            'a{color:#fff}',
+        )
+
+    def test_true(self):
+        self.assertEqual(
+            compile_with_func('a { content: returns_true(); }'),
+            'a{content:true}',
+        )
+
+    def test_false(self):
+        self.assertEqual(
+            compile_with_func('a { content: returns_false(); }'),
+            'a{content:false}',
+        )
+
+    def test_unicode(self):
+        self.assertEqual(
+            compile_with_func('a { content: returns_unicode(); }'),
+            u'@charset "UTF-8";\n'
+            u'a{content:☃}',
+        )
+
+    def test_bytes(self):
+        self.assertEqual(
+            compile_with_func('a { content: returns_bytes(); }'),
+            u'@charset "UTF-8";\n'
+            u'a{content:☃}',
+        )
+
+    def test_number(self):
+        self.assertEqual(
+            compile_with_func('a { width: returns_number(); }'),
+            'a{width:5px}',
+        )
+
+    def test_color(self):
+        self.assertEqual(
+            compile_with_func('a { color: returns_color(); }'),
+            'a{color:rgba(1,2,3,0.5)}',
+        )
+
+    def test_comma_list(self):
+        self.assertEqual(
+            compile_with_func('a { font-family: returns_comma_list(); }'),
+            'a{font-family:Arial,sans-serif}',
+        )
+
+    def test_space_list(self):
+        self.assertEqual(
+            compile_with_func('a { border-right: returns_space_list(); }'),
+            'a{border-right:medium none}',
+        )
+
+    def test_py_dict(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { content: map-get(returns_py_dict(), foo); }',
+            ),
+            'a{content:bar}',
+        )
+
+    def test_map(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { content: map-get(returns_map(), foo); }',
+            ),
+            'a{content:bar}',
+        )
+
+    def test_identity_none(self):
+        self.assertEqual(
+            compile_with_func(
+                'a {color: #fff; content: identity(returns_none());}',
+            ),
+            'a{color:#fff}',
+        )
+
+    def test_identity_true(self):
+        self.assertEqual(
+            compile_with_func('a { content: identity(returns_true()); }'),
+            'a{content:true}',
+        )
+
+    def test_identity_false(self):
+        self.assertEqual(
+            compile_with_func('a { content: identity(returns_false()); }'),
+            'a{content:false}',
+        )
+
+    def test_identity_strings(self):
+        self.assertEqual(
+            compile_with_func('a { content: identity(returns_unicode()); }'),
+            u'@charset "UTF-8";\n'
+            u'a{content:☃}',
+        )
+
+    def test_identity_number(self):
+        self.assertEqual(
+            compile_with_func('a { width: identity(returns_number()); }'),
+            'a{width:5px}',
+        )
+
+    def test_identity_color(self):
+        self.assertEqual(
+            compile_with_func('a { color: identity(returns_color()); }'),
+            'a{color:rgba(1,2,3,0.5)}',
+        )
+
+    def test_identity_comma_list(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { font-family: identity(returns_comma_list()); }',
+            ),
+            'a{font-family:Arial,sans-serif}',
+        )
+
+    def test_identity_space_list(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { border-right: identity(returns_space_list()); }',
+            ),
+            'a{border-right:medium none}',
+        )
+
+    def test_identity_py_dict(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { content: map-get(identity(returns_py_dict()), foo); }',
+            ),
+            'a{content:bar}',
+        )
+
+    def test_identity_map(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { content: map-get(identity(returns_map()), foo); }',
+            ),
+            'a{content:bar}',
+        )
+
+    def test_list_with_map_item(self):
+        self.assertEqual(
+            compile_with_func(
+                'a{content: '
+                'map-get(nth(identity(((foo: bar), (baz: womp))), 1), foo)'
+                '}'
+            ),
+            'a{content:bar}'
+        )
+
+    def test_map_with_map_key(self):
+        self.assertEqual(
+            compile_with_func(
+                'a{content: map-get(identity(((foo: bar): baz)), (foo: bar))}',
+            ),
+            'a{content:baz}',
+        )
+
+
 test_cases = [
     SassTestCase,
     CompileTestCase,
@@ -744,6 +1130,9 @@ test_cases = [
     DistutilsTestCase,
     SasscTestCase,
     CompileDirectoriesTest,
+    PrepareCustomFunctionListTest,
+    SassTypesTest,
+    CustomFunctionsTest,
 ]
 loader = unittest.defaultTestLoader
 suite = unittest.TestSuite()
