@@ -46,7 +46,9 @@ for makefilename in [
         sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
         sources_list = sources_match.group('sources').replace('\\\n', ' ')
         libsass_sources.update(sources_list.split())
-libsass_sources = list(libsass_sources)
+libsass_sources = set(
+    x for x in libsass_sources if not x.endswith('.hpp') and not x.endswith('.h')
+)
 
 libsass_headers = [
     os.path.join(LIBSASS_DIR, 'sass_interface.h'),
