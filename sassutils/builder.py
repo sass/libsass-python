@@ -26,7 +26,7 @@ SUFFIX_PATTERN = re.compile('[.](' + '|'.join(map(re.escape, SUFFIXES)) + ')$')
 
 
 def build_directory(sass_path, css_path, output_style='nested',
-                    _root_sass=None, _root_css=None):
+                    substitute_extension=False, _root_sass=None, _root_css=None):
     """Compiles all SASS/SCSS files in ``path`` to CSS.
 
     :param sass_path: the path of the directory which contains source files
@@ -38,6 +38,9 @@ def build_directory(sass_path, css_path, output_style='nested',
                          choose one of: ``'nested'`` (default), ``'expanded'``,
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
+    :param substitute_extension: whether or not to substitute the matched suffix
+                                 with the .css extenstion or just append .css
+    :type substitute_extension: :class:`bool`
     :returns: a dictionary of source filenames to compiled CSS filenames
     :rtype: :class:`collections.Mapping`
 
@@ -57,7 +60,11 @@ def build_directory(sass_path, css_path, output_style='nested',
             if name[0] == '_':
                 # Do not compile if it's partial
                 continue
-            css_fullname = os.path.join(css_path, name) + '.css'
+            css_fullname = os.path.join(css_path, name)
+            if substitute_extension:
+                css_fullname = SUFFIX_PATTERN.sub('.css', css_fullname)
+            else:
+                css_fullname += '.css'
             css = compile(filename=sass_fullname,
                           output_style=output_style,
                           include_paths=[_root_sass])
@@ -69,6 +76,7 @@ def build_directory(sass_path, css_path, output_style='nested',
             css_fullname = os.path.join(css_path, name)
             subresult = build_directory(sass_fullname, css_fullname,
                                         output_style=output_style,
+                                        substitute_extension=substitute_extension,
                                         _root_sass=_root_sass,
                                         _root_css=_root_css)
             result.update(subresult)
@@ -151,7 +159,7 @@ class Manifest(object):
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         return sass_path, css_path
 
-    def build(self, package_dir, output_style='nested'):
+    def build(self, package_dir, output_style='nested', substitute_extension=False):
         """Builds the SASS/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`
         as relative to the given ``package_dir``.
@@ -162,6 +170,9 @@ class Manifest(object):
                              choose one of: ``'nested'`` (default),
                              ``'expanded'``, ``'compact'``, ``'compressed'``
         :type output_style: :class:`str`
+        :param substitute_extension: whether or not to substitute the matched suffix
+                                 with the .css extenstion or just append .css
+        :type substitute_extension: :class:`bool`
         :returns: the set of compiled CSS filenames
         :rtype: :class:`collections.Set`
 
@@ -174,6 +185,7 @@ class Manifest(object):
         css_files = build_directory(
             sass_path, css_path,
             output_style=output_style
+            substitute_extension=substitute_extension
         ).values()
         return frozenset(os.path.join(self.css_path, filename)
                          for filename in css_files)
