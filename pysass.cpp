@@ -22,6 +22,19 @@
 extern "C" {
 #endif
 
+static PyObject* _to_py_value(const union Sass_Value* value);
+static union Sass_Value* _to_sass_value(PyObject* value);
+
+static union Sass_Value* _color_to_sass_value(PyObject* value);
+static union Sass_Value* _number_to_sass_value(PyObject* value);
+static union Sass_Value* _list_to_sass_value(PyObject* value);
+static union Sass_Value* _mapping_to_sass_value(PyObject* value);
+static union Sass_Value* _unicode_to_sass_value(PyObject* value);
+static union Sass_Value* _warning_to_sass_value(PyObject* value);
+static union Sass_Value* _error_to_sass_value(PyObject* value);
+static union Sass_Value* _unknown_type_to_sass_error(PyObject* value);
+static union Sass_Value* _exception_to_sass_error();
+
 struct PySass_Pair {
     char *label;
     int value;
@@ -129,6 +142,175 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
     return retv;
 }
 
+static union Sass_Value* _color_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* r_value = PyObject_GetAttrString(value, "r");
+    PyObject* g_value = PyObject_GetAttrString(value, "g");
+    PyObject* b_value = PyObject_GetAttrString(value, "b");
+    PyObject* a_value = PyObject_GetAttrString(value, "a");
+    retv = sass_make_color(
+        PyFloat_AsDouble(r_value),
+        PyFloat_AsDouble(g_value),
+        PyFloat_AsDouble(b_value),
+        PyFloat_AsDouble(a_value)
+    );
+    Py_DECREF(r_value);
+    Py_DECREF(g_value);
+    Py_DECREF(b_value);
+    Py_DECREF(a_value);
+    return retv;
+}
+
+static union Sass_Value* _list_to_sass_value(PyObject* value) {
+    PyObject* types_mod = PyImport_ImportModule("sass");
+    PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
+    PyObject* sass_space = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_SPACE");
+    union Sass_Value* retv = NULL;
+    Py_ssize_t i = 0;
+    PyObject* items = PyObject_GetAttrString(value, "items");
+    PyObject* separator = PyObject_GetAttrString(value, "separator");
+    Sass_Separator sep = SASS_COMMA;
+    if (separator == sass_comma) {
+        sep = SASS_COMMA;
+    } else if (separator == sass_space) {
+        sep = SASS_SPACE;
+    } else {
+        assert(0);
+    }
+    retv = sass_make_list(PyTuple_Size(items), sep);
+    for (i = 0; i < PyTuple_Size(items); i += 1) {
+        sass_list_set_value(
+            retv, i, _to_sass_value(PyTuple_GET_ITEM(items, i))
+        );
+    }
+    Py_DECREF(types_mod);
+    Py_DECREF(sass_comma);
+    Py_DECREF(sass_space);
+    Py_DECREF(items);
+    Py_DECREF(separator);
+    return retv;
+}
+
+static union Sass_Value* _mapping_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    size_t i = 0;
+    Py_ssize_t pos = 0;
+    PyObject* d_key = NULL;
+    PyObject* d_value = NULL;
+    PyObject* dct = PyDict_New();
+    PyDict_Update(dct, value);
+    retv = sass_make_map(PyDict_Size(dct));
+    while (PyDict_Next(dct, &pos, &d_key, &d_value)) {
+        sass_map_set_key(retv, i, _to_sass_value(d_key));
+        sass_map_set_value(retv, i, _to_sass_value(d_value));
+        i += 1;
+    }
+    Py_DECREF(dct);
+    return retv;
+}
+
+static union Sass_Value* _number_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* d_value = PyObject_GetAttrString(value, "value");
+    PyObject* unit = PyObject_GetAttrString(value, "unit");
+    PyObject* bytes = PyUnicode_AsEncodedString(unit, "UTF-8", "strict");
+    retv = sass_make_number(
+        PyFloat_AsDouble(d_value), PySass_Bytes_AS_STRING(bytes)
+    );
+    Py_DECREF(d_value);
+    Py_DECREF(unit);
+    Py_DECREF(bytes);
+    return retv;
+}
+
+static union Sass_Value* _unicode_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
+    retv = sass_make_string(PySass_Bytes_AS_STRING(bytes));
+    Py_DECREF(bytes);
+    return retv;
+}
+
+static union Sass_Value* _warning_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* msg = PyObject_GetAttrString(value, "msg");
+    PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
+    retv = sass_make_warning(PySass_Bytes_AS_STRING(bytes));
+    Py_DECREF(msg);
+    Py_DECREF(bytes);
+    return retv;
+}
+
+static union Sass_Value* _error_to_sass_value(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* msg = PyObject_GetAttrString(value, "msg");
+    PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
+    retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+    Py_DECREF(msg);
+    Py_DECREF(bytes);
+    return retv;
+}
+
+static union Sass_Value* _unknown_type_to_sass_error(PyObject* value) {
+    union Sass_Value* retv = NULL;
+    PyObject* type = PyObject_Type(value);
+    PyObject* type_name = PyObject_GetAttrString(type, "__name__");
+    PyObject* fmt = PyUnicode_FromString(
+        "Unexpected type: `{0}`.\n"
+        "Expected one of:\n"
+        "- None\n"
+        "- bool\n"
+        "- str\n"
+        "- SassNumber\n"
+        "- SassColor\n"
+        "- SassList\n"
+        "- dict\n"
+        "- SassMap\n"
+        "- SassWarning\n"
+        "- SassError\n"
+    );
+    PyObject* format_meth = PyObject_GetAttrString(fmt, "format");
+    PyObject* result = PyObject_CallFunctionObjArgs(
+        format_meth, type_name, NULL
+    );
+    PyObject* bytes = PyUnicode_AsEncodedString(result, "UTF-8", "strict");
+    retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+    Py_DECREF(type);
+    Py_DECREF(type_name);
+    Py_DECREF(fmt);
+    Py_DECREF(format_meth);
+    Py_DECREF(result);
+    Py_DECREF(bytes);
+    return retv;
+}
+
+static union Sass_Value* _exception_to_sass_error() {
+    union Sass_Value* retv = NULL;
+    PyObject* etype = NULL;
+    PyObject* evalue = NULL;
+    PyObject* etb = NULL;
+    PyErr_Fetch(&etype, &evalue, &etb);
+    {
+        PyObject* traceback_mod = PyImport_ImportModule("traceback");
+        PyObject* traceback_parts = PyObject_CallMethod(
+            traceback_mod, "format_exception", "OOO", etype, evalue, etb
+        );
+        PyList_Insert(traceback_parts, 0, PyUnicode_FromString("\n"));
+        PyObject* joinstr = PyUnicode_FromString("");
+        PyObject* result = PyUnicode_Join(joinstr, traceback_parts);
+        PyObject* bytes = PyUnicode_AsEncodedString(
+            result, "UTF-8", "strict"
+        );
+        retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+        Py_DECREF(traceback_mod);
+        Py_DECREF(traceback_parts);
+        Py_DECREF(joinstr);
+        Py_DECREF(result);
+        Py_DECREF(bytes);
+    }
+    return retv;
+}
+
 static union Sass_Value* _to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* types_mod = PyImport_ImportModule("sass");
@@ -137,8 +319,6 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     PyObject* sass_list_t = PyObject_GetAttrString(types_mod, "SassList");
     PyObject* sass_warning_t = PyObject_GetAttrString(types_mod, "SassWarning");
     PyObject* sass_error_t = PyObject_GetAttrString(types_mod, "SassError");
-    PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
-    PyObject* sass_space = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_SPACE");
     PyObject* collections_mod = PyImport_ImportModule("collections");
     PyObject* mapping_t = PyObject_GetAttrString(collections_mod, "Mapping");
 
@@ -147,114 +327,26 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     } else if (PyBool_Check(value)) {
         retv = sass_make_boolean(value == Py_True);
     } else if (PyUnicode_Check(value)) {
-        PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
-        retv = sass_make_string(PySass_Bytes_AS_STRING(bytes));
-        Py_DECREF(bytes);
+        retv = _unicode_to_sass_value(value);
     } else if (PySass_Bytes_Check(value)) {
         retv = sass_make_string(PySass_Bytes_AS_STRING(value));
     /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
     } else if (PyObject_IsInstance(value, mapping_t)) {
-        size_t i = 0;
-        Py_ssize_t pos = 0;
-        PyObject* d_key = NULL;
-        PyObject* d_value = NULL;
-        PyObject* dct = PyDict_New();
-        PyDict_Update(dct, value);
-        retv = sass_make_map(PyDict_Size(dct));
-        while (PyDict_Next(dct, &pos, &d_key, &d_value)) {
-            sass_map_set_key(retv, i, _to_sass_value(d_key));
-            sass_map_set_value(retv, i, _to_sass_value(d_value));
-            i += 1;
-        }
-        Py_DECREF(dct);
+        retv = _mapping_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_number_t)) {
-        PyObject* d_value = PyObject_GetAttrString(value, "value");
-        PyObject* unit = PyObject_GetAttrString(value, "unit");
-        PyObject* bytes = PyUnicode_AsEncodedString(unit, "UTF-8", "strict");
-        retv = sass_make_number(
-            PyFloat_AsDouble(d_value), PySass_Bytes_AS_STRING(bytes)
-        );
-        Py_DECREF(d_value);
-        Py_DECREF(unit);
-        Py_DECREF(bytes);
+        retv = _number_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_color_t)) {
-        PyObject* r_value = PyObject_GetAttrString(value, "r");
-        PyObject* g_value = PyObject_GetAttrString(value, "g");
-        PyObject* b_value = PyObject_GetAttrString(value, "b");
-        PyObject* a_value = PyObject_GetAttrString(value, "a");
-        retv = sass_make_color(
-            PyFloat_AsDouble(r_value),
-            PyFloat_AsDouble(g_value),
-            PyFloat_AsDouble(b_value),
-            PyFloat_AsDouble(a_value)
-        );
-        Py_DECREF(r_value);
-        Py_DECREF(g_value);
-        Py_DECREF(b_value);
-        Py_DECREF(a_value);
+        retv = _color_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_list_t)) {
-        Py_ssize_t i = 0;
-        PyObject* items = PyObject_GetAttrString(value, "items");
-        PyObject* separator = PyObject_GetAttrString(value, "separator");
-        Sass_Separator sep = SASS_COMMA;
-        if (separator == sass_comma) {
-            sep = SASS_COMMA;
-        } else if (separator == sass_space) {
-            sep = SASS_SPACE;
-        } else {
-            assert(0);
-        }
-        retv = sass_make_list(PyTuple_Size(items), sep);
-        for (i = 0; i < PyTuple_Size(items); i += 1) {
-            sass_list_set_value(
-                retv, i, _to_sass_value(PyTuple_GET_ITEM(items, i))
-            );
-        }
-        Py_DECREF(items);
-        Py_DECREF(separator);
+        retv = _list_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_warning_t)) {
-        PyObject* msg = PyObject_GetAttrString(value, "msg");
-        PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-        retv = sass_make_warning(PySass_Bytes_AS_STRING(bytes));
-        Py_DECREF(msg);
-        Py_DECREF(bytes);
+        retv = _warning_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_error_t)) {
-        PyObject* msg = PyObject_GetAttrString(value, "msg");
-        PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-        retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
-        Py_DECREF(msg);
-        Py_DECREF(bytes);
+        retv = _error_to_sass_value(value);
     }
 
     if (retv == NULL) {
-        PyObject* type = PyObject_Type(value);
-        PyObject* type_name = PyObject_GetAttrString(type, "__name__");
-        PyObject* fmt = PyUnicode_FromString(
-            "Unexpected type: `{0}`.\n"
-            "Expected one of:\n"
-            "- None\n"
-            "- bool\n"
-            "- str\n"
-            "- SassNumber\n"
-            "- SassColor\n"
-            "- SassList\n"
-            "- dict\n"
-            "- SassMap\n"
-            "- SassWarning\n"
-            "- SassError\n"
-        );
-        PyObject* format_meth = PyObject_GetAttrString(fmt, "format");
-        PyObject* result = PyObject_CallFunctionObjArgs(
-            format_meth, type_name, NULL
-        );
-        PyObject* bytes = PyUnicode_AsEncodedString(result, "UTF-8", "strict");
-        retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
-        Py_DECREF(type);
-        Py_DECREF(type_name);
-        Py_DECREF(fmt);
-        Py_DECREF(format_meth);
-        Py_DECREF(result);
-        Py_DECREF(bytes);
+        retv = _unknown_type_to_sass_error(value);
     }
 
     Py_DECREF(types_mod);
@@ -263,8 +355,6 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     Py_DECREF(sass_list_t);
     Py_DECREF(sass_warning_t);
     Py_DECREF(sass_error_t);
-    Py_DECREF(sass_comma);
-    Py_DECREF(sass_space);
     Py_DECREF(collections_mod);
     Py_DECREF(mapping_t);
     return retv;
@@ -280,7 +370,7 @@ static union Sass_Value* _call_py_f(
     union Sass_Value* sass_result = NULL;
 
     for (i = 0; i < sass_list_get_length(sass_args); i += 1) {
-        union Sass_Value* sass_arg = sass_list_get_value(sass_args, i);
+        const union Sass_Value* sass_arg = sass_list_get_value(sass_args, i);
         PyObject* py_arg = NULL;
         if (!(py_arg = _to_py_value(sass_arg))) goto done;
         PyTuple_SetItem(py_args, i, py_arg);
@@ -291,28 +381,7 @@ static union Sass_Value* _call_py_f(
 
 done:
     if (sass_result == NULL) {
-        PyObject* etype = NULL;
-        PyObject* evalue = NULL;
-        PyObject* etb = NULL;
-        {
-            PyErr_Fetch(&etype, &evalue, &etb);
-            PyObject* traceback_mod = PyImport_ImportModule("traceback");
-            PyObject* traceback_parts = PyObject_CallMethod(
-                traceback_mod, "format_exception", "OOO", etype, evalue, etb
-            );
-            PyList_Insert(traceback_parts, 0, PyUnicode_FromString("\n"));
-            PyObject* joinstr = PyUnicode_FromString("");
-            PyObject* result = PyUnicode_Join(joinstr, traceback_parts);
-            PyObject* bytes = PyUnicode_AsEncodedString(
-                result, "UTF-8", "strict"
-            );
-            sass_result = sass_make_error(PySass_Bytes_AS_STRING(bytes));
-            Py_DECREF(traceback_mod);
-            Py_DECREF(traceback_parts);
-            Py_DECREF(joinstr);
-            Py_DECREF(result);
-            Py_DECREF(bytes);
-        }
+        sass_result = _exception_to_sass_error();
     }
     Py_XDECREF(py_args);
     Py_XDECREF(py_result);
