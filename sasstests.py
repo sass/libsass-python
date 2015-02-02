@@ -21,7 +21,6 @@ from werkzeug.wrappers import Response
 
 import sass
 import sassc
-from sassutils import sass_types
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -788,57 +787,57 @@ class PrepareCustomFunctionListTest(unittest.TestCase):
 
 class SassTypesTest(unittest.TestCase):
     def test_number_no_conversion(self):
-        num = sass_types.SassNumber(123., u'px')
+        num = sass.SassNumber(123., u'px')
         assert type(num.value) is float, type(num.value)
         assert type(num.unit) is text_type, type(num.unit)
 
     def test_number_conversion(self):
-        num = sass_types.SassNumber(123, b'px')
+        num = sass.SassNumber(123, b'px')
         assert type(num.value) is float, type(num.value)
         assert type(num.unit) is text_type, type(num.unit)
 
     def test_color_no_conversion(self):
-        color = sass_types.SassColor(1., 2., 3., .5)
+        color = sass.SassColor(1., 2., 3., .5)
         assert type(color.r) is float, type(color.r)
         assert type(color.g) is float, type(color.g)
         assert type(color.b) is float, type(color.b)
         assert type(color.a) is float, type(color.a)
 
     def test_color_conversion(self):
-        color = sass_types.SassColor(1, 2, 3, 1)
+        color = sass.SassColor(1, 2, 3, 1)
         assert type(color.r) is float, type(color.r)
         assert type(color.g) is float, type(color.g)
         assert type(color.b) is float, type(color.b)
         assert type(color.a) is float, type(color.a)
 
     def test_sass_list_no_conversion(self):
-        lst = sass_types.SassList(
-            ('foo', 'bar'), sass_types.SASS_SEPARATOR_COMMA,
+        lst = sass.SassList(
+            ('foo', 'bar'), sass.SASS_SEPARATOR_COMMA,
         )
         assert type(lst.items) is tuple, type(lst.items)
-        assert lst.separator is sass_types.SASS_SEPARATOR_COMMA, lst.separator
+        assert lst.separator is sass.SASS_SEPARATOR_COMMA, lst.separator
 
     def test_sass_list_conversion(self):
-        lst = sass_types.SassList(
-            ['foo', 'bar'], sass_types.SASS_SEPARATOR_SPACE,
+        lst = sass.SassList(
+            ['foo', 'bar'], sass.SASS_SEPARATOR_SPACE,
         )
         assert type(lst.items) is tuple, type(lst.items)
-        assert lst.separator is sass_types.SASS_SEPARATOR_SPACE, lst.separator
+        assert lst.separator is sass.SASS_SEPARATOR_SPACE, lst.separator
 
     def test_sass_warning_no_conversion(self):
-        warn = sass_types.SassWarning(u'error msg')
+        warn = sass.SassWarning(u'error msg')
         assert type(warn.msg) is text_type, type(warn.msg)
 
     def test_sass_warning_no_conversion(self):
-        warn = sass_types.SassWarning(b'error msg')
+        warn = sass.SassWarning(b'error msg')
         assert type(warn.msg) is text_type, type(warn.msg)
 
     def test_sass_error_no_conversion(self):
-        err = sass_types.SassError(u'error msg')
+        err = sass.SassError(u'error msg')
         assert type(err.msg) is text_type, type(err.msg)
 
     def test_sass_error_conversion(self):
-        err = sass_types.SassError(b'error msg')
+        err = sass.SassError(b'error msg')
         assert type(err.msg) is text_type, type(err.msg)
 
 
@@ -855,8 +854,8 @@ def identity(x):
 
 custom_functions = {
     'raises': lambda: raise_exc(AssertionError('foo')),
-    'returns_warning': lambda: sass_types.SassWarning('This is a warning'),
-    'returns_error': lambda: sass_types.SassError('This is an error'),
+    'returns_warning': lambda: sass.SassWarning('This is a warning'),
+    'returns_error': lambda: sass.SassError('This is an error'),
     # Tuples are a not-supported type.
     'returns_unknown': lambda: (1, 2, 3),
     'returns_true': lambda: True,
@@ -864,16 +863,16 @@ custom_functions = {
     'returns_none': lambda: None,
     'returns_unicode': lambda: u'☃',
     'returns_bytes': lambda: u'☃'.encode('UTF-8'),
-    'returns_number': lambda: sass_types.SassNumber(5, 'px'),
-    'returns_color': lambda: sass_types.SassColor(1, 2, 3, .5),
-    'returns_comma_list': lambda: sass_types.SassList(
-        ('Arial', 'sans-serif'), sass_types.SASS_SEPARATOR_COMMA,
+    'returns_number': lambda: sass.SassNumber(5, 'px'),
+    'returns_color': lambda: sass.SassColor(1, 2, 3, .5),
+    'returns_comma_list': lambda: sass.SassList(
+        ('Arial', 'sans-serif'), sass.SASS_SEPARATOR_COMMA,
     ),
-    'returns_space_list': lambda: sass_types.SassList(
-        ('medium', 'none'), sass_types.SASS_SEPARATOR_SPACE,
+    'returns_space_list': lambda: sass.SassList(
+        ('medium', 'none'), sass.SASS_SEPARATOR_SPACE,
     ),
     'returns_py_dict': lambda: {'foo': 'bar'},
-    'returns_map': lambda: sass_types.SassMap((('foo', 'bar'),)),
+    'returns_map': lambda: sass.SassMap((('foo', 'bar'),)),
     # TODO: returns SassMap
     'identity': identity,
 }

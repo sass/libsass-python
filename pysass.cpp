@@ -37,7 +37,7 @@ static struct PySass_Pair PySass_output_style_enum[] = {
 
 static PyObject* _to_py_value(const union Sass_Value* value) {
     PyObject* retv = NULL;
-    PyObject* types_mod = PyImport_ImportModule("sassutils.sass_types");
+    PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
     PyObject* sass_space = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_SPACE");
 
@@ -131,7 +131,7 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
 
 static union Sass_Value* _to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
-    PyObject* types_mod = PyImport_ImportModule("sassutils.sass_types");
+    PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_number_t = PyObject_GetAttrString(types_mod, "SassNumber");
     PyObject* sass_color_t = PyObject_GetAttrString(types_mod, "SassColor");
     PyObject* sass_list_t = PyObject_GetAttrString(types_mod, "SassList");
