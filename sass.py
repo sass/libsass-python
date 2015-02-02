@@ -457,17 +457,29 @@ class SassWarning(collections.namedtuple('SassError', ('msg',))):
         return super(SassWarning, cls).__new__(cls, msg)
 
 
-class SassMap(dict):
+class SassMap(collections.Mapping):
     """Because sass maps can have mapping types as keys, we need an immutable
     hashable mapping type.
     """
-    __slots__ = ('_hash',)
+    __slots__ = ('_dict', '_hash',)
 
-    def __new__(cls, *args, **kwargs):
-        value = super(SassMap, cls).__new__(cls, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        self._dict = dict(*args, **kwargs)
         # An assertion that all things are hashable
-        value._hash = hash(frozenset(value.items()))
-        return value
+        self._hash = hash(frozenset(self._dict.items()))
+
+    # Mapping interface
+
+    def __getitem__(self, key):
+        return self._dict[key]
+
+    def __iter__(self):
+        return iter(self._dict)
+
+    def __len__(self):
+        return len(self._dict)
+
+    # Our interface
 
     def __repr__(self):
         return '{0}({1})'.format(type(self).__name__, frozenset(self.items()))
@@ -476,6 +488,6 @@ class SassMap(dict):
         return self._hash
 
     def _immutable(self, *_):
-        raise AssertionError('SassMaps are immutable')
+        raise TypeError('SassMaps are immutable.')
 
     __setitem__ = __delitem__ = _immutable

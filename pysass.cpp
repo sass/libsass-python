@@ -139,6 +139,8 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     PyObject* sass_error_t = PyObject_GetAttrString(types_mod, "SassError");
     PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
     PyObject* sass_space = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_SPACE");
+    PyObject* collections_mod = PyImport_ImportModule("collections");
+    PyObject* mapping_t = PyObject_GetAttrString(collections_mod, "Mapping");
 
     if (value == Py_None) {
         retv = sass_make_null();
@@ -150,17 +152,21 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
         Py_DECREF(bytes);
     } else if (PySass_Bytes_Check(value)) {
         retv = sass_make_string(PySass_Bytes_AS_STRING(value));
-    } else if (PyDict_Check(value)) {
+    /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
+    } else if (PyObject_IsInstance(value, mapping_t)) {
         size_t i = 0;
         Py_ssize_t pos = 0;
         PyObject* d_key = NULL;
         PyObject* d_value = NULL;
-        retv = sass_make_map(PyDict_Size(value));
-        while (PyDict_Next(value, &pos, &d_key, &d_value)) {
+        PyObject* dct = PyDict_New();
+        PyDict_Update(dct, value);
+        retv = sass_make_map(PyDict_Size(dct));
+        while (PyDict_Next(dct, &pos, &d_key, &d_value)) {
             sass_map_set_key(retv, i, _to_sass_value(d_key));
             sass_map_set_value(retv, i, _to_sass_value(d_value));
             i += 1;
         }
+        Py_DECREF(dct);
     } else if (PyObject_IsInstance(value, sass_number_t)) {
         PyObject* d_value = PyObject_GetAttrString(value, "value");
         PyObject* unit = PyObject_GetAttrString(value, "unit");
@@ -190,7 +196,6 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
         Py_ssize_t i = 0;
         PyObject* items = PyObject_GetAttrString(value, "items");
         PyObject* separator = PyObject_GetAttrString(value, "separator");
-        /* TODO: I don't really like this, maybe move types to C */
         Sass_Separator sep = SASS_COMMA;
         if (separator == sass_comma) {
             sep = SASS_COMMA;
@@ -260,6 +265,8 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     Py_DECREF(sass_error_t);
     Py_DECREF(sass_comma);
     Py_DECREF(sass_space);
+    Py_DECREF(collections_mod);
+    Py_DECREF(mapping_t);
     return retv;
 }
 
