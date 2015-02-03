@@ -331,7 +331,8 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     } else if (PySass_Bytes_Check(value)) {
         retv = sass_make_string(PySass_Bytes_AS_STRING(value));
     /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
-    } else if (PyObject_IsInstance(value, mapping_t)) {
+    /* XXX: pypy derps on dicts: https://bitbucket.org/pypy/pypy/issue/1970 */
+    } else if (PyDict_Check(value) || PyObject_IsInstance(value, mapping_t)) {
         retv = _mapping_to_sass_value(value);
     } else if (PyObject_IsInstance(value, sass_number_t)) {
         retv = _number_to_sass_value(value);
