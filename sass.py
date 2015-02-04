@@ -10,7 +10,9 @@ type.
 'a b {\n  color: blue; }\n'
 
 """
+from __future__ import absolute_import
 import collections
+import inspect
 import os
 import os.path
 import re
@@ -57,9 +59,26 @@ def mkdirp(path):
         raise
 
 
+def _prepare_custom_function_list(custom_functions):
+    # (signature, function_reference)
+    custom_function_list = []
+    for func_name, func in sorted(custom_functions.items()):
+        argspec = inspect.getargspec(func)
+        if argspec.varargs or argspec.keywords or argspec.defaults:
+            raise TypeError(
+                'Functions cannot have starargs or defaults: {0} {1}'.format(
+                    func_name, func,
+                )
+            )
+        blinged_args = ['$' + arg for arg in argspec.args]
+        signature = '{0}({1})'.format(func_name, ', '.join(blinged_args))
+        custom_function_list.append((signature.encode('UTF-8'), func))
+    return custom_function_list
+
+
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    image_path, precision,
+    image_path, precision, custom_functions,
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path):
@@ -74,7 +93,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                image_path, precision, None,
+                image_path, precision, None, custom_functions,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -84,6 +103,7 @@ def compile_dirname(
             else:
                 return False, v
     return True, None
+
 
 def compile(**kwargs):
     """There are three modes of parameters :func:`compile()` can take:
@@ -274,13 +294,18 @@ def compile(**kwargs):
                             repr(image_path))
         elif isinstance(image_path, text_type):
             image_path = image_path.encode(fs_encoding)
+
+    custom_functions = dict(kwargs.pop('custom_functions', {}))
+    custom_functions = _prepare_custom_function_list(custom_functions)
+
     if 'string' in modes:
         string = kwargs.pop('string')
         if isinstance(string, text_type):
             string = string.encode('utf-8')
         s, v = compile_string(string,
                               output_style, source_comments,
-                              include_paths, image_path, precision)
+                              include_paths, image_path, precision,
+                              custom_functions)
         if s:
             return v.decode('utf-8')
     elif 'filename' in modes:
@@ -294,7 +319,8 @@ def compile(**kwargs):
         s, v, source_map = compile_filename(
             filename,
             output_style, source_comments,
-            include_paths, image_path, precision, source_map_filename
+            include_paths, image_path, precision, source_map_filename,
+            custom_functions,
         )
         if s:
             v = v.decode('utf-8')
@@ -337,9 +363,12 @@ def compile(**kwargs):
         except ValueError:
             raise ValueError('dirname must be a pair of (source_dir, '
                              'output_dir)')
-        s, v = compile_dirname(search_path, output_path,
-                               output_style, source_comments,
-                               include_paths, image_path, precision)
+        s, v = compile_dirname(
+            search_path, output_path,
+            output_style, source_comments,
+            include_paths, image_path, precision,
+            custom_functions,
+        )
         if s:
             return
     else:
@@ -367,3 +396,98 @@ def and_join(strings):
         return ''
     iterator = enumerate(strings)
     return ', '.join('and ' + s if i == last else s for i, s in iterator)
+
+"""
+This module provides datatypes to be used in custom sass functions.
+
+The following mappings from sass types to python types are used:
+
+SASS_NULL: ``None``
+SASS_BOOLEAN: ``True`` or ``False``
+SASS_STRING: class:`str`
+SASS_NUMBER: class:`SassNumber`
+SASS_COLOR: class:`SassColor`
+SASS_LIST: class:`SassList`
+SASS_MAP: class:`dict` or class:`SassMap`
+SASS_ERROR: class:`SassError`
+SASS_WARNING: class:`SassWarning`
+"""
+
+
+class SassNumber(collections.namedtuple('SassNumber', ('value', 'unit'))):
+    def __new__(cls, value, unit):
+        value = float(value)
+        if not isinstance(unit, text_type):
+            unit = unit.decode('UTF-8')
+        return super(SassNumber, cls).__new__(cls, value, unit)
+
+
+class SassColor(collections.namedtuple('SassColor', ('r', 'g', 'b', 'a'))):
+    def __new__(cls, r, g, b, a):
+        r = float(r)
+        g = float(g)
+        b = float(b)
+        a = float(a)
+        return super(SassColor, cls).__new__(cls, r, g, b, a)
+
+
+SASS_SEPARATOR_COMMA = collections.namedtuple('SASS_SEPARATOR_COMMA', ())()
+SASS_SEPARATOR_SPACE = collections.namedtuple('SASS_SEPARATOR_SPACE', ())()
+SEPARATORS = frozenset((SASS_SEPARATOR_COMMA, SASS_SEPARATOR_SPACE))
+
+
+class SassList(collections.namedtuple('SassList', ('items', 'separator'))):
+    def __new__(cls, items, separator):
+        items = tuple(items)
+        assert separator in SEPARATORS
+        return super(SassList, cls).__new__(cls, items, separator)
+
+
+class SassError(collections.namedtuple('SassError', ('msg',))):
+    def __new__(cls, msg):
+        if not isinstance(msg, text_type):
+            msg = msg.decode('UTF-8')
+        return super(SassError, cls).__new__(cls, msg)
+
+
+class SassWarning(collections.namedtuple('SassError', ('msg',))):
+    def __new__(cls, msg):
+        if not isinstance(msg, text_type):
+            msg = msg.decode('UTF-8')
+        return super(SassWarning, cls).__new__(cls, msg)
+
+
+class SassMap(collections.Mapping):
+    """Because sass maps can have mapping types as keys, we need an immutable
+    hashable mapping type.
+    """
+    __slots__ = ('_dict', '_hash',)
+
+    def __init__(self, *args, **kwargs):
+        self._dict = dict(*args, **kwargs)
+        # An assertion that all things are hashable
+        self._hash = hash(frozenset(self._dict.items()))
+
+    # Mapping interface
+
+    def __getitem__(self, key):
+        return self._dict[key]
+
+    def __iter__(self):
+        return iter(self._dict)
+
+    def __len__(self):
+        return len(self._dict)
+
+    # Our interface
+
+    def __repr__(self):
+        return '{0}({1})'.format(type(self).__name__, frozenset(self.items()))
+
+    def __hash__(self):
+        return self._hash
+
+    def _immutable(self, *_):
+        raise TypeError('SassMaps are immutable.')
+
+    __setitem__ = __delitem__ = _immutable
