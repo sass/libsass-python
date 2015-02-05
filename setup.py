@@ -8,7 +8,6 @@ import glob
 import os
 import os.path
 import platform
-import re
 import shutil
 import sys
 import tempfile
@@ -23,12 +22,6 @@ except ImportError:
 
 LIBSASS_DIR = 'libsass'
 
-MAKEFILE_SOURCES_LIST_RE = re.compile(r'''
-    (?: ^ | \n ) (?: libsass_la_ )? SOURCES [ \t]* = [ \t]*
-    (?P<sources> (?: (?: $ | [ \t] | \\ [\n] )+
-                     [^ \n\t\\]+ )+ )
-''', re.VERBOSE)
-
 
 if not os.path.isfile(os.path.join(LIBSASS_DIR, 'Makefile')) and \
    os.path.isdir('.git'):
@@ -38,27 +31,12 @@ if not os.path.isfile(os.path.join(LIBSASS_DIR, 'Makefile')) and \
     print('  git submodule update --init', file=sys.stderr)
     print(file=sys.stderr)
 
-libsass_sources = set()
-for makefilename in [
-        os.path.join(LIBSASS_DIR, 'Makefile'),
-        os.path.join(LIBSASS_DIR, 'Makefile.am')]:
-    with open(makefilename) as makefile:
-        sources_match = MAKEFILE_SOURCES_LIST_RE.search(makefile.read())
-        sources_list = sources_match.group('sources').replace('\\\n', ' ')
-        libsass_sources.update(sources_list.split())
-libsass_sources = set(
-    x for x in libsass_sources if not x.endswith('.hpp') and not x.endswith('.h')
-)
-
-libsass_headers = [
-    os.path.join(LIBSASS_DIR, 'sass_interface.h'),
-    os.path.join(LIBSASS_DIR, 'sass.h'),
-    os.path.join(LIBSASS_DIR, 'win32', 'unistd.h'),
-]
-libsass_headers.extend(glob.glob('*.hpp'))
-include_dirs = ['b64', 'utf8']
-sources = ['pysass.cpp']
-sources.extend([os.path.join(LIBSASS_DIR, s) for s in libsass_sources])
+libsass_files = os.listdir(LIBSASS_DIR)
+libsass_sources = [f for f in libsass_files if f.endswith(('.c', '.cpp'))]
+libsass_headers = [f for f in libsass_files if f.endswith(('.h', '.hpp'))]
+headers = [os.path.join(LIBSASS_DIR, f) for f in libsass_headers]
+sources = [os.path.join(LIBSASS_DIR, f) for f in libsass_sources]
+sources.append('pysass.cpp')
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
