@@ -6,10 +6,25 @@ Version 0.7.0
 
 To be released.
 
+- Follow up the libsass upstream: :upcommit:`3.1.0` --- See the `release note`__
+  of Libsass.
+
+  - Custom functions and imports
+  - Decrementing in ``@for`` loops
+  - ``@debug`` and ``@error``
+  - ``not`` operator
+  - ``nth()`` for maps
+  - ``inspect()``
+  - ``feature-exists()``
+  - ``unique-id()``
+  - ``random()``
+
 - Added ``precision`` parameter to :func:`sass.compile()` function.
   [:issue:`39` by Andrea Stagi]
 - :program:`sassc` has a new :option:`-p <sassc -p>`/:option:`--precision
   <sassc --precision>` option.  [:issue:`39` by Andrea Stagi]
+
+__ https://github.com/sass/libsass/releases/tag/3.1.0
 
 
 Version 0.6.2
