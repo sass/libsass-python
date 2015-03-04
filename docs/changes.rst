@@ -7,7 +7,7 @@ Version 0.7.0
 To be released.
 
 - Follow up the libsass upstream: :upcommit:`3.1.0` --- See the `release note`__
-  of Libsass.
+  of Libsass.  [:issue:`38`, :issue:`43` by Anthony Sottile]
 
   - Custom functions and imports
   - Decrementing in ``@for`` loops
@@ -18,6 +18,18 @@ To be released.
   - ``feature-exists()``
   - ``unique-id()``
   - ``random()``
+
+- Added custom functions support.  [:issue:`13`, :issue:`44` by Anthony Sottile]
+
+  - Added ``custom_functions`` parameter to :func:`sass.compile()` function.
+  - Added data types for custom functions:
+
+    - :class:`sass.SassNumber`
+    - :class:`sass.SassColor`
+    - :class:`sass.SassList`
+    - :class:`sass.SassMap`
+    - :class:`sass.SassError`
+    - :class:`sass.SassWarning`
 
 - Added ``precision`` parameter to :func:`sass.compile()` function.
   [:issue:`39` by Andrea Stagi]

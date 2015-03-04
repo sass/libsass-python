@@ -130,6 +130,8 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
+    :param custom_functions: optional mapping of custom functions
+    :type custom_functions: :class:`collections.Mapping`
     :returns: the compiled CSS string
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -161,6 +163,8 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
+    :param custom_functions: optional mapping of custom functions
+    :type custom_functions: :class:`collections.Mapping`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -195,6 +199,8 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
+    :param custom_functions: optional mapping of custom functions
+    :type custom_functions: :class:`collections.Mapping`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
 
@@ -211,6 +217,9 @@ def compile(**kwargs):
 
     .. versionadded:: 0.7.0
        Added ``precision`` parameter.
+
+    .. versionadded:: 0.7.0
+       Added ``custom_functions`` parameter.
 
     """
     modes = set()
@@ -397,6 +406,7 @@ def and_join(strings):
     iterator = enumerate(strings)
     return ', '.join('and ' + s if i == last else s for i, s in iterator)
 
+
 """
 This module provides datatypes to be used in custom sass functions.
 
@@ -415,6 +425,7 @@ SASS_WARNING: class:`SassWarning`
 
 
 class SassNumber(collections.namedtuple('SassNumber', ('value', 'unit'))):
+
     def __new__(cls, value, unit):
         value = float(value)
         if not isinstance(unit, text_type):
@@ -423,6 +434,7 @@ class SassNumber(collections.namedtuple('SassNumber', ('value', 'unit'))):
 
 
 class SassColor(collections.namedtuple('SassColor', ('r', 'g', 'b', 'a'))):
+
     def __new__(cls, r, g, b, a):
         r = float(r)
         g = float(g)
@@ -437,6 +449,7 @@ SEPARATORS = frozenset((SASS_SEPARATOR_COMMA, SASS_SEPARATOR_SPACE))
 
 
 class SassList(collections.namedtuple('SassList', ('items', 'separator'))):
+
     def __new__(cls, items, separator):
         items = tuple(items)
         assert separator in SEPARATORS
@@ -444,13 +457,15 @@ class SassList(collections.namedtuple('SassList', ('items', 'separator'))):
 
 
 class SassError(collections.namedtuple('SassError', ('msg',))):
+
     def __new__(cls, msg):
         if not isinstance(msg, text_type):
             msg = msg.decode('UTF-8')
         return super(SassError, cls).__new__(cls, msg)
 
 
-class SassWarning(collections.namedtuple('SassError', ('msg',))):
+class SassWarning(collections.namedtuple('SassWarning', ('msg',))):
+
     def __new__(cls, msg):
         if not isinstance(msg, text_type):
             msg = msg.decode('UTF-8')
@@ -460,8 +475,12 @@ class SassWarning(collections.namedtuple('SassError', ('msg',))):
 class SassMap(collections.Mapping):
     """Because sass maps can have mapping types as keys, we need an immutable
     hashable mapping type.
+
+    .. versionadded:: 0.7.0
+
     """
-    __slots__ = ('_dict', '_hash',)
+
+    __slots__ = '_dict', '_hash'
 
     def __init__(self, *args, **kwargs):
         self._dict = dict(*args, **kwargs)
