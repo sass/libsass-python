@@ -1,6 +1,7 @@
 from __future__ import print_function, with_statement
 
 import ast
+import atexit
 import distutils.cmd
 import distutils.log
 import distutils.sysconfig
@@ -93,6 +94,30 @@ else:
             flags.append(
                 '-Wno-error=unused-command-line-argument-hard-error-in-future',
             )
+        # Dirty workaround to avoid link error...
+        # Python distutils doesn't provide any way to configure different
+        # flags for each cc and c++.
+        cencode_path = os.path.join(LIBSASS_DIR, 'cencode.c')
+        cencode_body = ''
+        with open(cencode_path) as f:
+            cencode_body = f.read()
+        with open(cencode_path, 'w') as f:
+            f.write('''
+                #ifdef __cplusplus
+                extern "C" {
+                #endif
+            ''')
+            f.write(cencode_body)
+            f.write('''
+                #ifdef __cplusplus
+                }
+                #endif
+            ''')
+
+        @atexit.register
+        def restore_cencode():
+            with open(cencode_path, 'w') as f:
+                f.write(cencode_body)
     link_flags = ['-fPIC', '-lstdc++']
 
 sass_extension = Extension(
