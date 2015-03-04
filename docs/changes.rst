@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.6.3
+Version 0.7.0
 -------------
 
 To be released.

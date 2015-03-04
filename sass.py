@@ -25,7 +25,7 @@ from _sass import OUTPUT_STYLES, compile_filename, compile_string
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
            'and_join', 'compile')
-__version__ = '0.6.3'
+__version__ = '0.7.0'
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
@@ -209,7 +209,7 @@ def compile(**kwargs):
        Values like ``'none'``, ``'line_numbers'``, and ``'map'`` for
        the ``source_comments`` parameter are deprecated.
 
-    .. versionadded:: 0.6.3
+    .. versionadded:: 0.7.0
        Added ``precision`` parameter.
 
     """

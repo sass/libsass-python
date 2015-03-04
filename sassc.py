@@ -44,7 +44,7 @@ There are options as well:
 
    Set the precision for numbers. Default is 5.
 
-   .. versionadded:: 0.6.3
+   .. versionadded:: 0.7.0
 
 .. option:: -v, --version
 
