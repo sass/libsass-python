@@ -14,6 +14,26 @@ It currently supports CPython 2.6, 2.7, 3.3, 3.4, and PyPy 2.3!
 .. _Libsass: https://github.com/sass/libsass
 
 
+Features
+--------
+
+- You don't need any Ruby/Node.js stack at all, for development or deployment
+  either.
+- Fast. (Libsass_ is written in C++.)
+- Simple API.  See :ref:`example code <example>` for details.
+- Custom functions.
+- Support both tabbed (Sass) and braces (SCSS) syntax.
+- WSGI middleware for ease of development.
+  It automatically compiles Sass/SCSS files for each request.
+  See also :mod:`sassutils.wsgi` for details.
+- :mod:`setuptools`/:mod:`distutils` integration.
+  You can build all Sass/SCSS files using
+  :program:`setup.py build_sass` command.
+  See also :mod:`sassutils.distutils` for details.
+- Works also on PyPy.
+- Provides prebuilt wheel (:pep:`427`) binary for Windows.
+
+
 Install
 -------
 
@@ -31,6 +51,8 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 
 .. _PyPI: https://pypi.python.org/pypi/libsass
 
+
+.. _example:
 
 Example
 -------
