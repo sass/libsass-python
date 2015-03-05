@@ -116,8 +116,9 @@ else:
 
         @atexit.register
         def restore_cencode():
-            with open(cencode_path, 'w') as f:
-                f.write(cencode_body)
+            if os.path.isfile(cencode_path):
+                with open(cencode_path, 'w') as f:
+                    f.write(cencode_body)
     link_flags = ['-fPIC', '-lstdc++']
 
 sass_extension = Extension(
