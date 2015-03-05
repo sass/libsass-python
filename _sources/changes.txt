@@ -1,6 +1,47 @@
 Changelog
 =========
 
+Version 0.7.0
+-------------
+
+Released on March 6, 2015.
+
+Anthony Sottile contributed to the most of this release.  Huge thanks to him!
+
+- Follow up the libsass upstream: :upcommit:`3.1.0` --- See the `release note`__
+  of Libsass.  [:issue:`38`, :issue:`43` by Anthony Sottile]
+
+  - Custom functions and imports
+  - Decrementing in ``@for`` loops
+  - ``@debug`` and ``@error``
+  - ``not`` operator
+  - ``nth()`` for maps
+  - ``inspect()``
+  - ``feature-exists()``
+  - ``unique-id()``
+  - ``random()``
+
+- Added custom functions support.  [:issue:`13`, :issue:`44` by Anthony Sottile]
+
+  - Added :class:`sass.SassFunction` class.
+  - Added ``custom_functions`` parameter to :func:`sass.compile()` function.
+  - Added data types for custom functions:
+
+    - :class:`sass.SassNumber`
+    - :class:`sass.SassColor`
+    - :class:`sass.SassList`
+    - :class:`sass.SassMap`
+    - :class:`sass.SassError`
+    - :class:`sass.SassWarning`
+
+- Added ``precision`` parameter to :func:`sass.compile()` function.
+  [:issue:`39` by Andrea Stagi]
+- :program:`sassc` has a new :option:`-p <sassc -p>`/:option:`--precision
+  <sassc --precision>` option.  [:issue:`39` by Andrea Stagi]
+
+__ https://github.com/sass/libsass/releases/tag/3.1.0
+
+
 Version 0.6.2
 -------------
 
@@ -98,7 +139,7 @@ Released on June 6, 2014.
   - Fixed UTF-8 support.
   - Backward incompatibility: broken extends.
 
-__ https://github.com/hcatlin/libsass/releases/tag/v2.0
+__ https://github.com/sass/libsass/releases/tag/v2.0
 
 
 Unstable version 0.4.2.20140529.cd3ee1cbe3
@@ -183,7 +224,7 @@ Released on February 21, 2014.
   - Supports `variable arguments`_.
   - Supports sourcemaps.
 
-.. _57a2f62--v1.0.1: https://github.com/hcatlin/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
+.. _57a2f62--v1.0.1: https://github.com/sass/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
 .. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
 
 
@@ -197,7 +238,7 @@ Released on December 4, 2012.
 - Merged recent changes from libsass upstream:
   `e997102--a84b181`__.
 
-__ https://github.com/hcatlin/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84
+__ https://github.com/sass/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84
 
 
 Version 0.2.3
