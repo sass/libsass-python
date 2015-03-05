@@ -4,7 +4,9 @@ Changelog
 Version 0.7.0
 -------------
 
-To be released.
+Released on March 6, 2015.
+
+Anthony Sottile contributed to the most of this release.  Huge thanks to him!
 
 - Follow up the libsass upstream: :upcommit:`3.1.0` --- See the `release note`__
   of Libsass.  [:issue:`38`, :issue:`43` by Anthony Sottile]
