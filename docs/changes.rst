@@ -21,6 +21,7 @@ To be released.
 
 - Added custom functions support.  [:issue:`13`, :issue:`44` by Anthony Sottile]
 
+  - Added :class:`sass.SassFunction` class.
   - Added ``custom_functions`` parameter to :func:`sass.compile()` function.
   - Added data types for custom functions:
 

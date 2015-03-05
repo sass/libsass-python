@@ -735,53 +735,49 @@ class CompileDirectoriesTest(unittest.TestCase):
                 assert False, 'Expected to raise CompileError but got {0!r}'.format(e)
 
 
-class PrepareCustomFunctionListTest(unittest.TestCase):
-    def test_trivial(self):
-        self.assertEqual(
-            sass._prepare_custom_function_list({}),
-            [],
-        )
+class SassFunctionTest(unittest.TestCase):
 
-    def test_noarg_functions(self):
-        func = lambda: 'bar'
-        self.assertEqual(
-            sass._prepare_custom_function_list({'foo': func}),
-            [(b'foo()', func)],
-        )
+    def test_from_lambda(self):
+        lambda_ = lambda abc, d: None
+        sf = sass.SassFunction.from_lambda('func_name', lambda_)
+        self.assertEqual('func_name', sf.name)
+        self.assertEqual(('$abc', '$d'), sf.arguments)
+        assert sf.callable_ is lambda_
 
-    def test_functions_with_arguments(self):
-        func = lambda arg: 'baz'
-        self.assertEqual(
-            sass._prepare_custom_function_list({'foo': func}),
-            [(b'foo($arg)', func)],
-        )
+    def test_from_named_function(self):
+        sf = sass.SassFunction.from_named_function(identity)
+        self.assertEqual('identity', sf.name)
+        self.assertEqual(('$x',), sf.arguments)
+        assert sf.callable_ is identity
 
-    def test_functions_many_arguments(self):
-        func = lambda foo, bar, baz: 'baz'
-        self.assertEqual(
-            sass._prepare_custom_function_list({'foo': func}),
-            [(b'foo($foo, $bar, $baz)', func)],
+    def test_sigature(self):
+        sf = sass.SassFunction(
+            'func-name',
+            ('$a', '$bc', '$d'),
+            lambda a, bc, d: None
         )
+        self.assertEqual('func-name($a, $bc, $d)', sf.signature)
+        self.assertEqual(sf.signature, str(sf))
 
     def test_raises_typeerror_kwargs(self):
         self.assertRaises(
             TypeError,
-            sass._prepare_custom_function_list,
-            {'foo': lambda bar='womp': 'baz'},
+            sass.SassFunction.from_lambda,
+            lambda bar='womp': 'baz'
         )
 
     def test_raises_typerror_star_kwargs(self):
         self.assertRaises(
             TypeError,
-            sass._prepare_custom_function_list,
-            {'foo': lambda *args: 'baz'},
+            sass.SassFunction.from_lambda,
+            lambda *args: 'baz'
         )
 
     def test_raises_typeerror_star_kwargs(self):
         self.assertRaises(
             TypeError,
-            sass._prepare_custom_function_list,
-            {'foo': lambda *kwargs: 'baz'},
+            sass.SassFunction.from_lambda,
+            lambda *kwargs: 'baz'
         )
 
 
@@ -841,49 +837,152 @@ class SassTypesTest(unittest.TestCase):
         assert type(err.msg) is text_type, type(err.msg)
 
 
-def raise_exc(x):
-    raise x
+def raises():
+    raise AssertionError('foo')
+
+
+def returns_warning():
+    return sass.SassWarning('This is a warning')
+
+
+def returns_error():
+    return sass.SassError('This is an error')
+
+def returns_unknown():
+    """Tuples are a not-supported type."""
+    return 1, 2, 3
+
+
+def returns_true():
+    return True
+
+
+def returns_false():
+    return False
+
+
+def returns_none():
+    return None
+
+
+def returns_unicode():
+    return u'☃'
+
+
+def returns_bytes():
+    return u'☃'.encode('UTF-8')
+
+
+def returns_number():
+    return sass.SassNumber(5, 'px')
+
+
+def returns_color():
+    return sass.SassColor(1, 2, 3, .5)
+
+
+def returns_comma_list():
+    return sass.SassList(('Arial', 'sans-serif'), sass.SASS_SEPARATOR_COMMA)
+
+
+def returns_space_list():
+    return sass.SassList(('medium', 'none'), sass.SASS_SEPARATOR_SPACE)
+
+
+def returns_py_dict():
+    return {'foo': 'bar'}
+
+
+def returns_map():
+    return sass.SassMap([('foo', 'bar')])
 
 
 def identity(x):
-    # This has the side-effect of bubbling any exceptions we failed to process
-    # in C land
+    """This has the side-effect of bubbling any exceptions we failed to process
+    in C land
+
+    """
     import sys
     return x
 
 
-custom_functions = {
-    'raises': lambda: raise_exc(AssertionError('foo')),
-    'returns_warning': lambda: sass.SassWarning('This is a warning'),
-    'returns_error': lambda: sass.SassError('This is an error'),
-    # Tuples are a not-supported type.
-    'returns_unknown': lambda: (1, 2, 3),
-    'returns_true': lambda: True,
-    'returns_false': lambda: False,
-    'returns_none': lambda: None,
-    'returns_unicode': lambda: u'☃',
-    'returns_bytes': lambda: u'☃'.encode('UTF-8'),
-    'returns_number': lambda: sass.SassNumber(5, 'px'),
-    'returns_color': lambda: sass.SassColor(1, 2, 3, .5),
-    'returns_comma_list': lambda: sass.SassList(
-        ('Arial', 'sans-serif'), sass.SASS_SEPARATOR_COMMA,
-    ),
-    'returns_space_list': lambda: sass.SassList(
-        ('medium', 'none'), sass.SASS_SEPARATOR_SPACE,
-    ),
-    'returns_py_dict': lambda: {'foo': 'bar'},
-    'returns_map': lambda: sass.SassMap((('foo', 'bar'),)),
-    # TODO: returns SassMap
+custom_functions = frozenset([
+    sass.SassFunction('raises', (), raises),
+    sass.SassFunction('returns_warning', (), returns_warning),
+    sass.SassFunction('returns_error', (), returns_error),
+    sass.SassFunction('returns_unknown', (), returns_unknown),
+    sass.SassFunction('returns_true', (), returns_true),
+    sass.SassFunction('returns_false', (), returns_false),
+    sass.SassFunction('returns_none', (), returns_none),
+    sass.SassFunction('returns_unicode', (), returns_unicode),
+    sass.SassFunction('returns_bytes', (), returns_bytes),
+    sass.SassFunction('returns_number', (), returns_number),
+    sass.SassFunction('returns_color', (), returns_color),
+    sass.SassFunction('returns_comma_list', (), returns_comma_list),
+    sass.SassFunction('returns_space_list', (), returns_space_list),
+    sass.SassFunction('returns_py_dict', (), returns_py_dict),
+    sass.SassFunction('returns_map', (), returns_map),
+    sass.SassFunction('identity', ('$x',), identity),
+])
+
+custom_function_map = {
+    'raises': raises,
+    'returns_warning': returns_warning,
+    'returns_error': returns_error,
+    'returns_unknown': returns_unknown,
+    'returns_true': returns_true,
+    'returns_false': returns_false,
+    'returns_none': returns_none,
+    'returns_unicode': returns_unicode,
+    'returns_bytes': returns_bytes,
+    'returns_number': returns_number,
+    'returns_color': returns_color,
+    'returns_comma_list': returns_comma_list,
+    'returns_space_list': returns_space_list,
+    'returns_py_dict': returns_py_dict,
+    'returns_map': returns_map,
     'identity': identity,
 }
 
+custom_function_set = frozenset([
+    raises,
+    returns_warning,
+    returns_error,
+    returns_unknown,
+    returns_true,
+    returns_false,
+    returns_none,
+    returns_unicode,
+    returns_bytes,
+    returns_number,
+    returns_color,
+    returns_comma_list,
+    returns_space_list,
+    returns_py_dict,
+    returns_map,
+    identity,
+])
+
 
 def compile_with_func(s):
-    return sass.compile(
+    result = sass.compile(
         string=s,
         custom_functions=custom_functions,
         output_style='compressed',
     )
+    map_result = sass.compile(
+        string=s,
+        custom_functions=custom_function_map,
+        output_style='compressed',
+    )
+    assert result == map_result
+    set_result = sass.compile(
+        string=s,
+        custom_functions=custom_function_set,
+        output_style='compressed',
+    )
+    assert map_result == set_result
+    return result
 
 
 @contextlib.contextmanager
@@ -905,6 +1004,7 @@ class RegexMatcher(object):
 
 
 class CustomFunctionsTest(unittest.TestCase):
+
     def test_raises(self):
         with assert_raises_compile_error(RegexMatcher(
                 r'^stdin:1: error in C function raises: \n'
@@ -1129,7 +1229,7 @@ test_cases = [
     DistutilsTestCase,
     SasscTestCase,
     CompileDirectoriesTest,
-    PrepareCustomFunctionListTest,
+    SassFunctionTest,
     SassTypesTest,
     CustomFunctionsTest,
 ]

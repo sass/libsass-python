@@ -24,7 +24,8 @@ from six import string_types, text_type
 from _sass import OUTPUT_STYLES, compile_filename, compile_string
 
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
-           'and_join', 'compile')
+           'SassColor', 'SassError', 'SassFunction', 'SassList', 'SassMap',
+           'SassNumber', 'SassWarning', 'and_join', 'compile')
 __version__ = '0.7.0'
 
 
@@ -59,21 +60,86 @@ def mkdirp(path):
         raise
 
 
-def _prepare_custom_function_list(custom_functions):
-    # (signature, function_reference)
-    custom_function_list = []
-    for func_name, func in sorted(custom_functions.items()):
-        argspec = inspect.getargspec(func)
+class SassFunction(object):
+    """Custom function for Sass.  It can be instantiated using
+    :meth:`from_lambda()` and :meth:`from_named_function()` as well.
+
+    :param name: the function name
+    :type name: :class:`str`
+    :param arguments: the argument names
+    :type arguments: :class:`collections.Sequence`
+    :param callable_: the actual function to be called
+    :type callable_: :class:`collections.Callable`
+
+    .. versionadded:: 0.7.0
+
+    """
+
+    __slots__ = 'name', 'arguments', 'callable_'
+
+    @classmethod
+    def from_lambda(cls, name, lambda_):
+        """Make a :class:`SassFunction` object from the given ``lambda_``
+        function.  Since lambda functions don't have their name, it need
+        its ``name`` as well.  Arguments are automatically inspected.
+
+        :param name: the function name
+        :type name: :class:`str`
+        :param lambda_: the actual lambda function to be called
+        :type lambda_: :class:`types.LambdaType`
+        :returns: a custom function wrapper of the ``lambda_`` function
+        :rtype: :class:`SassFunction`
+
+        """
+        argspec = inspect.getargspec(lambda_)
         if argspec.varargs or argspec.keywords or argspec.defaults:
             raise TypeError(
-                'Functions cannot have starargs or defaults: {0} {1}'.format(
-                    func_name, func,
+                'functions cannot have starargs or defaults: {0} {1}'.format(
+                    name, lambda_
                 )
             )
-        blinged_args = ['$' + arg for arg in argspec.args]
-        signature = '{0}({1})'.format(func_name, ', '.join(blinged_args))
-        custom_function_list.append((signature.encode('UTF-8'), func))
-    return custom_function_list
+        return cls(name, argspec.args, lambda_)
+
+    @classmethod
+    def from_named_function(cls, function):
+        """Make a :class:`SassFunction` object from the named ``function``.
+        Function name and arguments are automatically inspected.
+
+        :param function: the named function to be called
+        :type function: :class:`types.FunctionType`
+        :returns: a custom function wrapper of the ``function``
+        :rtype: :class:`SassFunction`
+
+        """
+        if not getattr(function, '__name__', ''):
+            raise TypeError('function must be named')
+        return cls.from_lambda(function.__name__, function)
+
+    def __init__(self, name, arguments, callable_):
+        if not isinstance(name, string_types):
+            raise TypeError('name must be a string, not ' + repr(name))
+        elif not isinstance(arguments, collections.Sequence):
+            raise TypeError('arguments must be a sequence, not ' +
+                            repr(arguments))
+        elif not callable(callable_):
+            raise TypeError(repr(callable_) + ' is not callable')
+        self.name = name
+        self.arguments = tuple(
+            arg if arg.startswith('$') else '$' + arg
+            for arg in arguments
+        )
+        self.callable_ = callable_
+
+    @property
+    def signature(self):
+        """Signature string of the function."""
+        return '{0}({1})'.format(self.name, ', '.join(self.arguments))
+
+    def __call__(self, *args, **kwargs):
+        return self.callable_(*args, **kwargs)
+
+    def __str__(self):
+        return self.signature
 
 
 def compile_dirname(
@@ -130,8 +196,12 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
-    :param custom_functions: optional mapping of custom functions
-    :type custom_functions: :class:`collections.Mapping`
+    :param custom_functions: optional mapping of custom functions.
+                             see also below `custom functions
+                             <custom-functions>`_ description
+    :type custom_functions: :class:`collections.Set`,
+                            :class:`collections.Sequence`,
+                            :class:`collections.Mapping`
     :returns: the compiled CSS string
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -163,8 +233,12 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
-    :param custom_functions: optional mapping of custom functions
-    :type custom_functions: :class:`collections.Mapping`
+    :param custom_functions: optional mapping of custom functions.
+                             see also below `custom functions
+                             <custom-functions>`_ description
+    :type custom_functions: :class:`collections.Set`,
+                            :class:`collections.Sequence`,
+                            :class:`collections.Mapping`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -199,10 +273,67 @@ def compile(**kwargs):
     :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
-    :param custom_functions: optional mapping of custom functions
-    :type custom_functions: :class:`collections.Mapping`
+    :param custom_functions: optional mapping of custom functions.
+                             see also below `custom functions
+                             <custom-functions>`_ description
+    :type custom_functions: :class:`collections.Set`,
+                            :class:`collections.Sequence`,
+                            :class:`collections.Mapping`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
+
+    .. _custom-functions:
+
+    The ``custom_functions`` parameter can take three types of forms:
+
+    :class:`~collections.Set`/:class:`~collections.Sequence` of \
+    :class:`SassFunction`\ s
+       It is the most general form.  Although pretty verbose, it can take
+       any kind of callables like type objects, unnamed functions,
+       and user-defined callables.
+
+       .. code-block:: python
+
+          sass.compile(
+              ...,
+              custom_functions={
+                  sass.SassFunction('func-name', ('$a', '$b'), some_callable),
+                  ...
+              }
+          )
+
+    :class:`~collections.Mapping` of names to functions
+       Less general, but easier-to-use form.  Although it's not it can take
+       any kind of callables, it can take any kind of *functions* defined
+       using :keyword:`def`/:keyword:`lambda` syntax.
+       It cannot take callables other than them since inspecting arguments
+       is not always available for every kind of callables.
+
+       .. code-block:: python
+
+          sass.compile(
+              ...,
+              custom_functions={
+                  'func-name': lambda a, b: ...,
+                  ...
+              }
+          )
+
+    :class:`~collections.Set`/:class:`~collections.Sequence` of \
+    named functions
+       Not general, but the easiest-to-use form for *named* functions.
+       It can take only named functions, defined using :keyword:`def`.
+       It cannot take lambdas sinc names are unavailable for them.
+
+       .. code-block:: python
+
+          def func_name(a, b):
+              return ...
+
+          sass.compile(
+              ...,
+              custom_functions={func_name}
+          )
 
     .. versionadded:: 0.4.0
        Added ``source_comments`` and ``source_map_filename`` parameters.
@@ -304,8 +435,26 @@ def compile(**kwargs):
         elif isinstance(image_path, text_type):
             image_path = image_path.encode(fs_encoding)
 
-    custom_functions = dict(kwargs.pop('custom_functions', {}))
-    custom_functions = _prepare_custom_function_list(custom_functions)
+    custom_functions = kwargs.pop('custom_functions', ())
+    if isinstance(custom_functions, collections.Mapping):
+        custom_functions = [
+            SassFunction.from_lambda(name, lambda_)
+            for name, lambda_ in custom_functions.items()
+        ]
+    elif isinstance(custom_functions, (collections.Set, collections.Sequence)):
+        custom_functions = [
+            func if isinstance(func, SassFunction)
+                 else SassFunction.from_named_function(func)
+            for func in custom_functions
+        ]
+    else:
+        raise TypeError(
+            'custom_functions must be one of:\n'
+            '- a set/sequence of {0.__module__}.{0.__name__} objects,\n'
+            '- a mapping of function name strings to lambda functions,\n'
+            '- a set/sequence of named functions,\n'
+            'not {1!r}'.format(SassFunction, custom_functions)
+        )
 
     if 'string' in modes:
         string = kwargs.pop('string')

@@ -10,12 +10,14 @@
 #define PySass_Bytes_Check(o) PyBytes_Check(o)
 #define PySass_Bytes_GET_SIZE(o) PyBytes_GET_SIZE(o)
 #define PySass_Bytes_AS_STRING(o) PyBytes_AS_STRING(o)
+#define PySass_Object_Bytes(o) PyUnicode_AsUTF8String(PyObject_Str(o))
 #else
 #define PySass_IF_PY3(three, two) (two)
 #define PySass_Int_FromLong(v) PyInt_FromLong(v)
 #define PySass_Bytes_Check(o) PyString_Check(o)
 #define PySass_Bytes_GET_SIZE(o) PyString_GET_SIZE(o)
 #define PySass_Bytes_AS_STRING(o) PyString_AS_STRING(o)
+#define PySass_Object_Bytes(o) PyObject_Str(o)
 #endif
 
 #ifdef __cplusplus
@@ -398,13 +400,12 @@ static void _add_custom_functions(
         PyList_Size(custom_functions)
     );
     for (i = 0; i < PyList_GET_SIZE(custom_functions); i += 1) {
-        PyObject* signature_and_func = PyList_GET_ITEM(custom_functions, i);
-        PyObject* signature = PyTuple_GET_ITEM(signature_and_func, 0);
-        PyObject* func = PyTuple_GET_ITEM(signature_and_func, 1);
+        PyObject* sass_function = PyList_GET_ITEM(custom_functions, i);
+        PyObject* signature = PySass_Object_Bytes(sass_function);
         Sass_C_Function_Callback fn = sass_make_function(
             PySass_Bytes_AS_STRING(signature),
             _call_py_f,
-            func
+            sass_function
         );
         sass_function_set_list_entry(fn_list, i, fn);
     }
