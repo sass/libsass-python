@@ -144,7 +144,7 @@ class SassFunction(object):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    image_path, precision, custom_functions,
+    precision, custom_functions,
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path):
@@ -159,7 +159,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                image_path, precision, None, custom_functions,
+                precision, None, custom_functions,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -192,8 +192,6 @@ def compile(**kwargs):
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
-    :param image_path: an optional path to find images
-    :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -229,8 +227,6 @@ def compile(**kwargs):
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
-    :param image_path: an optional path to find images
-    :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -269,8 +265,6 @@ def compile(**kwargs):
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
     :type include_paths: :class:`collections.Sequence`, :class:`str`
-    :param image_path: an optional path to find images
-    :type image_path: :class:`str`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -424,16 +418,6 @@ def compile(**kwargs):
                             'Windows) string, not ' + repr(include_paths))
         if isinstance(include_paths, text_type):
             include_paths = include_paths.encode(fs_encoding)
-    try:
-        image_path = kwargs.pop('image_path')
-    except KeyError:
-        image_path = b'.'
-    else:
-        if not isinstance(image_path, string_types):
-            raise TypeError('image_path must be a string, not ' +
-                            repr(image_path))
-        elif isinstance(image_path, text_type):
-            image_path = image_path.encode(fs_encoding)
 
     custom_functions = kwargs.pop('custom_functions', ())
     if isinstance(custom_functions, collections.Mapping):
@@ -460,10 +444,10 @@ def compile(**kwargs):
         string = kwargs.pop('string')
         if isinstance(string, text_type):
             string = string.encode('utf-8')
-        s, v = compile_string(string,
-                              output_style, source_comments,
-                              include_paths, image_path, precision,
-                              custom_functions)
+        s, v = compile_string(
+            string, output_style, source_comments, include_paths, precision,
+            custom_functions,
+        )
         if s:
             return v.decode('utf-8')
     elif 'filename' in modes:
@@ -475,10 +459,8 @@ def compile(**kwargs):
         elif isinstance(filename, text_type):
             filename = filename.encode(fs_encoding)
         s, v, source_map = compile_filename(
-            filename,
-            output_style, source_comments,
-            include_paths, image_path, precision, source_map_filename,
-            custom_functions,
+            filename, output_style, source_comments, include_paths, precision,
+            source_map_filename, custom_functions,
         )
         if s:
             v = v.decode('utf-8')
@@ -522,10 +504,8 @@ def compile(**kwargs):
             raise ValueError('dirname must be a pair of (source_dir, '
                              'output_dir)')
         s, v = compile_dirname(
-            search_path, output_path,
-            output_style, source_comments,
-            include_paths, image_path, precision,
-            custom_functions,
+            search_path, output_path, output_style, source_comments,
+            include_paths, precision, custom_functions,
         )
         if s:
             return

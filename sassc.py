@@ -21,10 +21,6 @@ There are options as well:
    Optional directory path to find ``@import``\ ed (S)CSS files.
    Can be multiply used.
 
-.. option:: -i <dir>, --image-path <dir>
-
-   Path to find images.  Default is the current directory (:file:`./`).
-
 .. option:: -m, -g, --sourcemap
 
    Emit source map.  Requires the second argument (output CSS filename).
@@ -88,8 +84,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                       dest='include_paths', action='append',
                       help='Path to find "@import"ed (S)CSS source files.  '
                            'Can be multiply used.')
-    parser.add_option('-i', '--image-path', metavar='DIR', default='./',
-                      help='Path to find images. [default: %default]')
     parser.add_option('-w', '--watch', action='store_true',
                       help='Watch file for changes.  Requires the second '
                            'argument (output css filename).')
@@ -130,7 +124,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     output_style=options.output_style,
                     source_map_filename=source_map_filename,
                     include_paths=options.include_paths,
-                    image_path=options.image_path,
                     precision=options.precision
                 )
             else:
@@ -140,7 +133,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     filename=filename,
                     output_style=options.output_style,
                     include_paths=options.include_paths,
-                    image_path=options.image_path,
                     precision=options.precision
                 )
         except (IOError, OSError) as e:

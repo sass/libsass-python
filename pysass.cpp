@@ -415,7 +415,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
     struct Sass_Data_Context *context;
     struct Sass_Options *options;
-    char *string, *include_paths, *image_path;
+    char *string, *include_paths;
     const char *error_message, *output_string;
     Sass_Output_Style output_style;
     int source_comments, error_status, precision;
@@ -423,19 +423,18 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyyiO", "siissiO"),
+                          PySass_IF_PY3("yiiyiO", "siisiO"),
                           &string, &output_style, &source_comments,
-                          &include_paths, &image_path, &precision,
+                          &include_paths, &precision,
                           &custom_functions)) {
         return NULL;
     }
 
-    context = sass_make_data_context(string);
+    context = sass_make_data_context(strdup(string));
     options = sass_data_context_get_options(context);
     sass_option_set_output_style(options, output_style);
     sass_option_set_source_comments(options, source_comments);
     sass_option_set_include_path(options, include_paths);
-    sass_option_set_image_path(options, image_path);
     sass_option_set_precision(options, precision);
     _add_custom_functions(options, custom_functions);
 
@@ -459,16 +458,16 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
     struct Sass_File_Context *context;
     struct Sass_Options *options;
-    char *filename, *include_paths, *image_path;
+    char *filename, *include_paths;
     const char *error_message, *output_string, *source_map_string;
     Sass_Output_Style output_style;
     int source_comments, error_status, precision;
     PyObject *source_map_filename, *custom_functions, *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyyiOO", "siissiOO"),
+                          PySass_IF_PY3("yiiyiOO", "siisiOO"),
                           &filename, &output_style, &source_comments,
-                          &include_paths, &image_path, &precision,
+                          &include_paths, &precision,
                           &source_map_filename, &custom_functions)) {
         return NULL;
     }
@@ -491,7 +490,6 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     sass_option_set_output_style(options, output_style);
     sass_option_set_source_comments(options, source_comments);
     sass_option_set_include_path(options, include_paths);
-    sass_option_set_image_path(options, image_path);
     sass_option_set_precision(options, precision);
     _add_custom_functions(options, custom_functions);
 

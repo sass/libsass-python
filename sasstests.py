@@ -57,7 +57,7 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'sourcesContent': [],
     'names': [],
-    'mappings': ';AAKA;EAHE,AAAkB;;EAKpB,AAAK;IACD,AAAO',
+    'mappings': ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,KAAK,EAAE,IAAK,GADX',
 }
 
 B_EXPECTED_CSS = '''\
@@ -221,12 +221,6 @@ class CompileTestCase(BaseTestCase):
                           string='a { color: blue; }',
                           source_comments='invalid')
 
-    def test_compile_invalid_image_path(self):
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }', image_path=[])
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }', image_path=123)
-
     def test_compile_string(self):
         actual = sass.compile(string='a { b { color: blue; } }')
         assert actual == 'a b {\n  color: blue; }\n'
@@ -247,7 +241,8 @@ a {
 a {
   color: blue; }
 
-/* 유니코드 */''',
+/* 유니코드 */
+''',
             actual
         )
         self.assertRaises(sass.CompileError, sass.compile,
@@ -409,7 +404,7 @@ class BuilderTestCase(BaseTestCase):
         self.assertEqual('a.scss.css', result_files['a.scss'])
         with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
             css = f.read()
-        self.assertEqual('body{background-color:green}body a{color:blue}',
+        self.assertEqual('body{background-color:green}body a{color:blue}\n',
                          css)
 
 
@@ -462,7 +457,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AACA,AAAE;EACE,AAAW',
+                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;EACA,SAAS,EAAE,IAAI,GADd',
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -480,7 +475,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AAKA;EAHE,AAAkB;;EAKpB,AAAK;IACD,AAAM',
+                    'mappings': ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,IAAI,EAAE,0BAA2B,GADhC',
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -561,7 +556,7 @@ class DistutilsTestCase(BaseTestCase):
         )
         with open(self.css_path('a.scss.css')) as f:
             self.assertEqual(
-                'p a {\n  color: red; }\np b {\n  color: blue; }\n',
+                'p a {\n  color: red; }\n\np b {\n  color: blue; }\n',
                 f.read()
             )
 
@@ -570,7 +565,7 @@ class DistutilsTestCase(BaseTestCase):
         self.assertEqual(0, rv)
         with open(self.css_path('a.scss.css')) as f:
             self.assertEqual(
-                'p a{color:red}p b{color:blue}',
+                'p a{color:red}p b{color:blue}\n',
                 f.read()
             )
 
@@ -727,8 +722,8 @@ class CompileDirectoriesTest(unittest.TestCase):
                 assert False, 'Expected to raise'
             except sass.CompileError as e:
                 msg, = e.args
-                assert msg.decode('UTF-8').endswith(
-                    'bad.scss:1: invalid property name\n'
+                assert msg.decode('UTF-8').startswith(
+                    'Error: invalid property name'
                 ), msg
                 return
             except Exception as e:
@@ -1007,111 +1002,112 @@ class CustomFunctionsTest(unittest.TestCase):
 
     def test_raises(self):
         with assert_raises_compile_error(RegexMatcher(
-                r'^stdin:1: error in C function raises: \n'
-                r'Traceback \(most recent call last\):\n'
+                r'^Error: error in C function raises: \n'
+                r'       Traceback \(most recent call last\):\n'
                 r'.+'
                 r'AssertionError: foo\n\n'
-                r'Backtrace:\n'
-                r'\tstdin:1, in function `raises`\n'
-                r'\tstdin:1\n$',
+                r'       Backtrace:\n'
+                r'       \tstdin:0, in function `raises`\n'
+                r'       \tstdin:0\n'
+                r'        on line 1 of stdin\n$'
         )):
             compile_with_func('a { content: raises(); }')
 
     def test_warning(self):
         with assert_raises_compile_error(
-                'stdin:1: warning in C function returns-warning: '
+                'Error: warning in C function returns-warning: '
                 'This is a warning\n'
-                'Backtrace:\n'
-                '\tstdin:1, in function `returns-warning`\n'
-                '\tstdin:1\n'
+                '       Backtrace:\n'
+                '       \tstdin:0, in function `returns-warning`\n'
+                '       \tstdin:0\n'
+                '        on line 1 of stdin\n'
         ):
             compile_with_func('a { content: returns_warning(); }')
 
     def test_error(self):
         with assert_raises_compile_error(
-                'stdin:1: error in C function returns-error: '
-                'This is an error\n'
-                'Backtrace:\n'
-                '\tstdin:1, in function `returns-error`\n'
-                '\tstdin:1\n',
+                'Error: error in C function returns-error: This is an error\n'
+                '       Backtrace:\n'
+                '       \tstdin:0, in function `returns-error`\n'
+                '       \tstdin:0\n'
+                '        on line 1 of stdin\n'
         ):
             compile_with_func('a { content: returns_error(); }')
 
     def test_returns_unknown_object(self):
         with assert_raises_compile_error(
-                'stdin:1: error in C function returns-unknown: '
+                'Error: error in C function returns-unknown: '
                 'Unexpected type: `tuple`.\n'
-                'Expected one of:\n'
-                '- None\n'
-                '- bool\n'
-                '- str\n'
-                '- SassNumber\n'
-                '- SassColor\n'
-                '- SassList\n'
-                '- dict\n'
-                '- SassMap\n'
-                '- SassWarning\n'
-                '- SassError\n\n'
-                'Backtrace:\n'
-                '\tstdin:1, in function `returns-unknown`\n'
-                '\tstdin:1\n',
+                '       Expected one of:\n'
+                '       - None\n'
+                '       - bool\n'
+                '       - str\n'
+                '       - SassNumber\n'
+                '       - SassColor\n'
+                '       - SassList\n'
+                '       - dict\n'
+                '       - SassMap\n'
+                '       - SassWarning\n'
+                '       - SassError\n\n'
+                '       Backtrace:\n'
+                '       \tstdin:0, in function `returns-unknown`\n'
+                '       \tstdin:0\n'
+                '        on line 1 of stdin\n'
         ):
             compile_with_func('a { content: returns_unknown(); }')
 
     def test_none(self):
         self.assertEqual(
             compile_with_func('a {color: #fff; content: returns_none();}'),
-            'a{color:#fff}',
+            'a{color:#fff}\n',
         )
 
     def test_true(self):
         self.assertEqual(
             compile_with_func('a { content: returns_true(); }'),
-            'a{content:true}',
+            'a{content:true}\n',
         )
 
     def test_false(self):
         self.assertEqual(
             compile_with_func('a { content: returns_false(); }'),
-            'a{content:false}',
+            'a{content:false}\n',
         )
 
     def test_unicode(self):
         self.assertEqual(
             compile_with_func('a { content: returns_unicode(); }'),
-            u'@charset "UTF-8";\n'
-            u'a{content:☃}',
+            u'\ufeffa{content:☃}\n',
         )
 
     def test_bytes(self):
         self.assertEqual(
             compile_with_func('a { content: returns_bytes(); }'),
-            u'@charset "UTF-8";\n'
-            u'a{content:☃}',
+            u'\ufeffa{content:☃}\n',
         )
 
     def test_number(self):
         self.assertEqual(
             compile_with_func('a { width: returns_number(); }'),
-            'a{width:5px}',
+            'a{width:5px}\n',
         )
 
     def test_color(self):
         self.assertEqual(
             compile_with_func('a { color: returns_color(); }'),
-            'a{color:rgba(1,2,3,0.5)}',
+            'a{color:rgba(1,2,3,0.5)}\n',
         )
 
     def test_comma_list(self):
         self.assertEqual(
             compile_with_func('a { font-family: returns_comma_list(); }'),
-            'a{font-family:Arial,sans-serif}',
+            'a{font-family:Arial,sans-serif}\n',
         )
 
     def test_space_list(self):
         self.assertEqual(
             compile_with_func('a { border-right: returns_space_list(); }'),
-            'a{border-right:medium none}',
+            'a{border-right:medium none}\n',
         )
 
     def test_py_dict(self):
@@ -1119,7 +1115,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { content: map-get(returns_py_dict(), foo); }',
             ),
-            'a{content:bar}',
+            'a{content:bar}\n',
         )
 
     def test_map(self):
@@ -1127,7 +1123,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { content: map-get(returns_map(), foo); }',
             ),
-            'a{content:bar}',
+            'a{content:bar}\n',
         )
 
     def test_identity_none(self):
@@ -1135,38 +1131,37 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a {color: #fff; content: identity(returns_none());}',
             ),
-            'a{color:#fff}',
+            'a{color:#fff}\n',
         )
 
     def test_identity_true(self):
         self.assertEqual(
             compile_with_func('a { content: identity(returns_true()); }'),
-            'a{content:true}',
+            'a{content:true}\n',
         )
 
     def test_identity_false(self):
         self.assertEqual(
             compile_with_func('a { content: identity(returns_false()); }'),
-            'a{content:false}',
+            'a{content:false}\n',
         )
 
     def test_identity_strings(self):
         self.assertEqual(
             compile_with_func('a { content: identity(returns_unicode()); }'),
-            u'@charset "UTF-8";\n'
-            u'a{content:☃}',
+            u'\ufeffa{content:☃}\n',
         )
 
     def test_identity_number(self):
         self.assertEqual(
             compile_with_func('a { width: identity(returns_number()); }'),
-            'a{width:5px}',
+            'a{width:5px}\n',
         )
 
     def test_identity_color(self):
         self.assertEqual(
             compile_with_func('a { color: identity(returns_color()); }'),
-            'a{color:rgba(1,2,3,0.5)}',
+            'a{color:rgba(1,2,3,0.5)}\n',
         )
 
     def test_identity_comma_list(self):
@@ -1174,7 +1169,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { font-family: identity(returns_comma_list()); }',
             ),
-            'a{font-family:Arial,sans-serif}',
+            'a{font-family:Arial,sans-serif}\n',
         )
 
     def test_identity_space_list(self):
@@ -1182,7 +1177,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { border-right: identity(returns_space_list()); }',
             ),
-            'a{border-right:medium none}',
+            'a{border-right:medium none}\n',
         )
 
     def test_identity_py_dict(self):
@@ -1190,7 +1185,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { content: map-get(identity(returns_py_dict()), foo); }',
             ),
-            'a{content:bar}',
+            'a{content:bar}\n',
         )
 
     def test_identity_map(self):
@@ -1198,7 +1193,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a { content: map-get(identity(returns_map()), foo); }',
             ),
-            'a{content:bar}',
+            'a{content:bar}\n',
         )
 
     def test_list_with_map_item(self):
@@ -1208,7 +1203,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 'map-get(nth(identity(((foo: bar), (baz: womp))), 1), foo)'
                 '}'
             ),
-            'a{content:bar}'
+            'a{content:bar}\n'
         )
 
     def test_map_with_map_key(self):
@@ -1216,7 +1211,7 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a{content: map-get(identity(((foo: bar): baz)), (foo: bar))}',
             ),
-            'a{content:baz}',
+            'a{content:baz}\n',
         )
 
 
