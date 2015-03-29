@@ -8,7 +8,7 @@
     
     <title>sass — Binding of libsass &mdash; libsass 0.7.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,10 +25,14 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="libsass 0.7.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
-    <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" /> 
+    <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,23 +47,385 @@
         <li class="right" >
           <a href="sassc.html" title="sassc — SassC compliant command line interface"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <span class="target" id="module-sass"></span><div class="section" id="sass-binding-of-libsass">
+<h1><a class="reference internal" href="#module-sass" title="sass"><code class="xref py py-mod docutils literal"><span class="pre">sass</span></code></a> &#8212; Binding of <code class="docutils literal"><span class="pre">libsass</span></code><a class="headerlink" href="#sass-binding-of-libsass" title="Permalink to this headline">¶</a></h1>
+<p>This simple C extension module provides a very simple binding of <code class="docutils literal"><span class="pre">libsass</span></code>,
+which is written in C/C++.  It contains only one function and one exception
+type.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
+<span class="go">&#39;a b {</span>
+<span class="go">  color: blue; }</span>
+<span class="go">&#39;</span>
+</pre></div>
+</div>
+<dl class="data">
+<dt id="sass.MODES">
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'filename', 'string', 'dirname'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> can take.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sass.OUTPUT_STYLES">
+<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'nested': 0, 'compressed': 3, 'expanded': 1}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of output styles.
+Keys are output name strings, and values are flag integers.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sass.SOURCE_COMMENTS">
+<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'map': 2, 'default': 1, 'line_numbers': 1, 'none': 0}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of source comments styles.
+Keys are mode names, and values are corresponding flag integers.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.4.0.</span></p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sass.CompileError">
+<em class="property">exception </em><code class="descclassname">sass.</code><code class="descname">CompileError</code><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a>.
+It is a subtype of <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><code class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sass.SassFunction">
+<em class="property">class </em><code class="descclassname">sass.</code><code class="descname">SassFunction</code><span class="sig-paren">(</span><em>name</em>, <em>arguments</em>, <em>callable_</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom function for Sass.  It can be instantiated using
+<a class="reference internal" href="#sass.SassFunction.from_lambda" title="sass.SassFunction.from_lambda"><code class="xref py py-meth docutils literal"><span class="pre">from_lambda()</span></code></a> and <a class="reference internal" href="#sass.SassFunction.from_named_function" title="sass.SassFunction.from_named_function"><code class="xref py py-meth docutils literal"><span class="pre">from_named_function()</span></code></a> as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; the function name</li>
+<li><strong>arguments</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>) &#8211; the argument names</li>
+<li><strong>callable</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Callable" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Callable</span></code></a>) &#8211; the actual function to be called</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.7.0.</span></p>
+</div>
+<dl class="classmethod">
+<dt id="sass.SassFunction.from_lambda">
+<em class="property">classmethod </em><code class="descname">from_lambda</code><span class="sig-paren">(</span><em>name</em>, <em>lambda_</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_lambda" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a> object from the given <code class="docutils literal"><span class="pre">lambda_</span></code>
+function.  Since lambda functions don&#8217;t have their name, it need
+its <code class="docutils literal"><span class="pre">name</span></code> as well.  Arguments are automatically inspected.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; the function name</li>
+<li><strong>lambda</strong> (<code class="xref py py-class docutils literal"><span class="pre">types.LambdaType</span></code>) &#8211; the actual lambda function to be called</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a custom function wrapper of the <code class="docutils literal"><span class="pre">lambda_</span></code> function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="sass.SassFunction.from_named_function">
+<em class="property">classmethod </em><code class="descname">from_named_function</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_named_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a> object from the named <code class="docutils literal"><span class="pre">function</span></code>.
+Function name and arguments are automatically inspected.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>function</strong> (<code class="xref py py-class docutils literal"><span class="pre">types.FunctionType</span></code>) &#8211; the named function to be called</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a custom function wrapper of the <code class="docutils literal"><span class="pre">function</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sass.SassFunction.signature">
+<code class="descname">signature</code><a class="headerlink" href="#sass.SassFunction.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signature string of the function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sass.SassMap">
+<em class="property">class </em><code class="descclassname">sass.</code><code class="descname">SassMap</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Because sass maps can have mapping types as keys, we need an immutable
+hashable mapping type.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.7.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sass.and_join">
+<code class="descclassname">sass.</code><code class="descname">and_join</code><span class="sig-paren">(</span><em>strings</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.and_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join the given <code class="docutils literal"><span class="pre">strings</span></code> by commas with last <cite>&#8216; and &#8216;</cite> conjuction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s">&#39;Korea&#39;</span><span class="p">,</span> <span class="s">&#39;Japan&#39;</span><span class="p">,</span> <span class="s">&#39;China&#39;</span><span class="p">,</span> <span class="s">&#39;Taiwan&#39;</span><span class="p">])</span>
+<span class="go">&#39;Korea, Japan, China, and Taiwan&#39;</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>strings</strong> &#8211; a list of words to join</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a joined string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">basestring</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sass.compile">
+<code class="descclassname">sass.</code><code class="descname">compile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>There are three modes of parameters <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> can take:
+<code class="docutils literal"><span class="pre">string</span></code>, <code class="docutils literal"><span class="pre">filename</span></code>, and <code class="docutils literal"><span class="pre">dirname</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">string</span></code> parameter is the most basic way to compile SASS.
+It simply takes a string of SASS code, and then returns a compiled
+CSS string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; SASS source code to compile.  it&#8217;s exclusive to
+<code class="docutils literal"><span class="pre">filename</span></code> and <code class="docutils literal"><span class="pre">dirname</span></code> parameters</li>
+<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional coding style of the compiled result.
+choose one of: <code class="docutils literal"><span class="pre">'nested'</span></code> (default), <code class="docutils literal"><span class="pre">'expanded'</span></code>,
+<code class="docutils literal"><span class="pre">'compact'</span></code>, <code class="docutils literal"><span class="pre">'compressed'</span></code></li>
+<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a>) &#8211; whether to add comments about source lines.
+<code class="xref py py-const docutils literal"><span class="pre">False</span></code> by default</li>
+<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional list of paths to find <code class="docutils literal"><span class="pre">&#64;import</span></code>ed
+SASS/CSS source files</li>
+<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional path to find images</li>
+<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>) &#8211; optional precision for numbers. <code class="xref py py-const docutils literal"><span class="pre">5</span></code> by default.</li>
+<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) &#8211; optional mapping of custom functions.
+see also below <a class="reference external" href="custom-functions">custom functions</a> description</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
+(for example the given SASS has broken syntax)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal"><span class="pre">filename</span></code> is the most commonly used way.  It takes a string of
+SASS filename, and then returns a compiled CSS string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; the filename of SASS source code to compile.
+it&#8217;s exclusive to <code class="docutils literal"><span class="pre">string</span></code> and <code class="docutils literal"><span class="pre">dirname</span></code> parameters</li>
+<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional coding style of the compiled result.
+choose one of: <code class="docutils literal"><span class="pre">'nested'</span></code> (default), <code class="docutils literal"><span class="pre">'expanded'</span></code>,
+<code class="docutils literal"><span class="pre">'compact'</span></code>, <code class="docutils literal"><span class="pre">'compressed'</span></code></li>
+<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a>) &#8211; whether to add comments about source lines.
+<code class="xref py py-const docutils literal"><span class="pre">False</span></code> by default</li>
+<li><strong>source_map_filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; use source maps and indicate the source map
+output filename.  <code class="xref py py-const docutils literal"><span class="pre">None</span></code> means not
+using source maps.  <code class="xref py py-const docutils literal"><span class="pre">None</span></code> by default.
+note that it implies <code class="docutils literal"><span class="pre">source_comments</span></code>
+is also <code class="xref py py-const docutils literal"><span class="pre">True</span></code></li>
+<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional list of paths to find <code class="docutils literal"><span class="pre">&#64;import</span></code>ed
+SASS/CSS source files</li>
+<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional path to find images</li>
+<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>) &#8211; optional precision for numbers. <code class="xref py py-const docutils literal"><span class="pre">5</span></code> by default.</li>
+<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) &#8211; <p>optional mapping of custom functions.
+see also below <a class="reference external" href="custom-functions">custom functions</a> description</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string, or a pair of the compiled CSS string
+and the source map string if <code class="docutils literal"><span class="pre">source_comments='map'</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> &#8211; when it fails for any reason
+(for example the given SASS has broken syntax)</li>
+<li><a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.IOError" title="(in Python v2.7)"><strong>exceptions.IOError</strong></a> &#8211; when the <code class="docutils literal"><span class="pre">filename</span></code> doesn&#8217;t exist or
+cannot be read</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal"><span class="pre">dirname</span></code> is useful for automation.  It takes a pair of paths.
+The first of the <code class="docutils literal"><span class="pre">dirname</span></code> pair refers the source directory, contains
+several SASS source files to compiled.  SASS source files can be nested
+in directories.  The second of the pair refers the output directory
+that compiled CSS files would be saved.  Directory tree structure of
+the source directory will be maintained in the output directory as well.
+If <code class="docutils literal"><span class="pre">dirname</span></code> parameter is used the function returns <code class="xref py py-const docutils literal"><span class="pre">None</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dirname</strong> (<code class="xref py py-class docutils literal"><span class="pre">tuple</span></code>) &#8211; a pair of <code class="docutils literal"><span class="pre">(source_dir,</span> <span class="pre">output_dir)</span></code>.
+it&#8217;s exclusive to <code class="docutils literal"><span class="pre">string</span></code> and <code class="docutils literal"><span class="pre">filename</span></code>
+parameters</li>
+<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional coding style of the compiled result.
+choose one of: <code class="docutils literal"><span class="pre">'nested'</span></code> (default), <code class="docutils literal"><span class="pre">'expanded'</span></code>,
+<code class="docutils literal"><span class="pre">'compact'</span></code>, <code class="docutils literal"><span class="pre">'compressed'</span></code></li>
+<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a>) &#8211; whether to add comments about source lines.
+<code class="xref py py-const docutils literal"><span class="pre">False</span></code> by default</li>
+<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional list of paths to find <code class="docutils literal"><span class="pre">&#64;import</span></code>ed
+SASS/CSS source files</li>
+<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional path to find images</li>
+<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>) &#8211; optional precision for numbers. <code class="xref py py-const docutils literal"><span class="pre">5</span></code> by default.</li>
+<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>,
+<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) &#8211; <p>optional mapping of custom functions.
+see also below <a class="reference external" href="custom-functions">custom functions</a> description</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
+(for example the given SASS has broken syntax)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p id="id3">The <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter can take three types of forms:</p>
+<dl class="docutils">
+<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Set</span></code></a>/<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a> of     <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a>s</dt>
+<dd><p class="first">It is the most general form.  Although pretty verbose, it can take
+any kind of callables like type objects, unnamed functions,
+and user-defined callables.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">sass</span><span class="o">.</span><span class="n">SassFunction</span><span class="p">(</span><span class="s">&#39;func-name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;$a&#39;</span><span class="p">,</span> <span class="s">&#39;$b&#39;</span><span class="p">),</span> <span class="n">some_callable</span><span class="p">),</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Mapping</span></code></a> of names to functions</dt>
+<dd><p class="first">Less general, but easier-to-use form.  Although it&#8217;s not it can take
+any kind of callables, it can take any kind of <em>functions</em> defined
+using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>/<a class="reference external" href="http://docs.python.org/reference/expressions.html#lambda" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">lambda</span></code></a> syntax.
+It cannot take callables other than them since inspecting arguments
+is not always available for every kind of callables.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">&#39;func-name&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Set</span></code></a>/<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a> of     named functions</dt>
+<dd><p class="first">Not general, but the easiest-to-use form for <em>named</em> functions.
+It can take only named functions, defined using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>.
+It cannot take lambdas sinc names are unavailable for them.</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">...</span>
+
+<span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span><span class="n">func_name</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.4.0: </span>Added <code class="docutils literal"><span class="pre">source_comments</span></code> and <code class="docutils literal"><span class="pre">source_map_filename</span></code> parameters.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.6.0: </span>The <code class="docutils literal"><span class="pre">source_comments</span></code> parameter becomes to take only <a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a>
+instead of <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>.</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.6.0: </span>Values like <code class="docutils literal"><span class="pre">'none'</span></code>, <code class="docutils literal"><span class="pre">'line_numbers'</span></code>, and <code class="docutils literal"><span class="pre">'map'</span></code> for
+the <code class="docutils literal"><span class="pre">source_comments</span></code> parameter are deprecated.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.7.0: </span>Added <code class="docutils literal"><span class="pre">precision</span></code> parameter.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.7.0: </span>Added <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="sassc.html"
-                        title="previous chapter"><tt class="docutils literal"><span class="pre">sassc</span></tt> &#8212; SassC compliant command line interface</a></p>
+                        title="previous chapter"><code class="docutils literal"><span class="pre">sassc</span></code> &#8212; SassC compliant command line interface</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="sassutils.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">sassutils</span></tt> &#8212; Additional utilities related to SASS</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/sass.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter"><code class="docutils literal"><span class="pre">sassutils</span></code> &#8212; Additional utilities related to SASS</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sass.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -74,389 +440,22 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <span class="target" id="module-sass"></span><div class="section" id="sass-binding-of-libsass">
-<h1><a class="reference internal" href="#module-sass" title="sass"><tt class="xref py py-mod docutils literal"><span class="pre">sass</span></tt></a> &#8212; Binding of <tt class="docutils literal"><span class="pre">libsass</span></tt><a class="headerlink" href="#sass-binding-of-libsass" title="Permalink to this headline">¶</a></h1>
-<p>This simple C extension module provides a very simple binding of <tt class="docutils literal"><span class="pre">libsass</span></tt>,
-which is written in C/C++.  It contains only one function and one exception
-type.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
-<span class="go">&#39;a b {</span>
-<span class="go">  color: blue; }</span>
-<span class="go">&#39;</span>
-</pre></div>
-</div>
-<dl class="data">
-<dt id="sass.MODES">
-<tt class="descclassname">sass.</tt><tt class="descname">MODES</tt><em class="property"> = {'dirname', 'string', 'filename'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> can take.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="sass.OUTPUT_STYLES">
-<tt class="descclassname">sass.</tt><tt class="descname">OUTPUT_STYLES</tt><em class="property"> = {'compressed': 3, 'compact': 2, 'expanded': 1, 'nested': 0}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of output styles.
-Keys are output name strings, and values are flag integers.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="sass.SOURCE_COMMENTS">
-<tt class="descclassname">sass.</tt><tt class="descname">SOURCE_COMMENTS</tt><em class="property"> = {'map': 2, 'line_numbers': 1, 'default': 1, 'none': 0}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) The dictionary of source comments styles.
-Keys are mode names, and values are corresponding flag integers.</p>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.4.0.</span></p>
-</div>
-<div class="deprecated">
-<p><span class="versionmodified">Deprecated since version 0.6.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="exception">
-<dt id="sass.CompileError">
-<em class="property">exception </em><tt class="descclassname">sass.</tt><tt class="descname">CompileError</tt><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a>.
-It is a subtype of <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><tt class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></tt></a>.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="sass.SassFunction">
-<em class="property">class </em><tt class="descclassname">sass.</tt><tt class="descname">SassFunction</tt><big>(</big><em>name</em>, <em>arguments</em>, <em>callable_</em><big>)</big><a class="headerlink" href="#sass.SassFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom function for Sass.  It can be instantiated using
-<a class="reference internal" href="#sass.SassFunction.from_lambda" title="sass.SassFunction.from_lambda"><tt class="xref py py-meth docutils literal"><span class="pre">from_lambda()</span></tt></a> and <a class="reference internal" href="#sass.SassFunction.from_named_function" title="sass.SassFunction.from_named_function"><tt class="xref py py-meth docutils literal"><span class="pre">from_named_function()</span></tt></a> as well.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; the function name</li>
-<li><strong>arguments</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>) &#8211; the argument names</li>
-<li><strong>callable</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Callable" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Callable</span></tt></a>) &#8211; the actual function to be called</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.7.0.</span></p>
-</div>
-<dl class="classmethod">
-<dt id="sass.SassFunction.from_lambda">
-<em class="property">classmethod </em><tt class="descname">from_lambda</tt><big>(</big><em>name</em>, <em>lambda_</em><big>)</big><a class="headerlink" href="#sass.SassFunction.from_lambda" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">SassFunction</span></tt></a> object from the given <tt class="docutils literal"><span class="pre">lambda_</span></tt>
-function.  Since lambda functions don&#8217;t have their name, it need
-its <tt class="docutils literal"><span class="pre">name</span></tt> as well.  Arguments are automatically inspected.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; the function name</li>
-<li><strong>lambda</strong> (<tt class="xref py py-class docutils literal"><span class="pre">types.LambdaType</span></tt>) &#8211; the actual lambda function to be called</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a custom function wrapper of the <tt class="docutils literal"><span class="pre">lambda_</span></tt> function</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">SassFunction</span></tt></a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="sass.SassFunction.from_named_function">
-<em class="property">classmethod </em><tt class="descname">from_named_function</tt><big>(</big><em>function</em><big>)</big><a class="headerlink" href="#sass.SassFunction.from_named_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">SassFunction</span></tt></a> object from the named <tt class="docutils literal"><span class="pre">function</span></tt>.
-Function name and arguments are automatically inspected.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>function</strong> (<tt class="xref py py-class docutils literal"><span class="pre">types.FunctionType</span></tt>) &#8211; the named function to be called</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a custom function wrapper of the <tt class="docutils literal"><span class="pre">function</span></tt></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">SassFunction</span></tt></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sass.SassFunction.signature">
-<tt class="descname">signature</tt><a class="headerlink" href="#sass.SassFunction.signature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Signature string of the function.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sass.SassMap">
-<em class="property">class </em><tt class="descclassname">sass.</tt><tt class="descname">SassMap</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#sass.SassMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Because sass maps can have mapping types as keys, we need an immutable
-hashable mapping type.</p>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.7.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="sass.and_join">
-<tt class="descclassname">sass.</tt><tt class="descname">and_join</tt><big>(</big><em>strings</em><big>)</big><a class="headerlink" href="#sass.and_join" title="Permalink to this definition">¶</a></dt>
-<dd><p>Join the given <tt class="docutils literal"><span class="pre">strings</span></tt> by commas with last <cite>&#8216; and &#8216;</cite> conjuction.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s">&#39;Korea&#39;</span><span class="p">,</span> <span class="s">&#39;Japan&#39;</span><span class="p">,</span> <span class="s">&#39;China&#39;</span><span class="p">,</span> <span class="s">&#39;Taiwan&#39;</span><span class="p">])</span>
-<span class="go">&#39;Korea, Japan, China, and Taiwan&#39;</span>
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>strings</strong> &#8211; a list of words to join</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a joined string</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="sass.compile">
-<tt class="descclassname">sass.</tt><tt class="descname">compile</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#sass.compile" title="Permalink to this definition">¶</a></dt>
-<dd><p>There are three modes of parameters <a class="reference internal" href="#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> can take:
-<tt class="docutils literal"><span class="pre">string</span></tt>, <tt class="docutils literal"><span class="pre">filename</span></tt>, and <tt class="docutils literal"><span class="pre">dirname</span></tt>.</p>
-<p>The <tt class="docutils literal"><span class="pre">string</span></tt> parameter is the most basic way to compile SASS.
-It simply takes a string of SASS code, and then returns a compiled
-CSS string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>string</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; SASS source code to compile.  it&#8217;s exclusive to
-<tt class="docutils literal"><span class="pre">filename</span></tt> and <tt class="docutils literal"><span class="pre">dirname</span></tt> parameters</li>
-<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional coding style of the compiled result.
-choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
-<tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
-<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></a>) &#8211; whether to add comments about source lines.
-<tt class="xref py py-const docutils literal"><span class="pre">False</span></tt> by default</li>
-<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
-SASS/CSS source files</li>
-<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional path to find images</li>
-<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">int</span></tt></a>) &#8211; optional precision for numbers. <tt class="xref py py-const docutils literal"><span class="pre">5</span></tt> by default.</li>
-<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) &#8211; optional mapping of custom functions.
-see also below <a class="reference external" href="custom-functions">custom functions</a> description</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
-(for example the given SASS has broken syntax)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The <tt class="docutils literal"><span class="pre">filename</span></tt> is the most commonly used way.  It takes a string of
-SASS filename, and then returns a compiled CSS string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; the filename of SASS source code to compile.
-it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</span></tt> and <tt class="docutils literal"><span class="pre">dirname</span></tt> parameters</li>
-<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional coding style of the compiled result.
-choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
-<tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
-<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></a>) &#8211; whether to add comments about source lines.
-<tt class="xref py py-const docutils literal"><span class="pre">False</span></tt> by default</li>
-<li><strong>source_map_filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; use source maps and indicate the source map
-output filename.  <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt> means not
-using source maps.  <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt> by default.
-note that it implies <tt class="docutils literal"><span class="pre">source_comments</span></tt>
-is also <tt class="xref py py-const docutils literal"><span class="pre">True</span></tt></li>
-<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
-SASS/CSS source files</li>
-<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional path to find images</li>
-<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">int</span></tt></a>) &#8211; optional precision for numbers. <tt class="xref py py-const docutils literal"><span class="pre">5</span></tt> by default.</li>
-<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) &#8211; <p>optional mapping of custom functions.
-see also below <a class="reference external" href="custom-functions">custom functions</a> description</p>
-</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string, or a pair of the compiled CSS string
-and the source map string if <tt class="docutils literal"><span class="pre">source_comments='map'</span></tt></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt></p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> &#8211; when it fails for any reason
-(for example the given SASS has broken syntax)</li>
-<li><a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.IOError" title="(in Python v2.7)"><strong>exceptions.IOError</strong></a> &#8211; when the <tt class="docutils literal"><span class="pre">filename</span></tt> doesn&#8217;t exist or
-cannot be read</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The <tt class="docutils literal"><span class="pre">dirname</span></tt> is useful for automation.  It takes a pair of paths.
-The first of the <tt class="docutils literal"><span class="pre">dirname</span></tt> pair refers the source directory, contains
-several SASS source files to compiled.  SASS source files can be nested
-in directories.  The second of the pair refers the output directory
-that compiled CSS files would be saved.  Directory tree structure of
-the source directory will be maintained in the output directory as well.
-If <tt class="docutils literal"><span class="pre">dirname</span></tt> parameter is used the function returns <tt class="xref py py-const docutils literal"><span class="pre">None</span></tt>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dirname</strong> (<tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt>) &#8211; a pair of <tt class="docutils literal"><span class="pre">(source_dir,</span> <span class="pre">output_dir)</span></tt>.
-it&#8217;s exclusive to <tt class="docutils literal"><span class="pre">string</span></tt> and <tt class="docutils literal"><span class="pre">filename</span></tt>
-parameters</li>
-<li><strong>output_style</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional coding style of the compiled result.
-choose one of: <tt class="docutils literal"><span class="pre">'nested'</span></tt> (default), <tt class="docutils literal"><span class="pre">'expanded'</span></tt>,
-<tt class="docutils literal"><span class="pre">'compact'</span></tt>, <tt class="docutils literal"><span class="pre">'compressed'</span></tt></li>
-<li><strong>source_comments</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></a>) &#8211; whether to add comments about source lines.
-<tt class="xref py py-const docutils literal"><span class="pre">False</span></tt> by default</li>
-<li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional list of paths to find <tt class="docutils literal"><span class="pre">&#64;import</span></tt>ed
-SASS/CSS source files</li>
-<li><strong>image_path</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>) &#8211; an optional path to find images</li>
-<li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">int</span></tt></a>) &#8211; optional precision for numbers. <tt class="xref py py-const docutils literal"><span class="pre">5</span></tt> by default.</li>
-<li><strong>custom_functions</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Set</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></tt></a>,
-<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></tt></a>) &#8211; <p>optional mapping of custom functions.
-see also below <a class="reference external" href="custom-functions">custom functions</a> description</p>
-</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Raises <a class="reference internal" href="#sass.CompileError" title="sass.CompileError">sass.CompileError</a>:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">when it fails for any reason
-(for example the given SASS has broken syntax)</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p id="id3">The <tt class="docutils literal"><span class="pre">custom_functions</span></tt> parameter can take three types of forms:</p>
-<dl class="docutils">
-<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Set</span></tt></a>/<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a> of     <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">SassFunction</span></tt></a>s</dt>
-<dd><p class="first">It is the most general form.  Although pretty verbose, it can take
-any kind of callables like type objects, unnamed functions,
-and user-defined callables.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="o">...</span><span class="p">,</span>
-    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
-        <span class="n">sass</span><span class="o">.</span><span class="n">SassFunction</span><span class="p">(</span><span class="s">&#39;func-name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;$a&#39;</span><span class="p">,</span> <span class="s">&#39;$b&#39;</span><span class="p">),</span> <span class="n">some_callable</span><span class="p">),</span>
-        <span class="o">...</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Mapping</span></tt></a> of names to functions</dt>
-<dd><p class="first">Less general, but easier-to-use form.  Although it&#8217;s not it can take
-any kind of callables, it can take any kind of <em>functions</em> defined
-using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><tt class="xref std std-keyword docutils literal"><span class="pre">def</span></tt></a>/<a class="reference external" href="http://docs.python.org/reference/expressions.html#lambda" title="(in Python v2.7)"><tt class="xref std std-keyword docutils literal"><span class="pre">lambda</span></tt></a> syntax.
-It cannot take callables other than them since inspecting arguments
-is not always available for every kind of callables.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="o">...</span><span class="p">,</span>
-    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
-        <span class="s">&#39;func-name&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
-        <span class="o">...</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-<dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Set</span></tt></a>/<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">Sequence</span></tt></a> of     named functions</dt>
-<dd><p class="first">Not general, but the easiest-to-use form for <em>named</em> functions.
-It can take only named functions, defined using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><tt class="xref std std-keyword docutils literal"><span class="pre">def</span></tt></a>.
-It cannot take lambdas sinc names are unavailable for them.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">return</span> <span class="o">...</span>
-
-<span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-    <span class="o">...</span><span class="p">,</span>
-    <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span><span class="n">func_name</span><span class="p">}</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.4.0: </span>Added <tt class="docutils literal"><span class="pre">source_comments</span></tt> and <tt class="docutils literal"><span class="pre">source_map_filename</span></tt> parameters.</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 0.6.0: </span>The <tt class="docutils literal"><span class="pre">source_comments</span></tt> parameter becomes to take only <a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></a>
-instead of <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>.</p>
-</div>
-<div class="deprecated">
-<p><span class="versionmodified">Deprecated since version 0.6.0: </span>Values like <tt class="docutils literal"><span class="pre">'none'</span></tt>, <tt class="docutils literal"><span class="pre">'line_numbers'</span></tt>, and <tt class="docutils literal"><span class="pre">'map'</span></tt> for
-the <tt class="docutils literal"><span class="pre">source_comments</span></tt> parameter are deprecated.</p>
-</div>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.7.0: </span>Added <tt class="docutils literal"><span class="pre">precision</span></tt> parameter.</p>
-</div>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.7.0: </span>Added <tt class="docutils literal"><span class="pre">custom_functions</span></tt> parameter.</p>
-</div>
-</dd></dl>
-
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="sassutils.html" title="sassutils — Additional utilities related to SASS"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="sassc.html" title="sassc — SassC compliant command line interface"
-             >previous</a> |</li>
-        <li><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      &copy;2012, Hong Minhee.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/sass.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>

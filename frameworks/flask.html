@@ -8,7 +8,7 @@
     
     <title>Using with Flask &mdash; libsass 0.7.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,10 +25,14 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="libsass 0.7.0 documentation" href="../index.html" />
     <link rel="next" title="Changelog" href="../changes.html" />
-    <link rel="prev" title="libsass" href="../index.html" /> 
+    <link rel="prev" title="libsass" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,10 +47,185 @@
         <li class="right" >
           <a href="../index.html" title="libsass"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="using-with-flask">
+<h1><a class="toc-backref" href="#id2">Using with Flask</a><a class="headerlink" href="#using-with-flask" title="Permalink to this headline">¶</a></h1>
+<p>This guide explains how to use libsass with <a class="reference external" href="http://flask.pocoo.org/">Flask</a> web framework.
+<a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils</span></code></a> package provides several tools that can be integrated
+to web applications written in Flask.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#using-with-flask" id="id2">Using with Flask</a><ul>
+<li><a class="reference internal" href="#directory-layout" id="id3">Directory layout</a></li>
+<li><a class="reference internal" href="#defining-manifest" id="id4">Defining manifest</a></li>
+<li><a class="reference internal" href="#building-sass-scss-for-each-request" id="id5">Building SASS/SCSS for each request</a></li>
+<li><a class="reference internal" href="#building-sass-scss-for-each-deployment" id="id6">Building SASS/SCSS for each deployment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="directory-layout">
+<h2><a class="toc-backref" href="#id3">Directory layout</a><a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
+<p>Imagine the project contained in such directory layout:</p>
+<ul class="simple">
+<li><code class="file docutils literal"><span class="pre">setup.py</span></code></li>
+<li><code class="file docutils literal"><span class="pre">myapp/</span></code><ul>
+<li><code class="file docutils literal"><span class="pre">__init__.py</span></code></li>
+<li><code class="file docutils literal"><span class="pre">static/</span></code><ul>
+<li><code class="file docutils literal"><span class="pre">sass/</span></code></li>
+<li><code class="file docutils literal"><span class="pre">css/</span></code></li>
+</ul>
+</li>
+<li><code class="file docutils literal"><span class="pre">templates/</span></code></li>
+</ul>
+</li>
+</ul>
+<p>SASS/SCSS files will go inside <code class="file docutils literal"><span class="pre">myapp/static/sass/</span></code> directory.
+Compiled CSS files will go inside <code class="file docutils literal"><span class="pre">myapp/static/css/</span></code> directory.
+CSS files can be regenerated, so add <code class="file docutils literal"><span class="pre">myapp/static/css/</span></code> into your
+ignore list like <code class="file docutils literal"><span class="pre">.gitignore</span></code> or <code class="file docutils literal"><span class="pre">.hgignore</span></code>.</p>
+</div>
+<div class="section" id="defining-manifest">
+<h2><a class="toc-backref" href="#id4">Defining manifest</a><a class="headerlink" href="#defining-manifest" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils</span></code></a> defines a concept named <em class="dfn">manifest</em>.
+Manifest is building settings of SASS/SCSS.  It specifies some paths
+related to building SASS/SCSS:</p>
+<ul class="simple">
+<li>The path of the directory which contains SASS/SCSS source files.</li>
+<li>The path of the directory compiled CSS files will go.</li>
+<li>The path, is exposed to HTTP (through WSGI), of the directory that
+will contain compiled CSS files.</li>
+</ul>
+<p>Every package may have their own manifest.  Paths have to be relative
+to the path of the package.</p>
+<p>For example, in the project the package name is <code class="xref py py-mod docutils literal"><span class="pre">myapp</span></code>.
+The path of the package is <code class="file docutils literal"><span class="pre">myapp/</span></code>.  The path of SASS/SCSS directory
+is <code class="file docutils literal"><span class="pre">static/sass/</span></code> (relative to the package directory).
+The path of CSS directory is <code class="file docutils literal"><span class="pre">static/css/</span></code>.
+The exposed path is <code class="file docutils literal"><span class="pre">/static/css</span></code>.</p>
+<p>This settings can be represented as the following manifests:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see the above, the set of manifests are represented in dictionary.
+Keys are packages names.  Values are tuples of paths.</p>
+</div>
+<div class="section" id="building-sass-scss-for-each-request">
+<h2><a class="toc-backref" href="#id5">Building SASS/SCSS for each request</a><a class="headerlink" href="#building-sass-scss-for-each-request" title="Permalink to this headline">¶</a></h2>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
+<dd>The section which explains how to integrate WSGI middlewares to
+Flask.</dd>
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v1.0-dev)"><span>Application Dispatching</span></a></dt>
+<dd>The documentation which explains how Flask dispatch each
+request internally.</dd>
+</dl>
+</div>
+<p>In development, to manually build SASS/SCSS files for each change is
+so tiring.  <a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> makes the web
+application to automatically build SASS/SCSS files for each request.
+It&#8217;s a WSGI middleware, so it can be plugged into the web app written in
+Flask.</p>
+<p><a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> takes two required parameters:</p>
+<ul class="simple">
+<li>The WSGI-compliant callable object.</li>
+<li>The set of manifests represented as dictionary.</li>
+</ul>
+<p>So:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">sassutils.wsgi</span> <span class="kn">import</span> <span class="n">SassMiddleware</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SassMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v1.0-dev)"><code class="xref py py-func docutils literal"><span class="pre">url_for()</span></code></a>
+function:</p>
+<div class="highlight-html+jinja"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+      <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The linked filename is <code class="file docutils literal"><span class="pre">style.scss.css</span></code>, not just <code class="file docutils literal"><span class="pre">style.scss</span></code>.
+All compiled filenames have trailing <code class="docutils literal"><span class="pre">.css</span></code> suffix.</p>
+</div>
+</div>
+<div class="section" id="building-sass-scss-for-each-deployment">
+<h2><a class="toc-backref" href="#id6">Building SASS/SCSS for each deployment</a><a class="headerlink" href="#building-sass-scss-for-each-deployment" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section assumes that you use <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a> for deployment.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v1.0-dev)"><span>Deploying with Distribute</span></a></dt>
+<dd>How to deploy Flask application using <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a>.</dd>
+</dl>
+</div>
+<p>If libsass has been installed in the <code class="file docutils literal"><span class="pre">site-packages</span></code> (for example,
+your virtualenv), <code class="file docutils literal"><span class="pre">setup.py</span></code> script also gets had new command
+provided by libsass: <a class="reference internal" href="../sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a>.
+The command is aware of <code class="docutils literal"><span class="pre">sass_manifests</span></code> option of <code class="file docutils literal"><span class="pre">setup.py</span></code> and
+builds all SASS/SCSS sources according to the manifests.</p>
+<p>Add these arguments to <code class="file docutils literal"><span class="pre">setup.py</span></code> script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">setup</span><span class="p">(</span>
+    <span class="c"># ...,</span>
+    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.6.0&#39;</span><span class="p">],</span>
+    <span class="n">sass_manifests</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">setup_requires</span></code> option makes sure that the libsass is installed
+in <code class="file docutils literal"><span class="pre">site-packages</span></code> (for example, your virtualenv) before
+<code class="file docutils literal"><span class="pre">setup.py</span></code> script.  That means: if you run <code class="file docutils literal"><span class="pre">setup.py</span></code> script
+and libsass isn&#8217;t installed yet at the moment, it will automatically
+install libsass first.</p>
+<p>The <code class="docutils literal"><span class="pre">sass_manifests</span></code> specifies the manifests for libsass.</p>
+<p>Now <strong class="program">setup.py build_sass</strong> will compile all SASS/SCSS files
+in the specified path and generates compiled CSS files into the specified
+path (according to the manifests).</p>
+<p>If you use it with <code class="docutils literal"><span class="pre">sdist</span></code> or <code class="docutils literal"><span class="pre">bdist</span></code> command, a packed archive also
+will contain compiled CSS files!</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> python setup.py build_sass sdist
+</pre></div>
+</div>
+<p>You can add aliases to make these commands to always run <code class="docutils literal"><span class="pre">build_sass</span></code>
+command before.  Make <code class="file docutils literal"><span class="pre">setup.cfg</span></code> config:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[aliases]</span>
+<span class="na">sdist</span> <span class="o">=</span> <span class="s">build_sass sdist</span>
+<span class="na">bdist</span> <span class="o">=</span> <span class="s">build_sass bdist</span>
+</pre></div>
+</div>
+<p>Now it automatically builds SASS/SCSS sources and include compiled CSS files
+to the package archive when you run <strong class="program">setup.py sdist</strong>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -65,12 +244,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="../changes.html"
                         title="next chapter">Changelog</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/frameworks/flask.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/frameworks/flask.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -85,204 +266,22 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="using-with-flask">
-<h1><a class="toc-backref" href="#id2">Using with Flask</a><a class="headerlink" href="#using-with-flask" title="Permalink to this headline">¶</a></h1>
-<p>This guide explains how to use libsass with <a class="reference external" href="http://flask.pocoo.org/">Flask</a> web framework.
-<a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils</span></tt></a> package provides several tools that can be integrated
-to web applications written in Flask.</p>
-<div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
-<ul class="simple">
-<li><a class="reference internal" href="#using-with-flask" id="id2">Using with Flask</a><ul>
-<li><a class="reference internal" href="#directory-layout" id="id3">Directory layout</a></li>
-<li><a class="reference internal" href="#defining-manifest" id="id4">Defining manifest</a></li>
-<li><a class="reference internal" href="#building-sass-scss-for-each-request" id="id5">Building SASS/SCSS for each request</a></li>
-<li><a class="reference internal" href="#building-sass-scss-for-each-deployment" id="id6">Building SASS/SCSS for each deployment</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="directory-layout">
-<h2><a class="toc-backref" href="#id3">Directory layout</a><a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
-<p>Imagine the project contained in such directory layout:</p>
-<ul class="simple">
-<li><tt class="file docutils literal"><span class="pre">setup.py</span></tt></li>
-<li><tt class="file docutils literal"><span class="pre">myapp/</span></tt><ul>
-<li><tt class="file docutils literal"><span class="pre">__init__.py</span></tt></li>
-<li><tt class="file docutils literal"><span class="pre">static/</span></tt><ul>
-<li><tt class="file docutils literal"><span class="pre">sass/</span></tt></li>
-<li><tt class="file docutils literal"><span class="pre">css/</span></tt></li>
-</ul>
-</li>
-<li><tt class="file docutils literal"><span class="pre">templates/</span></tt></li>
-</ul>
-</li>
-</ul>
-<p>SASS/SCSS files will go inside <tt class="file docutils literal"><span class="pre">myapp/static/sass/</span></tt> directory.
-Compiled CSS files will go inside <tt class="file docutils literal"><span class="pre">myapp/static/css/</span></tt> directory.
-CSS files can be regenerated, so add <tt class="file docutils literal"><span class="pre">myapp/static/css/</span></tt> into your
-ignore list like <tt class="file docutils literal"><span class="pre">.gitignore</span></tt> or <tt class="file docutils literal"><span class="pre">.hgignore</span></tt>.</p>
-</div>
-<div class="section" id="defining-manifest">
-<h2><a class="toc-backref" href="#id4">Defining manifest</a><a class="headerlink" href="#defining-manifest" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils</span></tt></a> defines a concept named <em class="dfn">manifest</em>.
-Manifest is building settings of SASS/SCSS.  It specifies some paths
-related to building SASS/SCSS:</p>
-<ul class="simple">
-<li>The path of the directory which contains SASS/SCSS source files.</li>
-<li>The path of the directory compiled CSS files will go.</li>
-<li>The path, is exposed to HTTP (through WSGI), of the directory that
-will contain compiled CSS files.</li>
-</ul>
-<p>Every package may have their own manifest.  Paths have to be relative
-to the path of the package.</p>
-<p>For example, in the project the package name is <tt class="xref py py-mod docutils literal"><span class="pre">myapp</span></tt>.
-The path of the package is <tt class="file docutils literal"><span class="pre">myapp/</span></tt>.  The path of SASS/SCSS directory
-is <tt class="file docutils literal"><span class="pre">static/sass/</span></tt> (relative to the package directory).
-The path of CSS directory is <tt class="file docutils literal"><span class="pre">static/css/</span></tt>.
-The exposed path is <tt class="file docutils literal"><span class="pre">/static/css</span></tt>.</p>
-<p>This settings can be represented as the following manifests:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>As you can see the above, the set of manifests are represented in dictionary.
-Keys are packages names.  Values are tuples of paths.</p>
-</div>
-<div class="section" id="building-sass-scss-for-each-request">
-<h2><a class="toc-backref" href="#id5">Building SASS/SCSS for each request</a><a class="headerlink" href="#building-sass-scss-for-each-request" title="Permalink to this headline">¶</a></h2>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
-<dd>The section which explains how to integrate WSGI middlewares to
-Flask.</dd>
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v1.0-dev)"><em>Application Dispatching</em></a></dt>
-<dd>The documentation which explains how Flask dispatch each
-request internally.</dd>
-</dl>
-</div>
-<p>In development, to manually build SASS/SCSS files for each change is
-so tiring.  <a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> makes the web
-application to automatically build SASS/SCSS files for each request.
-It&#8217;s a WSGI middleware, so it can be plugged into the web app written in
-Flask.</p>
-<p><a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> takes two required parameters:</p>
-<ul class="simple">
-<li>The WSGI-compliant callable object.</li>
-<li>The set of manifests represented as dictionary.</li>
-</ul>
-<p>So:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
-<span class="kn">from</span> <span class="nn">sassutils.wsgi</span> <span class="kn">import</span> <span class="n">SassMiddleware</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-
-<span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SassMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
-    <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v1.0-dev)"><tt class="xref py py-func docutils literal"><span class="pre">url_for()</span></tt></a>
-function:</p>
-<div class="highlight-html+jinja"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
-      <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The linked filename is <tt class="file docutils literal"><span class="pre">style.scss.css</span></tt>, not just <tt class="file docutils literal"><span class="pre">style.scss</span></tt>.
-All compiled filenames have trailing <tt class="docutils literal"><span class="pre">.css</span></tt> suffix.</p>
-</div>
-</div>
-<div class="section" id="building-sass-scss-for-each-deployment">
-<h2><a class="toc-backref" href="#id6">Building SASS/SCSS for each deployment</a><a class="headerlink" href="#building-sass-scss-for-each-deployment" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section assumes that you use <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a> for deployment.</p>
-</div>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v1.0-dev)"><em>Deploying with Distribute</em></a></dt>
-<dd>How to deploy Flask application using <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a>.</dd>
-</dl>
-</div>
-<p>If libsass has been installed in the <tt class="file docutils literal"><span class="pre">site-packages</span></tt> (for example,
-your virtualenv), <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script also gets had new command
-provided by libsass: <a class="reference internal" href="../sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a>.
-The command is aware of <tt class="docutils literal"><span class="pre">sass_manifests</span></tt> option of <tt class="file docutils literal"><span class="pre">setup.py</span></tt> and
-builds all SASS/SCSS sources according to the manifests.</p>
-<p>Add these arguments to <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">setup</span><span class="p">(</span>
-    <span class="c"># ...,</span>
-    <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;libsass &gt;= 0.6.0&#39;</span><span class="p">],</span>
-    <span class="n">sass_manifests</span><span class="o">=</span><span class="p">{</span>
-        <span class="s">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s">&#39;static/css&#39;</span><span class="p">,</span> <span class="s">&#39;/static/css&#39;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>The <tt class="docutils literal"><span class="pre">setup_requires</span></tt> option makes sure that the libsass is installed
-in <tt class="file docutils literal"><span class="pre">site-packages</span></tt> (for example, your virtualenv) before
-<tt class="file docutils literal"><span class="pre">setup.py</span></tt> script.  That means: if you run <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script
-and libsass isn&#8217;t installed yet at the moment, it will automatically
-install libsass first.</p>
-<p>The <tt class="docutils literal"><span class="pre">sass_manifests</span></tt> specifies the manifests for libsass.</p>
-<p>Now <strong class="program">setup.py build_sass</strong> will compile all SASS/SCSS files
-in the specified path and generates compiled CSS files into the specified
-path (according to the manifests).</p>
-<p>If you use it with <tt class="docutils literal"><span class="pre">sdist</span></tt> or <tt class="docutils literal"><span class="pre">bdist</span></tt> command, a packed archive also
-will contain compiled CSS files!</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> python setup.py build_sass sdist
-</pre></div>
-</div>
-<p>You can add aliases to make these commands to always run <tt class="docutils literal"><span class="pre">build_sass</span></tt>
-command before.  Make <tt class="file docutils literal"><span class="pre">setup.cfg</span></tt> config:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[aliases]</span>
-<span class="na">sdist</span> <span class="o">=</span> <span class="s">build_sass sdist</span>
-<span class="na">bdist</span> <span class="o">=</span> <span class="s">build_sass bdist</span>
-</pre></div>
-</div>
-<p>Now it automatically builds SASS/SCSS sources and include compiled CSS files
-to the package archive when you run <strong class="program">setup.py sdist</strong>.</p>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../changes.html" title="Changelog"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="libsass"
-             >previous</a> |</li>
-        <li><a href="../index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      &copy;2012, Hong Minhee.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="../_sources/frameworks/flask.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>

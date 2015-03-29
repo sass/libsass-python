@@ -8,7 +8,7 @@
     
     <title>Changelog &mdash; libsass 0.7.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,10 +25,14 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="libsass 0.7.0 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
-    <link rel="prev" title="Using with Flask" href="frameworks/flask.html" /> 
+    <link rel="prev" title="Using with Flask" href="frameworks/flask.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,10 +47,283 @@
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-7-0">
+<h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on March 6, 2015.</p>
+<p>Anthony Sottile contributed to the most of this release.  Huge thanks to him!</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.1.0">3.1.0</a> &#8212; See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.1.0">release note</a>
+of Libsass.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/38">#38</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/43">#43</a> by Anthony Sottile]<ul>
+<li>Custom functions and imports</li>
+<li>Decrementing in <code class="docutils literal"><span class="pre">&#64;for</span></code> loops</li>
+<li><code class="docutils literal"><span class="pre">&#64;debug</span></code> and <code class="docutils literal"><span class="pre">&#64;error</span></code></li>
+<li><code class="docutils literal"><span class="pre">not</span></code> operator</li>
+<li><code class="docutils literal"><span class="pre">nth()</span></code> for maps</li>
+<li><code class="docutils literal"><span class="pre">inspect()</span></code></li>
+<li><code class="docutils literal"><span class="pre">feature-exists()</span></code></li>
+<li><code class="docutils literal"><span class="pre">unique-id()</span></code></li>
+<li><code class="docutils literal"><span class="pre">random()</span></code></li>
+</ul>
+</li>
+<li>Added custom functions support.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/13">#13</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/44">#44</a> by Anthony Sottile]<ul>
+<li>Added <a class="reference internal" href="sass.html#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">sass.SassFunction</span></code></a> class.</li>
+<li>Added <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a> function.</li>
+<li>Added data types for custom functions:<ul>
+<li><code class="xref py py-class docutils literal"><span class="pre">sass.SassNumber</span></code></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">sass.SassColor</span></code></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">sass.SassList</span></code></li>
+<li><a class="reference internal" href="sass.html#sass.SassMap" title="sass.SassMap"><code class="xref py py-class docutils literal"><span class="pre">sass.SassMap</span></code></a></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">sass.SassError</span></code></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">sass.SassWarning</span></code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Added <code class="docutils literal"><span class="pre">precision</span></code> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a> function.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal"><span class="pre">-p</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--precision"><code class="xref std std-option docutils literal"><span class="pre">--precision</span></code></a> option.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
+</ul>
+</div>
+<div class="section" id="version-0-6-2">
+<h2>Version 0.6.2<a class="headerlink" href="#version-0-6-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on November 25, 2014.</p>
+<p>Although 0.6.0&#8211;0.6.1 have needed GCC (G++) 4.8+, LLVM Clang 3.3+,
+now it became back to only need GCC (G++) 4.3+, LLVM Clang 2.9+,
+or Visual Studio 2013+.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0.2">3.0.2</a> &#8212;
+See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0.2">release note</a> of libsass.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/33">#33</a> by Rodolphe Pelloux-Prayer]</li>
+<li>Fixed a bug that <strong class="program">sassc --watch</strong> crashed when a file is not
+compilable on the first try.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/32">#32</a> by Alan Justino da Silva]</li>
+<li>Fixed broken build on Windows.</li>
+</ul>
+</div>
+<div class="section" id="version-0-6-1">
+<h2>Version 0.6.1<a class="headerlink" href="#version-0-6-1" title="Permalink to this headline">¶</a></h2>
+<p>Released on November 6, 2014.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0.1">3.0.1</a> &#8212;
+See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0.1">release note</a> of Libsass.</li>
+<li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> never closes
+the socket on some WSGI servers e.g. <code class="docutils literal"><span class="pre">eventlet.wsgi</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="version-0-6-0">
+<h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on October 27, 2014.</p>
+<p>Note that since libsass-python 0.6.0 (and libsass 3.0) it requires C++11
+to compile.  Although 0.6.2 became back to only need GCC (G++) 4.3+,
+LLVM Clang 2.9+, from 0.6.0 to 0.6.1 you need GCC (G++) 4.8+, LLVM Clang 3.3+,
+or Visual Studio 2013+.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0">3.0</a> &#8212; See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0">release note</a>
+of Libsass.<ul>
+<li>Decent extends support</li>
+<li>Basic Sass Maps Support</li>
+<li>Better UTF-8 Support</li>
+<li><code class="docutils literal"><span class="pre">call()</span></code> function</li>
+<li>Better Windows Support</li>
+<li>Spec Enhancements</li>
+</ul>
+</li>
+<li>Added missing <a class="reference external" href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials">partial import</a> support.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/27">#27</a> by item4]</li>
+<li><a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS" title="sass.SOURCE_COMMENTS"><code class="xref py py-const docutils literal"><span class="pre">SOURCE_COMMENTS</span></code></a> became deprecated.</li>
+<li><a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a>&#8216;s parameter <code class="docutils literal"><span class="pre">source_comments</span></code> now can take only
+<code class="xref py py-const docutils literal"><span class="pre">bool</span></code> instead of <code class="xref py py-const docutils literal"><span class="pre">str</span></code>.  String values like <code class="docutils literal"><span class="pre">'none'</span></code>,
+<code class="docutils literal"><span class="pre">'line_numbers'</span></code>, and <code class="docutils literal"><span class="pre">'map'</span></code> become deprecated, and will be obsolete
+soon.</li>
+<li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal"><span class="pre">build_directory()</span></code></a> function has a new optional
+parameter <code class="docutils literal"><span class="pre">output_style</span></code>.</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">build()</span></code> method has a new optional
+parameter <code class="docutils literal"><span class="pre">output_style</span></code>.</li>
+<li>Added <code class="docutils literal"><span class="pre">--output-style</span></code>/<code class="docutils literal"><span class="pre">-s</span></code> option to
+<a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/25">#25</a>]</li>
+</ul>
+</div>
+<div class="section" id="version-0-5-1">
+<h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Permalink to this headline">¶</a></h2>
+<p>Released on September 23, 2014.</p>
+<ul class="simple">
+<li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> yielded
+<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> instead of <code class="xref py py-class docutils literal"><span class="pre">bytes</span></code> on Python 3.</li>
+<li>Fixed several Unicode-related bugs on Windows.</li>
+<li>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal"><span class="pre">build_directory()</span></code></a>,
+<a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a>, and
+<a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> don&#8217;t recursively build
+subdirectories.</li>
+</ul>
+</div>
+<div class="section" id="version-0-5-0">
+<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on June 6, 2014.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/v2.0">v2.0</a> &#8212;
+See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/v2.0">release note</a> of Libsass.<ul>
+<li>Added indented syntax support (<code class="file docutils literal"><span class="pre">*.sass</span></code> files).</li>
+<li>Added expanded selector support (BEM).</li>
+<li>Added string functions.</li>
+<li>Fixed UTF-8 support.</li>
+<li>Backward incompatibility: broken extends.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="unstable-version-0-4-2-20140529-cd3ee1cbe3">
+<h2>Unstable version 0.4.2.20140529.cd3ee1cbe3<a class="headerlink" href="#unstable-version-0-4-2-20140529-cd3ee1cbe3" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 29, 2014.</p>
+<ul class="simple">
+<li>Version scheme changed to use periods (<code class="docutils literal"><span class="pre">.</span></code>) instead of hyphens (<code class="docutils literal"><span class="pre">-</span></code>)
+due to setuptools seems to treat hyphens special.</li>
+<li>Fixed malformed packaging that doesn&#8217;t correctly preserve the package name
+and version.</li>
+</ul>
+</div>
+<div class="section" id="unstable-version-0-4-2-20140528-cd3ee1cbe3">
+<h2>Unstable Version 0.4.2-20140528-cd3ee1cbe3<a class="headerlink" href="#unstable-version-0-4-2-20140528-cd3ee1cbe3" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 28, 2014.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream:
+<a class="reference external" href="https://github.com/sass/libsass/commit/cd3ee1cbe34d5316eb762a43127a3de9575454ee">cd3ee1cbe34d5316eb762a43127a3de9575454ee</a>.</li>
+</ul>
+</div>
+<div class="section" id="version-0-4-2">
+<h2>Version 0.4.2<a class="headerlink" href="#version-0-4-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 22, 2014.</p>
+<ul class="simple">
+<li>Fixed build failing on Mac OS X 10.8 or earlier.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/19">#19</a>]</li>
+<li>Fixed <code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
+contains any non-ASCII Unicode characters.</li>
+</ul>
+</div>
+<div class="section" id="version-0-4-1">
+<h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 20, 2014.</p>
+<ul class="simple">
+<li>Fixed <code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code> that rise when the input source contains
+any non-ASCII Unicode characters.</li>
+</ul>
+</div>
+<div class="section" id="version-0-4-0">
+<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 6, 2014.</p>
+<ul class="simple">
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-w"><code class="xref std std-option docutils literal"><span class="pre">-w</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--watch"><code class="xref std std-option docutils literal"><span class="pre">--watch</span></code></a> option.</li>
+<li>Expose source maps support:<ul>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal"><span class="pre">-m</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-g"><code class="xref std std-option docutils literal"><span class="pre">-g</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--sourcemap"><code class="xref std std-option docutils literal"><span class="pre">--sourcemap</span></code></a> option.</li>
+<li><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> now also creates source map files
+with filenames followed by <code class="file docutils literal"><span class="pre">.map</span></code> suffix.</li>
+<li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></code></a> method
+has a new <code class="docutils literal"><span class="pre">source_map</span></code> option.  This option builds also a source map
+file with the filename followed by <code class="file docutils literal"><span class="pre">.map</span></code> suffix.</li>
+<li><a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a> has a new optional parameter <code class="docutils literal"><span class="pre">source_comments</span></code>.
+It can be one of <a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS" title="sass.SOURCE_COMMENTS"><code class="xref py py-const docutils literal"><span class="pre">sass.SOURCE_COMMENTS</span></code></a> keys.  It also has
+a new parameter <code class="docutils literal"><span class="pre">source_map_filename</span></code> which is required only when
+<code class="docutils literal"><span class="pre">source_comments='map'</span></code>.</li>
+</ul>
+</li>
+<li>Fixed Python 3 incompatibility of <strong class="program">sassc</strong> program.</li>
+<li>Fixed a bug that multiple <code class="docutils literal"><span class="pre">include_paths</span></code> doesn&#8217;t work on Windows.</li>
+</ul>
+</div>
+<div class="section" id="version-0-3-0">
+<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on February 21, 2014.</p>
+<ul class="simple">
+<li>Added support for Python 3.3.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/7">#7</a>]</li>
+<li>Dropped support for Python 2.5.</li>
+<li>Fixed build failing on Mac OS X.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/4">#4</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/5">#5</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/6">#6</a> by Hyungoo Kang]</li>
+<li>Now builder creates target recursive subdirectories even if it doesn&#8217;t
+exist yet, rather than siliently fails.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/8">#8</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/9">#9</a> by Philipp Volguine]</li>
+<li>Merged recent changes from libsass <a class="reference external" href="https://github.com/sass/libsass/commit/v1.0.1">v1.0.1</a>: <a class="reference external" href="https://github.com/sass/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1">57a2f62&#8211;v1.0.1</a>.<ul>
+<li>Supports <a class="reference external" href="http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments">variable arguments</a>.</li>
+<li>Supports sourcemaps.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="version-0-2-4">
+<h2>Version 0.2.4<a class="headerlink" href="#version-0-2-4" title="Permalink to this headline">¶</a></h2>
+<p>Released on December 4, 2012.</p>
+<ul class="simple">
+<li>Added <a class="reference internal" href="sassc.html#module-sassc" title="sassc"><code class="xref py py-mod docutils literal"><span class="pre">sassc</span></code></a> CLI executable script.</li>
+<li>Added <a class="reference internal" href="sass.html#sass.OUTPUT_STYLES" title="sass.OUTPUT_STYLES"><code class="xref py py-const docutils literal"><span class="pre">sass.OUTPUT_STYLES</span></code></a> constant map.</li>
+<li>Merged recent changes from libsass upstream:
+<a class="reference external" href="https://github.com/sass/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84">e997102&#8211;a84b181</a>.</li>
+</ul>
+</div>
+<div class="section" id="version-0-2-3">
+<h2>Version 0.2.3<a class="headerlink" href="#version-0-2-3" title="Permalink to this headline">¶</a></h2>
+<p>Released on October 24, 2012.</p>
+<ul class="simple">
+<li><a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a>: Prevent double monkey patch of <code class="docutils literal"><span class="pre">sdist</span></code>.</li>
+<li>Merged upstream changes of libsass.</li>
+</ul>
+</div>
+<div class="section" id="version-0-2-2">
+<h2>Version 0.2.2<a class="headerlink" href="#version-0-2-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on September 28, 2012.</p>
+<ul class="simple">
+<li>Fixed a link error on PyPy and Linux.</li>
+<li>Fixed build errors on Windows.</li>
+</ul>
+</div>
+<div class="section" id="version-0-2-1">
+<h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Permalink to this headline">¶</a></h2>
+<p>Released on September 12, 2012.</p>
+<ul class="simple">
+<li>Support Windows.</li>
+</ul>
+</div>
+<div class="section" id="version-0-2-0">
+<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on August 24, 2012.</p>
+<ul class="simple">
+<li>Added new <a class="reference internal" href="sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils</span></code></a> package.<ul>
+<li>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.builder</span></code></a> module to build the whole directory
+at a time.</li>
+<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and
+<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code> integration.</li>
+<li>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></code></a> module which provides a development-purpose
+WSGI middleware.</li>
+</ul>
+</li>
+<li>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command for
+<a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="version-0-1-1">
+<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Permalink to this headline">¶</a></h2>
+<p>Released on August 18, 2012.</p>
+<ul class="simple">
+<li>Fixed segmentation fault for reading <code class="docutils literal"><span class="pre">filename</span></code> which does not exist.
+Now it raises a proper <code class="docutils literal"><span class="pre">exceptions.IOError</span></code> exception.</li>
+</ul>
+</div>
+<div class="section" id="version-0-1-0">
+<h2>Version 0.1.0<a class="headerlink" href="#version-0-1-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on August 17, 2012.  Initial version.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -79,13 +356,15 @@
                         title="previous chapter">Using with Flask</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="sassc.html"
-                        title="next chapter"><tt class="docutils literal"><span class="pre">sassc</span></tt> &#8212; SassC compliant command line interface</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/changes.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter"><code class="docutils literal"><span class="pre">sassc</span></code> &#8212; SassC compliant command line interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/changes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -100,302 +379,22 @@
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="version-0-7-0">
-<h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on March 6, 2015.</p>
-<p>Anthony Sottile contributed to the most of this release.  Huge thanks to him!</p>
-<ul class="simple">
-<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.1.0">3.1.0</a> &#8212; See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.1.0">release note</a>
-of Libsass.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/38">#38</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/43">#43</a> by Anthony Sottile]<ul>
-<li>Custom functions and imports</li>
-<li>Decrementing in <tt class="docutils literal"><span class="pre">&#64;for</span></tt> loops</li>
-<li><tt class="docutils literal"><span class="pre">&#64;debug</span></tt> and <tt class="docutils literal"><span class="pre">&#64;error</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">not</span></tt> operator</li>
-<li><tt class="docutils literal"><span class="pre">nth()</span></tt> for maps</li>
-<li><tt class="docutils literal"><span class="pre">inspect()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">feature-exists()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">unique-id()</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">random()</span></tt></li>
-</ul>
-</li>
-<li>Added custom functions support.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/13">#13</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/44">#44</a> by Anthony Sottile]<ul>
-<li>Added <a class="reference internal" href="sass.html#sass.SassFunction" title="sass.SassFunction"><tt class="xref py py-class docutils literal"><span class="pre">sass.SassFunction</span></tt></a> class.</li>
-<li>Added <tt class="docutils literal"><span class="pre">custom_functions</span></tt> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a> function.</li>
-<li>Added data types for custom functions:<ul>
-<li><tt class="xref py py-class docutils literal"><span class="pre">sass.SassNumber</span></tt></li>
-<li><tt class="xref py py-class docutils literal"><span class="pre">sass.SassColor</span></tt></li>
-<li><tt class="xref py py-class docutils literal"><span class="pre">sass.SassList</span></tt></li>
-<li><a class="reference internal" href="sass.html#sass.SassMap" title="sass.SassMap"><tt class="xref py py-class docutils literal"><span class="pre">sass.SassMap</span></tt></a></li>
-<li><tt class="xref py py-class docutils literal"><span class="pre">sass.SassError</span></tt></li>
-<li><tt class="xref py py-class docutils literal"><span class="pre">sass.SassWarning</span></tt></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Added <tt class="docutils literal"><span class="pre">precision</span></tt> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a> function.
-[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-p"><em class="xref std std-option">-p</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--precision"><em class="xref std std-option">--precision</em></a> option.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
-</ul>
-</div>
-<div class="section" id="version-0-6-2">
-<h2>Version 0.6.2<a class="headerlink" href="#version-0-6-2" title="Permalink to this headline">¶</a></h2>
-<p>Released on November 25, 2014.</p>
-<p>Although 0.6.0&#8211;0.6.1 have needed GCC (G++) 4.8+, LLVM Clang 3.3+,
-now it became back to only need GCC (G++) 4.3+, LLVM Clang 2.9+,
-or Visual Studio 2013+.</p>
-<ul class="simple">
-<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0.2">3.0.2</a> &#8212;
-See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0.2">release note</a> of libsass.
-[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/33">#33</a> by Rodolphe Pelloux-Prayer]</li>
-<li>Fixed a bug that <strong class="program">sassc &#8211;watch</strong> crashed when a file is not
-compilable on the first try.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/32">#32</a> by Alan Justino da Silva]</li>
-<li>Fixed broken build on Windows.</li>
-</ul>
-</div>
-<div class="section" id="version-0-6-1">
-<h2>Version 0.6.1<a class="headerlink" href="#version-0-6-1" title="Permalink to this headline">¶</a></h2>
-<p>Released on November 6, 2014.</p>
-<ul class="simple">
-<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0.1">3.0.1</a> &#8212;
-See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0.1">release note</a> of Libsass.</li>
-<li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> never closes
-the socket on some WSGI servers e.g. <tt class="docutils literal"><span class="pre">eventlet.wsgi</span></tt>.</li>
-</ul>
-</div>
-<div class="section" id="version-0-6-0">
-<h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on October 27, 2014.</p>
-<p>Note that since libsass-python 0.6.0 (and libsass 3.0) it requires C++11
-to compile.  Although 0.6.2 became back to only need GCC (G++) 4.3+,
-LLVM Clang 2.9+, from 0.6.0 to 0.6.1 you need GCC (G++) 4.8+, LLVM Clang 3.3+,
-or Visual Studio 2013+.</p>
-<ul class="simple">
-<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/3.0">3.0</a> &#8212; See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.0">release note</a>
-of Libsass.<ul>
-<li>Decent extends support</li>
-<li>Basic Sass Maps Support</li>
-<li>Better UTF-8 Support</li>
-<li><tt class="docutils literal"><span class="pre">call()</span></tt> function</li>
-<li>Better Windows Support</li>
-<li>Spec Enhancements</li>
-</ul>
-</li>
-<li>Added missing <a class="reference external" href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials">partial import</a> support.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/27">#27</a> by item4]</li>
-<li><a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS" title="sass.SOURCE_COMMENTS"><tt class="xref py py-const docutils literal"><span class="pre">SOURCE_COMMENTS</span></tt></a> became deprecated.</li>
-<li><a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a>&#8216;s parameter <tt class="docutils literal"><span class="pre">source_comments</span></tt> now can take only
-<tt class="xref py py-const docutils literal"><span class="pre">bool</span></tt> instead of <tt class="xref py py-const docutils literal"><span class="pre">str</span></tt>.  String values like <tt class="docutils literal"><span class="pre">'none'</span></tt>,
-<tt class="docutils literal"><span class="pre">'line_numbers'</span></tt>, and <tt class="docutils literal"><span class="pre">'map'</span></tt> become deprecated, and will be obsolete
-soon.</li>
-<li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><tt class="xref py py-func docutils literal"><span class="pre">build_directory()</span></tt></a> function has a new optional
-parameter <tt class="docutils literal"><span class="pre">output_style</span></tt>.</li>
-<li><tt class="xref py py-meth docutils literal"><span class="pre">build()</span></tt> method has a new optional
-parameter <tt class="docutils literal"><span class="pre">output_style</span></tt>.</li>
-<li>Added <tt class="docutils literal"><span class="pre">--output-style</span></tt>/<tt class="docutils literal"><span class="pre">-s</span></tt> option to
-<a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a> command.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/25">#25</a>]</li>
-</ul>
-</div>
-<div class="section" id="version-0-5-1">
-<h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Permalink to this headline">¶</a></h2>
-<p>Released on September 23, 2014.</p>
-<ul class="simple">
-<li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> yielded
-<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a> instead of <tt class="xref py py-class docutils literal"><span class="pre">bytes</span></tt> on Python 3.</li>
-<li>Fixed several Unicode-related bugs on Windows.</li>
-<li>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><tt class="xref py py-func docutils literal"><span class="pre">build_directory()</span></tt></a>,
-<a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a>, and
-<a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a> don&#8217;t recursively build
-subdirectories.</li>
-</ul>
-</div>
-<div class="section" id="version-0-5-0">
-<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on June 6, 2014.</p>
-<ul class="simple">
-<li>Follow up the libsass upstream: <a class="reference external" href="https://github.com/sass/libsass/commit/v2.0">v2.0</a> &#8212;
-See the <a class="reference external" href="https://github.com/sass/libsass/releases/tag/v2.0">release note</a> of Libsass.<ul>
-<li>Added indented syntax support (<tt class="file docutils literal"><span class="pre">*.sass</span></tt> files).</li>
-<li>Added expanded selector support (BEM).</li>
-<li>Added string functions.</li>
-<li>Fixed UTF-8 support.</li>
-<li>Backward incompatibility: broken extends.</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="unstable-version-0-4-2-20140529-cd3ee1cbe3">
-<h2>Unstable version 0.4.2.20140529.cd3ee1cbe3<a class="headerlink" href="#unstable-version-0-4-2-20140529-cd3ee1cbe3" title="Permalink to this headline">¶</a></h2>
-<p>Released on May 29, 2014.</p>
-<ul class="simple">
-<li>Version scheme changed to use periods (<tt class="docutils literal"><span class="pre">.</span></tt>) instead of hyphens (<tt class="docutils literal"><span class="pre">-</span></tt>)
-due to setuptools seems to treat hyphens special.</li>
-<li>Fixed malformed packaging that doesn&#8217;t correctly preserve the package name
-and version.</li>
-</ul>
-</div>
-<div class="section" id="unstable-version-0-4-2-20140528-cd3ee1cbe3">
-<h2>Unstable Version 0.4.2-20140528-cd3ee1cbe3<a class="headerlink" href="#unstable-version-0-4-2-20140528-cd3ee1cbe3" title="Permalink to this headline">¶</a></h2>
-<p>Released on May 28, 2014.</p>
-<ul class="simple">
-<li>Follow up the libsass upstream:
-<a class="reference external" href="https://github.com/sass/libsass/commit/cd3ee1cbe34d5316eb762a43127a3de9575454ee">cd3ee1cbe34d5316eb762a43127a3de9575454ee</a>.</li>
-</ul>
-</div>
-<div class="section" id="version-0-4-2">
-<h2>Version 0.4.2<a class="headerlink" href="#version-0-4-2" title="Permalink to this headline">¶</a></h2>
-<p>Released on May 22, 2014.</p>
-<ul class="simple">
-<li>Fixed build failing on Mac OS X 10.8 or earlier.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/19">#19</a>]</li>
-<li>Fixed <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></tt> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><tt class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></tt></a> method rises when the input source
-contains any non-ASCII Unicode characters.</li>
-</ul>
-</div>
-<div class="section" id="version-0-4-1">
-<h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline">¶</a></h2>
-<p>Released on May 20, 2014.</p>
-<ul class="simple">
-<li>Fixed <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></tt> that rise when the input source contains
-any non-ASCII Unicode characters.</li>
-</ul>
-</div>
-<div class="section" id="version-0-4-0">
-<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on May 6, 2014.</p>
-<ul class="simple">
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-w"><em class="xref std std-option">-w</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--watch"><em class="xref std std-option">--watch</em></a> option.</li>
-<li>Expose source maps support:<ul>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><em class="xref std std-option">-m</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-g"><em class="xref std std-option">-g</em></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--sourcemap"><em class="xref std std-option">--sourcemap</em></a> option.</li>
-<li><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><tt class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></tt></a> now also creates source map files
-with filenames followed by <tt class="file docutils literal"><span class="pre">.map</span></tt> suffix.</li>
-<li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><tt class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></tt></a> method
-has a new <tt class="docutils literal"><span class="pre">source_map</span></tt> option.  This option builds also a source map
-file with the filename followed by <tt class="file docutils literal"><span class="pre">.map</span></tt> suffix.</li>
-<li><a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><tt class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></tt></a> has a new optional parameter <tt class="docutils literal"><span class="pre">source_comments</span></tt>.
-It can be one of <a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS" title="sass.SOURCE_COMMENTS"><tt class="xref py py-const docutils literal"><span class="pre">sass.SOURCE_COMMENTS</span></tt></a> keys.  It also has
-a new parameter <tt class="docutils literal"><span class="pre">source_map_filename</span></tt> which is required only when
-<tt class="docutils literal"><span class="pre">source_comments='map'</span></tt>.</li>
-</ul>
-</li>
-<li>Fixed Python 3 incompatibility of <strong class="program">sassc</strong> program.</li>
-<li>Fixed a bug that multiple <tt class="docutils literal"><span class="pre">include_paths</span></tt> doesn&#8217;t work on Windows.</li>
-</ul>
-</div>
-<div class="section" id="version-0-3-0">
-<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on February 21, 2014.</p>
-<ul class="simple">
-<li>Added support for Python 3.3.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/7">#7</a>]</li>
-<li>Dropped support for Python 2.5.</li>
-<li>Fixed build failing on Mac OS X.
-[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/4">#4</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/5">#5</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/6">#6</a> by Hyungoo Kang]</li>
-<li>Now builder creates target recursive subdirectories even if it doesn&#8217;t
-exist yet, rather than siliently fails.
-[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/8">#8</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/9">#9</a> by Philipp Volguine]</li>
-<li>Merged recent changes from libsass <a class="reference external" href="https://github.com/sass/libsass/commit/v1.0.1">v1.0.1</a>: <a class="reference external" href="https://github.com/sass/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1">57a2f62&#8211;v1.0.1</a>.<ul>
-<li>Supports <a class="reference external" href="http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments">variable arguments</a>.</li>
-<li>Supports sourcemaps.</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="version-0-2-4">
-<h2>Version 0.2.4<a class="headerlink" href="#version-0-2-4" title="Permalink to this headline">¶</a></h2>
-<p>Released on December 4, 2012.</p>
-<ul class="simple">
-<li>Added <a class="reference internal" href="sassc.html#module-sassc" title="sassc"><tt class="xref py py-mod docutils literal"><span class="pre">sassc</span></tt></a> CLI executable script.</li>
-<li>Added <a class="reference internal" href="sass.html#sass.OUTPUT_STYLES" title="sass.OUTPUT_STYLES"><tt class="xref py py-const docutils literal"><span class="pre">sass.OUTPUT_STYLES</span></tt></a> constant map.</li>
-<li>Merged recent changes from libsass upstream:
-<a class="reference external" href="https://github.com/sass/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84">e997102&#8211;a84b181</a>.</li>
-</ul>
-</div>
-<div class="section" id="version-0-2-3">
-<h2>Version 0.2.3<a class="headerlink" href="#version-0-2-3" title="Permalink to this headline">¶</a></h2>
-<p>Released on October 24, 2012.</p>
-<ul class="simple">
-<li><a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></tt></a>: Prevent double monkey patch of <tt class="docutils literal"><span class="pre">sdist</span></tt>.</li>
-<li>Merged upstream changes of libsass.</li>
-</ul>
-</div>
-<div class="section" id="version-0-2-2">
-<h2>Version 0.2.2<a class="headerlink" href="#version-0-2-2" title="Permalink to this headline">¶</a></h2>
-<p>Released on September 28, 2012.</p>
-<ul class="simple">
-<li>Fixed a link error on PyPy and Linux.</li>
-<li>Fixed build errors on Windows.</li>
-</ul>
-</div>
-<div class="section" id="version-0-2-1">
-<h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Permalink to this headline">¶</a></h2>
-<p>Released on September 12, 2012.</p>
-<ul class="simple">
-<li>Support Windows.</li>
-</ul>
-</div>
-<div class="section" id="version-0-2-0">
-<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on August 24, 2012.</p>
-<ul class="simple">
-<li>Added new <a class="reference internal" href="sassutils.html#module-sassutils" title="sassutils"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils</span></tt></a> package.<ul>
-<li>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils.builder</span></tt></a> module to build the whole directory
-at a time.</li>
-<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></tt></a> module for <a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">distutils</span></tt></a> and
-<tt class="xref py py-mod docutils literal"><span class="pre">setuptools</span></tt> integration.</li>
-<li>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><tt class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></tt></a> module which provides a development-purpose
-WSGI middleware.</li>
-</ul>
-</li>
-<li>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><tt class="xref py py-class docutils literal"><span class="pre">build_sass</span></tt></a> command for
-<a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><tt class="xref py py-mod docutils literal"><span class="pre">distutils</span></tt></a>/<tt class="xref py py-mod docutils literal"><span class="pre">setuptools</span></tt>.</li>
-</ul>
-</div>
-<div class="section" id="version-0-1-1">
-<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Permalink to this headline">¶</a></h2>
-<p>Released on August 18, 2012.</p>
-<ul class="simple">
-<li>Fixed segmentation fault for reading <tt class="docutils literal"><span class="pre">filename</span></tt> which does not exist.
-Now it raises a proper <tt class="docutils literal"><span class="pre">exceptions.IOError</span></tt> exception.</li>
-</ul>
-</div>
-<div class="section" id="version-0-1-0">
-<h2>Version 0.1.0<a class="headerlink" href="#version-0-1-0" title="Permalink to this headline">¶</a></h2>
-<p>Released on August 17, 2012.  Initial version.</p>
-</div>
-</div>
-
-
-          </div>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="sassc.html" title="sassc — SassC compliant command line interface"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="frameworks/flask.html" title="Using with Flask"
-             >previous</a> |</li>
-        <li><a href="index.html">libsass 0.7.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2012, Hong Minhee.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      &copy;2012, Hong Minhee.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/changes.txt"
+          rel="nofollow">Page source</a></li>
     </div>
+
+    
+
+    
   </body>
 </html>
