@@ -698,7 +698,6 @@ class CompileDirectoriesTest(unittest.TestCase):
             # Make sure we don't compile non-scss files
             write_file(os.path.join(input_dir, 'baz.txt'), 'Hello der')
 
-            # the api for this is weird, why does it need source?
             sass.compile(dirname=(input_dir, output_dir))
             assert os.path.exists(output_dir)
             assert os.path.exists(os.path.join(output_dir, 'foo'))
@@ -710,6 +709,17 @@ class CompileDirectoriesTest(unittest.TestCase):
             contentsf2 = open(os.path.join(output_dir, 'foo/f2.css')).read()
             self.assertEqual(contentsf1, 'a b {\n  width: 100%; }\n')
             self.assertEqual(contentsf2, 'foo {\n  width: 100%; }\n')
+
+    def test_ignores_underscored_files(self):
+        with tempdir() as tmpdir:
+            input_dir = os.path.join(tmpdir, 'input')
+            output_dir = os.path.join(tmpdir, 'output')
+            os.mkdir(input_dir)
+            write_file(os.path.join(input_dir, 'f1.scss'), '@import "f2";')
+            write_file(os.path.join(input_dir, '_f2.scss'), 'a{color:red}')
+
+            sass.compile(dirname=(input_dir, output_dir))
+            assert not os.path.exists(os.path.join(output_dir, '_f2.css'))
 
     def test_error(self):
         with tempdir() as tmpdir:
