@@ -362,10 +362,12 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
 }
 
 static union Sass_Value* _call_py_f(
-        const union Sass_Value* sass_args, void* cookie
+        const union Sass_Value* sass_args,
+        Sass_Function_Entry cb,
+        struct Sass_Options* opts
 ) {
     size_t i;
-    PyObject* pyfunc = (PyObject*)cookie;
+    PyObject* pyfunc = (PyObject*)sass_function_get_cookie(cb);
     PyObject* py_args = PyTuple_New(sass_list_get_length(sass_args));
     PyObject* py_result = NULL;
     union Sass_Value* sass_result = NULL;
@@ -394,13 +396,13 @@ static void _add_custom_functions(
         struct Sass_Options* options, PyObject* custom_functions
 ) {
     Py_ssize_t i;
-    Sass_C_Function_List fn_list = sass_make_function_list(
+    Sass_Function_List fn_list = sass_make_function_list(
         PyList_Size(custom_functions)
     );
     for (i = 0; i < PyList_GET_SIZE(custom_functions); i += 1) {
         PyObject* sass_function = PyList_GET_ITEM(custom_functions, i);
         PyObject* signature = PySass_Object_Bytes(sass_function);
-        Sass_C_Function_Callback fn = sass_make_function(
+        Sass_Function_Entry fn = sass_make_function(
             PySass_Bytes_AS_STRING(signature),
             _call_py_f,
             sass_function
