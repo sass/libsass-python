@@ -1009,7 +1009,9 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'       Backtrace:\n'
                 r'       \tstdin:0, in function `raises`\n'
                 r'       \tstdin:0\n'
-                r'        on line 1 of stdin\n$'
+                r'        on line 1 of stdin\n'
+                r'>> a { content: raises\(\); }\n'
+                r'   -------------\^\n$'
         )):
             compile_with_func('a { content: raises(); }')
 
@@ -1021,6 +1023,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:0, in function `returns-warning`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_warning(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_warning(); }')
 
@@ -1031,6 +1035,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:0, in function `returns-error`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_error(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_error(); }')
 
@@ -1053,6 +1059,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:0, in function `returns-unknown`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_unknown(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_unknown(); }')
 
