@@ -1009,34 +1009,40 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'       Backtrace:\n'
                 r'       \tstdin:0, in function `raises`\n'
                 r'       \tstdin:0\n'
-                r'        on line 1 of stdin\n$'
+                r'        on line 1 of stdin\n'
+                r'>> a { content: raises\(\); }\n'
+                r'   -------------\^\n$'
         )):
             compile_with_func('a { content: raises(); }')
 
     def test_warning(self):
         with assert_raises_compile_error(
-                'Error: warning in C function returns-warning: '
+                'Error: warning in C function returns_warning: '
                 'This is a warning\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns-warning`\n'
+                '       \tstdin:0, in function `returns_warning`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_warning(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_warning(); }')
 
     def test_error(self):
         with assert_raises_compile_error(
-                'Error: error in C function returns-error: This is an error\n'
+                'Error: error in C function returns_error: This is an error\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns-error`\n'
+                '       \tstdin:0, in function `returns_error`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_error(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_error(); }')
 
     def test_returns_unknown_object(self):
         with assert_raises_compile_error(
-                'Error: error in C function returns-unknown: '
+                'Error: error in C function returns_unknown: '
                 'Unexpected type: `tuple`.\n'
                 '       Expected one of:\n'
                 '       - None\n'
@@ -1050,9 +1056,11 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       - SassWarning\n'
                 '       - SassError\n\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns-unknown`\n'
+                '       \tstdin:0, in function `returns_unknown`\n'
                 '       \tstdin:0\n'
                 '        on line 1 of stdin\n'
+                '>> a { content: returns_unknown(); }\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_unknown(); }')
 
