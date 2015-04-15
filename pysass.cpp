@@ -35,18 +35,6 @@ static union Sass_Value* _error_to_sass_value(PyObject* value);
 static union Sass_Value* _unknown_type_to_sass_error(PyObject* value);
 static union Sass_Value* _exception_to_sass_error();
 
-struct PySass_Pair {
-    char *label;
-    int value;
-};
-
-static struct PySass_Pair PySass_output_style_enum[] = {
-    {(char *) "nested", SASS_STYLE_NESTED},
-    {(char *) "expanded", SASS_STYLE_EXPANDED},
-    {(char *) "compact", SASS_STYLE_COMPACT},
-    {(char *) "compressed", SASS_STYLE_COMPRESSED},
-    {NULL}
-};
 
 static PyObject* _to_py_value(const union Sass_Value* value) {
     PyObject* retv = NULL;
@@ -522,22 +510,17 @@ static PyMethodDef PySass_methods[] = {
 
 static char PySass_doc[] = "The thin binding of libsass for Python.";
 
-void PySass_make_enum_dict(PyObject *enum_dict, struct PySass_Pair *pairs) {
-    size_t i;
-    for (i = 0; pairs[i].label; ++i) {
-        PyDict_SetItemString(
-            enum_dict,
-            pairs[i].label,
-            PySass_Int_FromLong((long) pairs[i].value)
-        );
-    }
+PyObject* PySass_make_enum_dict() {
+    PyObject* dct = PyDict_New();
+    PyDict_SetItemString(dct, "nested", PySass_Int_FromLong(SASS_STYLE_NESTED));
+    PyDict_SetItemString(dct, "expected", PySass_Int_FromLong(SASS_STYLE_EXPANDED));
+    PyDict_SetItemString(dct, "compact", PySass_Int_FromLong(SASS_STYLE_COMPACT));
+    PyDict_SetItemString(dct, "compressed", PySass_Int_FromLong(SASS_STYLE_COMPRESSED));
+    return dct;
 }
 
 void PySass_init_module(PyObject *module) {
-    PyObject *output_styles;
-    output_styles = PyDict_New();
-    PySass_make_enum_dict(output_styles, PySass_output_style_enum);
-    PyModule_AddObject(module, "OUTPUT_STYLES", output_styles);
+    PyModule_AddObject(module, "OUTPUT_STYLES", PySass_make_enum_dict());
 }
 
 #if PY_MAJOR_VERSION >= 3
