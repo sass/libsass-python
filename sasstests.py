@@ -57,7 +57,7 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'sourcesContent': [],
     'names': [],
-    'mappings': ';AAKI,IAAI,CAAH;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEH,IAAI,CAAC,CAAC,CAAL;IACA,KAAK,EAAE,IAAK,GADX',
+    'mappings': ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,KAAK,EAAE,IAAK,GADX',
 }
 
 B_EXPECTED_CSS = '''\
@@ -457,7 +457,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AACG,CAAC,CAAC,CAAC,CAAF;EACA,SAAS,EAAE,IAAI,GADd',
+                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;EACA,SAAS,EAAE,IAAI,GADd',
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -475,7 +475,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';;AAKI,IAAI,CAAH;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEH,IAAI,CAAC,CAAC,CAAL;IACA,IAAI,EAAE,0BAA2B,GADhC',
+                    'mappings': ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,IAAI,EAAE,0BAA2B,GADhC',
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -1017,8 +1017,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'.+'
                 r'AssertionError: foo\n\n'
                 r'       Backtrace:\n'
-                r'       \tstdin:0, in function `raises`\n'
-                r'       \tstdin:0\n'
+                r'       \tstdin:1, in function `raises`\n'
+                r'       \tstdin:1\n'
                 r'        on line 1 of stdin\n'
                 r'>> a { content: raises\(\); }\n'
                 r'   --------------------\^\n$'
@@ -1030,8 +1030,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 'Error: warning in C function returns_warning: '
                 'This is a warning\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns_warning`\n'
-                '       \tstdin:0\n'
+                '       \tstdin:1, in function `returns_warning`\n'
+                '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_warning(); }\n'
                 '   -----------------------------^\n'
@@ -1042,8 +1042,8 @@ class CustomFunctionsTest(unittest.TestCase):
         with assert_raises_compile_error(
                 'Error: error in C function returns_error: This is an error\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns_error`\n'
-                '       \tstdin:0\n'
+                '       \tstdin:1, in function `returns_error`\n'
+                '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_error(); }\n'
                 '   ---------------------------^\n'
@@ -1066,8 +1066,8 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       - SassWarning\n'
                 '       - SassError\n\n'
                 '       Backtrace:\n'
-                '       \tstdin:0, in function `returns_unknown`\n'
-                '       \tstdin:0\n'
+                '       \tstdin:1, in function `returns_unknown`\n'
+                '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_unknown(); }\n'
                 '   -----------------------------^\n'
