@@ -457,7 +457,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;EACA,SAAS,EAAE,IAAI,GADd',
+                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;EACA,SAAS,EAAE,IAAK,GADf',
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -1021,7 +1021,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'       \tstdin:1\n'
                 r'        on line 1 of stdin\n'
                 r'>> a { content: raises\(\); }\n'
-                r'   --------------------\^\n$'
+                r'   -------------\^\n$'
         )):
             compile_with_func('a { content: raises(); }')
 
@@ -1034,7 +1034,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_warning(); }\n'
-                '   -----------------------------^\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_warning(); }')
 
@@ -1046,7 +1046,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_error(); }\n'
-                '   ---------------------------^\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_error(); }')
 
@@ -1070,7 +1070,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       \tstdin:1\n'
                 '        on line 1 of stdin\n'
                 '>> a { content: returns_unknown(); }\n'
-                '   -----------------------------^\n'
+                '   -------------^\n'
         ):
             compile_with_func('a { content: returns_unknown(); }')
 
