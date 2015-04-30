@@ -74,7 +74,7 @@ if sys.platform == 'win32':
 else:
     flags = ['-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses']
     platform.mac_ver()
-    if platform.system() == 'Darwin':
+    if platform.system() in ['Darwin', 'FreeBSD']:
         os.environ['CC'] = os.environ['CXX'] = 'c++'
         orig_customize_compiler = distutils.sysconfig.customize_compiler
 
@@ -88,12 +88,13 @@ else:
         distutils.sysconfig.customize_compiler = customize_compiler
         flags.extend([
             '-stdlib=libc++',
-            '-mmacosx-version-min=10.7',
         ])
-        if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
-            flags.append(
-                '-Wno-error=unused-command-line-argument-hard-error-in-future',
-            )
+        if platform.system() == 'Darwin':
+            flags.append('-mmacosx-version-min=10.7',)
+            if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+                flags.append(
+                    '-Wno-error=unused-command-line-argument-hard-error-in-future',
+                )
         # Dirty workaround to avoid link error...
         # Python distutils doesn't provide any way to configure different
         # flags for each cc and c++.
