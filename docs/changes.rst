@@ -6,8 +6,7 @@ Version 0.8.0
 
 To be released.
 
-- Follow up the libsass upstream: 3.2.0 --- See the `release note`__
-  of Libsass.
+- Follow up the libsass upstream: 3.2.0 --- See the `release note`__ of Libsass.
   [:issue:`61`, :issue:`52`, :issue:`56`, :issue:`58`, :issue:`62`
   by Anthony Sottile]
 
@@ -28,8 +27,8 @@ Released on March 6, 2015.
 
 Anthony Sottile contributed to the most of this release.  Huge thanks to him!
 
-- Follow up the libsass upstream: :upcommit:`3.1.0` --- See the `release note`__
-  of Libsass.  [:issue:`38`, :issue:`43` by Anthony Sottile]
+- Follow up the libsass upstream: 3.1.0 --- See the `release note`__ of Libsass.
+  [:issue:`38`, :issue:`43` by Anthony Sottile]
 
   - Custom functions and imports
   - Decrementing in ``@for`` loops
@@ -71,8 +70,7 @@ Although 0.6.0--0.6.1 have needed GCC (G++) 4.8+, LLVM Clang 3.3+,
 now it became back to only need GCC (G++) 4.3+, LLVM Clang 2.9+,
 or Visual Studio 2013+.
 
-- Follow up the libsass upstream: :upcommit:`3.0.2` ---
-  See the `release note`__ of libsass.
+- Follow up the libsass upstream: 3.0.2 --- See the `release note`__ of libsass.
   [:issue:`33` by Rodolphe Pelloux-Prayer]
 - Fixed a bug that :program:`sassc --watch` crashed when a file is not
   compilable on the first try.  [:issue:`32` by Alan Justino da Silva]
@@ -86,8 +84,7 @@ Version 0.6.1
 
 Released on November 6, 2014.
 
-- Follow up the libsass upstream: :upcommit:`3.0.1` ---
-  See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 3.0.1 --- See the `release note`__ of Libsass.
 - Fixed a bug that :class:`~sassutils.wsgi.SassMiddleware` never closes
   the socket on some WSGI servers e.g. ``eventlet.wsgi``.
 
@@ -104,8 +101,7 @@ to compile.  Although 0.6.2 became back to only need GCC (G++) 4.3+,
 LLVM Clang 2.9+, from 0.6.0 to 0.6.1 you need GCC (G++) 4.8+, LLVM Clang 3.3+,
 or Visual Studio 2013+.
 
-- Follow up the libsass upstream: :upcommit:`3.0` --- See the `release note`__
-  of Libsass.
+- Follow up the libsass upstream: 3.0 --- See the `release note`__ of Libsass.
 
   - Decent extends support
   - Basic Sass Maps Support 
@@ -150,8 +146,7 @@ Version 0.5.0
 
 Released on June 6, 2014.
 
-- Follow up the libsass upstream: :upcommit:`v2.0` ---
-  See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 2.0 --- See the `release note`__ of Libsass.
 
   - Added indented syntax support (:file:`*.sass` files).
   - Added expanded selector support (BEM).
@@ -239,7 +234,7 @@ Released on February 21, 2014.
 - Now builder creates target recursive subdirectories even if it doesn't
   exist yet, rather than siliently fails.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
-- Merged recent changes from libsass :upcommit:`v1.0.1`: `57a2f62--v1.0.1`_.
+- Merged recent changes from libsass 1.0.1: `57a2f62--v1.0.1`_.
             
   - Supports `variable arguments`_.
   - Supports sourcemaps.
