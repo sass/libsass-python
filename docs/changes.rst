@@ -6,6 +6,20 @@ Version 0.8.0
 
 To be released.
 
+- Follow up the libsass upstream: 3.2.0 --- See the `release note`__
+  of Libsass.
+  [:issue:`61`, :issue:`52`, :issue:`56`, :issue:`58`, :issue:`62`
+  by Anthony Sottile]
+
+  - Compact and expanded output styles  [:issue:`37`]
+  - Strings and interpolation closer to Ruby Sass
+  - The correctness of the generated sourcemap files
+  - Directive buddling
+  - Full support for the ``@at-root`` directive
+  - Full support for ``!global`` variable scoping
+
+__ https://github.com/sass/libsass/releases/tag/3.2.0
+
 
 Version 0.7.0
 -------------
