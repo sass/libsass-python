@@ -17,6 +17,9 @@ To be released.
   - Full support for the ``@at-root`` directive
   - Full support for ``!global`` variable scoping
 
+- Now underscored files are ignored when compiling a directory.
+  [:issue:`57` by Anthony Sottile]
+
 __ https://github.com/sass/libsass/releases/tag/3.2.0
 
 
