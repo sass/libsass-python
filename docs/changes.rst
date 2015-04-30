@@ -19,7 +19,7 @@ To be released.
 
 - Now underscored files are ignored when compiling a directory.
   [:issue:`57` by Anthony Sottile]
-- Fixed broken FreeBSD build.  [:issue:`60` by Ilya Baryshev]
+- Fixed broken FreeBSD build.  [:issue:`34`, :issue:`60` by Ilya Baryshev]
 
 __ https://github.com/sass/libsass/releases/tag/3.2.0
 
