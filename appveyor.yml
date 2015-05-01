@@ -25,11 +25,11 @@ init:
 - ps: "ls C:/Python*"
 install:
 - ps: >
-    git -C $env:APPVEYOR_BUILD_FOLDER submodule update --init
-    (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
-    $env:PYTHON\python.exe C:/get-pip.py
-    $env:PYTHON\Scripts\pip.exe --version
-    $env:PYTHON\Scripts\pip.exe install wheel
+    git -C $env:APPVEYOR_BUILD_FOLDER submodule update --init;
+    (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py');
+    $env:PYTHON\python.exe C:/get-pip.py;
+    $env:PYTHON\Scripts\pip.exe --version;
+    $env:PYTHON\Scripts\pip.exe install wheel;
     $env:PYTHON\Scripts\pip.exe install -e .
 build: false
 test_script:
