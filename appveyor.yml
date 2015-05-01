@@ -4,18 +4,18 @@ environment:
     VS90COMNTOOLS: "%VS110COMNTOOLS%"
     VS100COMNTOOLS: "%VS110COMNTOOLS%"
   matrix:
-  - PYTHON: "C:\\Python26_32"
-    PYTHON_VERSION: "2.6.9"
-    PYTHON_ARCH: "32"
-  - PYTHON: "C:\\Python27_32"
-    PYTHON_VERSION: "2.7.9"
-    PYTHON_ARCH: "32"
-  - PYTHON: "C:\\Python33_32"
-    PYTHON_VERSION: "3.3.6"
-    PYTHON_ARCH: "32"
-  - PYTHON: "C:\\Python34_32"
-    PYTHON_VERSION: "3.4.3"
-    PYTHON_ARCH: "32"
+  - PYTHON: "C:\\Python27"
+    PYTHON_ARCH: 32
+  - PYTHON: "C:\\Python27-x64"
+    PYTHON_ARCH: 64
+  - PYTHON: "C:\\Python33"
+    PYTHON_ARCH: 32
+  - PYTHON: "C:\\Python33-x64"
+    PYTHON_ARCH: 64
+  - PYTHON: "C:\\Python34"
+    PYTHON_ARCH: 32
+  - PYTHON: "C:\\Python34-x64"
+    PYTHON_ARCH: 32
 matrix:
   fast_finish: true
 init:
@@ -24,22 +24,13 @@ init:
 - "ECHO %PYTHON%"
 - ps: "ls C:/Python*"
 install:
-- "git -C %APPVEYOR_BUILD_FOLDER% submodule update --init"
 - ps: >
-    if (Test-Path $env:PYTHON) {
-      $env:PYTHON\python.exe C:/get-pip.py
-      $env:PYTHON\Scripts\pip.exe uninstall -y libsass
-    } else {
-      (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/ogrisel/python-appveyor-demo/master/appveyor/install.ps1', 'C:/python-install.ps1')
-      powershell C:/python-install.ps1
-      (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
-      $env:PYTHON\python.exe C:/get-pip.py
-      $env:PYTHON\Scripts\pip.exe --version
-      $env:PYTHON\Scripts\pip.exe install wheel
-    }
-- "%PYTHON%\\Scripts\\pip.exe install --upgrade -e ."
-cache:
-- "%PYTHON% -> appveyor.yml"
+    git -C $env:APPVEYOR_BUILD_FOLDER submodule update --init
+    (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
+    $env:PYTHON\python.exe C:/get-pip.py
+    $env:PYTHON\Scripts\pip.exe --version
+    $env:PYTHON\Scripts\pip.exe install wheel
+    $env:PYTHON\Scripts\pip.exe install -e .
 build: false
 test_script:
 - "dir \"C:\\Program Files (x86)\""
