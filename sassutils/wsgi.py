@@ -5,6 +5,7 @@
 from __future__ import absolute_import, with_statement
 
 import collections
+import logging
 import os
 import os.path
 
@@ -21,6 +22,54 @@ class SassMiddleware(object):
     requested it finds a matched SASS/SCSS source file and then compiled
     it into CSS.
 
+    It shows syntax errors in three ways:
+
+    Heading comment
+        The result CSS includes detailed error message in the heading
+        CSS comment e.g.:
+
+        .. code-block:: css
+
+           /*
+           Error: invalid property name
+           */
+
+    Red text in ``body:before``
+        The result CSS draws detailed error message in ``:before``
+        pseudo-class of ``body`` element e.g.::
+
+        .. code-block:: css
+
+           /*
+           body:before {
+             content: 'Error: invalid property name';
+             color: maroon;
+             background-color: white;
+           }
+           */
+
+        In most cases you could be aware of syntax error by refreshing your
+        working document because it will removes all other styles and leaves
+        only a red text.
+
+    :mod:`logging`
+        It logs syntax errors if exist during compilation to
+        ``sassutils.wsgi.SassMiddleware`` logger with level ``ERROR``.
+
+        To enable this::
+
+            from logging import Formatter, StreamHandler, getLogger
+            logger = getLogger('sassutils.wsgi.SassMiddleware')
+            handler = StreamHandler(level=logging.ERROR)
+            formatter = Formatter(fmt='*' * 80 + '\n%(message)s\n' + '*' * 80)
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+
+        Or simply::
+
+            import logging
+            logging.basicConfig()
+
     :param app: the WSGI application to wrap
     :type app: :class:`collections.Callable`
     :param manifests: build settings.  the same format to
@@ -35,6 +84,10 @@ class SassMiddleware(object):
     .. versionchanged:: 0.4.0
        It creates also source map files with filenames followed by
        :file:`.map` suffix.
+
+    .. versionadded:: 0.8.0
+       It logs syntax errors if exist during compilation to
+       ``sassutils.wsgi.SassMiddleware`` logger with level ``ERROR``.
 
     """
 
@@ -80,6 +133,8 @@ class SassMiddleware(object):
                 except (IOError, OSError):
                     break
                 except CompileError as e:
+                    logger = logging.getLogger(__name__ + '.SassMiddleware')
+                    logger.error(str(e))
                     start_response(
                         self.error_status,
                         [('Content-Type', 'text/css; charset=utf-8')]

@@ -20,6 +20,9 @@ To be released.
 - Now underscored files are ignored when compiling a directory.
   [:issue:`57` by Anthony Sottile]
 - Fixed broken FreeBSD build.  [:issue:`34`, :issue:`60` by Ilya Baryshev]
+- :class:`~sassutils.wsgi.SassMiddleware` became to log syntax errors
+  if exist during compilation to ``sassutils.wsgi.SassMiddleware`` logger
+  with level ``ERROR``.  [:issue:`42`]
 
 __ https://github.com/sass/libsass/releases/tag/3.2.0
 
