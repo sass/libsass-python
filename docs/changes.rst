@@ -6,8 +6,9 @@ Version 0.8.0
 
 To be released.
 
-- Follow up the libsass upstream: 3.2.0 --- See the `release note`__ of Libsass.
-  [:issue:`61`, :issue:`52`, :issue:`56`, :issue:`58`, :issue:`62`
+- Follow up the libsass upstream: 3.2.2 --- See the release notes of Libsass
+  3.2.0__, 3.2.1__, and 3.2.2__.
+  [:issue:`61`, :issue:`52`, :issue:`56`, :issue:`58`, :issue:`62`, :issue:`64`
   by Anthony Sottile]
 
   - Compact and expanded output styles  [:issue:`37`]
@@ -25,6 +26,8 @@ To be released.
   with level ``ERROR``.  [:issue:`42`]
 
 __ https://github.com/sass/libsass/releases/tag/3.2.0
+__ https://github.com/sass/libsass/releases/tag/3.2.1
+__ https://github.com/sass/libsass/releases/tag/3.2.2
 
 
 Version 0.7.0
