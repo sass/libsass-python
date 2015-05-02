@@ -1015,7 +1015,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'^Error: error in C function raises: \n'
                 r'       Traceback \(most recent call last\):\n'
                 r'.+'
-                r'AssertionError: foo\n\n'
+                r'AssertionError: foo\n\n\n'
                 r'       Backtrace:\n'
                 r'       \tstdin:1, in function `raises`\n'
                 r'       \tstdin:1\n'
@@ -1028,7 +1028,7 @@ class CustomFunctionsTest(unittest.TestCase):
     def test_warning(self):
         with assert_raises_compile_error(
                 'Error: warning in C function returns_warning: '
-                'This is a warning\n'
+                'This is a warning\n\n'
                 '       Backtrace:\n'
                 '       \tstdin:1, in function `returns_warning`\n'
                 '       \tstdin:1\n'
@@ -1040,7 +1040,8 @@ class CustomFunctionsTest(unittest.TestCase):
 
     def test_error(self):
         with assert_raises_compile_error(
-                'Error: error in C function returns_error: This is an error\n'
+                'Error: error in C function returns_error: '
+                'This is an error\n\n'
                 '       Backtrace:\n'
                 '       \tstdin:1, in function `returns_error`\n'
                 '       \tstdin:1\n'
@@ -1064,7 +1065,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       - dict\n'
                 '       - SassMap\n'
                 '       - SassWarning\n'
-                '       - SassError\n\n'
+                '       - SassError\n\n\n'
                 '       Backtrace:\n'
                 '       \tstdin:1, in function `returns_unknown`\n'
                 '       \tstdin:1\n'
