@@ -132,6 +132,9 @@ sass_extension = Extension(
     extra_link_args=link_flags,
 )
 
+install_requires = ['six']
+tests_require = ['Werkzeug >= 0.9']
+
 
 def version(sass_filename='sass.py'):
     with open(sass_filename) as f:
@@ -226,9 +229,15 @@ setup(
             ['sassc = sassc:main']
         ]
     },
-    install_requires=['six'],
-    tests_require=['Werkzeug >= 0.9'],
+    install_requires=install_requires,
+    tests_require=tests_require,
     test_suite='sasstests.suite',
+    extras_require={
+        'tests': tests_require,
+        'upload_appveyor_builds': [
+            'twine == 1.5.0',
+        ],
+    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
