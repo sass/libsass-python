@@ -4,7 +4,7 @@ Changelog
 Version 0.8.0
 -------------
 
-To be released.
+Released on May 3, 2015.
 
 - Follow up the libsass upstream: 3.2.2 --- See the release notes of Libsass
   3.2.0__, 3.2.1__, and 3.2.2__.
