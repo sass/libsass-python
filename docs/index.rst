@@ -1,5 +1,5 @@
-libsass
-=======
+libsass-python
+==============
 
 This package provides a simple Python extension module :mod:`sass` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
