@@ -6,6 +6,8 @@ Version 0.8.1
 
 To be released.
 
+- Fixed broken FreeBSD build.  [:issue:`65` by Toshiharu Moriyama]
+
 
 Version 0.8.0
 -------------
