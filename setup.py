@@ -69,21 +69,22 @@ if sys.platform == 'win32':
             spawn(cmd, dry_run=self.dry_run)
         from distutils.msvc9compiler import MSVCCompiler
         MSVCCompiler.spawn = spawn
-    flags = ['/EHsc']
+    flags = ['-c', '-O2', '/EHsc']
     link_flags = []
 else:
     flags = ['-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses']
     platform.mac_ver()
     if platform.system() in ['Darwin', 'FreeBSD']:
-        os.environ['CC'] = os.environ['CXX'] = 'c++'
+        os.environ.setdefault('CC', 'clang')
+        os.environ.setdefault('CXX', 'clang++')
         orig_customize_compiler = distutils.sysconfig.customize_compiler
 
         def customize_compiler(compiler):
             orig_customize_compiler(compiler)
-            compiler.compiler[0] = 'c++'
-            compiler.compiler_so[0] = 'c++'
-            compiler.compiler_cxx[0] = 'c++'
-            compiler.linker_so[0] = 'c++'
+            compiler.compiler[0] = os.environ['CC']
+            compiler.compiler_so[0] = os.environ['CXX']
+            compiler.compiler_cxx[0] = os.environ['CXX']
+            compiler.linker_so[0] = os.environ['CXX']
             return compiler
         distutils.sysconfig.customize_compiler = customize_compiler
         flags.extend([
@@ -120,7 +121,13 @@ else:
             if os.path.isfile(cencode_path):
                 with open(cencode_path, 'w') as f:
                     f.write(cencode_body)
-    link_flags = ['-fPIC', '-lstdc++']
+
+    flags = ['-c', '-O3'] + flags
+
+    if platform.system() == 'FreeBSD':
+        link_flags = ['-fPIC', '-lc++']
+    else:
+        link_flags = ['-fPIC', '-lstdc++']
 
 sass_extension = Extension(
     '_sass',
@@ -128,7 +135,7 @@ sass_extension = Extension(
     library_dirs=[os.path.join('.', LIBSASS_DIR)],
     include_dirs=[os.path.join('.', LIBSASS_DIR)],
     depends=libsass_headers,
-    extra_compile_args=['-c', '-O2'] + flags,
+    extra_compile_args=flags,
     extra_link_args=link_flags,
 )
 
