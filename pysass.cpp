@@ -513,7 +513,7 @@ static char PySass_doc[] = "The thin binding of libsass for Python.";
 PyObject* PySass_make_enum_dict() {
     PyObject* dct = PyDict_New();
     PyDict_SetItemString(dct, "nested", PySass_Int_FromLong(SASS_STYLE_NESTED));
-    PyDict_SetItemString(dct, "expected", PySass_Int_FromLong(SASS_STYLE_EXPANDED));
+    PyDict_SetItemString(dct, "expanded", PySass_Int_FromLong(SASS_STYLE_EXPANDED));
     PyDict_SetItemString(dct, "compact", PySass_Int_FromLong(SASS_STYLE_COMPACT));
     PyDict_SetItemString(dct, "compressed", PySass_Int_FromLong(SASS_STYLE_COMPRESSED));
     return dct;

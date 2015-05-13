@@ -6,6 +6,8 @@ Version 0.8.1
 
 To be released.
 
+- Fixed a bug that there was no ``'expanded'`` in :const:`sass.OUTPUT_STYLES`
+  but ``'expected'`` instead which is a typo.  [:issue:`66` by Triangle717]
 - Fixed broken FreeBSD build.  [:issue:`65` by Toshiharu Moriyama]
 
 
