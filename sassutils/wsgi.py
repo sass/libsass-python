@@ -91,8 +91,7 @@ class SassMiddleware(object):
 
     """
 
-    def __init__(self, app, manifests, package_dir={},
-                 error_status='500 Internal Server Error'):
+    def __init__(self, app, manifests, package_dir={}):
         if not callable(app):
             raise TypeError('app must be a WSGI-compliant callable object, '
                             'not ' + repr(app))
@@ -101,7 +100,6 @@ class SassMiddleware(object):
         if not isinstance(package_dir, collections.Mapping):
             raise TypeError('package_dir must be a mapping object, not ' +
                             repr(package_dir))
-        self.error_status = error_status
         self.package_dir = dict(package_dir)
         for package_name in self.manifests:
             if package_name in self.package_dir:
@@ -136,14 +134,16 @@ class SassMiddleware(object):
                     logger = logging.getLogger(__name__ + '.SassMiddleware')
                     logger.error(str(e))
                     start_response(
-                        self.error_status,
+                        "200 OK",
                         [('Content-Type', 'text/css; charset=utf-8')]
                     )
                     return [
                         b'/*\n', str(e).encode('utf-8'), b'\n*/\n\n',
                         b'body:before { content: ',
                         self.quote_css_string(str(e)).encode('utf-8'),
-                        b'; color: maroon; background-color: white; }'
+                        b'; color: maroon; background-color: white',
+                        b'; white-space: pre-wrap; display: block; ',
+                        b'font-family: "Courier New"; user-select: text; }'
                     ]
 
                 def read_file(path):
