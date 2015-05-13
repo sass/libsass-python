@@ -4,7 +4,7 @@ Changelog
 Version 0.8.1
 -------------
 
-To be released.
+Released on May 14, 2015.
 
 - Fixed a bug that there was no ``'expanded'`` in :const:`sass.OUTPUT_STYLES`
   but ``'expected'`` instead which is a typo.  [:issue:`66` by Triangle717]
