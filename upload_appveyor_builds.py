@@ -104,9 +104,16 @@ def main():
                         help='Overwrite files if already exist')
     parser.add_argument('--dist-dir', default='./dist/',
                         help='The temporary directory to download artifacts')
-    parser.add_argument('tag', help='Git tag of the version to upload')
+    parser.add_argument(
+        'tag',
+        help=('Git tag of the version to upload.  If it has a leading slash, '
+              'it means AppVeyor build number rather than Git tag.')
+    )
     args = parser.parse_args()
-    build = ci_tag_build(args.tag)
+    if args.tag.startswith('/'):
+        build = {'version': args.tag.lstrip('/')}
+    else:
+        build = ci_tag_build(args.tag)
     jobs = ci_jobs(build)
     if not os.path.isdir(args.dist_dir):
         print(args.dist_dir, 'does not exist yet; creating a new directory...')
