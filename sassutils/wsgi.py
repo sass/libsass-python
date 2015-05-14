@@ -92,7 +92,7 @@ class SassMiddleware(object):
     """
 
     def __init__(self, app, manifests, package_dir={},
-                 error_status='500 Internal Server Error'):
+                 error_status='200 OK'):
         if not callable(app):
             raise TypeError('app must be a WSGI-compliant callable object, '
                             'not ' + repr(app))
@@ -143,7 +143,9 @@ class SassMiddleware(object):
                         b'/*\n', str(e).encode('utf-8'), b'\n*/\n\n',
                         b'body:before { content: ',
                         self.quote_css_string(str(e)).encode('utf-8'),
-                        b'; color: maroon; background-color: white; }'
+                        b'; color: maroon; background-color: white',
+                        b'; white-space: pre-wrap; display: block; ',
+                        b'font-family: "Courier New"; user-select: text; }'
                     ]
 
                 def read_file(path):
