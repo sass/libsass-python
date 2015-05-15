@@ -6,6 +6,12 @@ Version 0.8.2
 
 To be released.
 
+- Follow up the libsass upstream: 3.2.4 --- See the release notes of Libsass
+  3.2.3__, and 3.2.4__.  [:issue:`69` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.2.3
+__ https://github.com/sass/libsass/releases/tag/3.2.4
+
 
 Version 0.8.1
 -------------
