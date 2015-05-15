@@ -145,7 +145,7 @@ class SassMiddleware(object):
                         self.quote_css_string(str(e)).encode('utf-8'),
                         b'; color: maroon; background-color: white',
                         b'; white-space: pre-wrap; display: block; ',
-                        b'font-family: monospace, "Courier New"; user-select: text; }'
+                        b'font-family: "Courier New", monospace; user-select: text; }'
                     ]
 
                 def read_file(path):
