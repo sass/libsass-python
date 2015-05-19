@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; libsass 0.8.1 documentation</title>
+    <title>Changelog &mdash; libsass 0.8.2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.8.1 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.8.2 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" />
    
@@ -47,7 +47,7 @@
         <li class="right" >
           <a href="frameworks/flask.html" title="Using with Flask"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">libsass 0.8.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">libsass 0.8.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -58,6 +58,18 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-8-2">
+<h2>Version 0.8.2<a class="headerlink" href="#version-0-8-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on May 19, 2015.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: 3.2.4 &#8212; See the release notes of Libsass
+<a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.2.3">3.2.3</a>, and <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.2.4">3.2.4</a>.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/69">#69</a> by Anthony Sottile]</li>
+<li>The default value of <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a>&#8216;s
+<code class="docutils literal"><span class="pre">error_status</span></code> parameter was changed from <code class="docutils literal"><span class="pre">'500</span> <span class="pre">Internal</span> <span class="pre">Server</span> <span class="pre">Error'</span></code>
+to <code class="docutils literal"><span class="pre">'200</span> <span class="pre">OK'</span></code> so that Mozilla Firefox can render the error message well.
+[<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/67">#67</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/68">#68</a>, <a class="reference external" href="https://github.com/dahlia/libsass-python/issues/70">#70</a> by zxv]</li>
+</ul>
+</div>
 <div class="section" id="version-0-8-1">
 <h2>Version 0.8.1<a class="headerlink" href="#version-0-8-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on May 14, 2015.</p>
@@ -357,6 +369,7 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-0-8-2">Version 0.8.2</a></li>
 <li><a class="reference internal" href="#version-0-8-1">Version 0.8.1</a></li>
 <li><a class="reference internal" href="#version-0-8-0">Version 0.8.0</a></li>
 <li><a class="reference internal" href="#version-0-7-0">Version 0.7.0</a></li>

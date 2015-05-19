@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sassutils.wsgi — WSGI middleware for development purpose &mdash; libsass 0.8.1 documentation</title>
+    <title>sassutils.wsgi — WSGI middleware for development purpose &mdash; libsass 0.8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.8.1 documentation" href="../index.html" />
+    <link rel="top" title="libsass 0.8.2 documentation" href="../index.html" />
     <link rel="up" title="sassutils — Additional utilities related to SASS" href="../sassutils.html" />
     <link rel="prev" title="sassutils.distutils — setuptools/distutils integration" href="distutils.html" />
    
@@ -44,7 +44,7 @@
         <li class="right" >
           <a href="distutils.html" title="sassutils.distutils — setuptools/distutils integration"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">libsass 0.8.1 documentation</a> &raquo;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">libsass 0.8.2 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../sassutils.html" accesskey="U"><code class="docutils literal"><span class="pre">sassutils</span></code> &#8212; Additional utilities related to SASS</a> &raquo;</li> 
       </ul>
     </div>  
@@ -58,7 +58,7 @@
 <h1><a class="reference internal" href="#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></code></a> &#8212; WSGI middleware for development purpose<a class="headerlink" href="#sassutils-wsgi-wsgi-middleware-for-development-purpose" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sassutils.wsgi.SassMiddleware">
-<em class="property">class </em><code class="descclassname">sassutils.wsgi.</code><code class="descname">SassMiddleware</code><span class="sig-paren">(</span><em>app</em>, <em>manifests</em>, <em>package_dir={}</em>, <em>error_status='500 Internal Server Error'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">sassutils.wsgi.</code><code class="descname">SassMiddleware</code><span class="sig-paren">(</span><em>app</em>, <em>manifests</em>, <em>package_dir={}</em>, <em>error_status='200 OK'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>WSGI middleware for development purpose.  Everytime a CSS file has</dt>
 <dd><p class="first">requested it finds a matched SASS/SCSS source file and then compiled

@@ -1,6 +1,22 @@
 Changelog
 =========
 
+Version 0.8.2
+-------------
+
+Released on May 19, 2015.
+
+- Follow up the libsass upstream: 3.2.4 --- See the release notes of Libsass
+  3.2.3__, and 3.2.4__.  [:issue:`69` by Anthony Sottile]
+- The default value of :class:`~sassutils.wsgi.SassMiddleware`'s
+  ``error_status`` parameter was changed from ``'500 Internal Server Error'``
+  to ``'200 OK'`` so that Mozilla Firefox can render the error message well.
+  [:issue:`67`, :issue:`68`, :issue:`70` by zxv]
+
+__ https://github.com/sass/libsass/releases/tag/3.2.3
+__ https://github.com/sass/libsass/releases/tag/3.2.4
+
+
 Version 0.8.1
 -------------
 
