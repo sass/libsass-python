@@ -46,8 +46,8 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 .. note::
 
    libsass-python (and libsass) requires C++11 to compile.
-   It means you need install GCC (G++) 4.3+, LLVM Clang 2.9+,
-   or Visual Studio 2013+.
+   It means you need install GCC (G++) 4.6+, LLVM Clang 2.9+,
+   or Visual Studio 2013 Update 4+.
 
 .. _PyPI: https://pypi.python.org/pypi/libsass
 
