@@ -89,7 +89,7 @@ def validate_manifests(dist, attr, value):
 class build_sass(Command):
     """Builds SASS/SCSS files to CSS files."""
 
-    descriptin = __doc__
+    description = __doc__
     user_options = [
         (
             'output-style=', 's',
