@@ -6,6 +6,9 @@ Version 0.8.3
 
 To be released.
 
+- Fixed a bug that :file:`*.sass` files were ignored.
+  [:issue:`78` by Guilhem MAS-PAITRAULT]
+
 
 Version 0.8.2
 -------------

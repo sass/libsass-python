@@ -150,13 +150,14 @@ def compile_dirname(
     for dirpath, _, filenames in os.walk(search_path):
         filenames = [
             filename for filename in filenames
-            if filename.endswith('.scss') and not filename.startswith('_')
+            if filename.endswith(('.scss', '.sass'))
+            and not filename.startswith('_')
         ]
         for filename in filenames:
             input_filename = os.path.join(dirpath, filename)
             relpath_to_file = os.path.relpath(input_filename, search_path)
             output_filename = os.path.join(output_path, relpath_to_file)
-            output_filename = re.sub('.scss$', '.css', output_filename)
+            output_filename = re.sub('.s[ac]ss$', '.css', output_filename)
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = compile_filename(
                 input_filename, output_style, source_comments, include_paths,
