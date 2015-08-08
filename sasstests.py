@@ -5,6 +5,7 @@ import collections
 import contextlib
 import glob
 import json
+import io
 import os
 import os.path
 import re
@@ -709,6 +710,21 @@ class CompileDirectoriesTest(unittest.TestCase):
             contentsf2 = open(os.path.join(output_dir, 'foo/f2.css')).read()
             self.assertEqual(contentsf1, 'a b {\n  width: 100%; }\n')
             self.assertEqual(contentsf2, 'foo {\n  width: 100%; }\n')
+
+    def test_compile_directories_unicode(self):
+        with tempdir() as tmpdir:
+            input_dir = os.path.join(tmpdir, 'input')
+            output_dir = os.path.join(tmpdir, 'output')
+            os.makedirs(input_dir)
+            with io.open(
+                os.path.join(input_dir, 'test.scss'), 'w', encoding='UTF-8',
+            ) as f:
+                f.write(u'a { content: "☃"; }')
+            # Raised a UnicodeEncodeError in py2 before #82 (issue #72)
+            # Also raised a UnicodeEncodeError in py3 if the default encoding
+            # couldn't represent it (such as cp1252 on windows)
+            sass.compile(dirname=(input_dir, output_dir))
+            assert os.path.exists(os.path.join(output_dir, 'test.css'))
 
     def test_ignores_underscored_files(self):
         with tempdir() as tmpdir:
