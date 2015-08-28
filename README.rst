@@ -64,10 +64,13 @@ It's available on PyPI_, so you can install it using ``pip`` (or
 
    libsass requires some features introduced by the recent C++ standard.
    You need a C++ compiler that support those features.
-   See also libsass project's README_ file.
+   See also libsass project's README_ file. 
+   If you are using the 64bit Version of Python, find the appropriate version here_.
+
 
 .. _PyPI: https://pypi.python.org/pypi/libsass
 .. _README: https://github.com/sass/libsass#readme
+.. _here: https://pypi.python.org/pypi/libsass
 
 
 .. _example:
