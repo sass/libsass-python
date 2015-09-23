@@ -278,6 +278,7 @@ static union Sass_Value* _exception_to_sass_error() {
     PyObject* evalue = NULL;
     PyObject* etb = NULL;
     PyErr_Fetch(&etype, &evalue, &etb);
+    PyErr_NormalizeException(&etype, &evalue, &etb);
     {
         PyObject* traceback_mod = PyImport_ImportModule("traceback");
         PyObject* traceback_parts = PyObject_CallMethod(
@@ -296,6 +297,9 @@ static union Sass_Value* _exception_to_sass_error() {
         Py_DECREF(result);
         Py_DECREF(bytes);
     }
+    Py_DECREF(etype);
+    Py_DECREF(evalue);
+    Py_DECREF(etb);
     return retv;
 }
 
