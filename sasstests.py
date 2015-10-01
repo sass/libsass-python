@@ -854,6 +854,10 @@ class SassTypesTest(unittest.TestCase):
         warn = sass.SassWarning(u'error msg')
         assert type(warn.msg) is text_type, type(warn.msg)
 
+    def test_sass_warning_no_conversion_bytes_message(self):
+        warn = sass.SassWarning(b'error msg')
+        assert type(warn.msg) is text_type, type(warn.msg)
+
     def test_sass_error_no_conversion(self):
         err = sass.SassError(u'error msg')
         assert type(err.msg) is text_type, type(err.msg)
