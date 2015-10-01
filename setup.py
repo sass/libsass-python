@@ -20,10 +20,9 @@ except ImportError:
     use_setuptools()
     from setuptools import Extension, setup
 
-LIBSASS_DIR = 'libsass'
+LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
-
-if not os.path.isfile(os.path.join(LIBSASS_DIR, 'Makefile')) and \
+if not os.path.isfile(os.path.join('libsass', 'Makefile')) and \
    os.path.isdir('.git'):
     print(file=sys.stderr)
     print('You seem to miss initializing submodules; '
@@ -31,12 +30,19 @@ if not os.path.isfile(os.path.join(LIBSASS_DIR, 'Makefile')) and \
     print('  git submodule update --init', file=sys.stderr)
     print(file=sys.stderr)
 
-libsass_files = os.listdir(LIBSASS_DIR)
-libsass_sources = [f for f in libsass_files if f.endswith(('.c', '.cpp'))]
-libsass_headers = [f for f in libsass_files if f.endswith(('.h', '.hpp'))]
-headers = [os.path.join(LIBSASS_DIR, f) for f in libsass_headers]
-sources = [os.path.join(LIBSASS_DIR, f) for f in libsass_sources]
-sources.append('pysass.cpp')
+sources = ['pysass.cpp']
+headers = []
+for directory in (
+        os.path.join('libsass', 'src'),
+        os.path.join('libsass', 'include')
+):
+    for pth, _, filenames in os.walk(directory):
+        for filename in filenames:
+            filename = os.path.join(pth, filename)
+            if filename.endswith(('.c', '.cpp')):
+                sources.append(filename)
+            elif filename.endswith('.h'):
+                headers.append(filename)
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -98,7 +104,7 @@ else:
         # Dirty workaround to avoid link error...
         # Python distutils doesn't provide any way to configure different
         # flags for each cc and c++.
-        cencode_path = os.path.join(LIBSASS_DIR, 'cencode.c')
+        cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
         cencode_body = ''
         with open(cencode_path) as f:
             cencode_body = f.read()
@@ -131,9 +137,9 @@ else:
 sass_extension = Extension(
     '_sass',
     sources,
-    library_dirs=[os.path.join('.', LIBSASS_DIR)],
-    include_dirs=[os.path.join('.', LIBSASS_DIR)],
-    depends=libsass_headers,
+    library_dirs=[os.path.join('.', 'libsass', 'src')],
+    include_dirs=[os.path.join('.', 'libsass', 'include')],
+    depends=headers,
     extra_compile_args=flags,
     extra_link_args=link_flags,
 )
@@ -216,8 +222,6 @@ setup(
     package_data={
         '': [
             'README.rst',
-            os.path.join(LIBSASS_DIR, 'Makefile'),
-            os.path.join(LIBSASS_DIR, 'Makefile.am'),
             'test/*.sass'
         ]
     },

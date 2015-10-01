@@ -1,10 +1,7 @@
-include libsass/*.h
-include libsass/*.hpp
-include libsass/*.cpp
+recursive-include libsas *.c
+recursive-include libsas *.cpp
+recursive-include libsas *.h
+recursive-include libsas *.hpp
 include libsass/Makefile
-include libsass/Makefile.am
-include libsass/b64/*.h
-include libsass/utf8/*.h
-include win32/*.h
 include test/*.scss
 include README.rst
