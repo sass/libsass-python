@@ -56,8 +56,13 @@ Here's a brief check list for releasing a new version:
   takes longer than an hour.  These wheels are not automatically uploaded,
   but there's upload_appveyor_builds.py script that downloads built wheels and
   uploads them to PyPI.
+- The `docs website`__ also has to be updated.
+  It's currently a static website deployed on GitHub Pages.
+  Use ``python setup.py upload_doc`` command.
+  Although it seems possible to be automated using Travis.
 
 Ping Hong Minhee (hongminhee@member.fsf.org, @dahlia on GitHub) if you need
 any help!
 
 .. _PyPI: https://pypi.python.org/pypi/libsass
+__ http://hongminhee.org/libsass-python/
