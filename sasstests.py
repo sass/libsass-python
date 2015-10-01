@@ -58,7 +58,8 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'sourcesContent': [],
     'names': [],
-    'mappings': ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,KAAK,EAAE,IAAK,GADX',
+    'mappings': ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;'
+                'EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,KAAK,EAAE,IAAK,GADX',
 }
 
 B_EXPECTED_CSS = '''\
@@ -458,7 +459,8 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;EACA,SAAS,EAAE,IAAK,GADf',
+                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;'
+                                'EACA,SAAS,EAAE,IAAK,GADf',
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -476,7 +478,9 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'sourcesContent': [],
                     'names': [],
-                    'mappings': ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,IAAI,EAAE,0BAA2B,GADhC',
+                    'mappings': ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;'
+                                ';EAEJ,IAAI,CAAC,CAAC,CAAJ'
+                                ';IACA,IAAI,EAAE,0BAA2B,GADhC',
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -582,7 +586,7 @@ class SasscTestCase(BaseTestCase):
         self.assertEqual(2, exit_code)
         err = self.err.getvalue()
         assert err.strip().endswith('error: too few arguments'), \
-               'actual error message is: ' + repr(err)
+            'actual error message is: ' + repr(err)
         self.assertEqual('', self.out.getvalue())
 
     def test_three_args(self):
@@ -593,7 +597,7 @@ class SasscTestCase(BaseTestCase):
         self.assertEqual(2, exit_code)
         err = self.err.getvalue()
         assert err.strip().endswith('error: too many arguments'), \
-               'actual error message is: ' + repr(err)
+            'actual error message is: ' + repr(err)
         self.assertEqual('', self.out.getvalue())
 
     def test_sassc_stdout(self):
@@ -640,7 +644,7 @@ class SasscTestCase(BaseTestCase):
         assert err.strip().endswith('error: -m/-g/--sourcemap requires '
                                     'the second argument, the output css '
                                     'filename.'), \
-               'actual error message is: ' + repr(err)
+            'actual error message is: ' + repr(err)
         self.assertEqual('', self.out.getvalue())
 
     def test_sassc_sourcemap(self):
@@ -694,8 +698,10 @@ class CompileDirectoriesTest(unittest.TestCase):
             input_dir = os.path.join(tmpdir, 'input')
             output_dir = os.path.join(tmpdir, 'output')
             os.makedirs(os.path.join(input_dir, 'foo'))
-            write_file(os.path.join(input_dir, 'f1.scss'), 'a { b { width: 100%; } }')
-            write_file(os.path.join(input_dir, 'foo/f2.scss'), 'foo { width: 100%; }')
+            write_file(os.path.join(input_dir, 'f1.scss'),
+                       'a { b { width: 100%; } }')
+            write_file(os.path.join(input_dir, 'foo/f2.scss'),
+                       'foo { width: 100%; }')
             # Make sure we don't compile non-scss files
             write_file(os.path.join(input_dir, 'baz.txt'), 'Hello der')
 
@@ -744,7 +750,9 @@ class CompileDirectoriesTest(unittest.TestCase):
             write_file(os.path.join(input_dir, 'bad.scss'), 'a {')
 
             try:
-                sass.compile(dirname=(input_dir, os.path.join(tmpdir, 'output')))
+                sass.compile(
+                    dirname=(input_dir, os.path.join(tmpdir, 'output'))
+                )
                 assert False, 'Expected to raise'
             except sass.CompileError as e:
                 msg, = e.args
@@ -753,7 +761,8 @@ class CompileDirectoriesTest(unittest.TestCase):
                 ), msg
                 return
             except Exception as e:
-                assert False, 'Expected to raise CompileError but got {0!r}'.format(e)
+                assert False, \
+                    'Expected to raise CompileError but got {0!r}'.format(e)
 
 
 class SassFunctionTest(unittest.TestCase):
@@ -845,10 +854,6 @@ class SassTypesTest(unittest.TestCase):
         warn = sass.SassWarning(u'error msg')
         assert type(warn.msg) is text_type, type(warn.msg)
 
-    def test_sass_warning_no_conversion(self):
-        warn = sass.SassWarning(b'error msg')
-        assert type(warn.msg) is text_type, type(warn.msg)
-
     def test_sass_error_no_conversion(self):
         err = sass.SassError(u'error msg')
         assert type(err.msg) is text_type, type(err.msg)
@@ -868,6 +873,7 @@ def returns_warning():
 
 def returns_error():
     return sass.SassError('This is an error')
+
 
 def returns_unknown():
     """Tuples are a not-supported type."""
@@ -923,7 +929,7 @@ def identity(x):
     in C land
 
     """
-    import sys
+    import sys  # noqa
     return x
 
 

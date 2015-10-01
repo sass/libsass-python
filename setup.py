@@ -5,7 +5,6 @@ import atexit
 import distutils.cmd
 import distutils.log
 import distutils.sysconfig
-import glob
 import os
 import os.path
 import platform
@@ -94,7 +93,7 @@ else:
             flags.append('-mmacosx-version-min=10.7',)
             if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
                 flags.append(
-                    '-Wno-error=unused-command-line-argument-hard-error-in-future',
+                    '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
                 )
         # Dirty workaround to avoid link error...
         # Python distutils doesn't provide any way to configure different
@@ -140,7 +139,10 @@ sass_extension = Extension(
 )
 
 install_requires = ['six']
-tests_require = ['Werkzeug >= 0.9']
+tests_require = [
+    'flake8 >= 2.4.0',
+    'Werkzeug >= 0.9'
+]
 
 
 def version(sass_filename='sass.py'):

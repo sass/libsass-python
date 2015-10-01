@@ -11,6 +11,7 @@ type.
 
 """
 from __future__ import absolute_import
+
 import collections
 import inspect
 from io import open
@@ -432,7 +433,7 @@ def compile(**kwargs):
     elif isinstance(custom_functions, (collections.Set, collections.Sequence)):
         custom_functions = [
             func if isinstance(func, SassFunction)
-                 else SassFunction.from_named_function(func)
+            else SassFunction.from_named_function(func)
             for func in custom_functions
         ]
     else:

@@ -87,8 +87,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     parser.add_option('-w', '--watch', action='store_true',
                       help='Watch file for changes.  Requires the second '
                            'argument (output css filename).')
-    parser.add_option('-p', '--precision', action='store', type="int", default=5,
-                      help='Set the precision for numbers. [default: %default]')
+    parser.add_option(
+        '-p', '--precision', action='store', type='int', default=5,
+        help='Set the precision for numbers. [default: %default]'
+    )
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',

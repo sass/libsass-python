@@ -10,7 +10,6 @@ import os.path
 import shutil
 import subprocess
 
-from six import PY3
 from six.moves.urllib.parse import urljoin
 from six.moves.urllib.request import urlopen
 from twine.commands.upload import upload
@@ -84,8 +83,8 @@ def download_artifact(artifact, target_dir, overwrite=False):
     response = urlopen(artifact['url'])
     filename = os.path.basename(artifact['fileName'])
     target_path = os.path.join(target_dir, filename)
-    if (os.path.isfile(target_path) and
-        os.path.getsize(target_path) == artifact['size']):
+    if os.path.isfile(target_path) and \
+       os.path.getsize(target_path) == artifact['size']:
         if overwrite:
             print(artifact['fileName'], ' already exists; overwrite...')
         else:

@@ -11,8 +11,9 @@ python:
 - 3.3
 - 3.4
 install:
-- pip install -e . "Werkzeug >= 0.9" coverage coveralls
+- pip install -e . "flake8 >= 2.4.0" "Werkzeug >= 0.9" coverage coveralls
 script:
 - coverage run --source sass,sassc,sassutils setup.py test
+- flake8 .
 after_success:
 - coveralls
