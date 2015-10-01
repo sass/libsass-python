@@ -43,6 +43,8 @@ Here's a breif check list for releasing a new version:
   You can bump the version by changing ``__version__`` in sass.py file.
   Note that it might be already bumped by other maintainers,
   so check what's the latest release version from PyPI_.
+- The changelog has to be complete, and frozen.
+  "To be released" sentence has to be replaced by the actual release date.
 - If the code freeze for the release is done (including version bump),
   tag the commit using ``git tag`` command.  The tag name has to simply be
   the version name e.g. ``1.2.3``.  Of course, the tag also has to be pushed
