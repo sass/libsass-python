@@ -37,7 +37,7 @@ Maintainer's guide
 Releasing
 ---------
 
-Here's a breif check list for releasing a new version:
+Here's a brief check list for releasing a new version:
 
 - Double check if the version is correctly bumped.
   You can bump the version by changing ``__version__`` in sass.py file.
