@@ -37,9 +37,9 @@ Maintainer's guide
 Releasing
 ---------
 
-Here's a breif check list for releasing a new version.
+Here's a breif check list for releasing a new version:
 
-- Double check the version is correctly bumped.
+- Double check if the version is correctly bumped.
   You can bump the version by changing ``__version__`` in sass.py file.
   Note that it might be already bumped by other maintainers,
   so check what's the latest release version from PyPI_.
