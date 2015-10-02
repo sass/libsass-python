@@ -56,10 +56,11 @@ A_EXPECTED_MAP = {
     'version': 3,
     'file': 'test/a.css',
     'sources': ['test/a.scss'],
-    'sourcesContent': [],
     'names': [],
-    'mappings': ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;;'
-                'EAEJ,IAAI,CAAC,CAAC,CAAJ;IACA,KAAK,EAAE,IAAK,GADX',
+    'mappings': (
+        ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,IAAI,CAEF,CAAC,'
+        'CAAC;IACA,KAAK,EAAE,IAAK,GACb'
+    ),
 }
 
 B_EXPECTED_CSS = '''\
@@ -457,10 +458,10 @@ class ManifestTestCase(BaseTestCase):
                     'version': 3,
                     'file': '../test/b.css',
                     'sources': ['../test/b.scss'],
-                    'sourcesContent': [],
                     'names': [],
-                    'mappings': ';AACE,CAAC,CAAC,CAAC,CAAD;'
-                                'EACA,SAAS,EAAE,IAAK,GADf',
+                    'mappings': (
+                        ';AAAA,CAAC,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,GACjB'
+                    ),
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
@@ -476,11 +477,11 @@ class ManifestTestCase(BaseTestCase):
                     'version': 3,
                     'file': '../test/d.css',
                     'sources': ['../test/d.scss'],
-                    'sourcesContent': [],
                     'names': [],
-                    'mappings': ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAGpB;'
-                                ';EAEJ,IAAI,CAAC,CAAC,CAAJ'
-                                ';IACA,IAAI,EAAE,0BAA2B,GADhC',
+                    'mappings': (
+                        ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,'
+                        'IAAI,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,GAClC'
+                    ),
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
@@ -757,7 +758,7 @@ class CompileDirectoriesTest(unittest.TestCase):
             except sass.CompileError as e:
                 msg, = e.args
                 assert msg.decode('UTF-8').startswith(
-                    'Error: invalid property name'
+                    'Error: Invalid CSS after '
                 ), msg
                 return
             except Exception as e:

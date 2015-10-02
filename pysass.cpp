@@ -1,6 +1,6 @@
 #include <string.h>
 #include <Python.h>
-#include "sass_context.h"
+#include <sass/context.h>
 
 #if PY_MAJOR_VERSION >= 3
 #define PySass_IF_PY3(three, two) (three)
