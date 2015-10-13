@@ -226,8 +226,6 @@ def compile(**kwargs):
     :param source_map_filename: use source maps and indicate the source map
                                 output filename.  :const:`None` means not
                                 using source maps.  :const:`None` by default.
-                                note that it implies ``source_comments``
-                                is also :const:`True`
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
@@ -408,8 +406,6 @@ def compile(**kwargs):
         raise CompileError('source_map_filename is only available with '
                            'filename= keyword argument since it has to be '
                            'aware of it')
-    if source_map_filename is not None:
-        source_comments = True
     try:
         include_paths = kwargs.pop('include_paths') or b''
     except KeyError:
