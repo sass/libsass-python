@@ -356,7 +356,7 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
 static union Sass_Value* _call_py_f(
         const union Sass_Value* sass_args,
         Sass_Function_Entry cb,
-        struct Sass_Options* opts
+        struct Sass_Compiler* compiler
 ) {
     size_t i;
     PyObject* pyfunc = (PyObject*)sass_function_get_cookie(cb);
