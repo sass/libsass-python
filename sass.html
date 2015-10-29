@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.8.3 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.8.3 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.9.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" />
    
@@ -52,20 +52,20 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'dirname', 'filename', 'string'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = set(['dirname', 'string', 'filename'])</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.OUTPUT_STYLES">
-<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'nested': 0, 'compressed': 3, 'expanded': 1}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'expanded': 1, 'compressed': 3, 'nested': 0}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of output styles.
 Keys are output name strings, and values are flag integers.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.SOURCE_COMMENTS">
-<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'none': 0, 'default': 1, 'map': 2, 'line_numbers': 1}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'default': 1, 'line_numbers': 1, 'none': 0, 'map': 2}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of source comments styles.
 Keys are mode names, and values are corresponding flag integers.</p>
 <div class="versionadded">

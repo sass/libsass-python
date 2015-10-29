@@ -1,12 +1,25 @@
 Changelog
 =========
 
+Version 0.9.0
+-------------
+
+Released on October 28, 2015.
+
+- Fix a bug with writing UTF-8 to a file [:issue:`72` by Caleb Ely]
+- Fix a segmentation fault on ^C [:issues:`87` by Anthony Sottile]
+- Follow up the libsass upstream: 3.3.0 --- See the release notes of Libsass
+  3.3.0__. [:issues:`96` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.3.0
+
+
 Version 0.8.3
 -------------
 
 Released on August 2, 2015.
 
-- Follow up the libsass upstream: 3.2.5 --- See the releas notes of Libsass
+- Follow up the libsass upstream: 3.2.5 --- See the release notes of Libsass
   3.2.5__.  [:issue:`79`, :issue:`80` by Anthony Sottile]
 - Fixed a bug that :file:`*.sass` files were ignored.
   [:issue:`78` by Guilhem MAS-PAITRAULT]
