@@ -29,6 +29,7 @@ if not os.path.isfile(os.path.join('libsass', 'Makefile')) and \
           'try the following command', file=sys.stderr)
     print('  git submodule update --init', file=sys.stderr)
     print(file=sys.stderr)
+    exit(1)
 
 sources = ['pysass.cpp']
 headers = []
