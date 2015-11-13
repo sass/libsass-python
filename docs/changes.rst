@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.9.2
+-------------
+
+Released on October 29, 2015.
+
+- Follow up the libsass upstream: 3.3.2 --- See the release notes of Libsass
+  3.3.2__. [by Anthony Sottile]
+- Require VS 2015 to build on windows [:issues:`99` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.3.2
+
 Version 0.9.1
 -------------
 
