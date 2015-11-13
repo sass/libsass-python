@@ -4,7 +4,7 @@ Changelog
 Version 0.9.2
 -------------
 
-Released on October 29, 2015.
+Released on November 12, 2015.
 
 - Follow up the libsass upstream: 3.3.2 --- See the release notes of Libsass
   3.3.2__. [by Anthony Sottile]
