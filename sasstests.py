@@ -256,6 +256,11 @@ a {
         self.assertRaises(TypeError, sass.compile, string=1234)
         self.assertRaises(TypeError, sass.compile, string=[])
 
+    def test_compile_string_sass_style(self):
+        actual = sass.compile(string='a\n\tb\n\t\tcolor: blue;',
+                              indented=True)
+        assert actual == 'a b {\n  color: blue; }\n'
+
     def test_compile_string_deprecated_source_comments_line_numbers(self):
         source = '''a {
             b { color: blue; }
