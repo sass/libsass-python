@@ -455,7 +455,7 @@ def compile(**kwargs):
         indented = kwargs.pop('indented', False)
         if not isinstance(indented, bool):
             raise TypeError('indented must be bool, not ' +
-            repr(source_comments))
+                            repr(source_comments))
         s, v = compile_string(
             string, output_style, source_comments, include_paths, precision,
             custom_functions, indented
