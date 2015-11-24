@@ -205,6 +205,9 @@ def compile(**kwargs):
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
+    :param indented: optional declaration that the string is SASS, not SCSS
+                     formatted. :const:`False` by default
+    :type indented: :class:`bool`
     :returns: the compiled CSS string
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -449,9 +452,13 @@ def compile(**kwargs):
         string = kwargs.pop('string')
         if isinstance(string, text_type):
             string = string.encode('utf-8')
+        indented = kwargs.pop('indented', False)
+        if not isinstance(indented, bool):
+            raise TypeError('indented must be bool, not ' +
+                            repr(source_comments))
         s, v = compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions,
+            custom_functions, indented
         )
         if s:
             return v.decode('utf-8')
