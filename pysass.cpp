@@ -412,15 +412,15 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     char *string, *include_paths;
     const char *error_message, *output_string;
     Sass_Output_Style output_style;
-    int source_comments, error_status, precision;
+    int source_comments, error_status, precision, indented;
     PyObject *custom_functions;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiO", "siisiO"),
+                          PySass_IF_PY3("yiiyiOi", "siisiOi"),
                           &string, &output_style, &source_comments,
                           &include_paths, &precision,
-                          &custom_functions)) {
+                          &custom_functions, &indented)) {
         return NULL;
     }
 
@@ -430,6 +430,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     sass_option_set_source_comments(options, source_comments);
     sass_option_set_include_path(options, include_paths);
     sass_option_set_precision(options, precision);
+    sass_option_set_is_indented_syntax_src(options, indented);
     _add_custom_functions(options, custom_functions);
 
     sass_compile_data_context(context);
