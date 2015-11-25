@@ -404,6 +404,73 @@ static void _add_custom_functions(
     sass_option_set_c_functions(options, fn_list);
 }
 
+Sass_Import_List _call_py_importer_f(
+        const char* path,
+        Sass_Importer_Entry cb,
+        struct Sass_Compiler* comp
+) {
+    PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
+    PyObject* py_path = PyUnicode_FromString(path);
+    PyObject* py_args = PyTuple_New(1);
+    PyObject* py_result = NULL;
+    Sass_Import_List sass_imports = NULL;
+    
+    PyTuple_SetItem(py_args, 0, py_path);
+    
+    if (!(py_result = PyObject_CallObject(pyfunc, py_args))) {
+        sass_imports = sass_make_import_list(1);
+        sass_imports[0] = sass_make_import_entry(path, 0, 0);
+        
+        
+        sass_import_set_error(list[0], strdup(message), 0, 0);
+        
+        Py_XDECREF(py_result);
+        return sass_imports;
+    }
+    
+    Py_XDECREF(py_args);
+        
+    if ( py_result == Py_None ) {
+        Py_XDECREF(py_result);
+        return 0;
+    }
+    
+    sass_imports = sass_make_import_list(PyList_Size(py_result));
+    
+    /* TODO: Iterator instead of literal list? Memory savings Python-side! */
+    for (i = 0; i < PyList_GET_SIZE(py_result); i += 1) {
+        PyObject* import_item = PyList_GET_ITEM(py_result, i);
+        char* path_str = NULL;  /* XXX: Memory leak? */
+        char* source_str = NULL;
+        char* sourcemap_str = NULL;
+        
+        /* TODO: Switch statement and error handling for default case. Better way? */
+        if ( PyTuple_GET_SIZE() == 1 ) {
+            PyArg_ParseTuple(import_item,
+                             PySass_IF_PY3("y", "s"),
+                             &path_str);
+        } else if ( PyTuple_GET_SIZE() == 2 ) {
+            PyArg_ParseTuple(import_item,
+                             PySass_IF_PY3("yy", "ss"),
+                             &path_str, &source_str);
+        } else if ( PyTuple_GET_SIZE() == 3 ) {
+            PyArg_ParseTuple(import_item,
+                             PySass_IF_PY3("yyy", "sss"),
+                             &path_str, &source_str, &sourcemap_str);
+        }
+        
+        /* POSSIBLE LEAK: owns arg source_str, sourcemap_str, but NOT path_str, ownership given @XXX?,
+           ref: https://github.com/sass/libsass/blob/master/docs/api-importer.md#return-imports */
+        sass_imports[i] = sass_make_import_entry(path_str, source_str, sourcemap_str)
+        
+        Py_XDECREF(import_item);
+    }
+    
+    Py_XDECREF(py_result);
+    
+    return sass_imports;
+}
+
 static PyObject *
 PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
