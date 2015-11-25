@@ -146,7 +146,7 @@ class SassFunction(object):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions,
+    precision, custom_functions, importers
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path):
@@ -163,7 +163,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                precision, None, custom_functions,
+                precision, None, custom_functions, importers
             )
             if s:
                 v = v.decode('UTF-8')
@@ -219,6 +219,10 @@ def compile(**kwargs):
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
     :returns: the compiled CSS string
+    :param importers: optional callback functions.
+                     see also below `importer callbacks
+                     <importer-callbacks>`_ description
+    :type importers: :class:`collections.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
@@ -253,6 +257,10 @@ def compile(**kwargs):
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
+    :param importers: optional callback functions.
+                     see also below `importer callbacks
+                     <importer-callbacks>`_ description
+    :type importers: :class:`collections.Callable`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -346,6 +354,49 @@ def compile(**kwargs):
               ...,
               custom_functions={func_name}
           )
+
+    .. _importer-callbacks:
+
+    Newer versions of ``libsass`` allow developers to define callbacks to be
+    called and given a chance to process ``@import`` directives. You can
+    define yours by passing in a list of callables via the ``importers``
+    parameter. The callables must be passed as 2-tuples in the form:
+
+    .. code-block:: python
+
+        (priority_int, callback_fn)
+
+    A priority of zero is acceptable; priority determines the order callbacks
+    are attempted.
+
+    These callbacks must accept a single string argument representing the path
+    passed to the ``@import`` directive, and either return ``None`` to
+    indicate the path wasn't handled by that callback (to continue with others
+    or fall back on internal ``libsass`` filesystem behaviour) or a list of
+    one or more tuples, each in one of three forms:
+
+    * A 1-tuple representing an alternate path to handle internally; or,
+    * A 2-tuple representing an alternate path and the content that path
+      represents; or,
+    * A 3-tuple representing the same as the 2-tuple with the addition of a
+      "sourcemap".
+
+    All tuple return values must be strings. As a not overly realistic
+    example:
+
+    .. code-block:: python
+
+        def my_importer(path):
+            return [(path, '#' + path + ' { color: red; }')]
+
+        sass.compile(
+                ...,
+                importers=[(0, my_importer)]
+            )
+
+    Now, within the style source, attempting to ``@import 'button';`` will
+    instead attach ``color: red`` as a property of an element with the
+    imported name.
 
     .. versionadded:: 0.4.0
        Added ``source_comments`` and ``source_map_filename`` parameters.
@@ -458,6 +509,8 @@ def compile(**kwargs):
             'not {1!r}'.format(SassFunction, custom_functions)
         )
 
+    importers = kwargs.pop('importers', None)
+
     if 'string' in modes:
         string = kwargs.pop('string')
         if isinstance(string, text_type):
@@ -469,7 +522,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions, indented,
+            custom_functions, indented, importers,
         )
         if s:
             return v.decode('utf-8')
@@ -484,7 +537,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v, source_map = compile_filename(
             filename, output_style, source_comments, include_paths, precision,
-            source_map_filename, custom_functions,
+            source_map_filename, custom_functions, importers
         )
         if s:
             v = v.decode('utf-8')
@@ -530,7 +583,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
-            include_paths, precision, custom_functions,
+            include_paths, precision, custom_functions, importers
         )
         if s:
             return
