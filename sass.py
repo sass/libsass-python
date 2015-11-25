@@ -209,6 +209,10 @@ def compile(**kwargs):
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
     :returns: the compiled CSS string
+    :param importer: optional callback function.
+                     see also below `importer callbacks
+                     <importer-callbacks>`_ description
+    :type importer: :class:`collections.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
@@ -336,6 +340,25 @@ def compile(**kwargs):
               ...,
               custom_functions={func_name}
           )
+    
+    .. _importer-callbacks:
+
+    Newer versions of ``libsass`` allow developers to define a callback to be
+    called to be given a chance to process ``@import`` directives. You can
+    define yours by passing in a callable via the ``importer`` parameter.
+    
+    This callback must accept a single string argument representing the path
+    passed to the ``@import`` directive, and either return ``None`` to
+    indicate the path should be handled internally by ``libsass``, or a list
+    of one or more tuples, each in one of three forms:
+    
+    * A 1-tuple representing an alternate path to handle internally; or,
+    * A 2-tuple representing an alternate path and the content that path
+      represents; or,
+    * A 3-tuple representing the same as the 2-tuple with the addition of a
+      "sourcemap".
+    
+    All tuple values must be strings.
 
     .. versionadded:: 0.4.0
        Added ``source_comments`` and ``source_map_filename`` parameters.
