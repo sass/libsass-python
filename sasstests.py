@@ -260,7 +260,23 @@ a {
         actual = sass.compile(string='a\n\tb\n\t\tcolor: blue;',
                               indented=True)
         assert actual == 'a b {\n  color: blue; }\n'
-
+    
+    # TODO: Test "nop" (return None) handling. Pseudo-code.
+    def test_compile_string_with_importer_callback(self):
+        def importer_callback(path):
+            return [
+                (path, '#' + path + ' { color: blue; }')
+                (path, '.' + path + ' { color: red; }')
+            ]
+        
+        source = '''@import('button')
+        a { color: green; }'''
+        
+        actual = sass.compile(string=source, importer=importer_callback)
+        assert actual == "#button { color: blue; }\n"
+                         ".button { color: red; }\n"
+                         "a { color: green; }"
+    
     def test_compile_string_deprecated_source_comments_line_numbers(self):
         source = '''a {
             b { color: blue; }
