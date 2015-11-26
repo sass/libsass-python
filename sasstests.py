@@ -264,18 +264,20 @@ a {
     # TODO: Test "nop" (return None) handling. Pseudo-code.
     def test_compile_string_with_importer_callback(self):
         def importer_callback(path):
+            print("HERE")
             return [
-                (path, '#' + path + ' { color: blue; }')
-                (path, '.' + path + ' { color: red; }')
+                (path, '#' + path + ' { color: blue; }\n'),
+                (path, '.' + path + ' { color: red; }\n')
             ]
         
-        source = '''@import('button')
+        source = '''@import 'button';
         a { color: green; }'''
         
-        actual = sass.compile(string=source, importer=importer_callback)
-        assert actual == "#button { color: blue; }\n"
-                         ".button { color: red; }\n"
-                         "a { color: green; }"
+        actual = sass.compile(string=source,
+                              importers=[(0, importer_callback)])
+        assert actual == "#button { color: blue; }\n" \
+                         ".button { color: red; }\n" \
+                         "a { color: green; }", "got: " + actual
     
     def test_compile_string_deprecated_source_comments_line_numbers(self):
         source = '''a {
