@@ -414,6 +414,7 @@ Sass_Import_List _call_py_importer_f(
     PyObject* py_args = PyTuple_New(1);
     PyObject* py_result = NULL;
     Sass_Import_List sass_imports = NULL;
+    Py_ssize_t i;
     
     PyTuple_SetItem(py_args, 0, py_path);
     
@@ -421,8 +422,9 @@ Sass_Import_List _call_py_importer_f(
         sass_imports = sass_make_import_list(1);
         sass_imports[0] = sass_make_import_entry(path, 0, 0);
         
-        
-        sass_import_set_error(list[0], strdup(message), 0, 0);
+        sass_import_set_error(sass_imports[0],
+                              strdup("Error calling importer callback."),
+                              0, 0);
         
         Py_XDECREF(py_args);
         Py_XDECREF(py_result);
@@ -445,27 +447,32 @@ Sass_Import_List _call_py_importer_f(
         char* source_str = NULL;
         char* sourcemap_str = NULL;
         
-        Py_INCREF(import_item);  /* GET_ITEM doesn't auto-retain. */
+        /* GET_ITEM doesn't auto-retain. Future armoring relating to above
+           TODO, where iteration may return to the Python code context. */
+        Py_INCREF(import_item);
         
         /* TODO: Switch statement and error handling for default case. Better way? */
-        if ( PyTuple_GET_SIZE() == 1 ) {
+        if ( PyTuple_GET_SIZE(import_item) == 1 ) {
             PyArg_ParseTuple(import_item,
                              PySass_IF_PY3("y", "s"),
                              &path_str);
-        } else if ( PyTuple_GET_SIZE() == 2 ) {
+        } else if ( PyTuple_GET_SIZE(import_item) == 2 ) {
             PyArg_ParseTuple(import_item,
                              PySass_IF_PY3("yy", "ss"),
                              &path_str, &source_str);
-        } else if ( PyTuple_GET_SIZE() == 3 ) {
+        } else if ( PyTuple_GET_SIZE(import_item) == 3 ) {
             PyArg_ParseTuple(import_item,
                              PySass_IF_PY3("yyy", "sss"),
                              &path_str, &source_str, &sourcemap_str);
         }
         
+        /* We need to give copies of these arguments; libsass handles
+           deallocation of them later, whereas path_str is left flapping
+           in the breeze -- it's treated const, so that's okay. */
         if ( source_str ) source_str = strdup(source_str);
         if ( sourcemap_str ) sourcemap_str = strdup(sourcemap_str);
         
-        sass_imports[i] = sass_make_import_entry(path_str, source_str, sourcemap_str)
+        sass_imports[i] = sass_make_import_entry(path_str, source_str, sourcemap_str);
         
         Py_XDECREF(import_item);
     }
@@ -473,6 +480,31 @@ Sass_Import_List _call_py_importer_f(
     Py_XDECREF(py_result);
     
     return sass_imports;
+}
+
+static void _add_custom_importers(
+        struct Sass_Options* options, PyObject* custom_importers
+) {
+    Py_ssize_t i;
+    Sass_Importer_List importer_list;
+   
+    importer_list = sass_make_importer_list(PyList_Size(custom_importers));
+    
+    for (i = 0; i < PyList_GET_SIZE(custom_importers); i += 1) {
+        PyObject* item = PyList_GET_ITEM(custom_importers, i);
+        int priority = 0;
+        PyObject* import_function = NULL;
+        
+        PyArg_ParseTuple(item,
+                         PySass_IF_PY3("iO", "iO"),
+                         &priority, &import_function);
+        
+        importer_list[i] = sass_make_importer(_call_py_importer_f,
+                                              priority,
+                                              import_function);
+    }
+    
+    sass_option_set_c_importers(options, importer_list);
 }
 
 static PyObject *
@@ -485,13 +517,14 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     Sass_Output_Style output_style;
     int source_comments, error_status, precision, indented;
     PyObject *custom_functions;
+    PyObject *custom_importers;
     PyObject *result;
-
+    
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOi", "siisiOi"),
+                          PySass_IF_PY3("yiiyiOiO", "siisiOiO"),
                           &string, &output_style, &source_comments,
                           &include_paths, &precision,
-                          &custom_functions, &indented)) {
+                          &custom_functions, &indented, &custom_importers)) {
         return NULL;
     }
 
@@ -503,7 +536,8 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     sass_option_set_precision(options, precision);
     sass_option_set_is_indented_syntax_src(options, indented);
     _add_custom_functions(options, custom_functions);
-
+    _add_custom_importers(options, custom_importers);
+    
     sass_compile_data_context(context);
 
     ctx = sass_data_context_get_context(context);
@@ -515,6 +549,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
         (short int) !error_status,
         error_status ? error_message : output_string
     );
+    
     sass_delete_data_context(context);
     return result;
 }
@@ -528,13 +563,16 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     const char *error_message, *output_string, *source_map_string;
     Sass_Output_Style output_style;
     int source_comments, error_status, precision;
-    PyObject *source_map_filename, *custom_functions, *result;
+    PyObject *source_map_filename, *custom_functions, *custom_importers,
+             *result;
+    
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOO", "siisiOO"),
+                          PySass_IF_PY3("yiiyiOOiO", "siisiOOiO"),
                           &filename, &output_style, &source_comments,
                           &include_paths, &precision,
-                          &source_map_filename, &custom_functions)) {
+                          &source_map_filename, &custom_functions,
+                          &custom_importers)) {
         return NULL;
     }
 
@@ -558,6 +596,7 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     sass_option_set_include_path(options, include_paths);
     sass_option_set_precision(options, precision);
     _add_custom_functions(options, custom_functions);
+    _add_custom_importers(options, custom_importers);
 
     sass_compile_file_context(context);
 
