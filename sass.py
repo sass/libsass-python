@@ -146,7 +146,7 @@ class SassFunction(object):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions,
+    precision, custom_functions, importers
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path):
@@ -163,7 +163,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                precision, None, custom_functions,
+                precision, None, custom_functions, importers
             )
             if s:
                 v = v.decode('UTF-8')
@@ -498,6 +498,8 @@ def compile(**kwargs):
             '- a set/sequence of named functions,\n'
             'not {1!r}'.format(SassFunction, custom_functions)
         )
+    
+    importers = kwargs.pop('importers', None)
 
     if 'string' in modes:
         string = kwargs.pop('string')
@@ -509,7 +511,7 @@ def compile(**kwargs):
                             repr(source_comments))
         s, v = compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions, indented
+            custom_functions, indented, importers
         )
         if s:
             return v.decode('utf-8')
@@ -523,7 +525,7 @@ def compile(**kwargs):
             filename = filename.encode(fs_encoding)
         s, v, source_map = compile_filename(
             filename, output_style, source_comments, include_paths, precision,
-            source_map_filename, custom_functions,
+            source_map_filename, custom_functions, importers
         )
         if s:
             v = v.decode('utf-8')
@@ -568,7 +570,7 @@ def compile(**kwargs):
                              'output_dir)')
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
-            include_paths, precision, custom_functions,
+            include_paths, precision, custom_functions, importers
         )
         if s:
             return

@@ -570,9 +570,8 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     PyObject *source_map_filename, *custom_functions, *custom_importers,
              *result;
     
-
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOOiO", "siisiOOiO"),
+                          PySass_IF_PY3("yiiyiOOO", "siisiOOO"),
                           &filename, &output_style, &source_comments,
                           &include_paths, &precision,
                           &source_map_filename, &custom_functions,
