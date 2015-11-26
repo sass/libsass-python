@@ -424,6 +424,7 @@ Sass_Import_List _call_py_importer_f(
         
         sass_import_set_error(list[0], strdup(message), 0, 0);
         
+        Py_XDECREF(py_args);
         Py_XDECREF(py_result);
         return sass_imports;
     }
@@ -443,6 +444,8 @@ Sass_Import_List _call_py_importer_f(
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
         char* sourcemap_str = NULL;
+        
+        Py_INCREF(import_item);  /* GET_ITEM doesn't auto-retain. */
         
         /* TODO: Switch statement and error handling for default case. Better way? */
         if ( PyTuple_GET_SIZE() == 1 ) {
