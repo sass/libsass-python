@@ -209,10 +209,10 @@ def compile(**kwargs):
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
     :returns: the compiled CSS string
-    :param importer: optional callback function.
+    :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks>`_ description
-    :type importer: :class:`collections.Callable`
+    :type importers: :class:`collections.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
@@ -247,6 +247,10 @@ def compile(**kwargs):
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
+    :param importers: optional callback functions.
+                     see also below `importer callbacks
+                     <importer-callbacks>`_ description
+    :type importers: :class:`collections.Callable`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_comments='map'``
     :rtype: :class:`str`, :class:`tuple`
@@ -343,14 +347,23 @@ def compile(**kwargs):
     
     .. _importer-callbacks:
 
-    Newer versions of ``libsass`` allow developers to define a callback to be
-    called to be given a chance to process ``@import`` directives. You can
-    define yours by passing in a callable via the ``importer`` parameter.
+    Newer versions of ``libsass`` allow developers to define callbacks to be
+    called and given a chance to process ``@import`` directives. You can
+    define yours by passing in a list of callables via the ``importers``
+    parameter. The callables must be passed as 2-tuples in the form:
     
-    This callback must accept a single string argument representing the path
+    .. code-block:: python
+    
+        (priority_int, callback_fn)
+    
+    A priority of zero is acceptable; priority determines the order callbacks
+    are attempted.
+    
+    These callbacks must accept a single string argument representing the path
     passed to the ``@import`` directive, and either return ``None`` to
-    indicate the path should be handled internally by ``libsass``, or a list
-    of one or more tuples, each in one of three forms:
+    indicate the path wasn't handled by that callback (to continue with others
+    or fall back on internal ``libsass`` filesystem behaviour) or a list of
+    one or more tuples, each in one of three forms:
     
     * A 1-tuple representing an alternate path to handle internally; or,
     * A 2-tuple representing an alternate path and the content that path
@@ -358,7 +371,22 @@ def compile(**kwargs):
     * A 3-tuple representing the same as the 2-tuple with the addition of a
       "sourcemap".
     
-    All tuple values must be strings.
+    All tuple return values must be strings. As a not overly realistic
+    example:
+    
+    .. code-block:: python
+    
+        def my_importer(path):
+            return [(path, '#' + path + ' { color: red; }')]
+        
+        sass.compile(
+                ...,
+                importers=[(0, my_importer)]
+            )
+    
+    Now, within the style source, attempting to ``@import 'button';`` will
+    instead attach ``color: red`` as a property of an element with the
+    imported name.
 
     .. versionadded:: 0.4.0
        Added ``source_comments`` and ``source_map_filename`` parameters.
