@@ -303,6 +303,37 @@ static union Sass_Value* _exception_to_sass_error() {
     return retv;
 }
 
+static PyObject* _exception_to_bytes() {
+    /* Grabs a Bytes instance for you to PySass_Bytes_AS_STRING.
+       Remember to Py_DECREF the object later!
+       TODO: This is a terrible violation of DRY, see above.
+    */
+    PyObject* retv = NULL;
+    PyObject* etype = NULL;
+    PyObject* evalue = NULL;
+    PyObject* etb = NULL;
+    PyErr_Fetch(&etype, &evalue, &etb);
+    PyErr_NormalizeException(&etype, &evalue, &etb);
+    {
+        PyObject* traceback_mod = PyImport_ImportModule("traceback");
+        PyObject* traceback_parts = PyObject_CallMethod(
+            traceback_mod, "format_exception", "OOO", etype, evalue, etb
+        );
+        PyList_Insert(traceback_parts, 0, PyUnicode_FromString("\n"));
+        PyObject* joinstr = PyUnicode_FromString("");
+        PyObject* result = PyUnicode_Join(joinstr, traceback_parts);
+        retv = PyUnicode_AsEncodedString(result, "UTF-8", "strict");
+        Py_DECREF(traceback_mod);
+        Py_DECREF(traceback_parts);
+        Py_DECREF(joinstr);
+        Py_DECREF(result);
+    }
+    Py_DECREF(etype);
+    Py_DECREF(evalue);
+    Py_DECREF(etb);
+    return retv;
+}
+
 static union Sass_Value* _to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* types_mod = PyImport_ImportModule("sass");
@@ -422,10 +453,14 @@ Sass_Import_List _call_py_importer_f(
         sass_imports = sass_make_import_list(1);
         sass_imports[0] = sass_make_import_entry(path, 0, 0);
         
+        PyObject* exc = _exception_to_bytes();
+        char* err = PySass_Bytes_AS_STRING(exc);
+        
         sass_import_set_error(sass_imports[0],
-                              strdup("Error calling importer callback."),
+                              err,
                               0, 0);
         
+        Py_XDECREF(exc);
         Py_XDECREF(py_args);
         Py_XDECREF(py_result);
         return sass_imports;
