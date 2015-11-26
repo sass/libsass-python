@@ -1,0 +1,58 @@
+.TH SASSC 1
+.SH NAME
+sassc \- HTML5 based management tool for KVM                                        
+.SH SYNOPSIS                                                                         
+.B sassc
+[\fB--version\fP] [\fB-h\fP|\fB--help\fP] [\fB-s\fP|\fB--output-style=\fP
+\fIcoding_style\fP] [\fB-m\fP|\fB-g\fP|\fB--sourcemap\fP] [\fB-I\fP|
+\fB--include-path=\fP \fIdirectory\fP] [\fB-w\fP|\fB--watch\fP] [\fB-p\fP|
+\fB--precision=\fP \fInumber\fP] \fISCSS_FILE\fP [\fIOUT_CSS_FILE\fP]
+.SH DESCRIPTION                                                                      
+\fBsassc\fP provides a SassC compliant command line interface (SassC: 
+https://github.com/sass/sassc).
+.br
+It is based on the python libsass (https://github.com/dahlia/libsass-python)
+library. See also libsass : http://github.com/sass/libsass.
+.br
+Sass is a CSS pre-processor language to add on exciting, new, awesome features
+to CSS. Sass was the first language of its kind and by far the most mature and
+up to date codebase.
+.br
+For more information about Sass itself, please visit http://sass-lang.com
+.SH OPTIONS
+The following options are supported:
+.TP
+\fB--version\fP
+Show program's version number and exit.
+.TP
+\fB-h\fP, \fB--help\fP
+Show this help message and exit.
+.TP
+\fB-s\fP, \fB--output-style=\fP \fIcoding_style\fP
+Coding style of the compiled result.  Choose one of compact, expanded,
+compressed, or nested (default: \fInested\fP).
+.TP
+\fB-m\fP, \fB-g\fP|\fB--sourcemap\fP
+Emit source map.  Requires the second argument (output css filename).
+.TP
+\fB-I\fP, \fB--include-path=\fP \fIdirectory\fP
+Path to find "@import"ed (S)CSS source files.  Can be multiply used.
+.TP
+\fB-w\fP, \fB--watch\fP
+Watch file for changes.  Requires the second argument (output css filename).
+.TP
+\fB-p\fP, \fB--precision=\fP \fInumber\fP
+Set the precision for numbers (default: \fI5\fP).
+
+.SH LICENCE
+.br
+sassc and python-libsass is provided under MIT license.
+.br
+Copyright (c) 2015 Hong Minhee <http://hongminhee.org/>
+.SH BUGS
+Current bugs can be found here : https://github.com/dahlia/libsass-python/issues
+.br
+If you find any, please open an issue :
+https://github.com/dahlia/libsass-python/issues/new
+.SH AUTHOR
+\fBHong Minhee\fP <hongminhee@member.fsf.org>
