@@ -462,8 +462,9 @@ Sass_Import_List _call_py_importer_f(
                              &path_str, &source_str, &sourcemap_str);
         }
         
-        /* POSSIBLE LEAK: owns arg source_str, sourcemap_str, but NOT path_str, ownership given @XXX?,
-           ref: https://github.com/sass/libsass/blob/master/docs/api-importer.md#return-imports */
+        if ( source_str ) source_str = strdup(source_str);
+        if ( sourcemap_str ) sourcemap_str = strdup(sourcemap_str);
+        
         sass_imports[i] = sass_make_import_entry(path_str, source_str, sourcemap_str)
         
         Py_XDECREF(import_item);
