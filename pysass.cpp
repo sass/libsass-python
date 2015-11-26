@@ -487,6 +487,10 @@ static void _add_custom_importers(
 ) {
     Py_ssize_t i;
     Sass_Importer_List importer_list;
+    
+    if ( custom_importers == Py_None ) {
+        return;
+    }
    
     importer_list = sass_make_importer_list(PyList_Size(custom_importers));
     
