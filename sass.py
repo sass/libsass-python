@@ -344,46 +344,46 @@ def compile(**kwargs):
               ...,
               custom_functions={func_name}
           )
-    
+
     .. _importer-callbacks:
 
     Newer versions of ``libsass`` allow developers to define callbacks to be
     called and given a chance to process ``@import`` directives. You can
     define yours by passing in a list of callables via the ``importers``
     parameter. The callables must be passed as 2-tuples in the form:
-    
+
     .. code-block:: python
-    
+
         (priority_int, callback_fn)
-    
+
     A priority of zero is acceptable; priority determines the order callbacks
     are attempted.
-    
+
     These callbacks must accept a single string argument representing the path
     passed to the ``@import`` directive, and either return ``None`` to
     indicate the path wasn't handled by that callback (to continue with others
     or fall back on internal ``libsass`` filesystem behaviour) or a list of
     one or more tuples, each in one of three forms:
-    
+
     * A 1-tuple representing an alternate path to handle internally; or,
     * A 2-tuple representing an alternate path and the content that path
       represents; or,
     * A 3-tuple representing the same as the 2-tuple with the addition of a
       "sourcemap".
-    
+
     All tuple return values must be strings. As a not overly realistic
     example:
-    
+
     .. code-block:: python
-    
+
         def my_importer(path):
             return [(path, '#' + path + ' { color: red; }')]
-        
+
         sass.compile(
                 ...,
                 importers=[(0, my_importer)]
             )
-    
+
     Now, within the style source, attempting to ``@import 'button';`` will
     instead attach ``color: red`` as a property of an element with the
     imported name.
@@ -498,7 +498,7 @@ def compile(**kwargs):
             '- a set/sequence of named functions,\n'
             'not {1!r}'.format(SassFunction, custom_functions)
         )
-    
+
     importers = kwargs.pop('importers', None)
 
     if 'string' in modes:
