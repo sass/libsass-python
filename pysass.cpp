@@ -488,17 +488,17 @@ Sass_Import_List _call_py_importer_f(
         
         /* TODO: Switch statement and error handling for default case. Better way? */
         if ( PyTuple_GET_SIZE(import_item) == 1 ) {
-            PyArg_ParseTuple(import_item,
-                             PySass_IF_PY3("y", "s"),
-                             &path_str);
+            fprintf(stderr, "il cb item 1-tup\n");
+            PyArg_ParseTuple(import_item, "es",
+                             0, &path_str);
         } else if ( PyTuple_GET_SIZE(import_item) == 2 ) {
-            PyArg_ParseTuple(import_item,
-                             PySass_IF_PY3("yy", "ss"),
-                             &path_str, &source_str);
+            fprintf(stderr, "il cb item 2-tup\n");
+            PyArg_ParseTuple(import_item, "eses",
+                             0, &path_str, 0, &source_str);
         } else if ( PyTuple_GET_SIZE(import_item) == 3 ) {
-            PyArg_ParseTuple(import_item,
-                             PySass_IF_PY3("yyy", "sss"),
-                             &path_str, &source_str, &sourcemap_str);
+            fprintf(stderr, "il cb item 3-tup\n");
+            PyArg_ParseTuple(import_item, "eseses",
+                             0, &path_str, 0, &source_str, 0, &sourcemap_str);
         }
         
         /* We need to give copies of these arguments; libsass handles
@@ -534,8 +534,7 @@ static void _add_custom_importers(
         int priority = 0;
         PyObject* import_function = NULL;
         
-        PyArg_ParseTuple(item,
-                         PySass_IF_PY3("iO", "iO"),
+        PyArg_ParseTuple(item, "iO",
                          &priority, &import_function);
         
         importer_list[i] = sass_make_importer(_call_py_importer_f,
