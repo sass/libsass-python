@@ -453,14 +453,14 @@ Sass_Import_List _call_py_importer_f(
     if (!py_result) {
         sass_imports = sass_make_import_list(1);
         sass_imports[0] = sass_make_import_entry(path, 0, 0);
-        
+
         PyObject* exc = _exception_to_bytes();
         char* err = PySass_Bytes_AS_STRING(exc);
-        
+
         sass_import_set_error(sass_imports[0],
                               err,
                               0, 0);
-        
+
         Py_XDECREF(exc);
         Py_XDECREF(py_args);
         Py_XDECREF(py_result);
@@ -473,7 +473,7 @@ Sass_Import_List _call_py_importer_f(
         Py_XDECREF(py_result);
         return 0;
     }
-    
+
     sass_imports = sass_make_import_list(PyList_Size(py_result));
     
     /* TODO: Iterator instead of literal list? Memory savings Python-side! */
@@ -501,20 +501,20 @@ Sass_Import_List _call_py_importer_f(
             PyArg_ParseTuple(import_item, "eseses",
                              0, &path_str, 0, &source_str, 0, &sourcemap_str);
         }
-        
+
         /* We need to give copies of these arguments; libsass handles
            deallocation of them later, whereas path_str is left flapping
            in the breeze -- it's treated const, so that's okay. */
         if ( source_str ) source_str = strdup(source_str);
         if ( sourcemap_str ) sourcemap_str = strdup(sourcemap_str);
-        
+
         sass_imports[i] = sass_make_import_entry(path_str, source_str, sourcemap_str);
-        
+
         Py_XDECREF(import_item);
     }
-    
+
     Py_XDECREF(py_result);
-    
+
     return sass_imports;
 }
 
