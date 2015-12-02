@@ -475,10 +475,9 @@ Sass_Import_List _call_py_importer_f(
     }
 
     sass_imports = sass_make_import_list(PyList_Size(py_result));
-    
-    /* TODO: Iterator instead of literal list? Memory savings Python-side! */
-    for (i = 0; i < PyList_GET_SIZE(py_result); i += 1) {
-        PyObject* import_item = PyList_GET_ITEM(py_result, i);
+
+    iterator = PyObject_GetIter(obj);
+    while (import_item = PyIter_Next(iterator)) {
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
         char* sourcemap_str = NULL;
@@ -513,6 +512,7 @@ Sass_Import_List _call_py_importer_f(
         Py_XDECREF(import_item);
     }
 
+    Py_XDECREF(iterator);
     Py_XDECREF(py_result);
 
     return sass_imports;
