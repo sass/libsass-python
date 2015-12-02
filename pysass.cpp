@@ -442,14 +442,15 @@ Sass_Import_List _call_py_importer_f(
 ) {
     PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
     PyObject* py_path = PyUnicode_FromString(path);
-    PyObject* py_args = PyTuple_New(1);
     PyObject* py_result = NULL;
+    PyObject *iterator;
+    PyObject *import_item;
     Sass_Import_List sass_imports = NULL;
     Py_ssize_t i;
-    
-    PyTuple_SetItem(py_args, 0, py_path);
-    
-    if (!(py_result = PyObject_CallObject(pyfunc, py_args))) {
+
+    py_result = PyObject_CallObject(pyfunc, PySass_IF_PY3("y", "s"), py_path);
+
+    if (!py_result) {
         sass_imports = sass_make_import_list(1);
         sass_imports[0] = sass_make_import_entry(path, 0, 0);
         
