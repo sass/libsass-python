@@ -462,14 +462,11 @@ Sass_Import_List _call_py_importer_f(
                               0, 0);
 
         Py_XDECREF(exc);
-        Py_XDECREF(py_args);
         Py_XDECREF(py_result);
         return sass_imports;
     }
-    
-    Py_XDECREF(py_args);
-        
-    if ( py_result == Py_None ) {
+
+    if (py_result == Py_None) {
         Py_XDECREF(py_result);
         return 0;
     }
@@ -481,22 +478,15 @@ Sass_Import_List _call_py_importer_f(
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
         char* sourcemap_str = NULL;
-        
-        /* GET_ITEM doesn't auto-retain. Future armoring relating to above
-           TODO, where iteration may return to the Python code context. */
-        Py_INCREF(import_item);
-        
+
         /* TODO: Switch statement and error handling for default case. Better way? */
         if ( PyTuple_GET_SIZE(import_item) == 1 ) {
-            fprintf(stderr, "il cb item 1-tup\n");
             PyArg_ParseTuple(import_item, "es",
                              0, &path_str);
         } else if ( PyTuple_GET_SIZE(import_item) == 2 ) {
-            fprintf(stderr, "il cb item 2-tup\n");
             PyArg_ParseTuple(import_item, "eses",
                              0, &path_str, 0, &source_str);
         } else if ( PyTuple_GET_SIZE(import_item) == 3 ) {
-            fprintf(stderr, "il cb item 3-tup\n");
             PyArg_ParseTuple(import_item, "eseses",
                              0, &path_str, 0, &source_str, 0, &sourcemap_str);
         }
