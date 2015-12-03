@@ -12,7 +12,7 @@ import subprocess
 
 from six.moves.urllib.parse import urljoin
 from six.moves.urllib.request import urlopen
-from twine.commands.upload import upload
+from twine.commands import upload
 
 
 APPVEYOR_API_BASE_URL = 'https://ci.appveyor.com/api/'
@@ -124,16 +124,7 @@ def main():
             dist = download_artifact(artifact, args.dist_dir, args.overwrite)
             dists.append(dist)
     print('Uploading {0} file(s)...'.format(len(dists)))
-    upload(
-        repository='pypi',
-        sign=False,
-        sign_with='gpg',
-        identity=None,
-        username=None,
-        password=None,
-        comment=None,
-        dists=dists
-    )
+    upload.main(('-r', 'pypi') + tuple(dists))
 
 
 if __name__ == '__main__':
