@@ -1,10 +1,18 @@
 Changelog
 =========
 
+Version 0.9.3
+-------------
+
+Released on December 03, 2015.
+
+- Support "indented" SASS compilation [:issues:`41` by Alice Zoë Bevan–McGregor]
+- Fix wheels on windows [:issues:`28` :issues:`49` by Anthony Sottile]
+
 Version 0.9.2
 -------------
 
-Released on October 29, 2015.
+Released on November 12, 2015.
 
 - Follow up the libsass upstream: 3.3.2 --- See the release notes of Libsass
   3.3.2__. [by Anthony Sottile]
