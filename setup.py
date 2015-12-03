@@ -75,7 +75,7 @@ if sys.platform == 'win32':
             spawn(cmd, dry_run=self.dry_run)
         from distutils.msvc9compiler import MSVCCompiler
         MSVCCompiler.spawn = spawn
-    flags = ['-c', '-O2', '/EHsc']
+    flags = ['-c', '-O2', '/EHsc', '/MT']
     link_flags = []
 else:
     flags = ['-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses']
