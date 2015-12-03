@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.9.3
+-------------
+
+Released on December 03, 2015.
+
+- Support "indented" SASS compilation [:issues:`41` by Alice Zoë Bevan–McGregor]
+- Fix wheels on windows [:issues:`28` :issues:`49` by Anthony Sottile]
+
 Version 0.9.2
 -------------
 
