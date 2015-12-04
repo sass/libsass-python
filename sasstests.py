@@ -202,25 +202,25 @@ class CompileTestCase(BaseTestCase):
                           string='a { color: blue; }', filename='test/a.scss')
         self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }', dirname='test/')
-        self.assertRaises(TypeError,  sass.compile,
+        self.assertRaises(TypeError, sass.compile,
                           filename='test/a.scss', dirname='test/')
 
     def test_compile_invalid_output_style(self):
         self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }',
                           output_style=['compact'])
-        self.assertRaises(TypeError,  sass.compile,
+        self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }', output_style=123j)
-        self.assertRaises(ValueError,  sass.compile,
+        self.assertRaises(ValueError, sass.compile,
                           string='a { color: blue; }', output_style='invalid')
 
     def test_compile_invalid_source_comments(self):
         self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }',
                           source_comments=['line_numbers'])
-        self.assertRaises(TypeError,  sass.compile,
+        self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }', source_comments=123j)
-        self.assertRaises(TypeError,  sass.compile,
+        self.assertRaises(TypeError, sass.compile,
                           string='a { color: blue; }',
                           source_comments='invalid')
 
