@@ -473,7 +473,7 @@ Sass_Import_List _call_py_importer_f(
 
     sass_imports = sass_make_import_list(PyList_Size(py_result));
 
-    iterator = PyObject_GetIter(obj);
+    iterator = PyObject_GetIter(py_result);
     while (import_item = PyIter_Next(iterator)) {
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
