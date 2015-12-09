@@ -13,6 +13,7 @@ type.
 from __future__ import absolute_import
 
 import collections
+import functools
 import inspect
 from io import open
 import os
@@ -142,6 +143,56 @@ class SassFunction(object):
 
     def __str__(self):
         return self.signature
+
+
+def _normalize_importer_return_value(result):
+    # An importer must return an iterable of iterables of 1-3 stringlike
+    # objects
+    if result is None:
+        return result
+
+    def _to_importer_result(single_result):
+        single_result = tuple(single_result)
+        if len(single_result) not in (1, 2, 3):
+            raise ValueError(
+                'Expected importer result to be a tuple of length (1, 2, 3) '
+                'but got {0}: {1!r}'.format(len(single_result), single_result)
+            )
+
+        def _to_bytes(obj):
+            if not isinstance(obj, bytes):
+                return obj.encode('UTF-8')
+            else:
+                return obj
+
+        return tuple(_to_bytes(s) for s in single_result)
+
+    return tuple(_to_importer_result(x) for x in result)
+
+
+def _importer_callback_wrapper(func):
+    @functools.wraps(func)
+    def inner(path):
+        ret = func(path.decode('UTF-8'))
+        return _normalize_importer_return_value(ret)
+    return inner
+
+
+def _validate_importers(importers):
+    """Validates the importers and decorates the callables with our output
+    formatter.
+    """
+    # They could have no importers, that's chill
+    if importers is None:
+        return None
+
+    def _to_importer(priority, func):
+        assert isinstance(priority, int), priority
+        assert callable(func), func
+        return (priority, _importer_callback_wrapper(func))
+
+    # Our code assumes tuple of tuples
+    return tuple(_to_importer(priority, func) for priority, func in importers)
 
 
 def compile_dirname(
@@ -509,7 +560,7 @@ def compile(**kwargs):
             'not {1!r}'.format(SassFunction, custom_functions)
         )
 
-    importers = kwargs.pop('importers', None)
+    importers = _validate_importers(kwargs.pop('importers', None))
 
     if 'string' in modes:
         string = kwargs.pop('string')
@@ -537,7 +588,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v, source_map = compile_filename(
             filename, output_style, source_comments, include_paths, precision,
-            source_map_filename, custom_functions, importers
+            source_map_filename, custom_functions, importers,
         )
         if s:
             v = v.decode('utf-8')
@@ -583,7 +634,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
-            include_paths, precision, custom_functions, importers
+            include_paths, precision, custom_functions, importers,
         )
         if s:
             return
