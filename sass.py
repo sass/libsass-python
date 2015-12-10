@@ -176,6 +176,16 @@ def compile_dirname(
     return True, None
 
 
+def _check_no_remaining_kwargs(func, kwargs):
+    if kwargs:
+        raise TypeError(
+            '{0}() got unexpected keyword argument(s) {1}'.format(
+                func.__name__,
+                ', '.join("'{0}'".format(arg) for arg in sorted(kwargs)),
+            )
+        )
+
+
 def compile(**kwargs):
     """There are three modes of parameters :func:`compile()` can take:
     ``string``, ``filename``, and ``dirname``.
@@ -456,9 +466,10 @@ def compile(**kwargs):
         if not isinstance(indented, bool):
             raise TypeError('indented must be bool, not ' +
                             repr(source_comments))
+        _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions, indented
+            custom_functions, indented,
         )
         if s:
             return v.decode('utf-8')
@@ -470,6 +481,7 @@ def compile(**kwargs):
             raise IOError('{0!r} seems not a file'.format(filename))
         elif isinstance(filename, text_type):
             filename = filename.encode(fs_encoding)
+        _check_no_remaining_kwargs(compile, kwargs)
         s, v, source_map = compile_filename(
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions,
@@ -515,6 +527,7 @@ def compile(**kwargs):
         except ValueError:
             raise ValueError('dirname must be a pair of (source_dir, '
                              'output_dir)')
+        _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
             include_paths, precision, custom_functions,

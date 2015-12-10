@@ -224,6 +224,19 @@ class CompileTestCase(BaseTestCase):
                           string='a { color: blue; }',
                           source_comments='invalid')
 
+    def test_compile_disallows_arbitrary_arguments(self):
+        for args in (
+                {'string': 'a{b:c}'},
+                {'filename': 'test/a.scss'},
+                {'dirname': ('test', '/dev/null')},
+        ):
+            with assert_raises(TypeError) as excinfo:
+                sass.compile(herp='derp', harp='darp', **args)
+            msg, = excinfo.value.args
+            assert msg == (
+                "compile() got unexpected keyword argument(s) 'harp', 'herp'"
+            )
+
     def test_compile_string(self):
         actual = sass.compile(string='a { b { color: blue; } }')
         assert actual == 'a b {\n  color: blue; }\n'
@@ -1023,13 +1036,24 @@ def compile_with_func(s):
 
 
 @contextlib.contextmanager
-def assert_raises_compile_error(expected):
+def assert_raises(exctype):
+    # I want pytest.raises, this'll have to do for now
+    class C:
+        pass
+
     try:
-        yield
+        yield C
         assert False, 'Expected to raise!'
-    except sass.CompileError as e:
-        msg, = e.args
-        assert msg.decode('UTF-8') == expected, (msg, expected)
+    except exctype as e:
+        C.value = e
+
+
+@contextlib.contextmanager
+def assert_raises_compile_error(expected):
+    with assert_raises(sass.CompileError) as excinfo:
+        yield
+    msg, = excinfo.value.args
+    assert msg.decode('UTF-8') == expected, (msg, expected)
 
 
 class RegexMatcher(object):
