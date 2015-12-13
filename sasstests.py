@@ -274,6 +274,138 @@ a {
                               indented=True)
         assert actual == 'a b {\n  color: blue; }\n'
 
+    def test_importer_one_arg(self):
+        """Demonstrates one-arg importers + chaining."""
+        def importer_returning_one_argument(path):
+            assert type(path) is text_type
+            return (
+                # Trigger the import of an actual file
+                ('test/b.scss',),
+                (path, '.{0}-one-arg {{ color: blue; }}'.format(path)),
+            )
+
+        ret = sass.compile(
+            string="@import 'foo';",
+            importers=((0, importer_returning_one_argument),),
+            output_style='compressed',
+        )
+        assert ret == 'b i{font-size:20px}.foo-one-arg{color:blue}\n'
+
+    def test_importer_does_not_handle_returns_None(self):
+        def importer_one(path):
+            if path == 'one':
+                return ((path, 'a { color: red; }'),)
+
+        def importer_two(path):
+            if path == 'two':
+                return ((path, 'b { color: blue; }'),)
+
+        ret = sass.compile(
+            string='@import "one"; @import "two";',
+            importers=((0, importer_one), (0, importer_two)),
+            output_style='compressed',
+        )
+        assert ret == 'a{color:red}b{color:blue}\n'
+
+    def test_importers_other_iterables(self):
+        def importer_one(path):
+            if path == 'one':
+                # Need to do this to avoid returning empty generator
+                def gen():
+                    yield (path, 'a { color: red; }')
+                    yield (path + 'other', 'b { color: orange; }')
+                return gen()
+
+        def importer_two(path):
+            if path == 'two':
+                # List of lists
+                return [
+                    [path, 'c { color: yellow; }'],
+                    [path + 'other', 'd { color: green; }'],
+                ]
+
+        ret = sass.compile(
+            string='@import "one"; @import "two";',
+            # Importers can also be lists
+            importers=[[0, importer_one], [0, importer_two]],
+            output_style='compressed',
+        )
+        assert ret == (
+            'a{color:red}b{color:orange}c{color:yellow}d{color:green}\n'
+        )
+
+    def test_importers_srcmap(self):
+        def importer_with_srcmap(path):
+            return (
+                (
+                    path,
+                    'a { color: red; }',
+                    json.dumps({
+                        "version": 3,
+                        "sources": [
+                            path + ".db"
+                        ],
+                        "mappings": ";AAAA,CAAC,CAAC;EAAE,KAAK,EAAE,GAAI,GAAI",
+                    }),
+                ),
+            )
+
+        # This exercises the code, but I don't know what the outcome is
+        # supposed to be.
+        ret = sass.compile(
+            string='@import "test";',
+            importers=((0, importer_with_srcmap),),
+            output_style='compressed',
+        )
+        assert ret == 'a{color:red}\n'
+
+    def test_importers_raises_exception(self):
+        def importer(path):
+            raise ValueError('Bad path: {0}'.format(path))
+
+        with assert_raises_compile_error(RegexMatcher(
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Bad path: hi\n'
+                r'        on line 1 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n'
+        )):
+            sass.compile(string='@import "hi";', importers=((0, importer),))
+
+    def test_importer_returns_wrong_tuple_size_zero(self):
+        def importer(path):
+            return ((),)
+
+        with assert_raises_compile_error(RegexMatcher(
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Expected importer result to be a tuple of '
+                r'length \(1, 2, 3\) but got 0: \(\)\n'
+                r'        on line 1 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n'
+        )):
+            sass.compile(string='@import "hi";', importers=((0, importer),))
+
+    def test_importer_returns_wrong_tuple_size_too_big(self):
+        def importer(path):
+            return (('a', 'b', 'c', 'd'),)
+
+        with assert_raises_compile_error(RegexMatcher(
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Expected importer result to be a tuple of '
+                r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
+                r'        on line 1 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n'
+        )):
+            sass.compile(string='@import "hi";', importers=((0, importer),))
+
     def test_compile_string_deprecated_source_comments_line_numbers(self):
         source = '''a {
             b { color: blue; }
