@@ -645,7 +645,7 @@ def compile(**kwargs):
 
 
 def and_join(strings):
-    """Join the given ``strings`` by commas with last `' and '` conjuction.
+    """Join the given ``strings`` by commas with last `' and '` conjunction.
 
     >>> and_join(['Korea', 'Japan', 'China', 'Taiwan'])
     'Korea, Japan, China, and Taiwan'

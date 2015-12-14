@@ -18,7 +18,7 @@ __all__ = 'SassMiddleware',
 
 
 class SassMiddleware(object):
-    """WSGI middleware for development purpose.  Everytime a CSS file has
+    """WSGI middleware for development purpose.  Every time a CSS file has
     requested it finds a matched SASS/SCSS source file and then compiled
     it into CSS.
 
