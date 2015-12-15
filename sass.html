@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.9.3 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.10.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.9.3 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.10.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" />
    
@@ -218,6 +218,8 @@ SASS/CSS source files</li>
 see also below <a class="reference external" href="custom-functions">custom functions</a> description</li>
 <li><strong>indented</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a>) &#8211; optional declaration that the string is SASS, not SCSS
 formatted. <code class="xref py py-const docutils literal"><span class="pre">False</span></code> by default</li>
+<li><strong>importers</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Callable" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Callable</span></code></a>) &#8211; optional callback functions.
+see also below <a class="reference external" href="importer-callbacks">importer callbacks</a> description</li>
 </ul>
 </td>
 </tr>
@@ -260,6 +262,9 @@ SASS/CSS source files</li>
 <a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>,
 <a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) &#8211; <p>optional mapping of custom functions.
 see also below <a class="reference external" href="custom-functions">custom functions</a> description</p>
+</li>
+<li><strong>importers</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Callable" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Callable</span></code></a>) &#8211; <p>optional callback functions.
+see also below <a class="reference external" href="importer-callbacks">importer callbacks</a> description</p>
 </li>
 </ul>
 </td>
@@ -319,7 +324,7 @@ see also below <a class="reference external" href="custom-functions">custom func
 </tr>
 </tbody>
 </table>
-<p id="id3">The <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter can take three types of forms:</p>
+<p id="id4">The <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter can take three types of forms:</p>
 <dl class="docutils">
 <dt><a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Set</span></code></a>/<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a> of     <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal"><span class="pre">SassFunction</span></code></a>s</dt>
 <dd><p class="first">It is the most general form.  Although pretty verbose, it can take
@@ -366,6 +371,41 @@ It cannot take lambdas sinc names are unavailable for them.</p>
 </div>
 </dd>
 </dl>
+<p id="id5">Newer versions of <code class="docutils literal"><span class="pre">libsass</span></code> allow developers to define callbacks to be
+called and given a chance to process <code class="docutils literal"><span class="pre">&#64;import</span></code> directives. You can
+define yours by passing in a list of callables via the <code class="docutils literal"><span class="pre">importers</span></code>
+parameter. The callables must be passed as 2-tuples in the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">priority_int</span><span class="p">,</span> <span class="n">callback_fn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A priority of zero is acceptable; priority determines the order callbacks
+are attempted.</p>
+<p>These callbacks must accept a single string argument representing the path
+passed to the <code class="docutils literal"><span class="pre">&#64;import</span></code> directive, and either return <code class="docutils literal"><span class="pre">None</span></code> to
+indicate the path wasn&#8217;t handled by that callback (to continue with others
+or fall back on internal <code class="docutils literal"><span class="pre">libsass</span></code> filesystem behaviour) or a list of
+one or more tuples, each in one of three forms:</p>
+<ul class="simple">
+<li>A 1-tuple representing an alternate path to handle internally; or,</li>
+<li>A 2-tuple representing an alternate path and the content that path
+represents; or,</li>
+<li>A 3-tuple representing the same as the 2-tuple with the addition of a
+&#8220;sourcemap&#8221;.</li>
+</ul>
+<p>All tuple return values must be strings. As a not overly realistic
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_importer</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#39;#&#39;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">&#39; { color: red; }&#39;</span><span class="p">)]</span>
+
+<span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span>
+        <span class="n">importers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">my_importer</span><span class="p">)]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, within the style source, attempting to <code class="docutils literal"><span class="pre">&#64;import</span> <span class="pre">'button';</span></code> will
+instead attach <code class="docutils literal"><span class="pre">color:</span> <span class="pre">red</span></code> as a property of an element with the
+imported name.</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.4.0: </span>Added <code class="docutils literal"><span class="pre">source_comments</span></code> and <code class="docutils literal"><span class="pre">source_map_filename</span></code> parameters.</p>
 </div>

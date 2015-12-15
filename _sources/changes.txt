@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.10.0
+-------------
+
+Released on December 15, 2015.
+
+- Support custom import callbacks [:issues:`81` by Alice Zoë Bevan–McGregor,
+  Anthony Sottile]
+- Disallow arbitrary kwargs in compile() [:issues:`109` by Anthony Sottile]
+
 Version 0.9.3
 -------------
 
