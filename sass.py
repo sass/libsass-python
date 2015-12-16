@@ -29,7 +29,7 @@ from _sass import OUTPUT_STYLES, compile_filename, compile_string
 __all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
            'SassColor', 'SassError', 'SassFunction', 'SassList', 'SassMap',
            'SassNumber', 'SassWarning', 'and_join', 'compile')
-__version__ = '0.10.0'
+__version__ = '0.10.1'
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
