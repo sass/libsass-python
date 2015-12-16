@@ -13,12 +13,7 @@ import sys
 import tempfile
 import time
 
-try:
-    from setuptools import Extension, setup
-except ImportError:
-    from ez_setup import use_setuptools
-    use_setuptools()
-    from setuptools import Extension, setup
+from setuptools import Extension, setup
 
 LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
