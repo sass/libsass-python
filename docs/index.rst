@@ -1,5 +1,5 @@
-libsass-python
-==============
+libsass-python: Sass_/SCSS for Python
+=====================================
 
 This package provides a simple Python extension module :mod:`sass` which is
 binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
@@ -22,6 +22,7 @@ Features
 - Fast. (Libsass_ is written in C++.)
 - Simple API.  See :ref:`example code <example>` for details.
 - Custom functions.
+- ``@import`` callbacks.
 - Support both tabbed (Sass) and braces (SCSS) syntax.
 - WSGI middleware for ease of development.
   It automatically compiles Sass/SCSS files for each request.
@@ -31,7 +32,7 @@ Features
   :program:`setup.py build_sass` command.
   See also :mod:`sassutils.distutils` for details.
 - Works also on PyPy.
-- Provides prebuilt wheel (:pep:`427`) binary for Windows.
+- Provides prebuilt wheel (:pep:`427`) binaries for Windows and Mac.
 
 
 Install
@@ -130,9 +131,9 @@ Coveralls (Test coverage)
 PyPI
    https://pypi.python.org/pypi/libsass
 
-   .. image:: https://img.shields.io/pypi/v/libsass.svg
+   .. image:: https://badge.fury.io/py/libsass.svg
+      :alt: PyPI
       :target: https://pypi.python.org/pypi/libsass
-      :alt: The latest PyPI release
 
 Changelog
    :doc:`changes`

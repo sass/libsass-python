@@ -1,9 +1,9 @@
-libsass: SASS_ for Python
-=========================
+libsass-python: Sass_/SCSS for Python
+=====================================
 
-.. image:: https://img.shields.io/pypi/v/libsass.svg
+.. image:: https://badge.fury.io/py/libsass.svg
+   :alt: PyPI
    :target: https://pypi.python.org/pypi/libsass
-   :alt: The latest PyPI release
 
 .. image:: https://travis-ci.org/dahlia/libsass-python.svg?branch=python
    :target: https://travis-ci.org/dahlia/libsass-python
@@ -26,7 +26,7 @@ Need no Ruby nor Node.js.
 
 It currently supports CPython 2.6, 2.7, 3.3--3.5, and PyPy 2.3+!
 
-.. _SASS: http://sass-lang.com/
+.. _Sass: http://sass-lang.com/
 .. _Libsass: https://github.com/sass/libsass
 
 
@@ -38,6 +38,7 @@ Features
 - Fast. (Libsass_ is written in C++.)
 - Simple API.  See the below example code for details.
 - Custom functions.
+- ``@import`` callbacks.
 - Support both tabbed (Sass) and braces (SCSS) syntax.
 - WSGI middleware for ease of development.
   It automatically compiles Sass/SCSS files for each request.
@@ -45,7 +46,7 @@ Features
   You can build all Sass/SCSS files using
   ``setup.py build_sass`` command.
 - Works also on PyPy.
-- Provides prebuilt wheel_ binary for Windows.
+- Provides prebuilt wheel_ binaries for Windows and Mac.
 
 .. _wheel: https://www.python.org/dev/peps/pep-0427/
 
