@@ -6,17 +6,17 @@ Version 0.10.0
 
 Released on December 15, 2015.
 
-- Support custom import callbacks [:issues:`81` by Alice Zoë Bevan–McGregor,
+- Support custom import callbacks [:issue:`81` by Alice Zoë Bevan–McGregor,
   Anthony Sottile]
-- Disallow arbitrary kwargs in compile() [:issues:`109` by Anthony Sottile]
+- Disallow arbitrary kwargs in compile() [:issue:`109` by Anthony Sottile]
 
 Version 0.9.3
 -------------
 
 Released on December 03, 2015.
 
-- Support "indented" SASS compilation [:issues:`41` by Alice Zoë Bevan–McGregor]
-- Fix wheels on windows [:issues:`28` :issues:`49` by Anthony Sottile]
+- Support "indented" SASS compilation [:issue:`41` by Alice Zoë Bevan–McGregor]
+- Fix wheels on windows [:issue:`28` :issue:`49` by Anthony Sottile]
 
 Version 0.9.2
 -------------
@@ -25,7 +25,7 @@ Released on November 12, 2015.
 
 - Follow up the libsass upstream: 3.3.2 --- See the release notes of Libsass
   3.3.2__. [by Anthony Sottile]
-- Require VS 2015 to build on windows [:issues:`99` by Anthony Sottile]
+- Require VS 2015 to build on windows [:issue:`99` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.2
 
@@ -46,9 +46,9 @@ Version 0.9.0
 Released on October 28, 2015.
 
 - Fix a bug with writing UTF-8 to a file [:issue:`72` by Caleb Ely]
-- Fix a segmentation fault on ^C [:issues:`87` by Anthony Sottile]
+- Fix a segmentation fault on ^C [:issue:`87` by Anthony Sottile]
 - Follow up the libsass upstream: 3.3.0 --- See the release notes of Libsass
-  3.3.0__. [:issues:`96` by Anthony Sottile]
+  3.3.0__. [:issue:`96` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.0
 
