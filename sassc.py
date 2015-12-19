@@ -11,10 +11,16 @@ This provides SassC_ compliant CLI executable named :program:`sassc`:
 
 There are options as well:
 
-.. option:: -s <style>, --output-style <style>
+.. option:: -t <style>, --style <style>
 
    Coding style of the compiled result.  The same as :func:`sass.compile()`
    function's ``output_style`` keyword argument.  Default is ``nested``.
+
+.. option:: -s <style>, --output-style <style>
+
+    Alias for -t / --style.
+
+    .. deprecated:: 0.11.0
 
 .. option:: -I <dir>, --include-path <dir>
 
@@ -72,10 +78,14 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     )
     output_styles = list(OUTPUT_STYLES)
     output_styles = ', '.join(output_styles[:-1]) + ', or ' + output_styles[-1]
-    parser.add_option('-s', '--output-style', metavar='STYLE', type='choice',
-                      choices=list(OUTPUT_STYLES), default='nested',
-                      help='Coding style of the compiled result.  Choose one '
-                           'of ' + output_styles + '. [default: %default]')
+    parser.add_option(
+        '-t', '--style', '-s', '--output-style', metavar='STYLE',
+        type='choice', choices=list(OUTPUT_STYLES), default='nested',
+        help=(
+            'Coding style of the compiled result.  Choose one of ' +
+            output_styles + '. [default: %default]'
+        ),
+    )
     parser.add_option('-m', '-g', '--sourcemap', dest='source_map',
                       action='store_true', default=False,
                       help='Emit source map.  Requires the second argument '
@@ -123,7 +133,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 source_map_filename = args[1] + '.map'  # FIXME
                 css, source_map = compile(
                     filename=filename,
-                    output_style=options.output_style,
+                    output_style=options.style,
                     source_map_filename=source_map_filename,
                     include_paths=options.include_paths,
                     precision=options.precision
@@ -133,7 +143,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 source_map = None
                 css = compile(
                     filename=filename,
-                    output_style=options.output_style,
+                    output_style=options.style,
                     include_paths=options.include_paths,
                     precision=options.precision
                 )
