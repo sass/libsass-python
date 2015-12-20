@@ -1,25 +1,21 @@
 version: "{build}"
 environment:
-  global:
-    VS90COMNTOOLS: "%VS110COMNTOOLS%"
-    VS100COMNTOOLS: "%VS110COMNTOOLS%"
   matrix:
   - PYTHON: "C:\\Python27"
     PYTHON_ARCH: 32
   - PYTHON: "C:\\Python27-x64"
     PYTHON_ARCH: 64
-  - PYTHON: "C:\\Python33"
-    PYTHON_ARCH: 32
-  - PYTHON: "C:\\Python33-x64"
-    PYTHON_ARCH: 64
   - PYTHON: "C:\\Python34"
     PYTHON_ARCH: 32
   - PYTHON: "C:\\Python34-x64"
     PYTHON_ARCH: 32
+  - PYTHON: "C:\\Python35"
+    PYTHON_ARCH: 32
+  - PYTHON: "C:\\Python35-x64"
+    PYTHON_ARCH: 64
 matrix:
   fast_finish: true
 init:
-- ps: "$env:Path = \"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\bin;\" + $env:Path"
 - "ECHO %PATH%"
 - "ECHO %PYTHON%"
 - ps: "ls C:/Python*"
@@ -30,8 +26,7 @@ install:
 - "%PYTHON%\\Scripts\\pip.exe install -e ."
 build: false
 test_script:
-- "dir \"C:\\Program Files (x86)\""
-- "%PYTHON%\\python.exe -c \"import os,pprint;pprint.pprint(os.environ)\""
+- "%PYTHON%\\python.exe -c \"import os,pprint;pprint.pprint(sorted(os.environ.items()))\""
 - "%PYTHON%\\python.exe setup.py test"
 after_test:
 - "%PYTHON%\\python.exe setup.py bdist_wheel"
