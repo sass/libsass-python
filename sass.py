@@ -203,8 +203,8 @@ def compile_dirname(
     for dirpath, _, filenames in os.walk(search_path):
         filenames = [
             filename for filename in filenames
-            if filename.endswith(('.scss', '.sass'))
-            and not filename.startswith('_')
+            if filename.endswith(('.scss', '.sass')) and
+            not filename.startswith('_')
         ]
         for filename in filenames:
             input_filename = os.path.join(dirpath, filename)

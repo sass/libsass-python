@@ -583,13 +583,13 @@ class ManifestTestCase(BaseTestCase):
     def test_build_one(self):
         d = tempfile.mkdtemp()
         src_path = os.path.join(d, 'test')
-        test_source_path = lambda *path: normalize_path(
-            os.path.join(d, 'test', *path)
-        )
-        replace_source_path = lambda s, name: s.replace(
-            'SOURCE',
-            test_source_path(name)
-        )
+
+        def test_source_path(*path):
+            return normalize_path(os.path.join(d, 'test', *path))
+
+        def replace_source_path(s, name):
+            return s.replace('SOURCE', test_source_path(name))
+
         try:
             shutil.copytree('test', src_path)
             m = Manifest(sass_path='test', css_path='css')
@@ -921,7 +921,10 @@ class CompileDirectoriesTest(unittest.TestCase):
 class SassFunctionTest(unittest.TestCase):
 
     def test_from_lambda(self):
-        lambda_ = lambda abc, d: None
+        # Hack for https://gitlab.com/pycqa/flake8/issues/117
+        def noop(x):
+            return x
+        lambda_ = noop(lambda abc, d: None)
         sf = sass.SassFunction.from_lambda('func_name', lambda_)
         self.assertEqual('func_name', sf.name)
         self.assertEqual(('$abc', '$d'), sf.arguments)
