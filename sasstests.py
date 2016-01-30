@@ -58,8 +58,8 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'names': [],
     'mappings': (
-        ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,IAAI,CAEF,CAAC,'
-        'CAAC;IACA,KAAK,EAAE,IAAK,GACb'
+        ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,AAEE,IAFE,'
+        'CAEF,CAAC,CAAC;IACA,KAAK,EAAE,IAAK,GACb'
     ),
 }
 
@@ -583,13 +583,13 @@ class ManifestTestCase(BaseTestCase):
     def test_build_one(self):
         d = tempfile.mkdtemp()
         src_path = os.path.join(d, 'test')
-        test_source_path = lambda *path: normalize_path(
-            os.path.join(d, 'test', *path)
-        )
-        replace_source_path = lambda s, name: s.replace(
-            'SOURCE',
-            test_source_path(name)
-        )
+
+        def test_source_path(*path):
+            return normalize_path(os.path.join(d, 'test', *path))
+
+        def replace_source_path(s, name):
+            return s.replace('SOURCE', test_source_path(name))
+
         try:
             shutil.copytree('test', src_path)
             m = Manifest(sass_path='test', css_path='css')
@@ -610,7 +610,8 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'names': [],
                     'mappings': (
-                        ';AAAA,CAAC,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,GACjB'
+                        ';AAAA,AACE,CADD,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,'
+                        'GACjB'
                     ),
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
@@ -629,8 +630,9 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'names': [],
                     'mappings': (
-                        ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,'
-                        'IAAI,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,GAClC'
+                        ';;AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;'
+                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,'
+                        'GAClC'
                     ),
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
@@ -919,7 +921,10 @@ class CompileDirectoriesTest(unittest.TestCase):
 class SassFunctionTest(unittest.TestCase):
 
     def test_from_lambda(self):
-        lambda_ = lambda abc, d: None
+        # Hack for https://gitlab.com/pycqa/flake8/issues/117
+        def noop(x):
+            return x
+        lambda_ = noop(lambda abc, d: None)
         sf = sass.SassFunction.from_lambda('func_name', lambda_)
         self.assertEqual('func_name', sf.name)
         self.assertEqual(('$abc', '$d'), sf.arguments)
