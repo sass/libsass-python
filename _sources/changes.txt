@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.10.1
+-------------
+
+Released on January 29, 2016.
+
+- Follow up the libsass upstream: 3.3.3 --- See the release notes of Libsass
+  3.3.3__. [by Anthony Sottile]
+- Allow -t for style like sassc [:issue:`98` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.3.3
+
 Version 0.10.0
 -------------
 

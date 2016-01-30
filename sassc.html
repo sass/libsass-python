@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sassc — SassC compliant command line interface &mdash; libsass 0.10.0 documentation</title>
+    <title>sassc — SassC compliant command line interface &mdash; libsass 0.10.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.10.0',
+        VERSION:     '0.10.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,12 +23,12 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.10.0 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.10.1 documentation" href="index.html" />
     <link rel="next" title="sass — Binding of libsass" href="sass.html" />
     <link rel="prev" title="Changelog" href="changes.html" />
    
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
   <body role="document">  
@@ -47,10 +47,19 @@
 </div>
 <p>There are options as well:</p>
 <dl class="option">
-<dt id="cmdoption-sassc-s">
-<span id="cmdoption-sassc--output-style"></span><code class="descname">-s</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--output-style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-sassc-t">
+<span id="cmdoption-sassc--style"></span><code class="descname">-t</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coding style of the compiled result.  The same as <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a>
 function&#8217;s <code class="docutils literal"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal"><span class="pre">nested</span></code>.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-sassc-s">
+<span id="cmdoption-sassc--output-style"></span><code class="descname">-s</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--output-style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for -t / &#8211;style.</p>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.11.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="option">
@@ -146,8 +155,8 @@ filename).</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |
       <a href="_sources/sassc.txt"
