@@ -58,8 +58,8 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'names': [],
     'mappings': (
-        ';AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,IAAI,CAEF,CAAC,'
-        'CAAC;IACA,KAAK,EAAE,IAAK,GACb'
+        ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,AAEE,IAFE,'
+        'CAEF,CAAC,CAAC;IACA,KAAK,EAAE,IAAK,GACb'
     ),
 }
 
@@ -610,7 +610,8 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'names': [],
                     'mappings': (
-                        ';AAAA,CAAC,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,GACjB'
+                        ';AAAA,AACE,CADD,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,'
+                        'GACjB'
                     ),
                 },
                 os.path.join(d, 'css', 'b.scss.css.map')
@@ -629,8 +630,9 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'names': [],
                     'mappings': (
-                        ';;AAKA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,'
-                        'IAAI,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,GAClC'
+                        ';;AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;'
+                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,'
+                        'GAClC'
                     ),
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
