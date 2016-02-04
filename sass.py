@@ -195,12 +195,16 @@ def _validate_importers(importers):
     return tuple(_to_importer(priority, func) for priority, func in importers)
 
 
+def _raise(e):
+    raise e
+
+
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
     precision, custom_functions, importers
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
-    for dirpath, _, filenames in os.walk(search_path):
+    for dirpath, _, filenames in os.walk(search_path, onerror=_raise):
         filenames = [
             filename for filename in filenames
             if filename.endswith(('.scss', '.sass')) and
