@@ -141,10 +141,6 @@ sass_extension = Extension(
 )
 
 install_requires = ['six']
-tests_require = [
-    'flake8 >= 2.4.0',
-    'Werkzeug >= 0.9'
-]
 
 
 def version(sass_filename='sass.py'):
@@ -239,10 +235,7 @@ setup(
         ]
     },
     install_requires=install_requires,
-    tests_require=tests_require,
-    test_suite='sasstests.suite',
     extras_require={
-        'tests': tests_require,
         'upload_appveyor_builds': [
             'twine == 1.5.0',
         ],
