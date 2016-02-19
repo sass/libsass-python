@@ -20,15 +20,16 @@ init:
 - "ECHO %PYTHON%"
 - ps: "ls C:/Python*"
 install:
-- "git -C %APPVEYOR_BUILD_FOLDER% submodule update --init"
+- "git submodule update --init"
 - "%PYTHON%\\Scripts\\pip.exe --version"
-- "%PYTHON%\\Scripts\\pip.exe install wheel"
-- "%PYTHON%\\Scripts\\pip.exe install -e ."
+- "%PYTHON%\\Scripts\\pip.exe install -rrequirements-dev.txt wheel"
 build: false
 test_script:
-- "%PYTHON%\\python.exe -c \"import os,pprint;pprint.pprint(sorted(os.environ.items()))\""
-- "%PYTHON%\\python.exe setup.py test"
+- '%PYTHON%\\python.exe -c "import os, pprint; pprint.pprint(sorted(os.environ.items()))"'
+- "%PYTHON%\\python.exe -m pytest sasstests.py"
 after_test:
 - "%PYTHON%\\python.exe setup.py bdist_wheel"
 artifacts:
 - path: dist\*
+cache:
+- '%LOCALAPPDATA%\pip\cache'

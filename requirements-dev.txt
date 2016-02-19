@@ -1,0 +1,5 @@
+-e .
+coverage
+flake8>=2.4.0
+pytest
+werkzeug>=0.9

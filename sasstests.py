@@ -16,6 +16,7 @@ import tempfile
 import unittest
 import warnings
 
+import pytest
 from six import PY3, StringIO, b, string_types, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
@@ -230,7 +231,7 @@ class CompileTestCase(BaseTestCase):
                 {'filename': 'test/a.scss'},
                 {'dirname': ('test', '/dev/null')},
         ):
-            with assert_raises(TypeError) as excinfo:
+            with pytest.raises(TypeError) as excinfo:
                 sass.compile(herp='derp', harp='darp', **args)
             msg, = excinfo.value.args
             assert msg == (
@@ -1173,21 +1174,8 @@ def compile_with_func(s):
 
 
 @contextlib.contextmanager
-def assert_raises(exctype):
-    # I want pytest.raises, this'll have to do for now
-    class C:
-        pass
-
-    try:
-        yield C
-        assert False, 'Expected to raise!'
-    except exctype as e:
-        C.value = e
-
-
-@contextlib.contextmanager
 def assert_raises_compile_error(expected):
-    with assert_raises(sass.CompileError) as excinfo:
+    with pytest.raises(sass.CompileError) as excinfo:
         yield
     msg, = excinfo.value.args
     assert msg.decode('UTF-8') == expected, (msg, expected)
@@ -1425,22 +1413,3 @@ class CustomFunctionsTest(unittest.TestCase):
             ),
             'a{content:baz}\n',
         )
-
-
-test_cases = [
-    SassTestCase,
-    CompileTestCase,
-    BuilderTestCase,
-    ManifestTestCase,
-    WsgiTestCase,
-    DistutilsTestCase,
-    SasscTestCase,
-    CompileDirectoriesTest,
-    SassFunctionTest,
-    SassTypesTest,
-    CustomFunctionsTest,
-]
-loader = unittest.defaultTestLoader
-suite = unittest.TestSuite()
-for test_case in test_cases:
-    suite.addTests(loader.loadTestsFromTestCase(test_case))

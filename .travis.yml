@@ -12,9 +12,12 @@ python:
 - 3.4
 - 3.5
 install:
-- pip install -e . "flake8 >= 2.4.0" "Werkzeug >= 0.9" coverage coveralls
+- pip install -rrequirements-dev.txt coveralls
 script:
-- coverage run --source sass,sassc,sassutils setup.py test
+- coverage run --source sass,sassc,sassutils -m pytest sasstests.py
 - flake8 .
 after_success:
 - coveralls
+cache:
+    directories:
+        - $HOME/.cache/pip
