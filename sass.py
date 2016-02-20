@@ -22,7 +22,7 @@ import re
 import sys
 import warnings
 
-from six import string_types, text_type
+from six import string_types, text_type, PY2, PY3
 
 from _sass import OUTPUT_STYLES, compile_filename, compile_string
 
@@ -48,10 +48,20 @@ SOURCE_COMMENTS = {'none': 0, 'line_numbers': 1, 'default': 1, 'map': 2}
 MODES = set(['string', 'filename', 'dirname'])
 
 
+def to_native_s(s):
+    if isinstance(s, bytes) and PY3:  # pragma: no cover (py3)
+        s = s.decode('UTF-8')
+    elif isinstance(s, text_type) and PY2:  # pragma: no cover (py2)
+        s = s.encode('UTF-8')
+    return s
+
+
 class CompileError(ValueError):
     """The exception type that is raised by :func:`compile()`.
     It is a subtype of :exc:`exceptions.ValueError`.
     """
+    def __init__(self, msg):
+        super(CompileError, self).__init__(to_native_s(msg))
 
 
 def mkdirp(path):
