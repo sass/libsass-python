@@ -847,6 +847,10 @@ def write_file(filename, contents):
 
 class CompileDirectoriesTest(unittest.TestCase):
 
+    def test_directory_does_not_exist(self):
+        with pytest.raises(OSError):
+            sass.compile(dirname=('i_dont_exist_lol', 'out'))
+
     def test_successful(self):
         with tempdir() as tmpdir:
             input_dir = os.path.join(tmpdir, 'input')
