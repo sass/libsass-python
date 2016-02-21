@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import traceback
 import unittest
 import warnings
 
@@ -914,7 +915,7 @@ class CompileDirectoriesTest(unittest.TestCase):
                 assert False, 'Expected to raise'
             except sass.CompileError as e:
                 msg, = e.args
-                assert msg.decode('UTF-8').startswith(
+                assert msg.startswith(
                     'Error: Invalid CSS after '
                 ), msg
                 return
@@ -1182,7 +1183,7 @@ def assert_raises_compile_error(expected):
     with pytest.raises(sass.CompileError) as excinfo:
         yield
     msg, = excinfo.value.args
-    assert msg.decode('UTF-8') == expected, (msg, expected)
+    assert msg == expected, (msg, expected)
 
 
 class RegexMatcher(object):
@@ -1417,3 +1418,17 @@ class CustomFunctionsTest(unittest.TestCase):
             ),
             'a{content:baz}\n',
         )
+
+
+def test_stack_trace_formatting():
+    try:
+        sass.compile(string=u'a{☃')
+        assert False, 'expected to raise CompileError'
+    except sass.CompileError:
+        tb = traceback.format_exc()
+    assert tb.endswith(
+        'CompileError: Error: Invalid CSS after "a{☃": expected "{", was ""\n'
+        '        on line 1 of stdin\n'
+        '>> a{☃\n'
+        '   --^\n\n'
+    )
