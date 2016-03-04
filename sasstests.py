@@ -657,7 +657,6 @@ class WsgiTestCase(BaseTestCase):
             self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
-            src_path = normalize_path(os.path.join(src_dir, 'a.scss'))
             self.assert_bytes_equal(
                 b(A_EXPECTED_CSS_WITH_MAP),
                 r.data
