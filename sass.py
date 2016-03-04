@@ -537,8 +537,6 @@ def compile(**kwargs):
         raise CompileError('source_map_filename is only available with '
                            'filename= keyword argument since it has to be '
                            'aware of it')
-    if source_map_filename is not None:
-        source_comments = True
     try:
         include_paths = kwargs.pop('include_paths') or b''
     except KeyError:
