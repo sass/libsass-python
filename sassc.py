@@ -48,6 +48,12 @@ There are options as well:
 
    .. versionadded:: 0.7.0
 
+.. option:: --source-comments
+
+   Include debug info in output.
+
+   .. versionadded:: 0.11.0
+
 .. option:: -v, --version
 
    Prints the program version.
@@ -101,6 +107,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         '-p', '--precision', action='store', type='int', default=5,
         help='Set the precision for numbers. [default: %default]'
     )
+    parser.add_option(
+        '--source-comments', action='store_true', default=False,
+        help='Include debug info in output',
+    )
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',
@@ -134,6 +144,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 css, source_map = compile(
                     filename=filename,
                     output_style=options.style,
+                    source_comments=options.source_comments,
                     source_map_filename=source_map_filename,
                     include_paths=options.include_paths,
                     precision=options.precision
@@ -144,6 +155,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 css = compile(
                     filename=filename,
                     output_style=options.style,
+                    source_comments=options.source_comments,
                     include_paths=options.include_paths,
                     precision=options.precision
                 )

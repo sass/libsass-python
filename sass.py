@@ -308,8 +308,6 @@ def compile(**kwargs):
     :param source_map_filename: use source maps and indicate the source map
                                 output filename.  :const:`None` means not
                                 using source maps.  :const:`None` by default.
-                                note that it implies ``source_comments``
-                                is also :const:`True`
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
@@ -327,7 +325,7 @@ def compile(**kwargs):
                      <importer-callbacks>`_ description
     :type importers: :class:`collections.Callable`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
-              and the source map string if ``source_comments='map'``
+              and the source map string if ``source_map_filename`` is set
     :rtype: :class:`str`, :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given SASS has broken syntax)
@@ -479,6 +477,9 @@ def compile(**kwargs):
 
     .. versionadded:: 0.7.0
        Added ``custom_functions`` parameter.
+
+    .. versionadded:: 0.11.0
+       ``source_map_filename`` no longer implies ``source_comments``.
 
     """
     modes = set()
