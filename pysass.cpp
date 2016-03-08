@@ -84,6 +84,9 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
                 case SASS_SPACE:
                     separator = sass_space;
                     break;
+                case SASS_HASH:
+                    assert(0);
+                    break;
             }
             for (i = 0; i < sass_list_get_length(value); i += 1) {
                 PyTuple_SetItem(
