@@ -45,10 +45,8 @@ body {
 '''
 
 A_EXPECTED_CSS_WITH_MAP = '''\
-/* line 6, SOURCE */
 body {
   background-color: green; }
-  /* line 8, SOURCE */
   body a {
     color: blue; }
 
@@ -60,8 +58,8 @@ A_EXPECTED_MAP = {
     'sources': ['test/a.scss'],
     'names': [],
     'mappings': (
-        ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;EALD,AAEE,IAFE,'
-        'CAEF,CAAC,CAAC;IACA,KAAK,EAAE,IAAK,GACb'
+        'AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;EALD,AAEE,'
+        'IAFE,CAEF,CAAC,CAAC;IACA,KAAK,EAAE,IAAK,GACb'
     ),
 }
 
@@ -71,7 +69,6 @@ b i {
 '''
 
 B_EXPECTED_CSS_WITH_MAP = '''\
-/* line 2, SOURCE */
 b i {
   font-size: 20px; }
 
@@ -97,10 +94,8 @@ body {
 
 D_EXPECTED_CSS_WITH_MAP = '''\
 @charset "UTF-8";
-/* line 6, SOURCE */
 body {
   background-color: green; }
-  /* line 8, SOURCE */
   body a {
     font: '나눔고딕', sans-serif; }
 
@@ -446,10 +441,7 @@ a {
             source_map_filename='a.scss.css.map'
         )
         self.assertEqual(
-            A_EXPECTED_CSS_WITH_MAP.replace(
-                'SOURCE',
-                normalize_path(os.path.abspath(filename))
-            ),
+            A_EXPECTED_CSS_WITH_MAP,
             actual
         )
         self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
@@ -612,7 +604,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/b.scss'],
                     'names': [],
                     'mappings': (
-                        ';AAAA,AACE,CADD,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,'
+                        'AAAA,AACE,CADD,CACC,CAAC,CAAC;EACA,SAAS,EAAE,IAAK,'
                         'GACjB'
                     ),
                 },
@@ -632,7 +624,7 @@ class ManifestTestCase(BaseTestCase):
                     'sources': ['../test/d.scss'],
                     'names': [],
                     'mappings': (
-                        ';;AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;;'
+                        ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAM,GAQzB;'
                         'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA2B,'
                         'GAClC'
                     ),
@@ -665,9 +657,8 @@ class WsgiTestCase(BaseTestCase):
             self.assertEqual('text/plain', r.mimetype)
             r = client.get('/static/a.scss.css')
             self.assertEqual(200, r.status_code)
-            src_path = normalize_path(os.path.join(src_dir, 'a.scss'))
             self.assert_bytes_equal(
-                b(A_EXPECTED_CSS_WITH_MAP.replace('SOURCE', src_path)),
+                b(A_EXPECTED_CSS_WITH_MAP),
                 r.data
             )
             self.assertEqual('text/css', r.mimetype)
@@ -737,7 +728,7 @@ class SasscTestCase(BaseTestCase):
         self.err = StringIO()
 
     def test_no_args(self):
-        exit_code = sassc.main(['sassc', ], self.out, self.err)
+        exit_code = sassc.main(['sassc'], self.out, self.err)
         self.assertEqual(2, exit_code)
         err = self.err.getvalue()
         assert err.strip().endswith('error: too few arguments'), \
@@ -803,12 +794,11 @@ class SasscTestCase(BaseTestCase):
         self.assertEqual('', self.out.getvalue())
 
     def test_sassc_sourcemap(self):
-        tmp_dir = tempfile.mkdtemp()
-        src_dir = os.path.join(tmp_dir, 'test')
-        shutil.copytree('test', src_dir)
-        src_filename = os.path.join(src_dir, 'a.scss')
-        out_filename = os.path.join(tmp_dir, 'a.scss.css')
-        try:
+        with tempdir() as tmp_dir:
+            src_dir = os.path.join(tmp_dir, 'test')
+            shutil.copytree('test', src_dir)
+            src_filename = os.path.join(src_dir, 'a.scss')
+            out_filename = os.path.join(tmp_dir, 'a.scss.css')
             exit_code = sassc.main(
                 ['sassc', '-m', src_filename, out_filename],
                 self.out, self.err
@@ -818,9 +808,7 @@ class SasscTestCase(BaseTestCase):
             self.assertEqual('', self.out.getvalue())
             with open(out_filename) as f:
                 self.assertEqual(
-                    A_EXPECTED_CSS_WITH_MAP.replace(
-                        'SOURCE', normalize_path(src_filename)
-                    ),
+                    A_EXPECTED_CSS_WITH_MAP,
                     f.read().strip()
                 )
             with open(out_filename + '.map') as f:
@@ -828,8 +816,6 @@ class SasscTestCase(BaseTestCase):
                     dict(A_EXPECTED_MAP, sources=None),
                     dict(json.load(f), sources=None)
                 )
-        finally:
-            shutil.rmtree(tmp_dir)
 
 
 @contextlib.contextmanager
@@ -1432,3 +1418,8 @@ def test_stack_trace_formatting():
         '>> a{☃\n'
         '   --^\n\n'
     )
+
+
+def test_source_comments():
+    out = sass.compile(string='a{color: red}', source_comments=True)
+    assert out == '/* line 1, stdin */\na {\n  color: red; }\n'

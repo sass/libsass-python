@@ -575,7 +575,7 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     context = sass_make_file_context(filename);
     options = sass_file_context_get_options(context);
 
-    if (source_comments && PySass_Bytes_Check(source_map_filename)) {
+    if (PySass_Bytes_Check(source_map_filename)) {
         size_t source_map_file_len = PySass_Bytes_GET_SIZE(source_map_filename);
         if (source_map_file_len) {
             char *source_map_file = (char *) malloc(source_map_file_len + 1);
