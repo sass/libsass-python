@@ -73,7 +73,9 @@ if sys.platform == 'win32':
     flags = ['-c', '-O2', '/EHsc', '/MT']
     link_flags = []
 else:
-    flags = ['-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses']
+    flags = [
+        '-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+    ]
     platform.mac_ver()
     if platform.system() in ['Darwin', 'FreeBSD']:
         os.environ.setdefault('CC', 'clang')
