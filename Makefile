@@ -18,15 +18,15 @@ all: _sass.so
 
 build2/libsass/c/%.o: libsass/src/%.c
 	@mkdir -p build2/libsass/c/
-	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses
+	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
 
 build2/libsass/cpp/%.o: libsass/src/%.cpp
 	@mkdir -p build2/libsass/cpp/
-	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses
+	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
 
 build2/pysass.o: pysass.cpp
 	@mkdir -p build2
-	gcc -pthread -fno-strict-aliasing -Wno-write-strings -DNDEBUG -g -fwrapv -O2 -Wall -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses
+	gcc -pthread -fno-strict-aliasing -Wno-write-strings -DNDEBUG -g -fwrapv -O2 -Wall -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
 
 _sass.so: $(C_OBJECTS) $(CPP_OBJECTS) build2/pysass.o
 	g++ -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro $^ -L./libsass -o $@ -fPIC -lstdc++
