@@ -11,7 +11,6 @@ import platform
 import shutil
 import sys
 import tempfile
-import time
 
 from setuptools import Extension, setup
 
@@ -156,17 +155,6 @@ def version(sass_filename='sass.py'):
                 return node.value.s
 
 
-def get_unstable_commit():
-    try:
-        with open('.unstable-release') as f:
-            return f.read().strip() or None
-    except (IOError, OSError):
-        return
-
-
-unstable_commit = get_unstable_commit()
-
-
 def readme():
     try:
         with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
@@ -204,12 +192,11 @@ class upload_doc(distutils.cmd.Command):
 
 
 setup(
-    name='libsass' + ('-unstable' if unstable_commit else ''),
+    name='libsass',
     description='SASS for Python: '
                 'A straightforward binding of libsass for Python.',
     long_description=readme(),
-    version=version() + (time.strftime('.%Y%m%d.') + unstable_commit
-                         if unstable_commit else ''),
+    version=version(),
     ext_modules=[sass_extension],
     packages=['sassutils'],
     py_modules=['sass', 'sassc', 'sasstests'],
