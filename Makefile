@@ -14,22 +14,29 @@ C_OBJECTS = $(patsubst libsass/src/%.c,build2/libsass/c/%.o,$(C_SOURCES))
 CPP_SOURCES := $(wildcard libsass/src/*.cpp)
 CPP_OBJECTS = $(patsubst libsass/src/%.cpp,build2/libsass/cpp/%.o,$(CPP_SOURCES))
 
+LIBSASS_VERSION = $(shell git -C libsass describe --abbrev=4 --dirty --always --tags)
+
+BASEFLAGS := -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -fPIC -I./libsass/include $(PY_HEADERS) -Wno-parentheses -Werror=switch -DLIBSASS_VERSION='"$(LIBSASS_VERSION)"'
+CFLAGS := $(BASEFLAGS) -Wstrict-prototypes
+CPPFLAGS := $(BASEFLAGS) -std=c++0x
+LFLAGS := -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro -fPIC -lstdc++
+
 all: _sass.so
 
 build2/libsass/c/%.o: libsass/src/%.c
 	@mkdir -p build2/libsass/c/
-	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
+	gcc $(CFLAGS) -c $^ -o $@
 
 build2/libsass/cpp/%.o: libsass/src/%.cpp
 	@mkdir -p build2/libsass/cpp/
-	gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
+	gcc $(CPPFLAGS) -c $^ -o $@
 
 build2/pysass.o: pysass.cpp
 	@mkdir -p build2
-	gcc -pthread -fno-strict-aliasing -Wno-write-strings -DNDEBUG -g -fwrapv -O2 -Wall -fPIC -I./libsass/include $(PY_HEADERS) -c $^ -o $@ -c -O2 -fPIC -std=c++0x -Wall -Wno-parentheses -Werror=switch
+	gcc $(CPPFLAGS) -Wno-write-strings -c $^ -o $@
 
 _sass.so: $(C_OBJECTS) $(CPP_OBJECTS) build2/pysass.o
-	g++ -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -Wl,-z,relro $^ -L./libsass -o $@ -fPIC -lstdc++
+	g++ $(LFLAGS) $^ -o $@
 
 .PHONY: clean
 clean:
