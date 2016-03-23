@@ -19,7 +19,7 @@ APPVEYOR_API_BASE_URL = 'https://ci.appveyor.com/api/'
 APPVEYOR_API_PROJECT_URL = urljoin(APPVEYOR_API_BASE_URL,
                                    'projects/dahlia/libsass-python/')
 APPVEYOR_API_BUILDS_URL = urljoin(APPVEYOR_API_PROJECT_URL,
-                                  'history?recordsNumber=50&branch=python')
+                                  'history?recordsNumber=50&branch=master')
 APPVEYOR_API_JOBS_URL = urljoin(APPVEYOR_API_PROJECT_URL,
                                 'build/')
 APPVEYOR_API_JOB_URL = urljoin(APPVEYOR_API_BASE_URL, 'buildjobs/')
