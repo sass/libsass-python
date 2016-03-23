@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.10.1 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.11.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.10.1',
+        VERSION:     '0.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.10.1 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.11.0 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" />
    
@@ -43,7 +43,7 @@
 <p>This simple C extension module provides a very simple binding of <code class="docutils literal"><span class="pre">libsass</span></code>,
 which is written in C/C++.  It contains only one function and one exception
 type.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {</span>
 <span class="go">  color: blue; }</span>
@@ -52,20 +52,20 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'string', 'filename', 'dirname'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'dirname', 'filename', 'string'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.OUTPUT_STYLES">
-<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'nested': 0, 'compressed': 3, 'expanded': 1}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'expanded': 1, 'nested': 0, 'compressed': 3}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of output styles.
 Keys are output name strings, and values are flag integers.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.SOURCE_COMMENTS">
-<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'default': 1, 'map': 2, 'line_numbers': 1, 'none': 0}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'line_numbers': 1, 'none': 0, 'default': 1, 'map': 2}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of source comments styles.
 Keys are mode names, and values are corresponding flag integers.</p>
 <div class="versionadded">
@@ -78,7 +78,7 @@ Keys are mode names, and values are corresponding flag integers.</p>
 
 <dl class="exception">
 <dt id="sass.CompileError">
-<em class="property">exception </em><code class="descclassname">sass.</code><code class="descname">CompileError</code><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><code class="descclassname">sass.</code><code class="descname">CompileError</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
 <dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a>.
 It is a subtype of <a class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.ValueError" title="(in Python v2.7)"><code class="xref py py-exc docutils literal"><span class="pre">exceptions.ValueError</span></code></a>.</p>
 </dd></dl>
@@ -171,7 +171,7 @@ hashable mapping type.</p>
 <dt id="sass.and_join">
 <code class="descclassname">sass.</code><code class="descname">and_join</code><span class="sig-paren">(</span><em>strings</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.and_join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Join the given <code class="docutils literal"><span class="pre">strings</span></code> by commas with last <cite>&#8216; and &#8216;</cite> conjuction.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s1">&#39;Korea&#39;</span><span class="p">,</span> <span class="s1">&#39;Japan&#39;</span><span class="p">,</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="s1">&#39;Taiwan&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s1">&#39;Korea&#39;</span><span class="p">,</span> <span class="s1">&#39;Japan&#39;</span><span class="p">,</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="s1">&#39;Taiwan&#39;</span><span class="p">])</span>
 <span class="go">&#39;Korea, Japan, China, and Taiwan&#39;</span>
 </pre></div>
 </div>
@@ -251,9 +251,7 @@ choose one of: <code class="docutils literal"><span class="pre">'nested'</span><
 <code class="xref py py-const docutils literal"><span class="pre">False</span></code> by default</li>
 <li><strong>source_map_filename</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; use source maps and indicate the source map
 output filename.  <code class="xref py py-const docutils literal"><span class="pre">None</span></code> means not
-using source maps.  <code class="xref py py-const docutils literal"><span class="pre">None</span></code> by default.
-note that it implies <code class="docutils literal"><span class="pre">source_comments</span></code>
-is also <code class="xref py py-const docutils literal"><span class="pre">True</span></code></li>
+using source maps.  <code class="xref py py-const docutils literal"><span class="pre">None</span></code> by default.</li>
 <li><strong>include_paths</strong> (<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Sequence" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Sequence</span></code></a>, <a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) &#8211; an optional list of paths to find <code class="docutils literal"><span class="pre">&#64;import</span></code>ed
 SASS/CSS source files</li>
 <li><strong>precision</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>) &#8211; optional precision for numbers. <code class="xref py py-const docutils literal"><span class="pre">5</span></code> by default.</li>
@@ -269,7 +267,7 @@ see also below <a class="reference external" href="importer-callbacks">importer 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the compiled CSS string, or a pair of the compiled CSS string
-and the source map string if <code class="docutils literal"><span class="pre">source_comments='map'</span></code></p>
+and the source map string if <code class="docutils literal"><span class="pre">source_map_filename</span></code> is set</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
@@ -328,7 +326,7 @@ see also below <a class="reference external" href="custom-functions">custom func
 <dd><p class="first">It is the most general form.  Although pretty verbose, it can take
 any kind of callables like type objects, unnamed functions,
 and user-defined callables.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="o">...</span><span class="p">,</span>
     <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
         <span class="n">sass</span><span class="o">.</span><span class="n">SassFunction</span><span class="p">(</span><span class="s1">&#39;func-name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;$a&#39;</span><span class="p">,</span> <span class="s1">&#39;$b&#39;</span><span class="p">),</span> <span class="n">some_callable</span><span class="p">),</span>
@@ -344,7 +342,7 @@ any kind of callables, it can take any kind of <em>functions</em> defined
 using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>/<a class="reference external" href="http://docs.python.org/reference/expressions.html#lambda" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">lambda</span></code></a> syntax.
 It cannot take callables other than them since inspecting arguments
 is not always available for every kind of callables.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
     <span class="o">...</span><span class="p">,</span>
     <span class="n">custom_functions</span><span class="o">=</span><span class="p">{</span>
         <span class="s1">&#39;func-name&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
@@ -358,7 +356,7 @@ is not always available for every kind of callables.</p>
 <dd><p class="first">Not general, but the easiest-to-use form for <em>named</em> functions.
 It can take only named functions, defined using <a class="reference external" href="http://docs.python.org/reference/compound_stmts.html#def" title="(in Python v2.7)"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>.
 It cannot take lambdas sinc names are unavailable for them.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">...</span>
 
 <span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -373,7 +371,7 @@ It cannot take lambdas sinc names are unavailable for them.</p>
 called and given a chance to process <code class="docutils literal"><span class="pre">&#64;import</span></code> directives. You can
 define yours by passing in a list of callables via the <code class="docutils literal"><span class="pre">importers</span></code>
 parameter. The callables must be passed as 2-tuples in the form:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">priority_int</span><span class="p">,</span> <span class="n">callback_fn</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">priority_int</span><span class="p">,</span> <span class="n">callback_fn</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A priority of zero is acceptable; priority determines the order callbacks
@@ -392,7 +390,7 @@ represents; or,</li>
 </ul>
 <p>All tuple return values must be strings. As a not overly realistic
 example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_importer</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_importer</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39; { color: red; }&#39;</span><span class="p">)]</span>
 
 <span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -420,6 +418,9 @@ the <code class="docutils literal"><span class="pre">source_comments</span></cod
 </div>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.7.0: </span>Added <code class="docutils literal"><span class="pre">custom_functions</span></code> parameter.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.11.0: </span><code class="docutils literal"><span class="pre">source_map_filename</span></code> no longer implies <code class="docutils literal"><span class="pre">source_comments</span></code>.</p>
 </div>
 </dd></dl>
 
@@ -467,7 +468,7 @@ the <code class="docutils literal"><span class="pre">source_comments</span></cod
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |

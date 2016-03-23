@@ -1,8 +1,30 @@
 Changelog
 =========
 
+Version 0.11.0
+--------------
+
+Released on March 23, 2016.
+
+- Follow up the libsass upstream: 3.3.4 --- See the release notes of Libsass
+  3.3.4__. [:issue:`144` by Anthony Sottile]
+- Expose libsass version in `sassc --version` and `sass.libsass_version`
+  [:issue:`142` :issue:`141` :issue:`140` by Anthony Sottile]
+- Fix warning about unused enum on switch [:issue:`127` :issue:`131` by
+  Anthony Sottile]
+- Sourcemaps no longer imply source comments [:issue:`124` :issue:`130` by
+  Tim Tisdall]
+- Add `--source-comments` option to `sassc` [:issue:`124` :issue:`130` by
+  Anthony Sottile]
+- Improve formatting of `CompileError` under python3 [:issue:`123` by Anthony
+  Sottile]
+- Raise when compiling a directory which does not exist [:issue:`116`
+  :issue:`119` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.3.4
+
 Version 0.10.1
--------------
+--------------
 
 Released on January 29, 2016.
 
@@ -13,7 +35,7 @@ Released on January 29, 2016.
 __ https://github.com/sass/libsass/releases/tag/3.3.3
 
 Version 0.10.0
--------------
+--------------
 
 Released on December 15, 2015.
 
