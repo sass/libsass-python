@@ -74,22 +74,21 @@ import os
 import sys
 import time
 
-import _sass
-from sass import __version__ as VERSION, OUTPUT_STYLES, CompileError, compile
+import sass
 
 
 def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     parser = optparse.OptionParser(
         usage='%prog [options] SCSS_FILE [OUT_CSS_FILE]',
         version='%prog {0} (sass/libsass {1})'.format(
-            VERSION, _sass.libsass_version,
+            sass.__version__, sass.libsass_version,
         ),
     )
-    output_styles = list(OUTPUT_STYLES)
+    output_styles = list(sass.OUTPUT_STYLES)
     output_styles = ', '.join(output_styles[:-1]) + ', or ' + output_styles[-1]
     parser.add_option(
         '-t', '--style', '-s', '--output-style', metavar='STYLE',
-        type='choice', choices=list(OUTPUT_STYLES), default='nested',
+        type='choice', choices=list(sass.OUTPUT_STYLES), default='nested',
         help=(
             'Coding style of the compiled result.  Choose one of ' +
             output_styles + '. [default: %default]'
@@ -144,7 +143,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             mtime = os.stat(filename).st_mtime
             if options.source_map:
                 source_map_filename = args[1] + '.map'  # FIXME
-                css, source_map = compile(
+                css, source_map = sass.compile(
                     filename=filename,
                     output_style=options.style,
                     source_comments=options.source_comments,
@@ -155,7 +154,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             else:
                 source_map_filename = None
                 source_map = None
-                css = compile(
+                css = sass.compile(
                     filename=filename,
                     output_style=options.style,
                     source_comments=options.source_comments,
@@ -165,7 +164,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         except (IOError, OSError) as e:
             error(e)
             return 3
-        except CompileError as e:
+        except sass.CompileError as e:
             error(e)
             if not options.watch:
                 return 1
