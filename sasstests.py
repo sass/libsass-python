@@ -133,12 +133,6 @@ class BaseTestCase(unittest.TestCase):
             expected = json.loads(expected)
         if isinstance(actual, string_types):
             actual = json.loads(actual)
-        if sys.platform == 'win32':  # pragma: no cover (windows)
-            assert expected['mappings'] != actual['mappings']
-            # On Windows the result of "mappings" is strange;
-            # seems a bug of libsass itself
-            expected.pop('mappings', None)
-            actual.pop('mappings', None)
         assert expected == actual
 
     def assert_source_map_file(self, expected, filename):
