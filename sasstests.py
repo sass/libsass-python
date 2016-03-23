@@ -18,7 +18,7 @@ import unittest
 import warnings
 
 import pytest
-from six import PY3, StringIO, b, string_types, text_type
+from six import StringIO, b, string_types, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -28,11 +28,11 @@ from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
 
-if os.sep != '/' and os.altsep:
+if os.sep != '/' and os.altsep:  # pragma: no cover (windows)
     def normalize_path(path):
         path = os.path.abspath(os.path.normpath(path))
         return path.replace(os.sep, os.altsep)
-else:
+else:   # pragma: no cover (non-windows)
     def normalize_path(path):
         return path
 
@@ -84,7 +84,7 @@ h1 a {
   color: green; }
 '''
 
-D_EXPECTED_CSS = '''\
+D_EXPECTED_CSS = u'''\
 @charset "UTF-8";
 body {
   background-color: green; }
@@ -92,7 +92,7 @@ body {
     font: '나눔고딕', sans-serif; }
 '''
 
-D_EXPECTED_CSS_WITH_MAP = '''\
+D_EXPECTED_CSS_WITH_MAP = u'''\
 @charset "UTF-8";
 body {
   background-color: green; }
@@ -125,38 +125,21 @@ body p {
   color: blue; }
 '''
 
-utf8_if_py3 = {'encoding': 'utf-8'} if PY3 else {}
-
 
 class BaseTestCase(unittest.TestCase):
 
-    def assert_json_file(self, expected, filename):
-        with open(filename) as f:
-            try:
-                tree = json.load(f)
-            except ValueError as e:
-                f.seek(0)
-                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
-                raise ValueError(msg)
-        self.assertEqual(expected, tree)
-
-    def assert_source_map_equal(self, expected, actual, *args, **kwargs):
+    def assert_source_map_equal(self, expected, actual):
         if isinstance(expected, string_types):
             expected = json.loads(expected)
         if isinstance(actual, string_types):
             actual = json.loads(actual)
-        if sys.platform == 'win32':
-            # On Windows the result of "mappings" is strange;
-            # seems a bug of libsass itself
-            expected.pop('mappings', None)
-            actual.pop('mappings', None)
-        self.assertEqual(expected, actual, *args, **kwargs)
+        assert expected == actual
 
     def assert_source_map_file(self, expected, filename):
         with open(filename) as f:
             try:
                 tree = json.load(f)
-            except ValueError as e:
+            except ValueError as e:  # pragma: no cover
                 f.seek(0)
                 msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
                 raise ValueError(msg)
@@ -169,8 +152,7 @@ class SassTestCase(BaseTestCase):
         assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
 
     def test_output_styles(self):
-        if hasattr(collections, 'Mapping'):
-            assert isinstance(sass.OUTPUT_STYLES, collections.Mapping)
+        assert isinstance(sass.OUTPUT_STYLES, collections.Mapping)
         assert 'nested' in sass.OUTPUT_STYLES
 
     def test_and_join(self):
@@ -182,8 +164,8 @@ class SassTestCase(BaseTestCase):
             'Korea, and Japan',
             sass.and_join(['Korea', 'Japan'])
         )
-        self.assertEqual('Korea', sass.and_join(['Korea']))
-        self.assertEqual('', sass.and_join([]))
+        assert 'Korea' == sass.and_join(['Korea'])
+        assert '' == sass.and_join([])
 
 
 class CompileTestCase(BaseTestCase):
@@ -294,8 +276,8 @@ a {
                 return ((path, 'a { color: red; }'),)
 
         def importer_two(path):
-            if path == 'two':
-                return ((path, 'b { color: blue; }'),)
+            assert path == 'two'
+            return ((path, 'b { color: blue; }'),)
 
         ret = sass.compile(
             string='@import "one"; @import "two";',
@@ -314,12 +296,12 @@ a {
                 return gen()
 
         def importer_two(path):
-            if path == 'two':
-                # List of lists
-                return [
-                    [path, 'c { color: yellow; }'],
-                    [path + 'other', 'd { color: green; }'],
-                ]
+            assert path == 'two'
+            # List of lists
+            return [
+                [path, 'c { color: yellow; }'],
+                [path + 'other', 'd { color: green; }'],
+            ]
 
         ret = sass.compile(
             string='@import "one"; @import "two";',
@@ -413,9 +395,9 @@ a {
             warnings.simplefilter('always')
             actual = sass.compile(string=source,
                                   source_comments='line_numbers')
-            self.assertEqual(1, len(w))
+            assert len(w) == 1
             assert issubclass(w[-1].category, DeprecationWarning)
-        self.assertEqual(expected, actual)
+        assert expected == actual
 
     def test_compile_filename(self):
         actual = sass.compile(filename='test/a.scss')
@@ -423,10 +405,7 @@ a {
         actual = sass.compile(filename='test/c.scss')
         assert actual == C_EXPECTED_CSS
         actual = sass.compile(filename='test/d.scss')
-        if text_type is str:
-            self.assertEqual(D_EXPECTED_CSS, actual)
-        else:
-            self.assertEqual(D_EXPECTED_CSS.decode('utf-8'), actual)
+        assert D_EXPECTED_CSS == actual
         actual = sass.compile(filename='test/e.scss')
         assert actual == E_EXPECTED_CSS
         self.assertRaises(IOError, sass.compile,
@@ -440,10 +419,7 @@ a {
             filename=filename,
             source_map_filename='a.scss.css.map'
         )
-        self.assertEqual(
-            A_EXPECTED_CSS_WITH_MAP,
-            actual
-        )
+        assert A_EXPECTED_CSS_WITH_MAP == actual
         self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
 
     def test_compile_source_map_deprecated_source_comments_map(self):
@@ -459,9 +435,9 @@ a {
                 source_comments='map',
                 source_map_filename='a.scss.css.map'
             )
-            self.assertEqual(1, len(w))
+            assert len(w) == 1
             assert issubclass(w[-1].category, DeprecationWarning)
-        self.assertEqual(expected, actual)
+        assert expected == actual
         self.assert_source_map_equal(expected_map, actual_map)
 
     def test_compile_with_precision(self):
@@ -506,50 +482,66 @@ class BuilderTestCase(BaseTestCase):
     def test_builder_build_directory(self):
         css_path = self.css_path
         result_files = build_directory(self.sass_path, css_path)
-        self.assertEqual(7, len(result_files))
-        self.assertEqual('a.scss.css', result_files['a.scss'])
-        with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
+        assert len(result_files) == 7
+        assert 'a.scss.css' == result_files['a.scss']
+        with io.open(
+            os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(A_EXPECTED_CSS, css)
-        self.assertEqual('b.scss.css', result_files['b.scss'])
-        with open(os.path.join(css_path, 'b.scss.css'), **utf8_if_py3) as f:
+        assert A_EXPECTED_CSS == css
+        assert 'b.scss.css' == result_files['b.scss']
+        with io.open(
+            os.path.join(css_path, 'b.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(B_EXPECTED_CSS, css)
-        self.assertEqual('c.scss.css', result_files['c.scss'])
-        with open(os.path.join(css_path, 'c.scss.css'), **utf8_if_py3) as f:
+        assert B_EXPECTED_CSS == css
+        assert 'c.scss.css' == result_files['c.scss']
+        with io.open(
+            os.path.join(css_path, 'c.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(C_EXPECTED_CSS, css)
-        self.assertEqual('d.scss.css', result_files['d.scss'])
-        with open(os.path.join(css_path, 'd.scss.css'), **utf8_if_py3) as f:
+        assert C_EXPECTED_CSS == css
+        assert 'd.scss.css' == result_files['d.scss']
+        with io.open(
+            os.path.join(css_path, 'd.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(D_EXPECTED_CSS, css)
-        self.assertEqual('e.scss.css', result_files['e.scss'])
-        with open(os.path.join(css_path, 'e.scss.css'), **utf8_if_py3) as f:
+        assert D_EXPECTED_CSS == css
+        assert 'e.scss.css' == result_files['e.scss']
+        with io.open(
+            os.path.join(css_path, 'e.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(E_EXPECTED_CSS, css)
+        assert E_EXPECTED_CSS == css
         self.assertEqual(
             os.path.join('subdir', 'recur.scss.css'),
             result_files[os.path.join('subdir', 'recur.scss')]
         )
-        with open(os.path.join(css_path, 'g.scss.css'), **utf8_if_py3) as f:
+        with io.open(
+            os.path.join(css_path, 'g.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(G_EXPECTED_CSS, css)
+        assert G_EXPECTED_CSS == css
         self.assertEqual(
             os.path.join('subdir', 'recur.scss.css'),
             result_files[os.path.join('subdir', 'recur.scss')]
         )
-        with open(os.path.join(css_path, 'subdir', 'recur.scss.css'),
-                  **utf8_if_py3) as f:
+        with io.open(
+            os.path.join(css_path, 'subdir', 'recur.scss.css'),
+            encoding='UTF-8',
+        ) as f:
             css = f.read()
-        self.assertEqual(SUBDIR_RECUR_EXPECTED_CSS, css)
+        assert SUBDIR_RECUR_EXPECTED_CSS == css
 
     def test_output_style(self):
         css_path = self.css_path
         result_files = build_directory(self.sass_path, css_path,
                                        output_style='compressed')
-        self.assertEqual(7, len(result_files))
-        self.assertEqual('a.scss.css', result_files['a.scss'])
-        with open(os.path.join(css_path, 'a.scss.css'), **utf8_if_py3) as f:
+        assert len(result_files) == 7
+        assert 'a.scss.css' == result_files['a.scss']
+        with io.open(
+            os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
+        ) as f:
             css = f.read()
         self.assertEqual('body{background-color:green}body a{color:blue}\n',
                          css)
@@ -575,27 +567,27 @@ class ManifestTestCase(BaseTestCase):
         assert manifests['package.name2'].css_path == 'css/path'
 
     def test_build_one(self):
-        d = tempfile.mkdtemp()
-        src_path = os.path.join(d, 'test')
+        with tempdir() as d:
+            src_path = os.path.join(d, 'test')
 
-        def test_source_path(*path):
-            return normalize_path(os.path.join(d, 'test', *path))
+            def test_source_path(*path):
+                return normalize_path(os.path.join(d, 'test', *path))
 
-        def replace_source_path(s, name):
-            return s.replace('SOURCE', test_source_path(name))
+            def replace_source_path(s, name):
+                return s.replace('SOURCE', test_source_path(name))
 
-        try:
             shutil.copytree('test', src_path)
             m = Manifest(sass_path='test', css_path='css')
             m.build_one(d, 'a.scss')
             with open(os.path.join(d, 'css', 'a.scss.css')) as f:
-                self.assertEqual(A_EXPECTED_CSS, f.read())
+                assert A_EXPECTED_CSS == f.read()
             m.build_one(d, 'b.scss', source_map=True)
-            with open(os.path.join(d, 'css', 'b.scss.css'),
-                      **utf8_if_py3) as f:
+            with io.open(
+                os.path.join(d, 'css', 'b.scss.css'), encoding='UTF-8',
+            ) as f:
                 self.assertEqual(
                     replace_source_path(B_EXPECTED_CSS_WITH_MAP, 'b.scss'),
-                    f.read()
+                    f.read(),
                 )
             self.assert_source_map_file(
                 {
@@ -611,10 +603,11 @@ class ManifestTestCase(BaseTestCase):
                 os.path.join(d, 'css', 'b.scss.css.map')
             )
             m.build_one(d, 'd.scss', source_map=True)
-            with open(os.path.join(d, 'css', 'd.scss.css'),
-                      **utf8_if_py3) as f:
-                self.assertEqual(
-                    replace_source_path(D_EXPECTED_CSS_WITH_MAP, 'd.scss'),
+            with io.open(
+                os.path.join(d, 'css', 'd.scss.css'), encoding='UTF-8',
+            ) as f:
+                assert (
+                    replace_source_path(D_EXPECTED_CSS_WITH_MAP, 'd.scss') ==
                     f.read()
                 )
             self.assert_source_map_file(
@@ -631,8 +624,6 @@ class ManifestTestCase(BaseTestCase):
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
-        finally:
-            shutil.rmtree(d)
 
 
 class WsgiTestCase(BaseTestCase):
@@ -643,31 +634,28 @@ class WsgiTestCase(BaseTestCase):
         return environ['PATH_INFO'],
 
     def test_wsgi_sass_middleware(self):
-        css_dir = tempfile.mkdtemp()
-        src_dir = os.path.join(css_dir, 'src')
-        shutil.copytree('test', src_dir)
-        try:
+        with tempdir() as css_dir:
+            src_dir = os.path.join(css_dir, 'src')
+            shutil.copytree('test', src_dir)
             app = SassMiddleware(self.sample_wsgi_app, {
                 __name__: (src_dir, css_dir, '/static')
             })
             client = Client(app, Response)
             r = client.get('/asdf')
-            self.assertEqual(200, r.status_code)
+            assert r.status_code == 200
             self.assert_bytes_equal(b'/asdf', r.data)
-            self.assertEqual('text/plain', r.mimetype)
+            assert r.mimetype == 'text/plain'
             r = client.get('/static/a.scss.css')
-            self.assertEqual(200, r.status_code)
+            assert r.status_code == 200
             self.assert_bytes_equal(
                 b(A_EXPECTED_CSS_WITH_MAP),
                 r.data
             )
-            self.assertEqual('text/css', r.mimetype)
+            assert r.mimetype == 'text/css'
             r = client.get('/static/not-exists.sass.css')
-            self.assertEqual(200, r.status_code)
+            assert r.status_code == 200
             self.assert_bytes_equal(b'/static/not-exists.sass.css', r.data)
-            self.assertEqual('text/plain', r.mimetype)
-        finally:
-            shutil.rmtree(css_dir)
+            assert r.mimetype == 'text/plain'
 
     def assert_bytes_equal(self, expected, actual, *args):
         self.assertEqual(expected.replace(b'\r\n', b'\n'),
@@ -700,7 +688,7 @@ class DistutilsTestCase(BaseTestCase):
 
     def test_build_sass(self):
         rv = self.build_sass()
-        self.assertEqual(0, rv)
+        assert rv == 0
         self.assertEqual(
             ['a.scss.css'],
             list(map(os.path.basename, self.list_built_css()))
@@ -713,7 +701,7 @@ class DistutilsTestCase(BaseTestCase):
 
     def test_output_style(self):
         rv = self.build_sass('--output-style', 'compressed')
-        self.assertEqual(0, rv)
+        assert rv == 0
         with open(self.css_path('a.scss.css')) as f:
             self.assertEqual(
                 'p a{color:red}p b{color:blue}\n',
@@ -729,28 +717,28 @@ class SasscTestCase(BaseTestCase):
 
     def test_no_args(self):
         exit_code = sassc.main(['sassc'], self.out, self.err)
-        self.assertEqual(2, exit_code)
+        assert exit_code == 2
         err = self.err.getvalue()
         assert err.strip().endswith('error: too few arguments'), \
             'actual error message is: ' + repr(err)
-        self.assertEqual('', self.out.getvalue())
+        assert '' == self.out.getvalue()
 
     def test_three_args(self):
         exit_code = sassc.main(
             ['sassc', 'a.scss', 'b.scss', 'c.scss'],
             self.out, self.err
         )
-        self.assertEqual(2, exit_code)
+        assert exit_code == 2
         err = self.err.getvalue()
         assert err.strip().endswith('error: too many arguments'), \
             'actual error message is: ' + repr(err)
-        self.assertEqual('', self.out.getvalue())
+        assert self.out.getvalue() == ''
 
     def test_sassc_stdout(self):
         exit_code = sassc.main(['sassc', 'test/a.scss'], self.out, self.err)
-        self.assertEqual(0, exit_code)
-        self.assertEqual('', self.err.getvalue())
-        self.assertEqual(A_EXPECTED_CSS.strip(), self.out.getvalue().strip())
+        assert exit_code == 0
+        assert self.err.getvalue() == ''
+        assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
 
     def test_sassc_output(self):
         fd, tmp = tempfile.mkstemp('.css')
@@ -758,11 +746,11 @@ class SasscTestCase(BaseTestCase):
             os.close(fd)
             exit_code = sassc.main(['sassc', 'test/a.scss', tmp],
                                    self.out, self.err)
-            self.assertEqual(0, exit_code)
-            self.assertEqual('', self.err.getvalue())
-            self.assertEqual('', self.out.getvalue())
+            assert exit_code == 0
+            assert self.err.getvalue() == ''
+            assert self.out.getvalue() == ''
             with open(tmp) as f:
-                self.assertEqual(A_EXPECTED_CSS.strip(), f.read().strip())
+                assert A_EXPECTED_CSS.strip() == f.read().strip()
         finally:
             os.remove(tmp)
 
@@ -772,26 +760,23 @@ class SasscTestCase(BaseTestCase):
             os.close(fd)
             exit_code = sassc.main(['sassc', 'test/d.scss', tmp],
                                    self.out, self.err)
-            self.assertEqual(0, exit_code)
-            self.assertEqual('', self.err.getvalue())
-            self.assertEqual('', self.out.getvalue())
-            with open(tmp, **utf8_if_py3) as f:
-                self.assertEqual(
-                    D_EXPECTED_CSS.strip(),
-                    f.read().strip()
-                )
+            assert exit_code == 0
+            assert self.err.getvalue() == ''
+            assert self.out.getvalue() == ''
+            with io.open(tmp, encoding='UTF-8') as f:
+                assert D_EXPECTED_CSS.strip() == f.read().strip()
         finally:
             os.remove(tmp)
 
     def test_sassc_source_map_without_css_filename(self):
         exit_code = sassc.main(['sassc', '-m', 'a.scss'], self.out, self.err)
-        self.assertEqual(2, exit_code)
+        assert exit_code == 2
         err = self.err.getvalue()
         assert err.strip().endswith('error: -m/-g/--sourcemap requires '
                                     'the second argument, the output css '
                                     'filename.'), \
             'actual error message is: ' + repr(err)
-        self.assertEqual('', self.out.getvalue())
+        assert self.out.getvalue() == ''
 
     def test_sassc_sourcemap(self):
         with tempdir() as tmp_dir:
@@ -803,14 +788,11 @@ class SasscTestCase(BaseTestCase):
                 ['sassc', '-m', src_filename, out_filename],
                 self.out, self.err
             )
-            self.assertEqual(0, exit_code)
-            self.assertEqual('', self.err.getvalue())
-            self.assertEqual('', self.out.getvalue())
+            assert exit_code == 0
+            assert self.err.getvalue() == ''
+            assert self.out.getvalue() == ''
             with open(out_filename) as f:
-                self.assertEqual(
-                    A_EXPECTED_CSS_WITH_MAP,
-                    f.read().strip()
-                )
+                assert A_EXPECTED_CSS_WITH_MAP == f.read().strip()
             with open(out_filename + '.map') as f:
                 self.assert_source_map_equal(
                     dict(A_EXPECTED_MAP, sources=None),
@@ -859,8 +841,8 @@ class CompileDirectoriesTest(unittest.TestCase):
 
             contentsf1 = open(os.path.join(output_dir, 'f1.css')).read()
             contentsf2 = open(os.path.join(output_dir, 'foo/f2.css')).read()
-            self.assertEqual(contentsf1, 'a b {\n  width: 100%; }\n')
-            self.assertEqual(contentsf2, 'foo {\n  width: 100%; }\n')
+            assert contentsf1 == 'a b {\n  width: 100%; }\n'
+            assert contentsf2 == 'foo {\n  width: 100%; }\n'
 
     def test_compile_directories_unicode(self):
         with tempdir() as tmpdir:
@@ -894,20 +876,12 @@ class CompileDirectoriesTest(unittest.TestCase):
             os.makedirs(input_dir)
             write_file(os.path.join(input_dir, 'bad.scss'), 'a {')
 
-            try:
+            with pytest.raises(sass.CompileError) as excinfo:
                 sass.compile(
                     dirname=(input_dir, os.path.join(tmpdir, 'output'))
                 )
-                assert False, 'Expected to raise'
-            except sass.CompileError as e:
-                msg, = e.args
-                assert msg.startswith(
-                    'Error: Invalid CSS after '
-                ), msg
-                return
-            except Exception as e:
-                assert False, \
-                    'Expected to raise CompileError but got {0!r}'.format(e)
+            msg, = excinfo.value.args
+            assert msg.startswith('Error: Invalid CSS after ')
 
 
 class SassFunctionTest(unittest.TestCase):
@@ -916,47 +890,35 @@ class SassFunctionTest(unittest.TestCase):
         # Hack for https://gitlab.com/pycqa/flake8/issues/117
         def noop(x):
             return x
-        lambda_ = noop(lambda abc, d: None)
+        lambda_ = noop(lambda abc, d: None)  # pragma: no branch (lambda)
         sf = sass.SassFunction.from_lambda('func_name', lambda_)
-        self.assertEqual('func_name', sf.name)
-        self.assertEqual(('$abc', '$d'), sf.arguments)
+        assert 'func_name' == sf.name
+        assert ('$abc', '$d') == sf.arguments
         assert sf.callable_ is lambda_
 
     def test_from_named_function(self):
         sf = sass.SassFunction.from_named_function(identity)
-        self.assertEqual('identity', sf.name)
-        self.assertEqual(('$x',), sf.arguments)
+        assert 'identity' == sf.name
+        assert ('$x',) == sf.arguments
         assert sf.callable_ is identity
 
     def test_sigature(self):
-        sf = sass.SassFunction(
+        sf = sass.SassFunction(  # pragma: no branch (doesn't run lambda)
             'func-name',
             ('$a', '$bc', '$d'),
             lambda a, bc, d: None
         )
-        self.assertEqual('func-name($a, $bc, $d)', sf.signature)
-        self.assertEqual(sf.signature, str(sf))
+        assert 'func-name($a, $bc, $d)' == sf.signature
+        assert sf.signature == str(sf)
 
-    def test_raises_typeerror_kwargs(self):
-        self.assertRaises(
-            TypeError,
-            sass.SassFunction.from_lambda,
-            lambda bar='womp': 'baz'
-        )
 
-    def test_raises_typerror_star_kwargs(self):
-        self.assertRaises(
-            TypeError,
-            sass.SassFunction.from_lambda,
-            lambda *args: 'baz'
-        )
-
-    def test_raises_typeerror_star_kwargs(self):
-        self.assertRaises(
-            TypeError,
-            sass.SassFunction.from_lambda,
-            lambda *kwargs: 'baz'
-        )
+@pytest.mark.parametrize(  # pragma: no branch (never runs lambdas)
+    'func',
+    (lambda bar='womp': None, lambda *args: None, lambda **kwargs: None),
+)
+def test_sass_func_type_errors(func):
+    with pytest.raises(TypeError):
+        sass.SassFunction.from_lambda('funcname', func)
 
 
 class SassTypesTest(unittest.TestCase):
@@ -1409,7 +1371,7 @@ class CustomFunctionsTest(unittest.TestCase):
 def test_stack_trace_formatting():
     try:
         sass.compile(string=u'a{☃')
-        assert False, 'expected to raise CompileError'
+        raise AssertionError('expected to raise CompileError')
     except sass.CompileError:
         tb = traceback.format_exc()
     assert tb.endswith(

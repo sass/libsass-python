@@ -10,7 +10,9 @@ python:
 install:
 - pip install -rrequirements-dev.txt coveralls
 script:
-- coverage run --source sass,sassc,sassutils -m pytest sasstests.py
+- COVERAGE_PROCESS_START=$PWD/.coveragerc py.test sasstests.py
+- coverage combine
+- coverage report
 - flake8 .
 after_success:
 - coveralls

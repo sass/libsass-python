@@ -1,8 +1,30 @@
+[run]
+parallel = True
+branch = True
+source = $PWD
+data_file = $PWD/.coverage
+omit =
+    .tox/*
+    /usr/*
+    */tmp*
+    */setup.py
+    */upload_appveyor_builds.py
+
 [report]
+show_missing = True
 exclude_lines =
-    pragma: no cover
-    def __repr__
-    raise TypeError
-    except UnicodeEncodeError
-    except KeyboardInterrupt
-    if __name__ == .__main__.:
+    # Have to re-enable the standard pragma
+    \#\s*pragma: no cover
+
+    # Don't complain if tests don't hit defensive assertion code:
+    ^\s*raise AssertionError\b
+    ^\s*raise NotImplementedError\b
+    ^\s*return NotImplemented\b
+    ^\s*raise TypeError\b
+    ^\s*raise$
+
+    # Don't complain if non-runnable code isn't run:
+    ^if __name__ == ['"]__main__['"]:$
+
+[html]
+directory = coverage-html
