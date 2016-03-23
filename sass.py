@@ -24,17 +24,20 @@ import warnings
 
 from six import string_types, text_type, PY2, PY3
 
-from _sass import OUTPUT_STYLES, compile_filename, compile_string
+import _sass
 
-__all__ = ('MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError',
-           'SassColor', 'SassError', 'SassFunction', 'SassList', 'SassMap',
-           'SassNumber', 'SassWarning', 'and_join', 'compile')
+__all__ = (
+    'MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError', 'SassColor',
+    'SassError', 'SassFunction', 'SassList', 'SassMap', 'SassNumber',
+    'SassWarning', 'and_join', 'compile', 'libsass_version',
+)
 __version__ = '0.10.1'
+libsass_version = _sass.libsass_version
 
 
 #: (:class:`collections.Mapping`) The dictionary of output styles.
 #: Keys are output name strings, and values are flag integers.
-OUTPUT_STYLES = OUTPUT_STYLES
+OUTPUT_STYLES = _sass.OUTPUT_STYLES
 
 #: (:class:`collections.Mapping`) The dictionary of source comments styles.
 #: Keys are mode names, and values are corresponding flag integers.
@@ -226,7 +229,7 @@ def compile_dirname(
             output_filename = os.path.join(output_path, relpath_to_file)
             output_filename = re.sub('.s[ac]ss$', '.css', output_filename)
             input_filename = input_filename.encode(fs_encoding)
-            s, v, _ = compile_filename(
+            s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
                 precision, None, custom_functions, importers
             )
@@ -584,7 +587,7 @@ def compile(**kwargs):
             raise TypeError('indented must be bool, not ' +
                             repr(source_comments))
         _check_no_remaining_kwargs(compile, kwargs)
-        s, v = compile_string(
+        s, v = _sass.compile_string(
             string, output_style, source_comments, include_paths, precision,
             custom_functions, indented, importers,
         )
@@ -599,7 +602,7 @@ def compile(**kwargs):
         elif isinstance(filename, text_type):
             filename = filename.encode(fs_encoding)
         _check_no_remaining_kwargs(compile, kwargs)
-        s, v, source_map = compile_filename(
+        s, v, source_map = _sass.compile_filename(
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions, importers,
         )
