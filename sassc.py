@@ -74,13 +74,16 @@ import os
 import sys
 import time
 
+import _sass
 from sass import __version__ as VERSION, OUTPUT_STYLES, CompileError, compile
 
 
 def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     parser = optparse.OptionParser(
         usage='%prog [options] SCSS_FILE [OUT_CSS_FILE]',
-        version='%prog ' + VERSION
+        version='%prog {0} (sass/libsass {1})'.format(
+            VERSION, _sass.libsass_version,
+        ),
     )
     output_styles = list(OUTPUT_STYLES)
     output_styles = ', '.join(output_styles[:-1]) + ', or ' + output_styles[-1]

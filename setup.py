@@ -5,10 +5,10 @@ import atexit
 import distutils.cmd
 import distutils.log
 import distutils.sysconfig
-import os
 import os.path
 import platform
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -16,14 +16,39 @@ from setuptools import Extension, setup
 
 LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
-if not os.path.isfile(os.path.join('libsass', 'Makefile')) and \
-   os.path.isdir('.git'):
+if (
+        not os.path.isfile(os.path.join('libsass', 'Makefile')) and
+        os.path.isdir('.git')
+):
     print(file=sys.stderr)
-    print('You seem to miss initializing submodules; '
-          'try the following command', file=sys.stderr)
+    print('Missing the libsass sumbodule.  Try:', file=sys.stderr)
     print('  git submodule update --init', file=sys.stderr)
     print(file=sys.stderr)
     exit(1)
+
+
+# Determine the libsass version from the git checkout
+if os.path.exists(os.path.join('libsass', '.git')):
+    proc = subprocess.Popen(
+        (
+            'git', '-C', 'libsass', 'describe',
+            '--abbrev=4', '--dirty', '--always', '--tags',
+        ),
+        stdout=subprocess.PIPE,
+    )
+    out, _ = proc.communicate()
+    assert not proc.returncode, proc.returncode
+    with open('.libsass-upstream-version', 'wb') as libsass_version_file:
+        libsass_version_file.write(out)
+
+# The version file should always exist at this point
+with open('.libsass-upstream-version', 'rb') as libsass_version_file:
+    libsass_version = libsass_version_file.read().decode('UTF-8').strip()
+    if sys.platform == 'win32':
+        # This looks wrong, but is required for some reason :(
+        version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(libsass_version)
+    else:
+        version_define = '-DLIBSASS_VERSION="{0}"'.format(libsass_version)
 
 sources = ['pysass.cpp']
 headers = []
@@ -89,9 +114,7 @@ else:
             compiler.linker_so[0] = os.environ['CXX']
             return compiler
         distutils.sysconfig.customize_compiler = customize_compiler
-        flags.extend([
-            '-stdlib=libc++',
-        ])
+        flags.append('-stdlib=libc++')
         if platform.system() == 'Darwin':
             flags.append('-mmacosx-version-min=10.7',)
             if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
@@ -134,10 +157,9 @@ else:
 sass_extension = Extension(
     '_sass',
     sources,
-    library_dirs=[os.path.join('.', 'libsass', 'src')],
     include_dirs=[os.path.join('.', 'libsass', 'include')],
     depends=headers,
-    extra_compile_args=flags,
+    extra_compile_args=flags + [version_define],
     extra_link_args=link_flags,
 )
 

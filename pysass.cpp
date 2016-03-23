@@ -634,6 +634,7 @@ PyObject* PySass_make_enum_dict() {
 
 void PySass_init_module(PyObject *module) {
     PyModule_AddObject(module, "OUTPUT_STYLES", PySass_make_enum_dict());
+    PyModule_AddObject(module, "libsass_version", PyUnicode_FromString(libsass_version()));
 }
 
 #if PY_MAJOR_VERSION >= 3
