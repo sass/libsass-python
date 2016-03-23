@@ -5,15 +5,15 @@ libsass-python: Sass_/SCSS for Python
    :alt: PyPI
    :target: https://pypi.python.org/pypi/libsass
 
-.. image:: https://travis-ci.org/dahlia/libsass-python.svg?branch=python
+.. image:: https://travis-ci.org/dahlia/libsass-python.svg
    :target: https://travis-ci.org/dahlia/libsass-python
    :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia/branch/python?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia/branch/master?svg=true
    :target: https://ci.appveyor.com/project/dahlia/libsass-python
    :alt: Build Status (Windows)
 
-.. image:: https://img.shields.io/coveralls/dahlia/libsass-python/python.svg
+.. image:: https://img.shields.io/coveralls/dahlia/libsass-python/master.svg
    :target: https://coveralls.io/r/dahlia/libsass-python
    :alt: Coverage Status
 
