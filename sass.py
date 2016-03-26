@@ -610,35 +610,6 @@ def compile(**kwargs):
             v = v.decode('utf-8')
             if source_map_filename:
                 source_map = source_map.decode('utf-8')
-                if os.sep != '/' and os.altsep:
-                    # Libsass has a bug that produces invalid JSON string
-                    # literals which contain unescaped backslashes for
-                    # "sources" paths on Windows e.g.:
-                    #
-                    #   {
-                    #     "version": 3,
-                    #     "file": "",
-                    #     "sources": ["c:\temp\tmpj2ac07\test\b.scss"],
-                    #     "names": [],
-                    #     "mappings": "AAAA,EAAE;EAEE,WAAW"
-                    #   }
-                    #
-                    # To workaround this bug without changing libsass'
-                    # internal behavior, we replace these backslashes with
-                    # slashes e.g.:
-                    #
-                    #   {
-                    #     "version": 3,
-                    #     "file": "",
-                    #     "sources": ["c:/temp/tmpj2ac07/test/b.scss"],
-                    #     "names": [],
-                    #     "mappings": "AAAA,EAAE;EAEE,WAAW"
-                    #   }
-                    source_map = re.sub(
-                        r'"sources":\s*\[\s*"[^"]*"(?:\s*,\s*"[^"]*")*\s*\]',
-                        lambda m: m.group(0).replace(os.sep, os.altsep),
-                        source_map
-                    )
                 v = v, source_map
             return v
     elif 'dirname' in modes:
