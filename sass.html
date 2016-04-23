@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sass — Binding of libsass &mdash; libsass 0.11.0 documentation</title>
+    <title>sass — Binding of libsass &mdash; libsass 0.11.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.11.0',
+        VERSION:     '0.11.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.11.0 documentation" href="index.html" />
+    <link rel="top" title="libsass 0.11.1 documentation" href="index.html" />
     <link rel="next" title="sassutils — Additional utilities related to SASS" href="sassutils.html" />
     <link rel="prev" title="sassc — SassC compliant command line interface" href="sassc.html" />
    
@@ -43,7 +43,7 @@
 <p>This simple C extension module provides a very simple binding of <code class="docutils literal"><span class="pre">libsass</span></code>,
 which is written in C/C++.  It contains only one function and one exception
 type.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {</span>
 <span class="go">  color: blue; }</span>
@@ -52,20 +52,20 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'dirname', 'filename', 'string'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = {'dirname', 'string', 'filename'}</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.OUTPUT_STYLES">
-<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'compact': 2, 'expanded': 1, 'nested': 0, 'compressed': 3}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">OUTPUT_STYLES</code><em class="property"> = {'nested': 0, 'compact': 2, 'compressed': 3, 'expanded': 1}</em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of output styles.
 Keys are output name strings, and values are flag integers.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sass.SOURCE_COMMENTS">
-<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'line_numbers': 1, 'none': 0, 'default': 1, 'map': 2}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">SOURCE_COMMENTS</code><em class="property"> = {'none': 0, 'map': 2, 'default': 1, 'line_numbers': 1}</em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="http://docs.python.org/library/collections.html#collections.Mapping" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Mapping</span></code></a>) The dictionary of source comments styles.
 Keys are mode names, and values are corresponding flag integers.</p>
 <div class="versionadded">
@@ -171,7 +171,7 @@ hashable mapping type.</p>
 <dt id="sass.and_join">
 <code class="descclassname">sass.</code><code class="descname">and_join</code><span class="sig-paren">(</span><em>strings</em><span class="sig-paren">)</span><a class="headerlink" href="#sass.and_join" title="Permalink to this definition">¶</a></dt>
 <dd><p>Join the given <code class="docutils literal"><span class="pre">strings</span></code> by commas with last <cite>&#8216; and &#8216;</cite> conjuction.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s1">&#39;Korea&#39;</span><span class="p">,</span> <span class="s1">&#39;Japan&#39;</span><span class="p">,</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="s1">&#39;Taiwan&#39;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">and_join</span><span class="p">([</span><span class="s1">&#39;Korea&#39;</span><span class="p">,</span> <span class="s1">&#39;Japan&#39;</span><span class="p">,</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="s1">&#39;Taiwan&#39;</span><span class="p">])</span>
 <span class="go">&#39;Korea, Japan, China, and Taiwan&#39;</span>
 </pre></div>
 </div>
@@ -455,9 +455,6 @@ the <code class="docutils literal"><span class="pre">source_comments</span></cod
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -468,7 +465,7 @@ the <code class="docutils literal"><span class="pre">source_comments</span></cod
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |

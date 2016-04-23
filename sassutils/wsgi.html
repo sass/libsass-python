@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sassutils.wsgi — WSGI middleware for development purpose &mdash; libsass 0.11.0 documentation</title>
+    <title>sassutils.wsgi — WSGI middleware for development purpose &mdash; libsass 0.11.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.11.0',
+        VERSION:     '0.11.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.11.0 documentation" href="../index.html" />
+    <link rel="top" title="libsass 0.11.1 documentation" href="../index.html" />
     <link rel="up" title="sassutils — Additional utilities related to SASS" href="../sassutils.html" />
     <link rel="prev" title="sassutils.distutils — setuptools/distutils integration" href="distutils.html" />
    
@@ -61,7 +61,7 @@ CSS comment e.g.:</p>
 <dt>Red text in <code class="docutils literal"><span class="pre">body:before</span></code></dt>
 <dd><p class="first">The result CSS draws detailed error message in <code class="docutils literal"><span class="pre">:before</span></code>
 pseudo-class of <code class="docutils literal"><span class="pre">body</span></code> element e.g.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>.. code-block:: css
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">::</span> <span class="n">css</span>
 </pre></div>
 </div>
 <blockquote>
@@ -82,10 +82,10 @@ only a red text.</p>
 <dd><p class="first">It logs syntax errors if exist during compilation to
 <code class="docutils literal"><span class="pre">sassutils.wsgi.SassMiddleware</span></code> logger with level <code class="docutils literal"><span class="pre">ERROR</span></code>.</p>
 <p>To enable this:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span>from logging import Formatter, StreamHandler, getLogger
-logger = getLogger(&#39;sassutils.wsgi.SassMiddleware&#39;)
-handler = StreamHandler(level=logging.ERROR)
-formatter = Formatter(fmt=&#39;*&#39; * 80 + &#39;
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">Formatter</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;sassutils.wsgi.SassMiddleware&#39;</span><span class="p">)</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s1">&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -100,7 +100,7 @@ formatter = Formatter(fmt=&#39;*&#39; * 80 + &#39;
 <div>handler.setFormatter(formatter)
 logger.addHandler(handler)</div></blockquote>
 <p>Or simply:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -179,9 +179,6 @@ the same format to <code class="file docutils literal"><span class="pre">setup.p
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -192,7 +189,7 @@ the same format to <code class="file docutils literal"><span class="pre">setup.p
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |
