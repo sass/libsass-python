@@ -8,6 +8,7 @@ omit =
     /usr/*
     */tmp*
     */setup.py
+    */build_manylinux_wheels.py
     */upload_appveyor_builds.py
 
 [report]

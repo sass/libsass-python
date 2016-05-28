@@ -56,6 +56,8 @@ Here's a brief check list for releasing a new version:
   takes longer than an hour.  These wheels are not automatically uploaded,
   but there's upload_appveyor_builds.py script that downloads built wheels and
   uploads them to PyPI.
+- Run build_manylinux_wheels.py to build linux wheels and upload them to
+  PyPI (takes ~10 minutes).
 - The `docs website`__ also has to be updated.
   It's currently a static website deployed on GitHub Pages.
   Use ``python setup.py upload_doc`` command.
