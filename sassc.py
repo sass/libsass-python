@@ -40,7 +40,12 @@ There are options as well:
    Watch file for changes.  Requires the second argument (output CSS
    filename).
 
+.. note:: Note that ``--watch`` does not understand imports.  Due to this, the
+   option is scheduled for removal in a future version.  It is suggested to
+   use a third party tool which implements intelligent watching functionality.
+
    .. versionadded:: 0.4.0
+   .. deprecated:: 0.12.0
 
 .. option:: -p, --precision
 
