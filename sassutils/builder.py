@@ -61,7 +61,9 @@ def build_directory(sass_path, css_path, output_style='nested',
             css = compile(filename=sass_fullname,
                           output_style=output_style,
                           include_paths=[_root_sass])
-            with io.open(css_fullname, 'w', encoding='utf-8') as css_file:
+            with io.open(
+                css_fullname, 'w', encoding='utf-8', newline='',
+            ) as css_file:
                 css_file.write(css)
             result[os.path.relpath(sass_fullname, _root_sass)] = \
                 os.path.relpath(css_fullname, _root_css)
@@ -215,10 +217,12 @@ class Manifest(object):
         css_folder = os.path.dirname(css_path)
         if not os.path.exists(css_folder):
             os.makedirs(css_folder)
-        with io.open(css_path, 'w', encoding='utf-8') as f:
+        with io.open(css_path, 'w', encoding='utf-8', newline='') as f:
             f.write(css)
         if source_map:
             # Source maps are JSON, and JSON has to be UTF-8 encoded
-            with io.open(source_map_path, 'w', encoding='utf-8') as f:
+            with io.open(
+                source_map_path, 'w', encoding='utf-8', newline='',
+            ) as f:
                 f.write(source_map)
         return css_filename

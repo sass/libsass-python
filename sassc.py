@@ -179,13 +179,15 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             if len(args) < 2:
                 print(css, file=stdout)
             else:
-                with io.open(args[1], 'w', encoding='utf-8') as f:
+                with io.open(args[1], 'w', encoding='utf-8', newline='') as f:
                     f.write(css)
                 if options.watch:
                     print(filename, 'is just compiled to', args[1],
                           file=stdout)
             if source_map_filename:
-                with io.open(source_map_filename, 'w', encoding='utf-8') as f:
+                with io.open(
+                    source_map_filename, 'w', encoding='utf-8', newline='',
+                ) as f:
                     f.write(source_map)
         if options.watch:  # pragma: no cover
             # FIXME: we should utilize inotify on Linux, and FSEvents on Mac

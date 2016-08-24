@@ -15,7 +15,7 @@ from __future__ import absolute_import
 import collections
 import functools
 import inspect
-from io import open
+import io
 import os
 import os.path
 import re
@@ -236,8 +236,9 @@ def compile_dirname(
             if s:
                 v = v.decode('UTF-8')
                 mkdirp(os.path.dirname(output_filename))
-                with open(output_filename, 'w',
-                          encoding="UTF-8") as output_file:
+                with io.open(
+                    output_filename, 'w', encoding='UTF-8', newline='',
+                ) as output_file:
                     output_file.write(v)
             else:
                 return False, v
