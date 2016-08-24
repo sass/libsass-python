@@ -643,24 +643,19 @@ class WsgiTestCase(BaseTestCase):
             client = Client(app, Response)
             r = client.get('/asdf')
             assert r.status_code == 200
-            self.assert_bytes_equal(b'/asdf', r.data)
+            self.assertEqual(b'/asdf', r.data)
             assert r.mimetype == 'text/plain'
             r = client.get('/static/a.scss.css')
             assert r.status_code == 200
-            self.assert_bytes_equal(
+            self.assertEqual(
                 b(A_EXPECTED_CSS_WITH_MAP),
-                r.data
+                r.data,
             )
             assert r.mimetype == 'text/css'
             r = client.get('/static/not-exists.sass.css')
             assert r.status_code == 200
-            self.assert_bytes_equal(b'/static/not-exists.sass.css', r.data)
+            self.assertEqual(b'/static/not-exists.sass.css', r.data)
             assert r.mimetype == 'text/plain'
-
-    def assert_bytes_equal(self, expected, actual, *args):
-        self.assertEqual(expected.replace(b'\r\n', b'\n'),
-                         actual.replace(b'\r\n', b'\n'),
-                         *args)
 
 
 class DistutilsTestCase(BaseTestCase):
@@ -749,7 +744,7 @@ class SasscTestCase(BaseTestCase):
             assert exit_code == 0
             assert self.err.getvalue() == ''
             assert self.out.getvalue() == ''
-            with open(tmp) as f:
+            with io.open(tmp, encoding='UTF-8', newline='') as f:
                 assert A_EXPECTED_CSS.strip() == f.read().strip()
         finally:
             os.remove(tmp)
