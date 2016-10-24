@@ -45,7 +45,7 @@ There are options as well:
    use a third party tool which implements intelligent watching functionality.
 
    .. versionadded:: 0.4.0
-   .. deprecated:: 0.12.0
+   .. deprecated:: 0.11.2
 
 .. option:: -p, --precision
 
