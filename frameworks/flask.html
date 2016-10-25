@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using with Flask &mdash; libsass 0.11.1 documentation</title>
+    <title>Using with Flask &#8212; libsass 0.11.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.11.1',
+        VERSION:     '0.11.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,15 +23,20 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.11.1 documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="libsass 0.11.2 documentation" href="../index.html" />
     <link rel="next" title="Changelog" href="../changes.html" />
     <link rel="prev" title="libsass-python: Sass/SCSS for Python" href="../index.html" />
    
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -111,7 +116,7 @@ Keys are packages names.  Values are tuples of paths.</p>
 <dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
 <dd>The section which explains how to integrate WSGI middlewares to
 Flask.</dd>
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v1.0-dev)"><span>Application Dispatching</span></a></dt>
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.12-dev)"><span>Application Dispatching</span></a></dt>
 <dd>The documentation which explains how Flask dispatch each
 request internally.</dd>
 </dl>
@@ -137,7 +142,7 @@ Flask.</p>
 <span class="p">})</span>
 </pre></div>
 </div>
-<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v1.0-dev)"><code class="xref py py-func docutils literal"><span class="pre">url_for()</span></code></a>
+<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v0.12-dev)"><code class="xref py py-func docutils literal"><span class="pre">url_for()</span></code></a>
 function:</p>
 <div class="highlight-html+jinja"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
       <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
@@ -158,7 +163,7 @@ All compiled filenames have trailing <code class="docutils literal"><span class=
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v1.0-dev)"><span>Deploying with Setuptools</span></a></dt>
+<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.12-dev)"><span>Deploying with Setuptools</span></a></dt>
 <dd>How to deploy Flask application using <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a>.</dd>
 </dl>
 </div>
@@ -238,8 +243,8 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -253,8 +258,8 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="../_sources/frameworks/flask.txt"

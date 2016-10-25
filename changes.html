@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; libsass 0.11.1 documentation</title>
+    <title>Changelog &#8212; libsass 0.11.2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.11.1',
+        VERSION:     '0.11.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,15 +23,20 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.11.1 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="libsass 0.11.2 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -40,6 +45,17 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-11-2">
+<h2>Version 0.11.2<a class="headerlink" href="#version-0-11-2" title="Permalink to this headline">¶</a></h2>
+<p>Released on October 24, 2016.</p>
+<ul class="simple">
+<li>Drop support for python2.6 [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/158">#158</a> by Anthony Sottile]</li>
+<li>Deprecate <cite>&#8211;watch</cite> [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/156">#156</a> by Anthony Sottile]</li>
+<li>Preserve line endings [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/160">#160</a> by Anthony Sottile]</li>
+<li>Follow up the libsass upstream: 3.3.6 &#8212; See the release notes of Libsass
+<a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.3.6">3.3.6</a>. [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/167">#167</a> by Anthony Sottile]</li>
+</ul>
+</div>
 <div class="section" id="version-0-11-1">
 <h2>Version 0.11.1<a class="headerlink" href="#version-0-11-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on April 22, 2016.</p>
@@ -272,7 +288,7 @@ parameter <code class="docutils literal"><span class="pre">output_style</span></
 <p>Released on September 23, 2014.</p>
 <ul class="simple">
 <li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> yielded
-<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> instead of <code class="xref py py-class docutils literal"><span class="pre">bytes</span></code> on Python 3.</li>
+<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> instead of <code class="xref py py-class docutils literal"><span class="pre">bytes</span></code> on Python 3.</li>
 <li>Fixed several Unicode-related bugs on Windows.</li>
 <li>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal"><span class="pre">build_directory()</span></code></a>,
 <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a>, and
@@ -409,14 +425,14 @@ exist yet, rather than siliently fails.
 <li>Added new <a class="reference internal" href="sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils</span></code></a> package.<ul>
 <li>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.builder</span></code></a> module to build the whole directory
 at a time.</li>
-<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and
+<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/2/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and
 <code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code> integration.</li>
 <li>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></code></a> module which provides a development-purpose
 WSGI middleware.</li>
 </ul>
 </li>
 <li>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command for
-<a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>.</li>
+<a class="reference external" href="https://docs.python.org/2/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="version-0-1-1">
@@ -442,6 +458,7 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-0-11-2">Version 0.11.2</a></li>
 <li><a class="reference internal" href="#version-0-11-1">Version 0.11.1</a></li>
 <li><a class="reference internal" href="#version-0-11-0">Version 0.11.0</a></li>
 <li><a class="reference internal" href="#version-0-10-1">Version 0.10.1</a></li>
@@ -495,8 +512,8 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -510,8 +527,8 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/changes.txt"

@@ -1,6 +1,22 @@
 Changelog
 =========
 
+
+Version 0.11.2
+--------------
+
+Released on October 24, 2016.
+
+- Drop support for python2.6 [:issue:`158` by Anthony Sottile]
+- Deprecate `--watch` [:issue:`156` by Anthony Sottile]
+- Preserve line endings [:issue:`160` by Anthony Sottile]
+- Follow up the libsass upstream: 3.3.6 --- See the release notes of Libsass
+  3.3.6__. [:issue:`167` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.3.6
+
+
+
 Version 0.11.1
 --------------
 
