@@ -24,7 +24,6 @@ def check_call(*cmd):
 def main():
     os.makedirs('dist', exist_ok=True)
     for python in (
-            'cp26-cp26mu',
             'cp27-cp27mu',
             'cp34-cp34m',
             'cp35-cp35m',
