@@ -45,5 +45,6 @@ def main():
     dists = tuple(os.path.join('dist', p) for p in os.listdir('dist'))
     return upload.main(('-r', 'pypi') + dists)
 
+
 if __name__ == '__main__':
     exit(main())
