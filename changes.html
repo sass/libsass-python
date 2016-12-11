@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &#8212; libsass 0.11.2 documentation</title>
+    <title>Changelog &#8212; libsass 0.12.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.11.2',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -25,7 +26,6 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="libsass 0.11.2 documentation" href="index.html" />
     <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" />
    
@@ -45,6 +45,14 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-12-0">
+<h2>Version 0.12.0<a class="headerlink" href="#version-0-12-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on December 10, 2016.</p>
+<ul class="simple">
+<li>Follow up the libsass upstream: 3.4.0 &#8212; See the release notes of Libsass
+<a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.4.0">3.4.0</a>. [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/173">#173</a> by Anthony Sottile]</li>
+</ul>
+</div>
 <div class="section" id="version-0-11-2">
 <h2>Version 0.11.2<a class="headerlink" href="#version-0-11-2" title="Permalink to this headline">¶</a></h2>
 <p>Released on October 24, 2016.</p>
@@ -226,7 +234,7 @@ with level <code class="docutils literal"><span class="pre">ERROR</span></code>.
 </li>
 <li>Added <code class="docutils literal"><span class="pre">precision</span></code> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a> function.
 [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal"><span class="pre">-p</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--precision"><code class="xref std std-option docutils literal"><span class="pre">--precision</span></code></a> option.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal"><span class="pre">-p</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal"><span class="pre">--precision</span></code></a> option.  [<a class="reference external" href="https://github.com/dahlia/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
 </ul>
 </div>
 <div class="section" id="version-0-6-2">
@@ -349,9 +357,9 @@ any non-ASCII Unicode characters.</li>
 <h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
 <p>Released on May 6, 2014.</p>
 <ul class="simple">
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-w"><code class="xref std std-option docutils literal"><span class="pre">-w</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--watch"><code class="xref std std-option docutils literal"><span class="pre">--watch</span></code></a> option.</li>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-w"><code class="xref std std-option docutils literal"><span class="pre">-w</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-w"><code class="xref std std-option docutils literal"><span class="pre">--watch</span></code></a> option.</li>
 <li>Expose source maps support:<ul>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal"><span class="pre">-m</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-g"><code class="xref std std-option docutils literal"><span class="pre">-g</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc--sourcemap"><code class="xref std std-option docutils literal"><span class="pre">--sourcemap</span></code></a> option.</li>
+<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal"><span class="pre">-m</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal"><span class="pre">-g</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal"><span class="pre">--sourcemap</span></code></a> option.</li>
 <li><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> now also creates source map files
 with filenames followed by <code class="file docutils literal"><span class="pre">.map</span></code> suffix.</li>
 <li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></code></a> method
@@ -458,6 +466,7 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-0-12-0">Version 0.12.0</a></li>
 <li><a class="reference internal" href="#version-0-11-2">Version 0.11.2</a></li>
 <li><a class="reference internal" href="#version-0-11-1">Version 0.11.1</a></li>
 <li><a class="reference internal" href="#version-0-11-0">Version 0.11.0</a></li>
@@ -505,7 +514,7 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/changes.txt"
+      <li><a href="_sources/changes.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -527,11 +536,11 @@ Now it raises a proper <code class="docutils literal"><span class="pre">exceptio
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
-      <a href="_sources/changes.txt"
+      <a href="_sources/changes.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
