@@ -26,6 +26,8 @@ import sass
 # If your documentation needs a minimal Sphinx version, state it here.
 needs_sphinx = '1.3'
 
+suppress_warnings = ['image.nonlocal_uri']
+
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
