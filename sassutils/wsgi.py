@@ -18,7 +18,7 @@ __all__ = 'SassMiddleware',
 
 
 class SassMiddleware(object):
-    """WSGI middleware for development purpose.  Everytime a CSS file has
+    r"""WSGI middleware for development purpose.  Everytime a CSS file has
     requested it finds a matched SASS/SCSS source file and then compiled
     it into CSS.
 
@@ -30,23 +30,21 @@ class SassMiddleware(object):
 
         .. code-block:: css
 
-           /*
-           Error: invalid property name
-           */
+            /*
+            Error: invalid property name
+            */
 
     Red text in ``body:before``
         The result CSS draws detailed error message in ``:before``
-        pseudo-class of ``body`` element e.g.::
+        pseudo-class of ``body`` element e.g.:
 
         .. code-block:: css
 
-           /*
-           body:before {
-             content: 'Error: invalid property name';
-             color: maroon;
-             background-color: white;
-           }
-           */
+            body:before {
+                content: 'Error: invalid property name';
+                color: maroon;
+                background-color: white;
+            }
 
         In most cases you could be aware of syntax error by refreshing your
         working document because it will removes all other styles and leaves
