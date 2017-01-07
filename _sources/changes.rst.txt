@@ -2,13 +2,24 @@ Changelog
 =========
 
 
+Version 0.12.3
+--------------
+
+Released on January 7, 2017.
+
+- Follow up the libsass upstream: 3.4.3 --- See the release notes of Libsass
+  3.4.3__. [:issue:`178` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.4.3
+
+
 Version 0.12.2
 --------------
 
 Released on January 5, 2017.
 
 - Follow up the libsass upstream: 3.4.2 --- See the release notes of Libsass
-  3.4.2__. [:issue:`177` by Anthony Sottile]
+  3.4.2__. [:issue:`176` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.2
 
