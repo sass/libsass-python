@@ -27,6 +27,7 @@ def main():
             'cp27-cp27mu',
             'cp34-cp34m',
             'cp35-cp35m',
+            'cp36-cp36m',
     ):
         with tempfile.TemporaryDirectory() as work:
             pip = '/opt/python/{}/bin/pip'.format(python)
