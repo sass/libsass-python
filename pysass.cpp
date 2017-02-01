@@ -4,17 +4,9 @@
 
 #if PY_MAJOR_VERSION >= 3
 #define PySass_IF_PY3(three, two) (three)
-#define PySass_Int_FromLong(v) PyLong_FromLong(v)
-#define PySass_Bytes_Check(o) PyBytes_Check(o)
-#define PySass_Bytes_GET_SIZE(o) PyBytes_GET_SIZE(o)
-#define PySass_Bytes_AS_STRING(o) PyBytes_AS_STRING(o)
 #define PySass_Object_Bytes(o) PyUnicode_AsUTF8String(PyObject_Str(o))
 #else
 #define PySass_IF_PY3(three, two) (two)
-#define PySass_Int_FromLong(v) PyInt_FromLong(v)
-#define PySass_Bytes_Check(o) PyString_Check(o)
-#define PySass_Bytes_GET_SIZE(o) PyString_GET_SIZE(o)
-#define PySass_Bytes_AS_STRING(o) PyString_AS_STRING(o)
 #define PySass_Object_Bytes(o) PyObject_Str(o)
 #endif
 
@@ -211,7 +203,7 @@ static union Sass_Value* _number_to_sass_value(PyObject* value) {
     PyObject* unit = PyObject_GetAttrString(value, "unit");
     PyObject* bytes = PyUnicode_AsEncodedString(unit, "UTF-8", "strict");
     retv = sass_make_number(
-        PyFloat_AsDouble(d_value), PySass_Bytes_AS_STRING(bytes)
+        PyFloat_AsDouble(d_value), PyBytes_AS_STRING(bytes)
     );
     Py_DECREF(d_value);
     Py_DECREF(unit);
@@ -222,7 +214,7 @@ static union Sass_Value* _number_to_sass_value(PyObject* value) {
 static union Sass_Value* _unicode_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
-    retv = sass_make_string(PySass_Bytes_AS_STRING(bytes));
+    retv = sass_make_string(PyBytes_AS_STRING(bytes));
     Py_DECREF(bytes);
     return retv;
 }
@@ -231,7 +223,7 @@ static union Sass_Value* _warning_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-    retv = sass_make_warning(PySass_Bytes_AS_STRING(bytes));
+    retv = sass_make_warning(PyBytes_AS_STRING(bytes));
     Py_DECREF(msg);
     Py_DECREF(bytes);
     return retv;
@@ -241,7 +233,7 @@ static union Sass_Value* _error_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-    retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+    retv = sass_make_error(PyBytes_AS_STRING(bytes));
     Py_DECREF(msg);
     Py_DECREF(bytes);
     return retv;
@@ -270,7 +262,7 @@ static union Sass_Value* _unknown_type_to_sass_error(PyObject* value) {
         format_meth, type_name, NULL
     );
     PyObject* bytes = PyUnicode_AsEncodedString(result, "UTF-8", "strict");
-    retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+    retv = sass_make_error(PyBytes_AS_STRING(bytes));
     Py_DECREF(type);
     Py_DECREF(type_name);
     Py_DECREF(fmt);
@@ -309,7 +301,7 @@ static PyObject* _exception_to_bytes() {
 
 static union Sass_Value* _exception_to_sass_error() {
     PyObject* bytes = _exception_to_bytes();
-    union Sass_Value* retv = sass_make_error(PySass_Bytes_AS_STRING(bytes));
+    union Sass_Value* retv = sass_make_error(PyBytes_AS_STRING(bytes));
     Py_DECREF(bytes);
     return retv;
 }
@@ -318,7 +310,7 @@ static Sass_Import_List _exception_to_sass_import_error(const char* path) {
     PyObject* bytes = _exception_to_bytes();
     Sass_Import_List import_list = sass_make_import_list(1);
     import_list[0] = sass_make_import_entry(path, 0, 0);
-    sass_import_set_error(import_list[0], PySass_Bytes_AS_STRING(bytes), 0, 0);
+    sass_import_set_error(import_list[0], PyBytes_AS_STRING(bytes), 0, 0);
     Py_DECREF(bytes);
     return import_list;
 }
@@ -340,8 +332,8 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
         retv = sass_make_boolean(value == Py_True);
     } else if (PyUnicode_Check(value)) {
         retv = _unicode_to_sass_value(value);
-    } else if (PySass_Bytes_Check(value)) {
-        retv = sass_make_string(PySass_Bytes_AS_STRING(value));
+    } else if (PyBytes_Check(value)) {
+        retv = sass_make_string(PyBytes_AS_STRING(value));
     /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
     /* XXX: pypy derps on dicts: https://bitbucket.org/pypy/pypy/issue/1970 */
     } else if (PyDict_Check(value) || PyObject_IsInstance(value, mapping_t)) {
@@ -415,7 +407,7 @@ static void _add_custom_functions(
         PyObject* sass_function = PyList_GET_ITEM(custom_functions, i);
         PyObject* signature = PySass_Object_Bytes(sass_function);
         Sass_Function_Entry fn = sass_make_function(
-            PySass_Bytes_AS_STRING(signature),
+            PyBytes_AS_STRING(signature),
             _call_py_f,
             sass_function
         );
@@ -583,13 +575,13 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     context = sass_make_file_context(filename);
     options = sass_file_context_get_options(context);
 
-    if (PySass_Bytes_Check(source_map_filename)) {
-        size_t source_map_file_len = PySass_Bytes_GET_SIZE(source_map_filename);
+    if (PyBytes_Check(source_map_filename)) {
+        size_t source_map_file_len = PyBytes_GET_SIZE(source_map_filename);
         if (source_map_file_len) {
             char *source_map_file = (char *) malloc(source_map_file_len + 1);
             strncpy(
                 source_map_file,
-                PySass_Bytes_AS_STRING(source_map_filename),
+                PyBytes_AS_STRING(source_map_filename),
                 source_map_file_len + 1
             );
             sass_option_set_source_map_file(options, source_map_file);
@@ -630,10 +622,10 @@ static char PySass_doc[] = "The thin binding of libsass for Python.";
 
 PyObject* PySass_make_enum_dict() {
     PyObject* dct = PyDict_New();
-    PyDict_SetItemString(dct, "nested", PySass_Int_FromLong(SASS_STYLE_NESTED));
-    PyDict_SetItemString(dct, "expanded", PySass_Int_FromLong(SASS_STYLE_EXPANDED));
-    PyDict_SetItemString(dct, "compact", PySass_Int_FromLong(SASS_STYLE_COMPACT));
-    PyDict_SetItemString(dct, "compressed", PySass_Int_FromLong(SASS_STYLE_COMPRESSED));
+    PyDict_SetItemString(dct, "nested", PyLong_FromLong(SASS_STYLE_NESTED));
+    PyDict_SetItemString(dct, "expanded", PyLong_FromLong(SASS_STYLE_EXPANDED));
+    PyDict_SetItemString(dct, "compact", PyLong_FromLong(SASS_STYLE_COMPACT));
+    PyDict_SetItemString(dct, "compressed", PyLong_FromLong(SASS_STYLE_COMPRESSED));
     return dct;
 }
 
