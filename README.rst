@@ -13,8 +13,8 @@ libsass-python: Sass_/SCSS for Python
    :target: https://ci.appveyor.com/project/dahlia/libsass-python
    :alt: Build Status (Windows)
 
-.. image:: https://img.shields.io/coveralls/dahlia/libsass-python/master.svg
-   :target: https://coveralls.io/r/dahlia/libsass-python
+.. image:: https://coveralls.io/repos/github/dahlia/libsass-python/badge.svg?branch=master
+   :target: https://coveralls.io/github/dahlia/libsass-python?branch=master
    :alt: Coverage Status
 
 This package provides a simple Python extension module ``sass`` which is
