@@ -46,7 +46,7 @@ Features
   You can build all Sass/SCSS files using
   ``setup.py build_sass`` command.
 - Works also on PyPy.
-- Provides prebuilt wheel_ binaries for Windows and Mac.
+- Provides prebuilt wheel_ binaries for Linux, Windows, and Mac.
 
 .. _wheel: https://www.python.org/dev/peps/pep-0427/
 
