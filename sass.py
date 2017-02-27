@@ -107,14 +107,22 @@ class SassFunction(object):
         :rtype: :class:`SassFunction`
 
         """
-        argspec = inspect.getargspec(lambda_)
-        if argspec.varargs or argspec.keywords or argspec.defaults:
+        if PY2:  # pragma: no cover
+            a = inspect.getargspec(lambda_)
+            varargs, varkw, defaults, kwonlyargs = (
+                a.varargs, a.keywords, a.defaults, None)
+        else:  # pragma: no cover
+            a = inspect.getfullargspec(lambda_)
+            varargs, varkw, defaults, kwonlyargs = (
+                a.varargs, a.varkw, a.defaults, a.kwonlyargs)
+
+        if varargs or varkw or defaults or kwonlyargs:
             raise TypeError(
                 'functions cannot have starargs or defaults: {0} {1}'.format(
                     name, lambda_
                 )
             )
-        return cls(name, argspec.args, lambda_)
+        return cls(name, a.args, lambda_)
 
     @classmethod
     def from_named_function(cls, function):
