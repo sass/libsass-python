@@ -1,4 +1,3 @@
-#include <string.h>
 #include <Python.h>
 #include <sass/context.h>
 
@@ -461,8 +460,8 @@ static Sass_Import_List _call_py_importer_f(
         /* We need to give copies of these arguments; libsass handles
          * deallocation of them later, whereas path_str is left flapping
          * in the breeze -- it's treated const, so that's okay. */
-        if (source_str) source_str = strdup(source_str);
-        if (sourcemap_str) sourcemap_str = strdup(sourcemap_str);
+        if (source_str) source_str = sass_copy_c_string(source_str);
+        if (sourcemap_str) sourcemap_str = sass_copy_c_string(sourcemap_str);
 
         sass_imports[i] = sass_make_import_entry(
             path_str, source_str, sourcemap_str
@@ -527,7 +526,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    context = sass_make_data_context(strdup(string));
+    context = sass_make_data_context(sass_copy_c_string(string));
     options = sass_data_context_get_options(context);
     sass_option_set_output_style(options, output_style);
     sass_option_set_source_comments(options, source_comments);
@@ -578,11 +577,8 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     if (PyBytes_Check(source_map_filename)) {
         size_t source_map_file_len = PyBytes_GET_SIZE(source_map_filename);
         if (source_map_file_len) {
-            char *source_map_file = (char *) malloc(source_map_file_len + 1);
-            strncpy(
-                source_map_file,
-                PyBytes_AS_STRING(source_map_filename),
-                source_map_file_len + 1
+            char *source_map_file = sass_copy_c_string(
+                PyBytes_AS_STRING(source_map_filename)
             );
             sass_option_set_source_map_file(options, source_map_file);
         }
