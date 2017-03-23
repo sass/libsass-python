@@ -85,7 +85,7 @@ if sys.platform == 'win32':
     link_flags = []
 else:
     flags = [
-        '-fPIC', '-std=c++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+        '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
     ]
     platform.mac_ver()
     if platform.system() in ['Darwin', 'FreeBSD']:
