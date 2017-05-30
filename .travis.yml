@@ -1,7 +1,7 @@
 language: python
+dist: trusty
 python:
-- pypy
-- pypy3
+- pypy-5.4.1
 - 2.7
 - 3.4
 - 3.5
