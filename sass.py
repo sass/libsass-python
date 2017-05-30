@@ -239,7 +239,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                precision, None, custom_functions, importers
+                precision, None, custom_functions, importers, None,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -539,30 +539,32 @@ def compile(**kwargs):
         raise TypeError('source_comments must be bool, not ' +
                         repr(source_comments))
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
-    source_map_filename = kwargs.pop('source_map_filename', None)
-    if not (source_map_filename is None or
-            isinstance(source_map_filename, string_types)):
-        raise TypeError('source_map_filename must be a string, not ' +
-                        repr(source_map_filename))
-    elif isinstance(source_map_filename, text_type):
-        source_map_filename = source_map_filename.encode(fs_encoding)
-    if not ('filename' in modes or source_map_filename is None):
-        raise CompileError('source_map_filename is only available with '
-                           'filename= keyword argument since it has to be '
-                           'aware of it')
-    try:
-        include_paths = kwargs.pop('include_paths') or b''
-    except KeyError:
-        include_paths = b''
-    else:
-        if isinstance(include_paths, collections.Sequence):
-            include_paths = os.pathsep.join(include_paths)
-        elif not isinstance(include_paths, string_types):
-            raise TypeError('include_paths must be a sequence of strings, or '
-                            'a colon-separated (or semicolon-separated if '
-                            'Windows) string, not ' + repr(include_paths))
-        if isinstance(include_paths, text_type):
-            include_paths = include_paths.encode(fs_encoding)
+
+    def _get_file_arg(key):
+        ret = kwargs.pop(key, None)
+        if ret is not None and not isinstance(ret, string_types):
+            raise TypeError('{} must be a string, not {!r}'.format(key, ret))
+        elif isinstance(ret, text_type):
+            ret = ret.encode(fs_encoding)
+        if ret and 'filename' not in modes:
+            raise CompileError(
+                '{} is only available with filename= keyword argument since '
+                'has to be aware of it'.format(key)
+            )
+        return ret
+
+    source_map_filename = _get_file_arg('source_map_filename')
+    output_filename_hint = _get_file_arg('output_filename_hint')
+
+    include_paths = kwargs.pop('include_paths', b'') or b''
+    if isinstance(include_paths, collections.Sequence):
+        include_paths = os.pathsep.join(include_paths)
+    elif not isinstance(include_paths, string_types):
+        raise TypeError('include_paths must be a sequence of strings, or '
+                        'a colon-separated (or semicolon-separated if '
+                        'Windows) string, not ' + repr(include_paths))
+    if isinstance(include_paths, text_type):
+        include_paths = include_paths.encode(fs_encoding)
 
     custom_functions = kwargs.pop('custom_functions', ())
     if isinstance(custom_functions, collections.Mapping):
@@ -614,6 +616,7 @@ def compile(**kwargs):
         s, v, source_map = _sass.compile_filename(
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions, importers,
+            output_filename_hint,
         )
         if s:
             v = v.decode('utf-8')
