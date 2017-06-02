@@ -560,14 +560,14 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     Sass_Output_Style output_style;
     int source_comments, error_status, precision;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
-             *result;
+             *result, *output_filename_hint;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOOO", "siisiOOO"),
+                          PySass_IF_PY3("yiiyiOOOO", "siisiOOOO"),
                           &filename, &output_style, &source_comments,
                           &include_paths, &precision,
                           &source_map_filename, &custom_functions,
-                          &custom_importers)) {
+                          &custom_importers, &output_filename_hint)) {
         return NULL;
     }
 
@@ -575,12 +575,17 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     options = sass_file_context_get_options(context);
 
     if (PyBytes_Check(source_map_filename)) {
-        size_t source_map_file_len = PyBytes_GET_SIZE(source_map_filename);
-        if (source_map_file_len) {
-            char *source_map_file = sass_copy_c_string(
-                PyBytes_AS_STRING(source_map_filename)
+        if (PyBytes_GET_SIZE(source_map_filename)) {
+            sass_option_set_source_map_file(
+                options, PyBytes_AS_STRING(source_map_filename)
             );
-            sass_option_set_source_map_file(options, source_map_file);
+        }
+    }
+    if (PyBytes_Check(output_filename_hint)) {
+        if (PyBytes_GET_SIZE(output_filename_hint)) {
+            sass_option_set_output_path(
+                options, PyBytes_AS_STRING(output_filename_hint)
+            );
         }
     }
     sass_option_set_output_style(options, output_style);

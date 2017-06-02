@@ -153,6 +153,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                     output_style=options.style,
                     source_comments=options.source_comments,
                     source_map_filename=source_map_filename,
+                    output_filename_hint=args[1],
                     include_paths=options.include_paths,
                     precision=options.precision
                 )

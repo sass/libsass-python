@@ -773,27 +773,6 @@ class SasscTestCase(BaseTestCase):
             'actual error message is: ' + repr(err)
         assert self.out.getvalue() == ''
 
-    def test_sassc_sourcemap(self):
-        with tempdir() as tmp_dir:
-            src_dir = os.path.join(tmp_dir, 'test')
-            shutil.copytree('test', src_dir)
-            src_filename = os.path.join(src_dir, 'a.scss')
-            out_filename = os.path.join(tmp_dir, 'a.scss.css')
-            exit_code = sassc.main(
-                ['sassc', '-m', src_filename, out_filename],
-                self.out, self.err
-            )
-            assert exit_code == 0
-            assert self.err.getvalue() == ''
-            assert self.out.getvalue() == ''
-            with open(out_filename) as f:
-                assert A_EXPECTED_CSS_WITH_MAP == f.read().strip()
-            with open(out_filename + '.map') as f:
-                self.assert_source_map_equal(
-                    dict(A_EXPECTED_MAP, sources=None),
-                    dict(json.load(f), sources=None)
-                )
-
 
 @contextlib.contextmanager
 def tempdir():
@@ -1399,3 +1378,32 @@ def test_stack_trace_formatting():
 def test_source_comments():
     out = sass.compile(string='a{color: red}', source_comments=True)
     assert out == '/* line 1, stdin */\na {\n  color: red; }\n'
+
+
+def test_sassc_sourcemap(tmpdir):
+    src_file = tmpdir.join('src').ensure_dir().join('a.scss')
+    out_file = tmpdir.join('a.scss.css')
+    out_map_file = tmpdir.join('a.scss.css.map')
+
+    src_file.write('.c { font-size: 5px + 5px; }')
+
+    exit_code = sassc.main([
+        'sassc', '-m', src_file.strpath, out_file.strpath,
+    ])
+    assert exit_code == 0
+
+    contents = out_file.read()
+    assert contents == (
+        '.c {\n'
+        '  font-size: 10px; }\n'
+        '\n'
+        '/*# sourceMappingURL=a.scss.css.map */'
+    )
+    source_map_json = json.loads(out_map_file.read())
+    assert source_map_json == {
+        'sources': ['src/a.scss'],
+        'version': 3,
+        'names': [],
+        'file': 'a.scss.css',
+        'mappings': 'AAAA,AAAA,EAAE,CAAC;EAAE,SAAS,EAAE,IAAS,GAAI',
+    }
