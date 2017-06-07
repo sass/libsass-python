@@ -71,7 +71,7 @@ Version 0.11.2
 Released on October 24, 2016.
 
 - Drop support for python2.6 [:issue:`158` by Anthony Sottile]
-- Deprecate `--watch` [:issue:`156` by Anthony Sottile]
+- Deprecate ``--watch`` [:issue:`156` by Anthony Sottile]
 - Preserve line endings [:issue:`160` by Anthony Sottile]
 - Follow up the libsass upstream: 3.3.6 --- See the release notes of Libsass
   3.3.6__. [:issue:`167` by Anthony Sottile]
@@ -97,15 +97,15 @@ Released on March 23, 2016.
 
 - Follow up the libsass upstream: 3.3.4 --- See the release notes of Libsass
   3.3.4__. [:issue:`144` by Anthony Sottile]
-- Expose libsass version in `sassc --version` and `sass.libsass_version`
+- Expose libsass version in ``sassc --version`` and ``sass.libsass_version``
   [:issue:`142` :issue:`141` :issue:`140` by Anthony Sottile]
 - Fix warning about unused enum on switch [:issue:`127` :issue:`131` by
   Anthony Sottile]
 - Sourcemaps no longer imply source comments [:issue:`124` :issue:`130` by
   Tim Tisdall]
-- Add `--source-comments` option to `sassc` [:issue:`124` :issue:`130` by
+- Add ``--source-comments`` option to ``sassc`` [:issue:`124` :issue:`130` by
   Anthony Sottile]
-- Improve formatting of `CompileError` under python3 [:issue:`123` by Anthony
+- Improve formatting of ``CompileError`` under python3 [:issue:`123` by Anthony
   Sottile]
 - Raise when compiling a directory which does not exist [:issue:`116`
   :issue:`119` by Anthony Sottile]
