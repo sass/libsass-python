@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.12.3 documentation</title>
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.13.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.12.3',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -46,15 +46,15 @@
 <h1>libsass-python: <a class="reference external" href="http://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this headline">¶</a></h1>
 <p>This package provides a simple Python extension module <a class="reference internal" href="sass.html#module-sass" title="sass"><code class="xref py py-mod docutils literal"><span class="pre">sass</span></code></a> which is
 binding <a class="reference external" href="https://github.com/sass/libsass">Libsass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
-It&#8217;s very straightforward and there isn&#8217;t any headache related Python
+It’s very straightforward and there isn’t any headache related Python
 distribution/deployment.  That means you can add just <code class="docutils literal"><span class="pre">libsass</span></code> into
-your <code class="file docutils literal"><span class="pre">setup.py</span></code>&#8216;s <code class="docutils literal"><span class="pre">install_requires</span></code> list or <code class="file docutils literal"><span class="pre">requirements.txt</span></code>
+your <code class="file docutils literal"><span class="pre">setup.py</span></code>’s <code class="docutils literal"><span class="pre">install_requires</span></code> list or <code class="file docutils literal"><span class="pre">requirements.txt</span></code>
 file.</p>
-<p>It currently supports CPython 2.6, 2.7, 3.3&#8211;3.5, and PyPy 2.3+!</p>
+<p>It currently supports CPython 2.6, 2.7, 3.4–3.6, and PyPy 2.3+!</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>You don&#8217;t need any Ruby/Node.js stack at all, for development or deployment
+<li>You don’t need any Ruby/Node.js stack at all, for development or deployment
 either.</li>
 <li>Fast. (<a class="reference external" href="https://github.com/sass/libsass">Libsass</a> is written in C++.)</li>
 <li>Simple API.  See <a class="reference internal" href="#example"><span class="std std-ref">example code</span></a> for details.</li>
@@ -74,7 +74,7 @@ See also <a class="reference internal" href="sassutils/distutils.html#module-sas
 </div>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p>It&#8217;s available on <a class="reference external" href="https://pypi.python.org/pypi/libsass">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
+<p>It’s available on <a class="reference external" href="https://pypi.python.org/pypi/libsass">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
 <div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install libsass
 </pre></div>
 </div>
@@ -82,7 +82,7 @@ See also <a class="reference internal" href="sassutils/distutils.html#module-sas
 <p class="first admonition-title">Note</p>
 <p class="last">libsass requires some features introduced by the recent C++ standard.
 You need a C++ compiler that support those features.
-See also libsass project&#8217;s <a class="reference external" href="https://github.com/sass/libsass#readme">README</a> file.</p>
+See also libsass project’s <a class="reference external" href="https://github.com/sass/libsass#readme">README</a> file.</p>
 </div>
 </div>
 <div class="section" id="example">
@@ -94,7 +94,7 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 </div>
 </div>
 <div class="section" id="user-s-guide">
-<h2>User&#8217;s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h2>
+<h2>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a><ul>
@@ -105,6 +105,7 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-13-0">Version 0.13.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-12-3">Version 0.12.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-12-2">Version 0.12.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-12-1">Version 0.12.1</a></li>
@@ -150,12 +151,12 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal"><span class="pre">sassc</span></code> &#8212; SassC compliant command line interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal"><span class="pre">sass</span></code> &#8212; Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> &#8212; Additional utilities related to SASS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> &#8212; Build the whole directory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="docutils literal"><span class="pre">sassutils.distutils</span></code> &#8212; <code class="docutils literal"><span class="pre">setuptools</span></code>/<code class="docutils literal"><span class="pre">distutils</span></code> integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> &#8212; WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal"><span class="pre">sassc</span></code> — SassC compliant command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal"><span class="pre">sass</span></code> — Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> — Additional utilities related to SASS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="docutils literal"><span class="pre">sassutils.distutils</span></code> — <code class="docutils literal"><span class="pre">setuptools</span></code>/<code class="docutils literal"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
 </ul>
 </li>
 </ul>
@@ -217,7 +218,7 @@ reference implementation of it in Ruby.</p>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#install">Install</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
-<li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a></li>
+<li><a class="reference internal" href="#user-s-guide">User’s Guide</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 <li><a class="reference internal" href="#credit">Credit</a></li>
 <li><a class="reference internal" href="#open-source">Open source</a></li>
@@ -258,8 +259,8 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="_sources/index.rst.txt"

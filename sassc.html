@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>sassc — SassC compliant command line interface &#8212; libsass 0.12.3 documentation</title>
+    <title>sassc — SassC compliant command line interface &#8212; libsass 0.13.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.12.3',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -44,7 +44,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-sassc"></span><div class="section" id="sassc-sassc-compliant-command-line-interface">
-<h1><a class="reference internal" href="#module-sassc" title="sassc"><code class="xref py py-mod docutils literal"><span class="pre">sassc</span></code></a> &#8212; SassC compliant command line interface<a class="headerlink" href="#sassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-sassc" title="sassc"><code class="xref py py-mod docutils literal"><span class="pre">sassc</span></code></a> — SassC compliant command line interface<a class="headerlink" href="#sassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
 <p>This provides <a class="reference external" href="https://github.com/sass/sassc">SassC</a> compliant CLI executable named <strong class="program">sassc</strong>:</p>
 <div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sassc
 <span class="go">Usage: sassc [options] SCSS_FILE [CSS_FILE]</span>
@@ -55,13 +55,13 @@
 <dt id="cmdoption-sassc-t">
 <code class="descname">-t</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coding style of the compiled result.  The same as <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a>
-function&#8217;s <code class="docutils literal"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal"><span class="pre">nested</span></code>.</p>
+function’s <code class="docutils literal"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal"><span class="pre">nested</span></code>.</p>
 </dd></dl>
 
 <dl class="option">
 <dt id="cmdoption-sassc-s">
 <code class="descname">-s</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--output-style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for -t / &#8211;style.</p>
+<dd><p>Alias for -t / –style.</p>
 <div class="deprecated">
 <p><span class="versionmodified">Deprecated since version 0.11.0.</span></p>
 </div>
@@ -85,25 +85,6 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
-<dt id="cmdoption-sassc-w">
-<code class="descname">-w</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--watch</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-w" title="Permalink to this definition">¶</a></dt>
-<dd><p>Watch file for changes.  Requires the second argument (output CSS
-filename).</p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Note that <code class="docutils literal"><span class="pre">--watch</span></code> does not understand imports.  Due to this, the
-option is scheduled for removal in a future version.  It is suggested to
-use a third party tool which implements intelligent watching functionality.</p>
-<div class="versionadded">
-<p><span class="versionmodified">New in version 0.4.0.</span></p>
-</div>
-<div class="last deprecated">
-<p><span class="versionmodified">Deprecated since version 0.11.2.</span></p>
-</div>
-</div>
 <dl class="option">
 <dt id="cmdoption-sassc-p">
 <code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--precision</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-p" title="Permalink to this definition">¶</a></dt>
@@ -146,7 +127,7 @@ use a third party tool which implements intelligent watching functionality.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="changes.html" title="previous chapter">Changelog</a></li>
-      <li>Next: <a href="sass.html" title="next chapter"><code class="docutils literal"><span class="pre">sass</span></code> &#8212; Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
+      <li>Next: <a href="sass.html" title="next chapter"><code class="docutils literal"><span class="pre">sass</span></code> — Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
   </ul></li>
 </ul>
 </div>
@@ -175,8 +156,8 @@ use a third party tool which implements intelligent watching functionality.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="_sources/sassc.rst.txt"

@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using with Flask &#8212; libsass 0.12.3 documentation</title>
+    <title>Using with Flask &#8212; libsass 0.13.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.12.3',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -113,10 +113,10 @@ Keys are packages names.  Values are tuples of paths.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
 <dd>The section which explains how to integrate WSGI middlewares to
 Flask.</dd>
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.12-dev)"><span>Application Dispatching</span></a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.12-dev)"><span>Application Dispatching</span></a></dt>
 <dd>The documentation which explains how Flask dispatch each
 request internally.</dd>
 </dl>
@@ -124,7 +124,7 @@ request internally.</dd>
 <p>In development, to manually build SASS/SCSS files for each change is
 so tiring.  <a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> makes the web
 application to automatically build SASS/SCSS files for each request.
-It&#8217;s a WSGI middleware, so it can be plugged into the web app written in
+It’s a WSGI middleware, so it can be plugged into the web app written in
 Flask.</p>
 <p><a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> takes two required parameters:</p>
 <ul class="simple">
@@ -135,7 +135,7 @@ Flask.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Flask</span>
 <span class="kn">from</span> <span class="nn">sassutils.wsgi</span> <span class="k">import</span> <span class="n">SassMiddleware</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SassMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
     <span class="s1">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s1">&#39;static/css&#39;</span><span class="p">,</span> <span class="s1">&#39;/static/css&#39;</span><span class="p">)</span>
@@ -163,7 +163,7 @@ All compiled filenames have trailing <code class="docutils literal"><span class=
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.12-dev)"><span>Deploying with Setuptools</span></a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.12-dev)"><span>Deploying with Setuptools</span></a></dt>
 <dd>How to deploy Flask application using <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a>.</dd>
 </dl>
 </div>
@@ -185,7 +185,7 @@ builds all SASS/SCSS sources according to the manifests.</p>
 <p>The <code class="docutils literal"><span class="pre">setup_requires</span></code> option makes sure that the libsass is installed
 in <code class="file docutils literal"><span class="pre">site-packages</span></code> (for example, your virtualenv) before
 <code class="file docutils literal"><span class="pre">setup.py</span></code> script.  That means: if you run <code class="file docutils literal"><span class="pre">setup.py</span></code> script
-and libsass isn&#8217;t installed yet at the moment, it will automatically
+and libsass isn’t installed yet at the moment, it will automatically
 install libsass first.</p>
 <p>The <code class="docutils literal"><span class="pre">sass_manifests</span></code> specifies the manifests for libsass.</p>
 <p>Now <strong class="program">setup.py build_sass</strong> will compile all SASS/SCSS files
@@ -258,8 +258,8 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
       <a href="../_sources/frameworks/flask.rst.txt"
