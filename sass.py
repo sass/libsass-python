@@ -705,15 +705,12 @@ SASS_SEPARATOR_SPACE = collections.namedtuple('SASS_SEPARATOR_SPACE', ())()
 SEPARATORS = frozenset((SASS_SEPARATOR_COMMA, SASS_SEPARATOR_SPACE))
 
 
-class SassList(collections.namedtuple(
-        'SassList', ('items', 'separator', 'bracketed'),
-)):
+class SassList(collections.namedtuple('SassList', ('items', 'separator'))):
 
-    def __new__(cls, items, separator, bracketed=False):
+    def __new__(cls, items, separator):
         items = tuple(items)
-        assert separator in SEPARATORS, separator
-        assert isinstance(bracketed, bool), bracketed
-        return super(SassList, cls).__new__(cls, items, separator, bracketed)
+        assert separator in SEPARATORS
+        return super(SassList, cls).__new__(cls, items, separator)
 
 
 class SassError(collections.namedtuple('SassError', ('msg',))):
