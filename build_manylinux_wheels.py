@@ -44,7 +44,7 @@ def main():
                 'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip)
             )
     dists = tuple(os.path.join('dist', p) for p in os.listdir('dist'))
-    return upload.main(('-r', 'pypi') + dists)
+    return upload.main(('-r', 'pypi', '--skip-existing') + dists)
 
 
 if __name__ == '__main__':
