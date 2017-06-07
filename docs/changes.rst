@@ -2,6 +2,25 @@ Changelog
 =========
 
 
+Version 0.13.0
+--------------
+
+Released on January 7, 2017.
+
+- Use ``getfullargspec`` when available in python 3. [:issue:`188` by
+  Thom Wiggers]
+- Use ``sass_copy_c_string`` instead of ``strdup`` for portability
+  [:issue:`196` by Anthony Sottile]
+- Use ``-std=gnu++0x`` to fix installation under cygwin [:issue:`195`
+  :issue:`197` by Anthony Sottile]
+- Correct source map url [:issue:`201` :issue:`202` by Anthony Sottile]
+- Remove ``--watch`` [:issue:`203` by Anthony Sottile]
+- Follow up the libsass upstream: 3.4.4 --- See the release notes of Libsass
+  3.4.4__. [:issue:`205` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.4.4
+
+
 Version 0.12.3
 --------------
 
