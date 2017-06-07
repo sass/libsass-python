@@ -5,7 +5,7 @@ Changelog
 Version 0.13.0
 --------------
 
-Released on January 7, 2017.
+Released on June 7, 2017.
 
 - Use ``getfullargspec`` when available in python 3. [:issue:`188` by
   Thom Wiggers]
