@@ -2,6 +2,17 @@ Changelog
 =========
 
 
+Version 0.13.1
+--------------
+
+Released on June 8, 2017.
+
+- Follow up the libsass upstream: 3.4.5 --- See the release notes of Libsass
+  3.4.5__. [:issue:`207` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.4.5
+
+
 Version 0.13.0
 --------------
 
