@@ -283,7 +283,7 @@ def compile(**kwargs):
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
-    :type include_paths: :class:`collections.Sequence`, :class:`str`
+    :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -323,7 +323,7 @@ def compile(**kwargs):
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
-    :type include_paths: :class:`collections.Sequence`, :class:`str`
+    :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -365,7 +365,7 @@ def compile(**kwargs):
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           SASS/CSS source files
-    :type include_paths: :class:`collections.Sequence`, :class:`str`
+    :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
@@ -556,13 +556,10 @@ def compile(**kwargs):
     source_map_filename = _get_file_arg('source_map_filename')
     output_filename_hint = _get_file_arg('output_filename_hint')
 
-    include_paths = kwargs.pop('include_paths', b'') or b''
-    if isinstance(include_paths, collections.Sequence):
-        include_paths = os.pathsep.join(include_paths)
-    elif not isinstance(include_paths, string_types):
-        raise TypeError('include_paths must be a sequence of strings, or '
-                        'a colon-separated (or semicolon-separated if '
-                        'Windows) string, not ' + repr(include_paths))
+    # #208: cwd is always included in include paths
+    include_paths = (os.getcwd(),)
+    include_paths += tuple(kwargs.pop('include_paths', ()) or ())
+    include_paths = os.pathsep.join(include_paths)
     if isinstance(include_paths, text_type):
         include_paths = include_paths.encode(fs_encoding)
 
