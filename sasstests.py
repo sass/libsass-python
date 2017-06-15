@@ -1388,3 +1388,13 @@ def test_sassc_sourcemap(tmpdir):
         'file': 'a.scss.css',
         'mappings': 'AAAA,AAAA,EAAE,CAAC;EAAE,SAAS,EAAE,IAAS,GAAI',
     }
+
+
+def test_imports_from_cwd(tmpdir):
+    scss_dir = tmpdir.join('scss').ensure_dir()
+    scss_dir.join('_variables.scss').ensure()
+    main_scss = scss_dir.join('main.scss')
+    main_scss.write("@import 'scss/variables';")
+    with tmpdir.as_cwd():
+        out = sass.compile(filename=main_scss.strpath)
+        assert out == ''
