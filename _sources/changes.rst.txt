@@ -2,6 +2,14 @@ Changelog
 =========
 
 
+Version 0.13.2
+--------------
+
+Released on June 14, 2017.
+
+- Always add cwd to import paths [:issue:`208` by Anthony Sottile]
+
+
 Version 0.13.1
 --------------
 
