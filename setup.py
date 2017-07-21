@@ -57,7 +57,7 @@ for directory in (
         os.path.join('libsass', 'include')
 ):
     for pth, _, filenames in os.walk(directory):
-        for filename in filenames:
+        for filename in sorted(filenames):
             filename = os.path.join(pth, filename)
             if filename.endswith(('.c', '.cpp')):
                 sources.append(filename)
