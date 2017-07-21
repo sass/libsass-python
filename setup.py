@@ -141,6 +141,7 @@ else:
     else:
         link_flags = ['-fPIC', '-lstdc++']
 
+sources.sort()
 sass_extension = Extension(
     '_sass',
     sources,
