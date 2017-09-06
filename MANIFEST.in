@@ -6,3 +6,4 @@ include libsass/Makefile
 include .libsass-upstream-version
 include test/*.scss
 include README.rst
+include LICENSE
