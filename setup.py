@@ -230,7 +230,9 @@ setup(
             'sass_manifests = sassutils.distutils:validate_manifests'
         ],
         'console_scripts': [
-            ['sassc = sassc:main']
+            ['pysassc = sassc:main'],
+            # TODO: deprecate `sassc` and remove (#134)
+            ['sassc = sassc:main'],
         ]
     },
     install_requires=install_requires,
