@@ -14,55 +14,63 @@ import tempfile
 
 from setuptools import Extension, setup
 
-LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
-
-if (
-        not os.path.isfile(os.path.join('libsass', 'Makefile')) and
-        os.path.isdir('.git')
-):
-    print(file=sys.stderr)
-    print('Missing the libsass sumbodule.  Try:', file=sys.stderr)
-    print('  git submodule update --init', file=sys.stderr)
-    print(file=sys.stderr)
-    exit(1)
-
-
-# Determine the libsass version from the git checkout
-if os.path.exists(os.path.join('libsass', '.git')):
-    proc = subprocess.Popen(
-        (
-            'git', '-C', 'libsass', 'describe',
-            '--abbrev=4', '--dirty', '--always', '--tags',
-        ),
-        stdout=subprocess.PIPE,
-    )
-    out, _ = proc.communicate()
-    assert not proc.returncode, proc.returncode
-    with open('.libsass-upstream-version', 'wb') as libsass_version_file:
-        libsass_version_file.write(out)
-
-# The version file should always exist at this point
-with open('.libsass-upstream-version', 'rb') as libsass_version_file:
-    libsass_version = libsass_version_file.read().decode('UTF-8').strip()
-    if sys.platform == 'win32':
-        # This looks wrong, but is required for some reason :(
-        version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(libsass_version)
-    else:
-        version_define = '-DLIBSASS_VERSION="{0}"'.format(libsass_version)
+try:
+    system_sass = bool(os.environ["SYSTEMSASS"])
+except KeyError:
+    system_sass = False
 
 sources = ['pysass.cpp']
 headers = []
-for directory in (
-        os.path.join('libsass', 'src'),
-        os.path.join('libsass', 'include')
-):
-    for pth, _, filenames in os.walk(directory):
-        for filename in filenames:
-            filename = os.path.join(pth, filename)
-            if filename.endswith(('.c', '.cpp')):
-                sources.append(filename)
-            elif filename.endswith('.h'):
-                headers.append(filename)
+version_define=''
+
+if not system_sass:
+    LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
+
+    if (
+            not os.path.isfile(os.path.join('libsass', 'Makefile')) and
+            os.path.isdir('.git')
+    ):
+        print(file=sys.stderr)
+        print('Missing the libsass sumbodule.  Try:', file=sys.stderr)
+        print('  git submodule update --init', file=sys.stderr)
+        print(file=sys.stderr)
+        exit(1)
+
+
+    # Determine the libsass version from the git checkout
+    if os.path.exists(os.path.join('libsass', '.git')):
+        proc = subprocess.Popen(
+            (
+                'git', '-C', 'libsass', 'describe',
+                '--abbrev=4', '--dirty', '--always', '--tags',
+            ),
+            stdout=subprocess.PIPE,
+        )
+        out, _ = proc.communicate()
+        assert not proc.returncode, proc.returncode
+        with open('.libsass-upstream-version', 'wb') as libsass_version_file:
+            libsass_version_file.write(out)
+
+    # The version file should always exist at this point
+    with open('.libsass-upstream-version', 'rb') as libsass_version_file:
+        libsass_version = libsass_version_file.read().decode('UTF-8').strip()
+        if sys.platform == 'win32':
+            # This looks wrong, but is required for some reason :(
+            version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(libsass_version)
+        else:
+            version_define = '-DLIBSASS_VERSION="{0}"'.format(libsass_version)
+
+    for directory in (
+            os.path.join('libsass', 'src'),
+            os.path.join('libsass', 'include')
+    ):
+        for pth, _, filenames in os.walk(directory):
+            for filename in filenames:
+                filename = os.path.join(pth, filename)
+                if filename.endswith(('.c', '.cpp')):
+                    sources.append(filename)
+                elif filename.endswith('.h'):
+                    headers.append(filename)
 
 if sys.platform == 'win32':
     from distutils.msvc9compiler import get_build_version
@@ -108,31 +116,32 @@ else:
                 flags.append(
                     '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
                 )
-        # Dirty workaround to avoid link error...
-        # Python distutils doesn't provide any way to configure different
-        # flags for each cc and c++.
-        cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
-        cencode_body = ''
-        with open(cencode_path) as f:
-            cencode_body = f.read()
-        with open(cencode_path, 'w') as f:
-            f.write('''
-                #ifdef __cplusplus
-                extern "C" {
-                #endif
-            ''')
-            f.write(cencode_body)
-            f.write('''
-                #ifdef __cplusplus
-                }
-                #endif
-            ''')
+        if not system_sass:
+            # Dirty workaround to avoid link error...
+            # Python distutils doesn't provide any way to configure different
+            # flags for each cc and c++.
+            cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
+            cencode_body = ''
+            with open(cencode_path) as f:
+                cencode_body = f.read()
+            with open(cencode_path, 'w') as f:
+                f.write('''
+                    #ifdef __cplusplus
+                    extern "C" {
+                    #endif
+                ''')
+                f.write(cencode_body)
+                f.write('''
+                    #ifdef __cplusplus
+                    }
+                    #endif
+                ''')
 
-        @atexit.register
-        def restore_cencode():
-            if os.path.isfile(cencode_path):
-                with open(cencode_path, 'w') as f:
-                    f.write(cencode_body)
+            @atexit.register
+            def restore_cencode():
+                if os.path.isfile(cencode_path):
+                    with open(cencode_path, 'w') as f:
+                        f.write(cencode_body)
 
     flags = ['-c', '-O3'] + flags
 
@@ -141,14 +150,27 @@ else:
     else:
         link_flags = ['-fPIC', '-lstdc++']
 
+if system_sass:
+    libraries = ['sass']
+    include_dirs=[]
+    extra_compile_args=flags
+    extra_link_args=link_flags
+else:
+    libraries = []
+    include_dirs=[os.path.join('.', 'libsass', 'include')]
+    extra_compile_args=flags + [version_define]
+    extra_link_args=link_flags
+    libraries=libraries
+
 sources.sort()
 sass_extension = Extension(
     '_sass',
     sources,
-    include_dirs=[os.path.join('.', 'libsass', 'include')],
+    include_dirs=include_dirs,
     depends=headers,
-    extra_compile_args=flags + [version_define],
+    extra_compile_args=extra_compile_args,
     extra_link_args=link_flags,
+    libraries=libraries
 )
 
 install_requires = ['six']
