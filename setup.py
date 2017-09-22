@@ -14,10 +14,7 @@ import tempfile
 
 from setuptools import Extension, setup
 
-try:
-    system_sass = bool(os.environ["SYSTEMSASS"])
-except KeyError:
-    system_sass = False
+system_sass = bool(os.environ["SYSTEMSASS"], False)
 
 sources = ['pysass.cpp']
 headers = []
@@ -152,25 +149,24 @@ else:
 
 if system_sass:
     libraries = ['sass']
-    include_dirs=[]
-    extra_compile_args=flags
-    extra_link_args=link_flags
+    include_dirs = []
+    extra_compile_args = flags
+    extra_link_args = link_flags
 else:
     libraries = []
-    include_dirs=[os.path.join('.', 'libsass', 'include')]
-    extra_compile_args=flags + [version_define]
-    extra_link_args=link_flags
-    libraries=libraries
+    include_dirs = [os.path.join('.', 'libsass', 'include')]
+    extra_compile_args = flags + [version_define]
+    extra_link_args = link_flags
 
 sources.sort()
 sass_extension = Extension(
     '_sass',
     sources,
-    include_dirs=include_dirs,
-    depends=headers,
-    extra_compile_args=extra_compile_args,
-    extra_link_args=link_flags,
-    libraries=libraries
+    include_dirs = include_dirs,
+    depends = headers,
+    extra_compile_args = extra_compile_args,
+    extra_link_args = link_flags,
+    libraries = libraries
 )
 
 install_requires = ['six']
