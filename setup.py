@@ -162,11 +162,11 @@ sources.sort()
 sass_extension = Extension(
     '_sass',
     sources,
-    include_dirs = include_dirs,
-    depends = headers,
-    extra_compile_args = extra_compile_args,
-    extra_link_args = link_flags,
-    libraries = libraries
+    include_dirs=include_dirs,
+    depends=headers,
+    extra_compile_args=extra_compile_args,
+    extra_link_args=link_flags,
+    libraries=libraries
 )
 
 install_requires = ['six']
