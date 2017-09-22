@@ -14,7 +14,7 @@ import tempfile
 
 from setuptools import Extension, setup
 
-system_sass = bool(os.environ["SYSTEMSASS"], False)
+system_sass = os.environ.get('SYSTEMSASS', False)
 
 sources = ['pysass.cpp']
 headers = []
