@@ -18,7 +18,7 @@ system_sass = os.environ.get('SYSTEMSASS', False)
 
 sources = ['pysass.cpp']
 headers = []
-version_define=''
+version_define = ''
 
 if not system_sass:
     LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
@@ -32,7 +32,6 @@ if not system_sass:
         print('  git submodule update --init', file=sys.stderr)
         print(file=sys.stderr)
         exit(1)
-
 
     # Determine the libsass version from the git checkout
     if os.path.exists(os.path.join('libsass', '.git')):
@@ -53,7 +52,8 @@ if not system_sass:
         libsass_version = libsass_version_file.read().decode('UTF-8').strip()
         if sys.platform == 'win32':
             # This looks wrong, but is required for some reason :(
-            version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(libsass_version)
+            version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(
+                                                            libsass_version)
         else:
             version_define = '-DLIBSASS_VERSION="{0}"'.format(libsass_version)
 
