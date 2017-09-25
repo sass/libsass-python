@@ -178,15 +178,15 @@ else:
 
         flags = ['-c', '-O3'] + flags
 
-    if platform.system() == 'FreeBSD':
-        link_flags = ['-fPIC', '-lc++']
-    else:
-        link_flags = ['-fPIC', '-lstdc++']
+        if platform.system() == 'FreeBSD':
+            link_flags = ['-fPIC', '-lc++']
+        else:
+            link_flags = ['-fPIC', '-lstdc++']
 
-libraries = []
-include_dirs = [os.path.join('.', 'libsass', 'include')]
-extra_compile_args = flags + [version_define]
-extra_link_args = link_flags
+    libraries = []
+    include_dirs = [os.path.join('.', 'libsass', 'include')]
+    extra_compile_args = flags + [version_define]
+    extra_link_args = link_flags
 
 sources.sort()
 sass_extension = Extension(
