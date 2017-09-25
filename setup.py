@@ -14,13 +14,49 @@ import tempfile
 
 from setuptools import Extension, setup
 
-system_sass = os.environ.get('SYSTEMSASS', False)
+system_sass = os.environ.get('SYSTEM_SASS', False)
 
 sources = ['pysass.cpp']
 headers = []
 version_define = ''
 
-if not system_sass:
+if system_sass:
+    flags = [
+        '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+    ]
+    platform.mac_ver()
+    if platform.system() in ['Darwin', 'FreeBSD']:
+        os.environ.setdefault('CC', 'clang')
+        os.environ.setdefault('CXX', 'clang++')
+        orig_customize_compiler = distutils.sysconfig.customize_compiler
+
+        def customize_compiler(compiler):
+            orig_customize_compiler(compiler)
+            compiler.compiler[0] = os.environ['CC']
+            compiler.compiler_so[0] = os.environ['CXX']
+            compiler.compiler_cxx[0] = os.environ['CXX']
+            compiler.linker_so[0] = os.environ['CXX']
+            return compiler
+        distutils.sysconfig.customize_compiler = customize_compiler
+        flags.append('-stdlib=libc++')
+        if platform.system() == 'Darwin':
+            flags.append('-mmacosx-version-min=10.7',)
+            if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+                flags.append(
+                    '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
+                )
+
+        flags = ['-c', '-O3'] + flags
+
+    if platform.system() == 'FreeBSD':
+        link_flags = ['-fPIC', '-lc++']
+    else:
+        link_flags = ['-fPIC', '-lstdc++']
+    libraries = ['sass']
+    include_dirs = []
+    extra_compile_args = flags
+    extra_link_args = link_flags
+else:
     LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
     if (
@@ -69,94 +105,87 @@ if not system_sass:
                 elif filename.endswith('.h'):
                     headers.append(filename)
 
-if sys.platform == 'win32':
-    from distutils.msvc9compiler import get_build_version
-    vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
-        int(get_build_version()),
-        int(get_build_version() * 10) % 10
-    )
-    try:
-        os.environ[vscomntools_env] = os.environ['VS140COMNTOOLS']
-    except KeyError:
-        distutils.log.warn('You probably need Visual Studio 2015 (14.0) '
-                           'or higher')
-    from distutils import msvccompiler, msvc9compiler
-    if msvccompiler.get_build_version() < 14.0:
-        msvccompiler.get_build_version = lambda: 14.0
-    if get_build_version() < 14.0:
-        msvc9compiler.get_build_version = lambda: 14.0
-        msvc9compiler.VERSION = 14.0
-    flags = ['/Od', '/EHsc', '/MT']
-    link_flags = []
-else:
-    flags = [
-        '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
-    ]
-    platform.mac_ver()
-    if platform.system() in ['Darwin', 'FreeBSD']:
-        os.environ.setdefault('CC', 'clang')
-        os.environ.setdefault('CXX', 'clang++')
-        orig_customize_compiler = distutils.sysconfig.customize_compiler
-
-        def customize_compiler(compiler):
-            orig_customize_compiler(compiler)
-            compiler.compiler[0] = os.environ['CC']
-            compiler.compiler_so[0] = os.environ['CXX']
-            compiler.compiler_cxx[0] = os.environ['CXX']
-            compiler.linker_so[0] = os.environ['CXX']
-            return compiler
-        distutils.sysconfig.customize_compiler = customize_compiler
-        flags.append('-stdlib=libc++')
-        if platform.system() == 'Darwin':
-            flags.append('-mmacosx-version-min=10.7',)
-            if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
-                flags.append(
-                    '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
-                )
-        if not system_sass:
-            # Dirty workaround to avoid link error...
-            # Python distutils doesn't provide any way to configure different
-            # flags for each cc and c++.
-            cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
-            cencode_body = ''
-            with open(cencode_path) as f:
-                cencode_body = f.read()
-            with open(cencode_path, 'w') as f:
-                f.write('''
-                    #ifdef __cplusplus
-                    extern "C" {
-                    #endif
-                ''')
-                f.write(cencode_body)
-                f.write('''
-                    #ifdef __cplusplus
-                    }
-                    #endif
-                ''')
-
-            @atexit.register
-            def restore_cencode():
-                if os.path.isfile(cencode_path):
-                    with open(cencode_path, 'w') as f:
-                        f.write(cencode_body)
-
-    flags = ['-c', '-O3'] + flags
-
-    if platform.system() == 'FreeBSD':
-        link_flags = ['-fPIC', '-lc++']
+    if sys.platform == 'win32':
+        from distutils.msvc9compiler import get_build_version
+        vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
+            int(get_build_version()),
+            int(get_build_version() * 10) % 10
+        )
+        try:
+            os.environ[vscomntools_env] = os.environ['VS140COMNTOOLS']
+        except KeyError:
+            distutils.log.warn('You probably need Visual Studio 2015 (14.0) '
+                               'or higher')
+        from distutils import msvccompiler, msvc9compiler
+        if msvccompiler.get_build_version() < 14.0:
+            msvccompiler.get_build_version = lambda: 14.0
+        if get_build_version() < 14.0:
+            msvc9compiler.get_build_version = lambda: 14.0
+            msvc9compiler.VERSION = 14.0
+        flags = ['/Od', '/EHsc', '/MT']
+        link_flags = []
     else:
-        link_flags = ['-fPIC', '-lstdc++']
+        flags = [
+            '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+        ]
+        platform.mac_ver()
+        if platform.system() in ['Darwin', 'FreeBSD']:
+            os.environ.setdefault('CC', 'clang')
+            os.environ.setdefault('CXX', 'clang++')
+            orig_customize_compiler = distutils.sysconfig.customize_compiler
 
-if system_sass:
-    libraries = ['sass']
-    include_dirs = []
-    extra_compile_args = flags
-    extra_link_args = link_flags
-else:
-    libraries = []
-    include_dirs = [os.path.join('.', 'libsass', 'include')]
-    extra_compile_args = flags + [version_define]
-    extra_link_args = link_flags
+            def customize_compiler(compiler):
+                orig_customize_compiler(compiler)
+                compiler.compiler[0] = os.environ['CC']
+                compiler.compiler_so[0] = os.environ['CXX']
+                compiler.compiler_cxx[0] = os.environ['CXX']
+                compiler.linker_so[0] = os.environ['CXX']
+                return compiler
+            distutils.sysconfig.customize_compiler = customize_compiler
+            flags.append('-stdlib=libc++')
+            if platform.system() == 'Darwin':
+                flags.append('-mmacosx-version-min=10.7',)
+                if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+                    flags.append(
+                        '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
+                    )
+            if not system_sass:
+                # Dirty workaround to avoid link error...
+                # Python distutils doesn't provide any way to configure different
+                # flags for each cc and c++.
+                cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
+                cencode_body = ''
+                with open(cencode_path) as f:
+                    cencode_body = f.read()
+                with open(cencode_path, 'w') as f:
+                    f.write('''
+                        #ifdef __cplusplus
+                        extern "C" {
+                        #endif
+                    ''')
+                    f.write(cencode_body)
+                    f.write('''
+                        #ifdef __cplusplus
+                        }
+                        #endif
+                    ''')
+
+                @atexit.register
+                def restore_cencode():
+                    if os.path.isfile(cencode_path):
+                        with open(cencode_path, 'w') as f:
+                            f.write(cencode_body)
+
+        flags = ['-c', '-O3'] + flags
+
+        if platform.system() == 'FreeBSD':
+            link_flags = ['-fPIC', '-lc++']
+        else:
+            link_flags = ['-fPIC', '-lstdc++']
+        libraries = []
+        include_dirs = [os.path.join('.', 'libsass', 'include')]
+        extra_compile_args = flags + [version_define]
+        extra_link_args = link_flags
 
 sources.sort()
 sass_extension = Extension(
