@@ -184,10 +184,12 @@ else:
             link_flags = ['-fPIC', '-lstdc++']
         libraries = []
         include_dirs = [os.path.join('.', 'libsass', 'include')]
+        print('Assigned include_dirs = %s' % (include_dirs))
         extra_compile_args = flags + [version_define]
         extra_link_args = link_flags
 
 sources.sort()
+print('Include_dirs = %s' % (include_dirs))
 sass_extension = Extension(
     '_sass',
     sources,
