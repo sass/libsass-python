@@ -43,7 +43,8 @@ if system_sass:
             flags.append('-mmacosx-version-min=10.7',)
             if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
                 flags.append(
-                    '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
+                    '-Wno-error=unused-command-line-'+
+                    'argument-hard-error-in-future',  # noqa
                 )
 
         flags = ['-c', '-O3'] + flags
@@ -126,7 +127,8 @@ else:
         link_flags = []
     else:
         flags = [
-            '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+            '-fPIC', '-std=gnu++0x', '-Wall',
+            '-Wno-parentheses', '-Werror=switch',
         ]
         platform.mac_ver()
         if platform.system() in ['Darwin', 'FreeBSD']:
@@ -145,14 +147,17 @@ else:
             flags.append('-stdlib=libc++')
             if platform.system() == 'Darwin':
                 flags.append('-mmacosx-version-min=10.7',)
-                if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+                if tuple(
+                   map(int, platform.mac_ver()[0].split('.'))
+                ) >= (10, 9):
                     flags.append(
-                        '-Wno-error=unused-command-line-argument-hard-error-in-future',  # noqa
+                        '-Wno-error=unused-command-line-'+
+                        'argument-hard-error-in-future',  # noqa
                     )
             if not system_sass:
                 # Dirty workaround to avoid link error...
-                # Python distutils doesn't provide any way to configure different
-                # flags for each cc and c++.
+                # Python distutils doesn't provide any way
+                # to configure different flags for each cc and c++.
                 cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
                 cencode_body = ''
                 with open(cencode_path) as f:
