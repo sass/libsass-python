@@ -43,7 +43,7 @@ if system_sass:
             flags.append('-mmacosx-version-min=10.7',)
             if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
                 flags.append(
-                    '-Wno-error=unused-command-line-'+
+                    '-Wno-error=unused-command-line-' +
                     'argument-hard-error-in-future',  # noqa
                 )
 
@@ -149,9 +149,9 @@ else:
                 flags.append('-mmacosx-version-min=10.7',)
                 if tuple(
                    map(int, platform.mac_ver()[0].split('.'))
-                ) >= (10, 9):
+                   ) >= (10, 9):
                     flags.append(
-                        '-Wno-error=unused-command-line-'+
+                        '-Wno-error=unused-command-line-' +
                         'argument-hard-error-in-future',  # noqa
                     )
             if not system_sass:
