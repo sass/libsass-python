@@ -148,38 +148,37 @@ else:
             if platform.system() == 'Darwin':
                 flags.append('-mmacosx-version-min=10.7',)
                 if tuple(
-                map(int, platform.mac_ver()[0].split('.'))
+                        map(int, platform.mac_ver()[0].split('.'))
                 ) >= (10, 9):
                     flags.append(
                         '-Wno-error=unused-command-line-' +
                         'argument-hard-error-in-future',  # noqa
                     )
-            if not system_sass:
-                # Dirty workaround to avoid link error...
-                # Python distutils doesn't provide any way
-                # to configure different flags for each cc and c++.
-                cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
-                cencode_body = ''
-                with open(cencode_path) as f:
-                    cencode_body = f.read()
-                with open(cencode_path, 'w') as f:
-                    f.write('''
-                        #ifdef __cplusplus
-                        extern "C" {
-                        #endif
-                    ''')
-                    f.write(cencode_body)
-                    f.write('''
-                        #ifdef __cplusplus
-                        }
-                        #endif
-                    ''')
+            # Dirty workaround to avoid link error...
+            # Python distutils doesn't provide any way
+            # to configure different flags for each cc and c++.
+            cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
+            cencode_body = ''
+            with open(cencode_path) as f:
+                cencode_body = f.read()
+            with open(cencode_path, 'w') as f:
+                f.write('''
+                    #ifdef __cplusplus
+                    extern "C" {
+                    #endif
+                ''')
+                f.write(cencode_body)
+                f.write('''
+                    #ifdef __cplusplus
+                    }
+                    #endif
+                ''')
 
-                @atexit.register
-                def restore_cencode():
-                    if os.path.isfile(cencode_path):
-                        with open(cencode_path, 'w') as f:
-                            f.write(cencode_body)
+            @atexit.register
+            def restore_cencode():
+                if os.path.isfile(cencode_path):
+                    with open(cencode_path, 'w') as f:
+                        f.write(cencode_body)
 
         flags = ['-c', '-O3'] + flags
 
