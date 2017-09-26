@@ -148,8 +148,8 @@ else:
             if platform.system() == 'Darwin':
                 flags.append('-mmacosx-version-min=10.7',)
                 if tuple(
-                   map(int, platform.mac_ver()[0].split('.'))
-                   ) >= (10, 9):
+                map(int, platform.mac_ver()[0].split('.'))
+                ) >= (10, 9):
                     flags.append(
                         '-Wno-error=unused-command-line-' +
                         'argument-hard-error-in-future',  # noqa
