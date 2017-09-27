@@ -41,7 +41,8 @@ if system_sass:
         flags.append('-stdlib=libc++')
         if platform.system() == 'Darwin':
             flags.append('-mmacosx-version-min=10.7',)
-            if tuple(map(int, platform.mac_ver()[0].split('.'))) >= (10, 9):
+            macver = tuple(map(int, platform.mac_ver()[0].split('.')))
+            if macver >= (10, 9):
                 flags.append(
                     '-Wno-error=unused-command-line-' +
                     'argument-hard-error-in-future',  # noqa
@@ -147,9 +148,8 @@ else:
             flags.append('-stdlib=libc++')
             if platform.system() == 'Darwin':
                 flags.append('-mmacosx-version-min=10.7',)
-                if tuple(
-                        map(int, platform.mac_ver()[0].split('.'))
-                ) >= (10, 9):
+                macver = tuple(map(int, platform.mac_ver()[0].split('.')))
+                if macver >= (10, 9):
                     flags.append(
                         '-Wno-error=unused-command-line-' +
                         'argument-hard-error-in-future',  # noqa
