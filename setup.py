@@ -20,35 +20,43 @@ sources = ['pysass.cpp']
 headers = []
 version_define = ''
 
+
+def _maybe_clang(flags):
+    if platform.system() not in ('Darwin', 'FreeBSD'):
+        return
+
+    os.environ.setdefault('CC', 'clang')
+    os.environ.setdefault('CXX', 'clang++')
+    orig_customize_compiler = distutils.sysconfig.customize_compiler
+
+    def customize_compiler(compiler):
+        orig_customize_compiler(compiler)
+        compiler.compiler[0] = os.environ['CC']
+        compiler.compiler_so[0] = os.environ['CXX']
+        compiler.compiler_cxx[0] = os.environ['CXX']
+        compiler.linker_so[0] = os.environ['CXX']
+        return compiler
+    distutils.sysconfig.customize_compiler = customize_compiler
+    flags[:] = ['-c', '-O3'] + flags + ['stdlib=libc++']
+
+
+def _maybe_macos(flags):
+    if platform.system() != 'Darwin':
+        return
+    flags.append('-mmacosx-version-min=10.7',)
+    macver = tuple(map(int, platform.mac_ver()[0].split('.')))
+    if macver >= (10, 9):
+        flags.append(
+            '-Wno-error=unused-command-line-argument-hard-error-in-future',
+        )
+
+
 if system_sass:
     flags = [
         '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
     ]
-    platform.mac_ver()
-    if platform.system() in ['Darwin', 'FreeBSD']:
-        os.environ.setdefault('CC', 'clang')
-        os.environ.setdefault('CXX', 'clang++')
-        orig_customize_compiler = distutils.sysconfig.customize_compiler
-
-        def customize_compiler(compiler):
-            orig_customize_compiler(compiler)
-            compiler.compiler[0] = os.environ['CC']
-            compiler.compiler_so[0] = os.environ['CXX']
-            compiler.compiler_cxx[0] = os.environ['CXX']
-            compiler.linker_so[0] = os.environ['CXX']
-            return compiler
-        distutils.sysconfig.customize_compiler = customize_compiler
-        flags.append('-stdlib=libc++')
-        if platform.system() == 'Darwin':
-            flags.append('-mmacosx-version-min=10.7',)
-            macver = tuple(map(int, platform.mac_ver()[0].split('.')))
-            if macver >= (10, 9):
-                flags.append(
-                    '-Wno-error=unused-command-line-' +
-                    'argument-hard-error-in-future',  # noqa
-                )
-
-        flags = ['-c', '-O3'] + flags
+    _maybe_clang(flags)
+    _maybe_macos(flags)
 
     if platform.system() == 'FreeBSD':
         link_flags = ['-fPIC', '-lc++']
@@ -90,10 +98,10 @@ else:
         libsass_version = libsass_version_file.read().decode('UTF-8').strip()
         if sys.platform == 'win32':
             # This looks wrong, but is required for some reason :(
-            version_define = r'/DLIBSASS_VERSION="\"{0}\""'.format(
+            version_define = r'/DLIBSASS_VERSION="\"{}\""'.format(
                                                             libsass_version)
         else:
-            version_define = '-DLIBSASS_VERSION="{0}"'.format(libsass_version)
+            version_define = '-DLIBSASS_VERSION="{}"'.format(libsass_version)
 
     for directory in (
             os.path.join('libsass', 'src'),
@@ -109,7 +117,7 @@ else:
 
     if sys.platform == 'win32':
         from distutils.msvc9compiler import get_build_version
-        vscomntools_env = 'VS{0}{1}COMNTOOLS'.format(
+        vscomntools_env = 'VS{}{}COMNTOOLS'.format(
             int(get_build_version()),
             int(get_build_version() * 10) % 10
         )
@@ -131,29 +139,10 @@ else:
             '-fPIC', '-std=gnu++0x', '-Wall',
             '-Wno-parentheses', '-Werror=switch',
         ]
-        platform.mac_ver()
-        if platform.system() in ['Darwin', 'FreeBSD']:
-            os.environ.setdefault('CC', 'clang')
-            os.environ.setdefault('CXX', 'clang++')
-            orig_customize_compiler = distutils.sysconfig.customize_compiler
+        _maybe_clang(flags)
+        _maybe_macos(flags)
 
-            def customize_compiler(compiler):
-                orig_customize_compiler(compiler)
-                compiler.compiler[0] = os.environ['CC']
-                compiler.compiler_so[0] = os.environ['CXX']
-                compiler.compiler_cxx[0] = os.environ['CXX']
-                compiler.linker_so[0] = os.environ['CXX']
-                return compiler
-            distutils.sysconfig.customize_compiler = customize_compiler
-            flags.append('-stdlib=libc++')
-            if platform.system() == 'Darwin':
-                flags.append('-mmacosx-version-min=10.7',)
-                macver = tuple(map(int, platform.mac_ver()[0].split('.')))
-                if macver >= (10, 9):
-                    flags.append(
-                        '-Wno-error=unused-command-line-' +
-                        'argument-hard-error-in-future',  # noqa
-                    )
+        if platform.system() in ('Darwin', 'FreeBSD'):
             # Dirty workaround to avoid link error...
             # Python distutils doesn't provide any way
             # to configure different flags for each cc and c++.
@@ -162,25 +151,23 @@ else:
             with open(cencode_path) as f:
                 cencode_body = f.read()
             with open(cencode_path, 'w') as f:
-                f.write('''
-                    #ifdef __cplusplus
-                    extern "C" {
-                    #endif
-                ''')
+                f.write(
+                    '#ifdef __cplusplus\n'
+                    'extern "C" {\n'
+                    '#endif\n'
+                )
                 f.write(cencode_body)
-                f.write('''
-                    #ifdef __cplusplus
-                    }
-                    #endif
-                ''')
+                f.write(
+                    '#ifdef __cplusplus\n'
+                    '}\n'
+                    '#endif\n'
+                )
 
             @atexit.register
             def restore_cencode():
                 if os.path.isfile(cencode_path):
                     with open(cencode_path, 'w') as f:
                         f.write(cencode_body)
-
-        flags = ['-c', '-O3'] + flags
 
         if platform.system() == 'FreeBSD':
             link_flags = ['-fPIC', '-lc++']
@@ -192,18 +179,15 @@ else:
     extra_compile_args = flags + [version_define]
     extra_link_args = link_flags
 
-sources.sort()
 sass_extension = Extension(
     '_sass',
-    sources,
+    sorted(sources),
     include_dirs=include_dirs,
     depends=headers,
     extra_compile_args=extra_compile_args,
     extra_link_args=link_flags,
     libraries=libraries
 )
-
-install_requires = ['six']
 
 
 def version(sass_filename='sass.py'):
@@ -287,12 +271,8 @@ setup(
             ['sassc = sassc:main'],
         ]
     },
-    install_requires=install_requires,
-    extras_require={
-        'upload_appveyor_builds': [
-            'twine == 1.5.0',
-        ],
-    },
+    install_requires=['six'],
+    extras_require={'upload_appveyor_builds': ['twine == 1.5.0']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
