@@ -2,6 +2,22 @@ Changelog
 =========
 
 
+Version 0.13.3
+--------------
+
+Released on October 11, 2017.
+
+- Sort input files for determinism [:issue:`212` by Bernhard M. Wiedemann]
+- Include LICENSE file in distributions [:issue:`216` by Dougal J. Sutherland]
+- Add a ``pysassc`` entry to replace ``sassc`` [:issue:`218` by
+  Anthony Sottile]
+- Enable building with dynamic linking [:issue:`219` by Marcel Plch]
+- Follow up the libsass upstream: 3.4.6 --- See the release notes of Libsass
+  3.4.6__. [:issue:`221` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.4.6
+
+
 Version 0.13.2
 --------------
 
