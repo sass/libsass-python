@@ -56,12 +56,37 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 
 .. _example:
 
-Example
--------
+Examples
+--------
+
+Compile a String of SASS to CSS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> import sass
 >>> sass.compile(string='a { b { color: blue; } }')
 'a b {\n  color: blue; }\n'
+
+Compile a Directory of SASS Files to CSS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+>>> import sass
+>>> import os
+>>> os.mkdir('css')
+>>> os.mkdir('sass')
+>>> scss = """\
+... $theme_color: #cc0000;
+... body {
+...     background-color: $theme_color;
+... }
+... """
+>>> with open('sass/example.scss', 'w') as example_scss:
+...      example_scss.write(scss)
+...
+>>> sass.compile(dirname=('sass', 'css'), output_style='compressed')
+>>> with open('css/example.css') as example_css:
+...     print(example_css.read())
+...
+body{background-color:#c00}
 
 
 User's Guide
