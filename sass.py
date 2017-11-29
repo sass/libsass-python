@@ -556,8 +556,11 @@ def compile(**kwargs):
     source_map_filename = _get_file_arg('source_map_filename')
     output_filename_hint = _get_file_arg('output_filename_hint')
 
-    # #208: cwd is always included in include paths
-    include_paths = (os.getcwd(),)
+    # #208: cwd is always included in include paths, if possible
+    try:
+        include_paths = (os.getcwd(),)
+    except OSError:
+        include_paths = tuple()
     include_paths += tuple(kwargs.pop('include_paths', ()) or ())
     include_paths = os.pathsep.join(include_paths)
     if isinstance(include_paths, text_type):
