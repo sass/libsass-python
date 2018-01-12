@@ -1,36 +1,38 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>libsass-python: Sass/SCSS for Python &mdash; libsass 0.13.5 documentation</title>
-    
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.13.5 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.13.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.13.5 documentation" href="#" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using with Flask" href="frameworks/flask.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -41,25 +43,25 @@
 <h1>libsass-python: <a class="reference external" href="http://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this headline">¶</a></h1>
 <p>This package provides a simple Python extension module <a class="reference internal" href="sass.html#module-sass" title="sass"><code class="xref py py-mod docutils literal"><span class="pre">sass</span></code></a> which is
 binding <a class="reference external" href="https://github.com/sass/libsass">Libsass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
-It&#8217;s very straightforward and there isn&#8217;t any headache related Python
+It’s very straightforward and there isn’t any headache related Python
 distribution/deployment.  That means you can add just <code class="docutils literal"><span class="pre">libsass</span></code> into
-your <code class="file docutils literal"><span class="pre">setup.py</span></code>&#8216;s <code class="docutils literal"><span class="pre">install_requires</span></code> list or <code class="file docutils literal"><span class="pre">requirements.txt</span></code>
+your <code class="file docutils literal"><span class="pre">setup.py</span></code>’s <code class="docutils literal"><span class="pre">install_requires</span></code> list or <code class="file docutils literal"><span class="pre">requirements.txt</span></code>
 file.</p>
-<p>It currently supports CPython 2.6, 2.7, 3.4&#8211;3.6, and PyPy 2.3+!</p>
+<p>It currently supports CPython 2.6, 2.7, 3.4–3.6, and PyPy 2.3+!</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>You don&#8217;t need any Ruby/Node.js stack at all, for development or deployment
+<li>You don’t need any Ruby/Node.js stack at all, for development or deployment
 either.</li>
 <li>Fast. (<a class="reference external" href="https://github.com/sass/libsass">Libsass</a> is written in C++.)</li>
-<li>Simple API.  See <a class="reference internal" href="#example"><span>example code</span></a> for details.</li>
+<li>Simple API.  See <a class="reference internal" href="#example"><span class="std std-ref">example code</span></a> for details.</li>
 <li>Custom functions.</li>
 <li><code class="docutils literal"><span class="pre">&#64;import</span></code> callbacks.</li>
 <li>Support both tabbed (Sass) and braces (SCSS) syntax.</li>
 <li>WSGI middleware for ease of development.
 It automatically compiles Sass/SCSS files for each request.
 See also <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></code></a> for details.</li>
-<li><code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>/<a class="reference external" href="http://docs.python.org/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> integration.
+<li><code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/2/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> integration.
 You can build all Sass/SCSS files using
 <strong class="program">setup.py build_sass</strong> command.
 See also <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> for details.</li>
@@ -69,22 +71,22 @@ See also <a class="reference internal" href="sassutils/distutils.html#module-sas
 </div>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p>It&#8217;s available on <a class="reference external" href="https://pypi.python.org/pypi/libsass">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> pip install libsass
+<p>It’s available on <a class="reference external" href="https://pypi.python.org/pypi/libsass">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install libsass
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">libsass requires some features introduced by the recent C++ standard.
 You need a C++ compiler that support those features.
-See also libsass project&#8217;s <a class="reference external" href="https://github.com/sass/libsass#readme">README</a> file.</p>
+See also libsass project’s <a class="reference external" href="https://github.com/sass/libsass#readme">README</a> file.</p>
 </div>
 </div>
 <div class="section" id="examples">
 <span id="example"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="compile-a-string-of-sass-to-css">
 <h3>Compile a String of SASS to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
 </pre></div>
@@ -92,7 +94,7 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 </div>
 <div class="section" id="compile-a-directory-of-sass-files-to-css">
 <h3>Compile a Directory of SASS Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;css&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;sass&#39;</span><span class="p">)</span>
@@ -107,7 +109,7 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">dirname</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;sass&#39;</span><span class="p">,</span> <span class="s1">&#39;css&#39;</span><span class="p">),</span> <span class="n">output_style</span><span class="o">=</span><span class="s1">&#39;compressed&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;css/example.css&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">example_css</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">print</span><span class="p">(</span><span class="n">example_css</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">example_css</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 <span class="gp">...</span>
 <span class="go">body{background-color:#c00}</span>
 </pre></div>
@@ -115,7 +117,7 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 </div>
 </div>
 <div class="section" id="user-s-guide">
-<h2>User&#8217;s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h2>
+<h2>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a><ul>
@@ -177,12 +179,12 @@ See also libsass project&#8217;s <a class="reference external" href="https://git
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal"><span class="pre">sassc</span></code> &#8212; SassC compliant command line interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal"><span class="pre">sass</span></code> &#8212; Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> &#8212; Additional utilities related to SASS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> &#8212; Build the whole directory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="docutils literal"><span class="pre">sassutils.distutils</span></code> &#8212; <code class="docutils literal"><span class="pre">setuptools</span></code>/<code class="docutils literal"><span class="pre">distutils</span></code> integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> &#8212; WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal"><span class="pre">sassc</span></code> — SassC compliant command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal"><span class="pre">sass</span></code> — Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> — Additional utilities related to SASS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="docutils literal"><span class="pre">sassutils.distutils</span></code> — <code class="docutils literal"><span class="pre">setuptools</span></code>/<code class="docutils literal"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
 </ul>
 </li>
 </ul>
@@ -219,15 +221,15 @@ reference implementation of it in Ruby.</p>
 <a class="last reference external image-reference" href="https://pypi.python.org/pypi/libsass"><img alt="PyPI" src="https://badge.fury.io/py/libsass.svg" /></a>
 </dd>
 <dt>Changelog</dt>
-<dd><a class="reference internal" href="changes.html"><em>Changelog</em></a></dd>
+<dd><a class="reference internal" href="changes.html"><span class="doc">Changelog</span></a></dd>
 </dl>
 </div>
 <div class="section" id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 </div>
@@ -248,7 +250,7 @@ reference implementation of it in Ruby.</p>
 <li><a class="reference internal" href="#compile-a-directory-of-sass-files-to-css">Compile a Directory of SASS Files to CSS</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#user-s-guide">User&#8217;s Guide</a></li>
+<li><a class="reference internal" href="#user-s-guide">User’s Guide</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 <li><a class="reference internal" href="#credit">Credit</a></li>
 <li><a class="reference internal" href="#open-source">Open source</a></li>
@@ -267,21 +269,18 @@ reference implementation of it in Ruby.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -292,11 +291,11 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

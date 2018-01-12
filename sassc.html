@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sassc — SassC compliant command line interface &mdash; libsass 0.13.5 documentation</title>
-    
+    <title>sassc — SassC compliant command line interface &#8212; libsass 0.13.5 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.13.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.13.5 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sass — Binding of libsass" href="sass.html" />
     <link rel="prev" title="Changelog" href="changes.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -39,39 +41,39 @@
           <div class="body" role="main">
             
   <span class="target" id="module-sassc"></span><div class="section" id="sassc-sassc-compliant-command-line-interface">
-<h1><a class="reference internal" href="#module-sassc" title="sassc"><code class="xref py py-mod docutils literal"><span class="pre">sassc</span></code></a> &#8212; SassC compliant command line interface<a class="headerlink" href="#sassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-sassc" title="sassc"><code class="xref py py-mod docutils literal"><span class="pre">sassc</span></code></a> — SassC compliant command line interface<a class="headerlink" href="#sassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
 <p>This provides <a class="reference external" href="https://github.com/sass/sassc">SassC</a> compliant CLI executable named <strong class="program">sassc</strong>:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> sassc
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> sassc
 <span class="go">Usage: sassc [options] SCSS_FILE [CSS_FILE]</span>
 </pre></div>
 </div>
 <p>There are options as well:</p>
 <dl class="option">
 <dt id="cmdoption-sassc-t">
-<span id="cmdoption-sassc--style"></span><code class="descname">-t</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-t" title="Permalink to this definition">¶</a></dt>
+<code class="descname">-t</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coding style of the compiled result.  The same as <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal"><span class="pre">sass.compile()</span></code></a>
-function&#8217;s <code class="docutils literal"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal"><span class="pre">nested</span></code>.</p>
+function’s <code class="docutils literal"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal"><span class="pre">nested</span></code>.</p>
 </dd></dl>
 
 <dl class="option">
 <dt id="cmdoption-sassc-s">
-<span id="cmdoption-sassc--output-style"></span><code class="descname">-s</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--output-style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
-<dd><p>Alias for -t / &#8211;style.</p>
+<code class="descname">-s</code><code class="descclassname"> &lt;style&gt;</code><code class="descclassname">, </code><code class="descname">--output-style</code><code class="descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-sassc-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for -t / –style.</p>
 <div class="deprecated">
 <p><span class="versionmodified">Deprecated since version 0.11.0.</span></p>
 </div>
 </dd></dl>
 
 <dl class="option">
-<dt id="cmdoption-sassc-I">
-<span id="cmdoption-sassc--include-path"></span><code class="descname">-I</code><code class="descclassname"> &lt;dir&gt;</code><code class="descclassname">, </code><code class="descname">--include-path</code><code class="descclassname"> &lt;dir&gt;</code><a class="headerlink" href="#cmdoption-sassc-I" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-sassc-i">
+<code class="descname">-I</code><code class="descclassname"> &lt;dir&gt;</code><code class="descclassname">, </code><code class="descname">--include-path</code><code class="descclassname"> &lt;dir&gt;</code><a class="headerlink" href="#cmdoption-sassc-i" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional directory path to find <code class="docutils literal"><span class="pre">&#64;import</span></code>ed (S)CSS files.
 Can be multiply used.</p>
 </dd></dl>
 
 <dl class="option">
 <dt id="cmdoption-sassc-m">
-<span id="cmdoption-sassc-g"></span><span id="cmdoption-sassc--sourcemap"></span><code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">-g</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--sourcemap</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-m" title="Permalink to this definition">¶</a></dt>
+<code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">-g</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--sourcemap</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-m" title="Permalink to this definition">¶</a></dt>
 <dd><p>Emit source map.  Requires the second argument (output CSS filename).
 The filename of source map will be the output CSS filename followed by
 <code class="file docutils literal"><span class="pre">.map</span></code>.</p>
@@ -82,7 +84,7 @@ The filename of source map will be the output CSS filename followed by
 
 <dl class="option">
 <dt id="cmdoption-sassc-p">
-<span id="cmdoption-sassc--precision"></span><code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--precision</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-p" title="Permalink to this definition">¶</a></dt>
+<code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--precision</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-p" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the precision for numbers. Default is 5.</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.7.0.</span></p>
@@ -90,8 +92,8 @@ The filename of source map will be the output CSS filename followed by
 </dd></dl>
 
 <dl class="option">
-<dt id="cmdoption-sassc--source-comments">
-<code class="descname">--source-comments</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc--source-comments" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption-sassc-source-comments">
+<code class="descname">--source-comments</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-source-comments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Include debug info in output.</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.11.0.</span></p>
@@ -100,13 +102,13 @@ The filename of source map will be the output CSS filename followed by
 
 <dl class="option">
 <dt id="cmdoption-sassc-v">
-<span id="cmdoption-sassc--version"></span><code class="descname">-v</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-v" title="Permalink to this definition">¶</a></dt>
+<code class="descname">-v</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-v" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the program version.</p>
 </dd></dl>
 
 <dl class="option">
 <dt id="cmdoption-sassc-h">
-<span id="cmdoption-sassc--help"></span><code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-h" title="Permalink to this definition">¶</a></dt>
+<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-sassc-h" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the help message.</p>
 </dd></dl>
 
@@ -122,28 +124,25 @@ The filename of source map will be the output CSS filename followed by
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="changes.html" title="previous chapter">Changelog</a></li>
-      <li>Next: <a href="sass.html" title="next chapter"><code class="docutils literal"><span class="pre">sass</span></code> &#8212; Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
+      <li>Next: <a href="sass.html" title="next chapter"><code class="docutils literal"><span class="pre">sass</span></code> — Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/sassc.txt"
+      <li><a href="_sources/sassc.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -154,11 +153,11 @@ The filename of source map will be the output CSS filename followed by
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/sassc.txt"
+      <a href="_sources/sassc.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

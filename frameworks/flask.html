@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Using with Flask &mdash; libsass 0.13.5 documentation</title>
-    
+    <title>Using with Flask &#8212; libsass 0.13.5 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.13.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="libsass 0.13.5 documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Changelog" href="../changes.html" />
     <link rel="prev" title="libsass-python: Sass/SCSS for Python" href="../index.html" />
    
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -95,7 +97,7 @@ is <code class="file docutils literal"><span class="pre">static/sass/</span></co
 The path of CSS directory is <code class="file docutils literal"><span class="pre">static/css/</span></code>.
 The exposed path is <code class="file docutils literal"><span class="pre">/static/css</span></code>.</p>
 <p>This settings can be represented as the following manifests:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s1">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s1">&#39;static/css&#39;</span><span class="p">,</span> <span class="s1">&#39;/static/css&#39;</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
@@ -108,10 +110,10 @@ Keys are packages names.  Values are tuples of paths.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt>
 <dd>The section which explains how to integrate WSGI middlewares to
 Flask.</dd>
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.13-dev)"><span>Application Dispatching</span></a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v0.13-dev)"><span>Application Dispatching</span></a></dt>
 <dd>The documentation which explains how Flask dispatch each
 request internally.</dd>
 </dl>
@@ -119,7 +121,7 @@ request internally.</dd>
 <p>In development, to manually build SASS/SCSS files for each change is
 so tiring.  <a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> makes the web
 application to automatically build SASS/SCSS files for each request.
-It&#8217;s a WSGI middleware, so it can be plugged into the web app written in
+It’s a WSGI middleware, so it can be plugged into the web app written in
 Flask.</p>
 <p><a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> takes two required parameters:</p>
 <ul class="simple">
@@ -127,10 +129,10 @@ Flask.</p>
 <li>The set of manifests represented as dictionary.</li>
 </ul>
 <p>So:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
-<span class="kn">from</span> <span class="nn">sassutils.wsgi</span> <span class="kn">import</span> <span class="n">SassMiddleware</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">sassutils.wsgi</span> <span class="k">import</span> <span class="n">SassMiddleware</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SassMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
     <span class="s1">&#39;myapp&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s1">&#39;static/css&#39;</span><span class="p">,</span> <span class="s1">&#39;/static/css&#39;</span><span class="p">)</span>
@@ -139,7 +141,7 @@ Flask.</p>
 </div>
 <p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v0.13-dev)"><code class="xref py py-func docutils literal"><span class="pre">url_for()</span></code></a>
 function:</p>
-<div class="highlight-html+jinja"><div class="highlight"><pre><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<div class="highlight-html+jinja"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
       <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
 </pre></div>
 </div>
@@ -158,7 +160,7 @@ All compiled filenames have trailing <code class="docutils literal"><span class=
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt>Flask &#8212; <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.13-dev)"><span>Deploying with Setuptools</span></a></dt>
+<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v0.13-dev)"><span>Deploying with Setuptools</span></a></dt>
 <dd>How to deploy Flask application using <a class="reference external" href="https://pypi.python.org/pypi/setuptools">setuptools</a>.</dd>
 </dl>
 </div>
@@ -168,7 +170,7 @@ provided by libsass: <a class="reference internal" href="../sassutils/distutils.
 The command is aware of <code class="docutils literal"><span class="pre">sass_manifests</span></code> option of <code class="file docutils literal"><span class="pre">setup.py</span></code> and
 builds all SASS/SCSS sources according to the manifests.</p>
 <p>Add these arguments to <code class="file docutils literal"><span class="pre">setup.py</span></code> script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">setup</span><span class="p">(</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
     <span class="c1"># ...,</span>
     <span class="n">setup_requires</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;libsass &gt;= 0.6.0&#39;</span><span class="p">],</span>
     <span class="n">sass_manifests</span><span class="o">=</span><span class="p">{</span>
@@ -180,7 +182,7 @@ builds all SASS/SCSS sources according to the manifests.</p>
 <p>The <code class="docutils literal"><span class="pre">setup_requires</span></code> option makes sure that the libsass is installed
 in <code class="file docutils literal"><span class="pre">site-packages</span></code> (for example, your virtualenv) before
 <code class="file docutils literal"><span class="pre">setup.py</span></code> script.  That means: if you run <code class="file docutils literal"><span class="pre">setup.py</span></code> script
-and libsass isn&#8217;t installed yet at the moment, it will automatically
+and libsass isn’t installed yet at the moment, it will automatically
 install libsass first.</p>
 <p>The <code class="docutils literal"><span class="pre">sass_manifests</span></code> specifies the manifests for libsass.</p>
 <p>Now <strong class="program">setup.py build_sass</strong> will compile all SASS/SCSS files
@@ -188,12 +190,12 @@ in the specified path and generates compiled CSS files into the specified
 path (according to the manifests).</p>
 <p>If you use it with <code class="docutils literal"><span class="pre">sdist</span></code> or <code class="docutils literal"><span class="pre">bdist</span></code> command, a packed archive also
 will contain compiled CSS files!</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> python setup.py build_sass sdist
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py build_sass sdist
 </pre></div>
 </div>
 <p>You can add aliases to make these commands to always run <code class="docutils literal"><span class="pre">build_sass</span></code>
 command before.  Make <code class="file docutils literal"><span class="pre">setup.cfg</span></code> config:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[aliases]</span>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[aliases]</span>
 <span class="na">sdist</span> <span class="o">=</span> <span class="s">build_sass sdist</span>
 <span class="na">bdist</span> <span class="o">=</span> <span class="s">build_sass bdist</span>
 </pre></div>
@@ -231,21 +233,18 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/frameworks/flask.txt"
+      <li><a href="../_sources/frameworks/flask.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -256,11 +255,11 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../_sources/frameworks/flask.txt"
+      <a href="../_sources/frameworks/flask.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
