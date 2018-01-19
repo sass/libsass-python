@@ -2,6 +2,14 @@ Changelog
 =========
 
 
+Version 0.13.6
+--------------
+
+Released on January 19, 2018.
+
+- libsass-python has moved to the sass organization!
+
+
 Version 0.13.5
 --------------
 
