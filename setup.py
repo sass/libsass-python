@@ -227,7 +227,7 @@ class upload_doc(distutils.cmd.Command):
                              'build', 'sphinx', 'html')
         os.chdir(path)
         os.system('git clone -b gh-pages --depth 5 '
-                  'git@github.com:dahlia/libsass-python.git .')
+                  'git@github.com:sass/libsass-python.git .')
         os.system('git rm -r .')
         os.system('touch .nojekyll')
         os.system('cp -r ' + build + '/* .')
@@ -257,7 +257,7 @@ setup(
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
     url='http://hongminhee.org/libsass-python/',
-    download_url='https://github.com/dahlia/libsass-python/releases',
+    download_url='https://github.com/sass/libsass-python/releases',
     entry_points={
         'distutils.commands': [
             'build_sass = sassutils.distutils:build_sass'

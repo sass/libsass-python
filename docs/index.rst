@@ -130,27 +130,27 @@ Open source
 -----------
 
 GitHub (Git repository + issues)
-   https://github.com/dahlia/libsass-python
+   https://github.com/sass/libsass-python
 
 Travis CI
-   https://travis-ci.org/dahlia/libsass-python
+   https://travis-ci.org/sass/libsass-python
 
-   .. image:: https://travis-ci.org/dahlia/libsass-python.svg
-      :target: https://travis-ci.org/dahlia/libsass-python
+   .. image:: https://travis-ci.org/sass/libsass-python.svg
+      :target: https://travis-ci.org/sass/libsass-python
       :alt: Build Status
 
 AppVeyor (CI for Windows)
-   https://ci.appveyor.com/project/dahlia/libsass-python
+   https://ci.appveyor.com/project/asottile/libsass-python
 
-   .. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia/branch/master?svg=true
-      :target: https://ci.appveyor.com/project/dahlia/libsass-python
+   .. image:: https://ci.appveyor.com/api/projects/status/asgquaxlffnuryoq/branch/master?svg=true
+      :target: https://ci.appveyor.com/project/asottile/libsass-python
       :alt: Build Status (Windows)
 
 Coveralls (Test coverage)
-   https://coveralls.io/r/dahlia/libsass-python
+   https://coveralls.io/r/sass/libsass-python
 
-   .. image:: https://img.shields.io/coveralls/dahlia/libsass-python/master.svg
-      :target: https://coveralls.io/r/dahlia/libsass-python
+   .. image:: https://coveralls.io/repos/github/sass/libsass-python/badge.svg?branch=master
+      :target: https://coveralls.io/r/sass/libsass-python
       :alt: Coverage Status
 
 PyPI

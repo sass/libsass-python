@@ -5,16 +5,16 @@ libsass-python: Sass_/SCSS for Python
    :alt: PyPI
    :target: https://pypi.python.org/pypi/libsass
 
-.. image:: https://travis-ci.org/dahlia/libsass-python.svg
-   :target: https://travis-ci.org/dahlia/libsass-python
+.. image:: https://travis-ci.org/sass/libsass-python.svg
+   :target: https://travis-ci.org/sass/libsass-python
    :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/yghrs9jw7b67c0ia/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/dahlia/libsass-python
+.. image:: https://ci.appveyor.com/api/projects/status/asgquaxlffnuryoq/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/asottile/libsass-python
    :alt: Build Status (Windows)
 
-.. image:: https://coveralls.io/repos/github/dahlia/libsass-python/badge.svg?branch=master
-   :target: https://coveralls.io/github/dahlia/libsass-python?branch=master
+.. image:: https://coveralls.io/repos/github/sass/libsass-python/badge.svg?branch=master
+   :target: https://coveralls.io/github/sass/libsass-python?branch=master
    :alt: Coverage Status
 
 This package provides a simple Python extension module ``sass`` which is
