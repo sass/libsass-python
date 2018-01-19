@@ -27,8 +27,8 @@ Tests
   AppVeyor_ (Windows).
 
 .. _tox:  http://tox.testrun.org/
-.. _Travis: http://travis-ci.org/dahlia/libsass-python
-.. _AppVeyor: https://ci.appveyor.com/project/dahlia/libsass-python
+.. _Travis: http://travis-ci.org/sass/libsass-python
+.. _AppVeyor: https://ci.appveyor.com/project/asottile/libsass-python
 
 
 Maintainer's guide
@@ -62,7 +62,7 @@ Here's a brief check list for releasing a new version:
   It's currently a static website deployed on GitHub Pages.
   Use ``python setup.py upload_doc`` command.
   Although it seems possible to be automated using Travis.
-- Manually create a release through https://github.com/dahlia/libsass-python/releases/
+- Manually create a release through https://github.com/sass/libsass-python/releases/
 
 Ping Hong Minhee (hongminhee@member.fsf.org, @dahlia on GitHub) if you need
 any help!
