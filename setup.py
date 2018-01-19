@@ -256,7 +256,7 @@ setup(
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
-    url='http://hongminhee.org/libsass-python/',
+    url='https://sass.github.io/libsass-python/',
     download_url='https://github.com/sass/libsass-python/releases',
     entry_points={
         'distutils.commands': [

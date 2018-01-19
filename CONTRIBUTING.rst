@@ -68,4 +68,4 @@ Ping Hong Minhee (hongminhee@member.fsf.org, @dahlia on GitHub) if you need
 any help!
 
 .. _PyPI: https://pypi.python.org/pypi/libsass
-__ http://hongminhee.org/libsass-python/
+__ https://sass.github.io/libsass-python/

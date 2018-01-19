@@ -89,7 +89,7 @@ Docs
 
 There's the user guide manual and the full API reference for ``libsass``:
 
-http://hongminhee.org/libsass-python/
+https://sass.github.io/libsass-python/
 
 You can build the docs by yourself:
 
