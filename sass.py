@@ -288,7 +288,7 @@ def compile(**kwargs):
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
-                             <custom-functions>`_ description
+                             <custom-functions_>`_ description
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
@@ -298,7 +298,7 @@ def compile(**kwargs):
     :returns: the compiled CSS string
     :param importers: optional callback functions.
                      see also below `importer callbacks
-                     <importer-callbacks>`_ description
+                     <importer-callbacks_>`_ description
     :type importers: :class:`collections.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
@@ -328,13 +328,13 @@ def compile(**kwargs):
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
-                             <custom-functions>`_ description
+                             <custom-functions_>`_ description
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
     :param importers: optional callback functions.
                      see also below `importer callbacks
-                     <importer-callbacks>`_ description
+                     <importer-callbacks_>`_ description
     :type importers: :class:`collections.Callable`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_map_filename`` is set
@@ -370,7 +370,7 @@ def compile(**kwargs):
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
-                             <custom-functions>`_ description
+                             <custom-functions_>`_ description
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
