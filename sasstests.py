@@ -618,8 +618,8 @@ class ManifestTestCase(BaseTestCase):
                     'names': [],
                     'mappings': (
                         ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAK,GAQxB;'
-                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,0BAA0B,'
-                        'GACjC'
+                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,sBAAsB,'
+                        'GAC7B'
                     ),
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
