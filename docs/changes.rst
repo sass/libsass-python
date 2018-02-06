@@ -2,6 +2,17 @@ Changelog
 =========
 
 
+Version 0.13.7
+--------------
+
+Released on February 5, 2018.
+
+- Follow up the libsass upstream: 3.4.9 --- See the release notes of Libsass
+  3.4.9__. [:issue:`232` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.4.9
+
+
 Version 0.13.6
 --------------
 
@@ -19,7 +30,6 @@ Released on January 11, 2018.
   3.4.8__. [:issue:`228` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.8
-
 
 
 Version 0.13.4
