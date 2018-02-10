@@ -921,16 +921,12 @@ class SassTypesTest(unittest.TestCase):
         assert type(color.a) is float, type(color.a)
 
     def test_sass_list_no_conversion(self):
-        lst = sass.SassList(
-            ('foo', 'bar'), sass.SASS_SEPARATOR_COMMA,
-        )
+        lst = sass.SassList(('foo', 'bar'), sass.SASS_SEPARATOR_COMMA)
         assert type(lst.items) is tuple, type(lst.items)
         assert lst.separator is sass.SASS_SEPARATOR_COMMA, lst.separator
 
     def test_sass_list_conversion(self):
-        lst = sass.SassList(
-            ['foo', 'bar'], sass.SASS_SEPARATOR_SPACE,
-        )
+        lst = sass.SassList(['foo', 'bar'], sass.SASS_SEPARATOR_SPACE)
         assert type(lst.items) is tuple, type(lst.items)
         assert lst.separator is sass.SASS_SEPARATOR_SPACE, lst.separator
 
@@ -1004,6 +1000,12 @@ def returns_space_list():
     return sass.SassList(('medium', 'none'), sass.SASS_SEPARATOR_SPACE)
 
 
+def returns_bracketed_list():
+    return sass.SassList(
+        ('hello', 'ohai'), sass.SASS_SEPARATOR_SPACE, bracketed=True,
+    )
+
+
 def returns_py_dict():
     return {'foo': 'bar'}
 
@@ -1035,6 +1037,7 @@ custom_functions = frozenset([
     sass.SassFunction('returns_color', (), returns_color),
     sass.SassFunction('returns_comma_list', (), returns_comma_list),
     sass.SassFunction('returns_space_list', (), returns_space_list),
+    sass.SassFunction('returns_bracketed_list', (), returns_bracketed_list),
     sass.SassFunction('returns_py_dict', (), returns_py_dict),
     sass.SassFunction('returns_map', (), returns_map),
     sass.SassFunction('identity', ('$x',), identity),
@@ -1054,6 +1057,7 @@ custom_function_map = {
     'returns_color': returns_color,
     'returns_comma_list': returns_comma_list,
     'returns_space_list': returns_space_list,
+    'returns_bracketed_list': returns_bracketed_list,
     'returns_py_dict': returns_py_dict,
     'returns_map': returns_map,
     'identity': identity,
@@ -1073,6 +1077,7 @@ custom_function_set = frozenset([
     returns_color,
     returns_comma_list,
     returns_space_list,
+    returns_bracketed_list,
     returns_py_dict,
     returns_map,
     identity,
@@ -1237,6 +1242,12 @@ class CustomFunctionsTest(unittest.TestCase):
             'a{border-right:medium none}\n',
         )
 
+    def test_bracketed_list(self):
+        self.assertEqual(
+            compile_with_func('a { content: returns_bracketed_list(); }'),
+            'a{content:[hello ohai]}\n'
+        )
+
     def test_py_dict(self):
         self.assertEqual(
             compile_with_func(
@@ -1305,6 +1316,14 @@ class CustomFunctionsTest(unittest.TestCase):
                 'a { border-right: identity(returns_space_list()); }',
             ),
             'a{border-right:medium none}\n',
+        )
+
+    def test_identity_bracketed_list(self):
+        self.assertEqual(
+            compile_with_func(
+                'a { content: identity(returns_bracketed_list()); }',
+            ),
+            'a{content:[hello ohai]}\n',
         )
 
     def test_identity_py_dict(self):
