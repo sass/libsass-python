@@ -44,13 +44,13 @@
 <h1><a class="reference internal" href="#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.builder</span></code></a> — Build the whole directory<a class="headerlink" href="#sassutils-builder-build-the-whole-directory" title="Permalink to this headline">¶</a></h1>
 <dl class="data">
 <dt id="sassutils.builder.SUFFIXES">
-<code class="descclassname">sassutils.builder.</code><code class="descname">SUFFIXES</code><em class="property"> = frozenset(['scss', 'sass'])</em><a class="headerlink" href="#sassutils.builder.SUFFIXES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sassutils.builder.</code><code class="descname">SUFFIXES</code><em class="property"> = frozenset({'scss', 'sass'})</em><a class="headerlink" href="#sassutils.builder.SUFFIXES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/2/library/collections.html#collections.Set" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">collections.Set</span></code></a>) The set of supported filename suffixes.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="sassutils.builder.SUFFIX_PATTERN">
-<code class="descclassname">sassutils.builder.</code><code class="descname">SUFFIX_PATTERN</code><em class="property"> = &lt;_sre.SRE_Pattern object&gt;</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sassutils.builder.</code><code class="descname">SUFFIX_PATTERN</code><em class="property"> = re.compile('[.](scss|sass)$')</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/2/library/re.html#re.RegexObject" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">re.RegexObject</span></code></a>) The regular expression pattern which matches to
 filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><code class="xref py py-const docutils literal"><span class="pre">SUFFIXES</span></code></a>.</p>
 </dd></dl>
