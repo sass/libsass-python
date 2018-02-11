@@ -2,7 +2,7 @@ libsass-python: Sass_/SCSS for Python
 =====================================
 
 This package provides a simple Python extension module :mod:`sass` which is
-binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
+binding LibSass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
 your :file:`setup.py`'s ``install_requires`` list or :file:`requirements.txt`
@@ -11,7 +11,7 @@ file.
 It currently supports CPython 2.6, 2.7, 3.4--3.6, and PyPy 2.3+!
 
 .. _Sass: https://sass-lang.com/
-.. _Libsass: https://github.com/sass/libsass
+.. _LibSass: https://github.com/sass/libsass
 
 
 Features
@@ -19,7 +19,7 @@ Features
 
 - You don't need any Ruby/Node.js stack at all, for development or deployment
   either.
-- Fast. (Libsass_ is written in C++.)
+- Fast. (LibSass_ is written in C++.)
 - Simple API.  See :ref:`example code <example>` for details.
 - Custom functions.
 - ``@import`` callbacks.
@@ -113,9 +113,9 @@ References
 Credit
 ------
 
-Hong Minhee wrote this Python binding of Libsass_.
+Hong Minhee wrote this Python binding of LibSass_.
 
-Hampton Catlin and Aaron Leung wrote Libsass_, which is portable C/C++
+Hampton Catlin and Aaron Leung wrote LibSass_, which is portable C/C++
 implementation of Sass_.
 
 Hampton Catlin originally designed Sass_ language and wrote the first

@@ -7,7 +7,7 @@ Version 0.13.7
 
 Released on February 5, 2018.
 
-- Follow up the libsass upstream: 3.4.9 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.9 --- See the release notes of LibSass
   3.4.9__. [:issue:`232` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.9
@@ -26,7 +26,7 @@ Version 0.13.5
 
 Released on January 11, 2018.
 
-- Follow up the libsass upstream: 3.4.8 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.8 --- See the release notes of LibSass
   3.4.8__. [:issue:`228` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.8
@@ -37,7 +37,7 @@ Version 0.13.4
 
 Released on November 14, 2017.
 
-- Follow up the libsass upstream: 3.4.7 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.7 --- See the release notes of LibSass
   3.4.7__. [:issue:`226` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.7
@@ -53,7 +53,7 @@ Released on October 11, 2017.
 - Add a ``pysassc`` entry to replace ``sassc`` [:issue:`218` by
   Anthony Sottile]
 - Enable building with dynamic linking [:issue:`219` by Marcel Plch]
-- Follow up the libsass upstream: 3.4.6 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.6 --- See the release notes of LibSass
   3.4.6__. [:issue:`221` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.6
@@ -72,7 +72,7 @@ Version 0.13.1
 
 Released on June 8, 2017.
 
-- Follow up the libsass upstream: 3.4.5 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.5 --- See the release notes of LibSass
   3.4.5__. [:issue:`207` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.5
@@ -91,7 +91,7 @@ Released on June 7, 2017.
   :issue:`197` by Anthony Sottile]
 - Correct source map url [:issue:`201` :issue:`202` by Anthony Sottile]
 - Remove ``--watch`` [:issue:`203` by Anthony Sottile]
-- Follow up the libsass upstream: 3.4.4 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.4 --- See the release notes of LibSass
   3.4.4__. [:issue:`205` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.4
@@ -102,7 +102,7 @@ Version 0.12.3
 
 Released on January 7, 2017.
 
-- Follow up the libsass upstream: 3.4.3 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.3 --- See the release notes of LibSass
   3.4.3__. [:issue:`178` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.3
@@ -113,7 +113,7 @@ Version 0.12.2
 
 Released on January 5, 2017.
 
-- Follow up the libsass upstream: 3.4.2 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.2 --- See the release notes of LibSass
   3.4.2__. [:issue:`176` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.2
@@ -124,7 +124,7 @@ Version 0.12.1
 
 Released on December 20, 2016.
 
-- Follow up the libsass upstream: 3.4.1 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.1 --- See the release notes of LibSass
   3.4.1__. [:issue:`175` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.1
@@ -135,7 +135,7 @@ Version 0.12.0
 
 Released on December 10, 2016.
 
-- Follow up the libsass upstream: 3.4.0 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.4.0 --- See the release notes of LibSass
   3.4.0__. [:issue:`173` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.4.0
@@ -149,7 +149,7 @@ Released on October 24, 2016.
 - Drop support for python2.6 [:issue:`158` by Anthony Sottile]
 - Deprecate ``--watch`` [:issue:`156` by Anthony Sottile]
 - Preserve line endings [:issue:`160` by Anthony Sottile]
-- Follow up the libsass upstream: 3.3.6 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.6 --- See the release notes of LibSass
   3.3.6__. [:issue:`167` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.6
@@ -161,7 +161,7 @@ Version 0.11.1
 
 Released on April 22, 2016.
 
-- Follow up the libsass upstream: 3.3.5 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.5 --- See the release notes of LibSass
   3.3.5__. [:issue:`148` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.5
@@ -171,7 +171,7 @@ Version 0.11.0
 
 Released on March 23, 2016.
 
-- Follow up the libsass upstream: 3.3.4 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.4 --- See the release notes of LibSass
   3.3.4__. [:issue:`144` by Anthony Sottile]
 - Expose libsass version in ``sassc --version`` and ``sass.libsass_version``
   [:issue:`142` :issue:`141` :issue:`140` by Anthony Sottile]
@@ -193,7 +193,7 @@ Version 0.10.1
 
 Released on January 29, 2016.
 
-- Follow up the libsass upstream: 3.3.3 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.3 --- See the release notes of LibSass
   3.3.3__. [by Anthony Sottile]
 - Allow -t for style like sassc [:issue:`98` by Anthony Sottile]
 
@@ -221,7 +221,7 @@ Version 0.9.2
 
 Released on November 12, 2015.
 
-- Follow up the libsass upstream: 3.3.2 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.2 --- See the release notes of LibSass
   3.3.2__. [by Anthony Sottile]
 - Require VS 2015 to build on windows [:issue:`99` by Anthony Sottile]
 
@@ -232,7 +232,7 @@ Version 0.9.1
 
 Released on October 29, 2015.
 
-- Follow up the libsass upstream: 3.3.1 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.1 --- See the release notes of LibSass
   3.3.1__. [by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.1
@@ -245,7 +245,7 @@ Released on October 28, 2015.
 
 - Fix a bug with writing UTF-8 to a file [:issue:`72` by Caleb Ely]
 - Fix a segmentation fault on ^C [:issue:`87` by Anthony Sottile]
-- Follow up the libsass upstream: 3.3.0 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.3.0 --- See the release notes of LibSass
   3.3.0__. [:issue:`96` by Anthony Sottile]
 
 __ https://github.com/sass/libsass/releases/tag/3.3.0
@@ -256,7 +256,7 @@ Version 0.8.3
 
 Released on August 2, 2015.
 
-- Follow up the libsass upstream: 3.2.5 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.2.5 --- See the release notes of LibSass
   3.2.5__.  [:issue:`79`, :issue:`80` by Anthony Sottile]
 - Fixed a bug that :file:`*.sass` files were ignored.
   [:issue:`78` by Guilhem MAS-PAITRAULT]
@@ -269,7 +269,7 @@ Version 0.8.2
 
 Released on May 19, 2015.
 
-- Follow up the libsass upstream: 3.2.4 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.2.4 --- See the release notes of LibSass
   3.2.3__, and 3.2.4__.  [:issue:`69` by Anthony Sottile]
 - The default value of :class:`~sassutils.wsgi.SassMiddleware`'s
   ``error_status`` parameter was changed from ``'500 Internal Server Error'``
@@ -295,7 +295,7 @@ Version 0.8.0
 
 Released on May 3, 2015.
 
-- Follow up the libsass upstream: 3.2.2 --- See the release notes of Libsass
+- Follow up the libsass upstream: 3.2.2 --- See the release notes of LibSass
   3.2.0__, 3.2.1__, and 3.2.2__.
   [:issue:`61`, :issue:`52`, :issue:`56`, :issue:`58`, :issue:`62`, :issue:`64`
   by Anthony Sottile]
@@ -326,7 +326,7 @@ Released on March 6, 2015.
 
 Anthony Sottile contributed to the most of this release.  Huge thanks to him!
 
-- Follow up the libsass upstream: 3.1.0 --- See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 3.1.0 --- See the `release note`__ of LibSass.
   [:issue:`38`, :issue:`43` by Anthony Sottile]
 
   - Custom functions and imports
@@ -383,7 +383,7 @@ Version 0.6.1
 
 Released on November 6, 2014.
 
-- Follow up the libsass upstream: 3.0.1 --- See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 3.0.1 --- See the `release note`__ of LibSass.
 - Fixed a bug that :class:`~sassutils.wsgi.SassMiddleware` never closes
   the socket on some WSGI servers e.g. ``eventlet.wsgi``.
 
@@ -400,7 +400,7 @@ to compile.  Although 0.6.2 became back to only need GCC (G++) 4.6+,
 LLVM Clang 2.9+, from 0.6.0 to 0.6.1 you need GCC (G++) 4.8+, LLVM Clang 3.3+,
 or Visual Studio 2013 Update 4+.
 
-- Follow up the libsass upstream: 3.0 --- See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 3.0 --- See the `release note`__ of LibSass.
 
   - Decent extends support
   - Basic Sass Maps Support 
@@ -445,7 +445,7 @@ Version 0.5.0
 
 Released on June 6, 2014.
 
-- Follow up the libsass upstream: 2.0 --- See the `release note`__ of Libsass.
+- Follow up the libsass upstream: 2.0 --- See the `release note`__ of LibSass.
 
   - Added indented syntax support (:file:`*.sass` files).
   - Added expanded selector support (BEM).
