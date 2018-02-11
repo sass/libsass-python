@@ -10,7 +10,7 @@ file.
 
 It currently supports CPython 2.6, 2.7, 3.4--3.6, and PyPy 2.3+!
 
-.. _Sass: http://sass-lang.com/
+.. _Sass: https://sass-lang.com/
 .. _Libsass: https://github.com/sass/libsass
 
 
@@ -123,7 +123,7 @@ reference implementation of it in Ruby.
 
 The above three softwares are all distributed under `MIT license`_.
 
-.. _MIT license: http://mit-license.org/
+.. _MIT license: https://mit-license.org/
 
 
 Open source

@@ -423,7 +423,7 @@ or Visual Studio 2013 Update 4+.
   :class:`~sassutils.distutils.build_sass` command.  [:issue:`25`]
 
 __ https://github.com/sass/libsass/releases/tag/3.0
-.. _partial import: http://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
+.. _partial import: https://sass-lang.com/documentation/file.SASS_REFERENCE.html#partials
 
 
 Version 0.5.1
@@ -539,7 +539,7 @@ Released on February 21, 2014.
   - Supports sourcemaps.
 
 .. _57a2f62--v1.0.1: https://github.com/sass/libsass/compare/57a2f627b4d2fbd3cf1913b241f1d5aa31e35580...v1.0.1
-.. _variable arguments: http://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
+.. _variable arguments: https://sass-lang.com/docs/yardoc/file.SASS_CHANGELOG.html#variable_arguments
 
 
 Version 0.2.4

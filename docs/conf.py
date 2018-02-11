@@ -250,8 +250,8 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('http://docs.python.org/', None),
-    'setuptools': ('http://pythonhosted.org/setuptools/', None),
+    'python': ('https://docs.python.org/', None),
+    'setuptools': ('https://setuptools.readthedocs.io/', None),
     'flask': ('http://flask.pocoo.org/docs/', None)
 }
 
