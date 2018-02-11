@@ -216,7 +216,8 @@ class upload_doc(distutils.cmd.Command):
     user_options = []
 
     def initialize_options(self):
-        pass
+        if sys.version_info < (3,):
+            raise SystemExit('upload_doc must be run with python 3')
 
     def finalize_options(self):
         pass
