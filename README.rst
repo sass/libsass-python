@@ -107,9 +107,9 @@ Credit
 Hong Minhee wrote this Python binding of Libsass_.
 
 Hampton Catlin and Aaron Leung wrote Libsass_, which is portable C/C++
-implementation of SASS_.
+implementation of Sass_.
 
-Hampton Catlin originally designed SASS_ language and wrote the first
+Hampton Catlin originally designed Sass_ language and wrote the first
 reference implementation of it in Ruby.
 
 The above three softwares are all distributed under `MIT license`_.

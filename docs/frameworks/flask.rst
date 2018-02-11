@@ -25,7 +25,7 @@ Imagine the project contained in such directory layout:
     - :file:`css/`
   - :file:`templates/`
 
-SASS/SCSS files will go inside :file:`myapp/static/sass/` directory.
+Sass/SCSS files will go inside :file:`myapp/static/sass/` directory.
 Compiled CSS files will go inside :file:`myapp/static/css/` directory.
 CSS files can be regenerated, so add :file:`myapp/static/css/` into your
 ignore list like :file:`.gitignore` or :file:`.hgignore`.
@@ -35,10 +35,10 @@ Defining manifest
 -----------------
 
 The :mod:`sassutils` defines a concept named :dfn:`manifest`.
-Manifest is building settings of SASS/SCSS.  It specifies some paths
-related to building SASS/SCSS:
+Manifest is building settings of Sass/SCSS.  It specifies some paths
+related to building Sass/SCSS:
 
-- The path of the directory which contains SASS/SCSS source files.
+- The path of the directory which contains Sass/SCSS source files.
 - The path of the directory compiled CSS files will go.
 - The path, is exposed to HTTP (through WSGI), of the directory that
   will contain compiled CSS files.
@@ -47,7 +47,7 @@ Every package may have their own manifest.  Paths have to be relative
 to the path of the package.
 
 For example, in the project the package name is :mod:`myapp`.
-The path of the package is :file:`myapp/`.  The path of SASS/SCSS directory
+The path of the package is :file:`myapp/`.  The path of Sass/SCSS directory
 is :file:`static/sass/` (relative to the package directory).
 The path of CSS directory is :file:`static/css/`.
 The exposed path is :file:`/static/css`.
@@ -62,7 +62,7 @@ As you can see the above, the set of manifests are represented in dictionary.
 Keys are packages names.  Values are tuples of paths.
 
 
-Building SASS/SCSS for each request
+Building Sass/SCSS for each request
 -----------------------------------
 
 .. seealso::
@@ -77,9 +77,9 @@ Building SASS/SCSS for each request
 
    __ http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares
 
-In development, to manually build SASS/SCSS files for each change is
+In development, to manually build Sass/SCSS files for each change is
 so tiring.  :class:`~sassutils.wsgi.SassMiddleware` makes the web
-application to automatically build SASS/SCSS files for each request.
+application to automatically build Sass/SCSS files for each request.
 It's a WSGI middleware, so it can be plugged into the web app written in
 Flask.
 
@@ -113,7 +113,7 @@ function:
    All compiled filenames have trailing ``.css`` suffix.
 
 
-Building SASS/SCSS for each deployment
+Building Sass/SCSS for each deployment
 --------------------------------------
 
 .. note::
@@ -129,7 +129,7 @@ If libsass has been installed in the :file:`site-packages` (for example,
 your virtualenv), :file:`setup.py` script also gets had new command
 provided by libsass: :class:`~sassutils.distutils.build_sass`.
 The command is aware of ``sass_manifests`` option of :file:`setup.py` and
-builds all SASS/SCSS sources according to the manifests.
+builds all Sass/SCSS sources according to the manifests.
 
 Add these arguments to :file:`setup.py` script::
 
@@ -149,7 +149,7 @@ install libsass first.
 
 The ``sass_manifests`` specifies the manifests for libsass.
 
-Now :program:`setup.py build_sass` will compile all SASS/SCSS files
+Now :program:`setup.py build_sass` will compile all Sass/SCSS files
 in the specified path and generates compiled CSS files into the specified
 path (according to the manifests).
 
@@ -169,7 +169,7 @@ command before.  Make :file:`setup.cfg` config:
    sdist = build_sass sdist
    bdist = build_sass bdist
 
-Now it automatically builds SASS/SCSS sources and include compiled CSS files
+Now it automatically builds Sass/SCSS sources and include compiled CSS files
 to the package archive when you run :program:`setup.py sdist`.
 
 .. _setuptools: https://pypi.python.org/pypi/setuptools

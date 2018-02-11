@@ -10,7 +10,7 @@ file.
 
 It currently supports CPython 2.6, 2.7, 3.4--3.6, and PyPy 2.3+!
 
-.. _SASS: http://sass-lang.com/
+.. _Sass: http://sass-lang.com/
 .. _Libsass: https://github.com/sass/libsass
 
 
@@ -59,14 +59,14 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 Examples
 --------
 
-Compile a String of SASS to CSS
+Compile a String of Sass to CSS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> import sass
 >>> sass.compile(string='a { b { color: blue; } }')
 'a b {\n  color: blue; }\n'
 
-Compile a Directory of SASS Files to CSS
+Compile a Directory of Sass Files to CSS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> import sass
@@ -116,9 +116,9 @@ Credit
 Hong Minhee wrote this Python binding of Libsass_.
 
 Hampton Catlin and Aaron Leung wrote Libsass_, which is portable C/C++
-implementation of SASS_.
+implementation of Sass_.
 
-Hampton Catlin originally designed SASS_ language and wrote the first
+Hampton Catlin originally designed Sass_ language and wrote the first
 reference implementation of it in Ruby.
 
 The above three softwares are all distributed under `MIT license`_.

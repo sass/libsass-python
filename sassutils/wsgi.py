@@ -19,7 +19,7 @@ __all__ = 'SassMiddleware',
 
 class SassMiddleware(object):
     r"""WSGI middleware for development purpose.  Everytime a CSS file has
-    requested it finds a matched SASS/SCSS source file and then compiled
+    requested it finds a matched Sass/SCSS source file and then compiled
     it into CSS.
 
     It shows syntax errors in three ways:

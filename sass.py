@@ -267,11 +267,11 @@ def compile(**kwargs):
     """There are three modes of parameters :func:`compile()` can take:
     ``string``, ``filename``, and ``dirname``.
 
-    The ``string`` parameter is the most basic way to compile SASS.
-    It simply takes a string of SASS code, and then returns a compiled
+    The ``string`` parameter is the most basic way to compile Sass.
+    It simply takes a string of Sass code, and then returns a compiled
     CSS string.
 
-    :param string: SASS source code to compile.  it's exclusive to
+    :param string: Sass source code to compile.  it's exclusive to
                    ``filename`` and ``dirname`` parameters
     :type string: :class:`str`
     :param output_style: an optional coding style of the compiled result.
@@ -282,7 +282,7 @@ def compile(**kwargs):
                             :const:`False` by default
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
-                          SASS/CSS source files
+                          Sass/CSS source files
     :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
@@ -292,7 +292,7 @@ def compile(**kwargs):
     :type custom_functions: :class:`collections.Set`,
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
-    :param indented: optional declaration that the string is SASS, not SCSS
+    :param indented: optional declaration that the string is Sass, not SCSS
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
     :returns: the compiled CSS string
@@ -302,12 +302,12 @@ def compile(**kwargs):
     :type importers: :class:`collections.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
-                               (for example the given SASS has broken syntax)
+                               (for example the given Sass has broken syntax)
 
     The ``filename`` is the most commonly used way.  It takes a string of
-    SASS filename, and then returns a compiled CSS string.
+    Sass filename, and then returns a compiled CSS string.
 
-    :param filename: the filename of SASS source code to compile.
+    :param filename: the filename of Sass source code to compile.
                      it's exclusive to ``string`` and ``dirname`` parameters
     :type filename: :class:`str`
     :param output_style: an optional coding style of the compiled result.
@@ -322,7 +322,7 @@ def compile(**kwargs):
                                 using source maps.  :const:`None` by default.
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
-                          SASS/CSS source files
+                          Sass/CSS source files
     :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
@@ -340,13 +340,13 @@ def compile(**kwargs):
               and the source map string if ``source_map_filename`` is set
     :rtype: :class:`str`, :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
-                               (for example the given SASS has broken syntax)
+                               (for example the given Sass has broken syntax)
     :raises exceptions.IOError: when the ``filename`` doesn't exist or
                                 cannot be read
 
     The ``dirname`` is useful for automation.  It takes a pair of paths.
     The first of the ``dirname`` pair refers the source directory, contains
-    several SASS source files to compiled.  SASS source files can be nested
+    several Sass source files to compiled.  Sass source files can be nested
     in directories.  The second of the pair refers the output directory
     that compiled CSS files would be saved.  Directory tree structure of
     the source directory will be maintained in the output directory as well.
@@ -364,7 +364,7 @@ def compile(**kwargs):
                             :const:`False` by default
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
-                          SASS/CSS source files
+                          Sass/CSS source files
     :type include_paths: :class:`collections.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
@@ -375,7 +375,7 @@ def compile(**kwargs):
                             :class:`collections.Sequence`,
                             :class:`collections.Mapping`
     :raises sass.CompileError: when it fails for any reason
-                               (for example the given SASS has broken syntax)
+                               (for example the given Sass has broken syntax)
 
     .. _custom-functions:
 

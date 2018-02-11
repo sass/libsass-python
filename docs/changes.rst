@@ -213,7 +213,7 @@ Version 0.9.3
 
 Released on December 03, 2015.
 
-- Support "indented" SASS compilation [:issue:`41` by Alice Zoë Bevan–McGregor]
+- Support "indented" Sass compilation [:issue:`41` by Alice Zoë Bevan–McGregor]
 - Fix wheels on windows [:issue:`28` :issue:`49` by Anthony Sottile]
 
 Version 0.9.2

@@ -27,7 +27,7 @@ SUFFIX_PATTERN = re.compile('[.](' + '|'.join(map(re.escape, SUFFIXES)) + ')$')
 
 def build_directory(sass_path, css_path, output_style='nested',
                     _root_sass=None, _root_css=None):
-    """Compiles all SASS/SCSS files in ``path`` to CSS.
+    """Compiles all Sass/SCSS files in ``path`` to CSS.
 
     :param sass_path: the path of the directory which contains source files
                       to compile
@@ -78,9 +78,9 @@ def build_directory(sass_path, css_path, output_style='nested',
 
 
 class Manifest(object):
-    """Building manifest of SASS/SCSS.
+    """Building manifest of Sass/SCSS.
 
-    :param sass_path: the path of the directory that contains SASS/SCSS
+    :param sass_path: the path of the directory that contains Sass/SCSS
                       source files
     :type sass_path: :class:`str`, :class:`basestring`
     :param css_path: the path of the directory to store compiled CSS
@@ -136,13 +136,13 @@ class Manifest(object):
         self.wsgi_path = wsgi_path
 
     def resolve_filename(self, package_dir, filename):
-        """Gets a proper full relative path of SASS source and
+        """Gets a proper full relative path of Sass source and
         CSS source that will be generated, according to ``package_dir``
         and ``filename``.
 
         :param package_dir: the path of package directory
         :type package_dir: :class:`str`, :class:`basestring`
-        :param filename: the filename of SASS/SCSS source to compile
+        :param filename: the filename of Sass/SCSS source to compile
         :type filename: :class:`str`, :class:`basestring`
         :returns: a pair of (sass, css) path
         :rtype: :class:`tuple`
@@ -154,7 +154,7 @@ class Manifest(object):
         return sass_path, css_path
 
     def build(self, package_dir, output_style='nested'):
-        """Builds the SASS/SCSS files in the specified :attr:`sass_path`.
+        """Builds the Sass/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`
         as relative to the given ``package_dir``.
 
@@ -181,11 +181,11 @@ class Manifest(object):
                          for filename in css_files)
 
     def build_one(self, package_dir, filename, source_map=False):
-        """Builds one SASS/SCSS file.
+        """Builds one Sass/SCSS file.
 
         :param package_dir: the path of package directory
         :type package_dir: :class:`str`, :class:`basestring`
-        :param filename: the filename of SASS/SCSS source to compile
+        :param filename: the filename of Sass/SCSS source to compile
         :type filename: :class:`str`, :class:`basestring`
         :param source_map: whether to use source maps.  if :const:`True`
                            it also write a source map to a ``filename``
