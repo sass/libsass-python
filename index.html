@@ -40,9 +40,9 @@
           <div class="body" role="main">
             
   <div class="section" id="libsass-python-sass-scss-for-python">
-<h1>libsass-python: <a class="reference external" href="http://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this headline">¶</a></h1>
+<h1>libsass-python: <a class="reference external" href="https://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this headline">¶</a></h1>
 <p>This package provides a simple Python extension module <a class="reference internal" href="sass.html#module-sass" title="sass"><code class="xref py py-mod docutils literal"><span class="pre">sass</span></code></a> which is
-binding <a class="reference external" href="https://github.com/sass/libsass">Libsass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
+binding <a class="reference external" href="https://github.com/sass/libsass">LibSass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
 It’s very straightforward and there isn’t any headache related Python
 distribution/deployment.  That means you can add just <code class="docutils literal"><span class="pre">libsass</span></code> into
 your <code class="file docutils literal"><span class="pre">setup.py</span></code>’s <code class="docutils literal"><span class="pre">install_requires</span></code> list or <code class="file docutils literal"><span class="pre">requirements.txt</span></code>
@@ -53,7 +53,7 @@ file.</p>
 <ul class="simple">
 <li>You don’t need any Ruby/Node.js stack at all, for development or deployment
 either.</li>
-<li>Fast. (<a class="reference external" href="https://github.com/sass/libsass">Libsass</a> is written in C++.)</li>
+<li>Fast. (<a class="reference external" href="https://github.com/sass/libsass">LibSass</a> is written in C++.)</li>
 <li>Simple API.  See <a class="reference internal" href="#example"><span class="std std-ref">example code</span></a> for details.</li>
 <li>Custom functions.</li>
 <li><code class="docutils literal"><span class="pre">&#64;import</span></code> callbacks.</li>
@@ -85,7 +85,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 <div class="section" id="examples">
 <span id="example"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="compile-a-string-of-sass-to-css">
-<h3>Compile a String of SASS to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this headline">¶</a></h3>
+<h3>Compile a String of Sass to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
@@ -93,7 +93,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 </div>
 <div class="section" id="compile-a-directory-of-sass-files-to-css">
-<h3>Compile a Directory of SASS Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this headline">¶</a></h3>
+<h3>Compile a Directory of Sass Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;css&#39;</span><span class="p">)</span>
@@ -123,8 +123,8 @@ See also libsass project’s <a class="reference external" href="https://github.
 <li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#directory-layout">Directory layout</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#defining-manifest">Defining manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#building-sass-scss-for-each-request">Building SASS/SCSS for each request</a></li>
-<li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#building-sass-scss-for-each-deployment">Building SASS/SCSS for each deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#building-sass-scss-for-each-request">Building Sass/SCSS for each request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frameworks/flask.html#building-sass-scss-for-each-deployment">Building Sass/SCSS for each deployment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
@@ -183,7 +183,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal"><span class="pre">sassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal"><span class="pre">sass</span></code> — Binding of <code class="docutils literal"><span class="pre">libsass</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> — Additional utilities related to SASS</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="docutils literal"><span class="pre">sassutils.distutils</span></code> — <code class="docutils literal"><span class="pre">setuptools</span></code>/<code class="docutils literal"><span class="pre">distutils</span></code> integration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
@@ -194,12 +194,12 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 <div class="section" id="credit">
 <h2>Credit<a class="headerlink" href="#credit" title="Permalink to this headline">¶</a></h2>
-<p>Hong Minhee wrote this Python binding of <a class="reference external" href="https://github.com/sass/libsass">Libsass</a>.</p>
-<p>Hampton Catlin and Aaron Leung wrote <a class="reference external" href="https://github.com/sass/libsass">Libsass</a>, which is portable C/C++
-implementation of <a class="reference external" href="http://sass-lang.com/">SASS</a>.</p>
-<p>Hampton Catlin originally designed <a class="reference external" href="http://sass-lang.com/">SASS</a> language and wrote the first
+<p>Hong Minhee wrote this Python binding of <a class="reference external" href="https://github.com/sass/libsass">LibSass</a>.</p>
+<p>Hampton Catlin and Aaron Leung wrote <a class="reference external" href="https://github.com/sass/libsass">LibSass</a>, which is portable C/C++
+implementation of <a class="reference external" href="https://sass-lang.com/">Sass</a>.</p>
+<p>Hampton Catlin originally designed <a class="reference external" href="https://sass-lang.com/">Sass</a> language and wrote the first
 reference implementation of it in Ruby.</p>
-<p>The above three softwares are all distributed under <a class="reference external" href="http://mit-license.org/">MIT license</a>.</p>
+<p>The above three softwares are all distributed under <a class="reference external" href="https://mit-license.org/">MIT license</a>.</p>
 </div>
 <div class="section" id="open-source">
 <h2>Open source<a class="headerlink" href="#open-source" title="Permalink to this headline">¶</a></h2>
@@ -248,8 +248,8 @@ reference implementation of it in Ruby.</p>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#install">Install</a></li>
 <li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#compile-a-string-of-sass-to-css">Compile a String of SASS to CSS</a></li>
-<li><a class="reference internal" href="#compile-a-directory-of-sass-files-to-css">Compile a Directory of SASS Files to CSS</a></li>
+<li><a class="reference internal" href="#compile-a-string-of-sass-to-css">Compile a String of Sass to CSS</a></li>
+<li><a class="reference internal" href="#compile-a-directory-of-sass-files-to-css">Compile a Directory of Sass Files to CSS</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#user-s-guide">User’s Guide</a></li>
@@ -293,7 +293,7 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

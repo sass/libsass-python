@@ -2,7 +2,7 @@ libsass-python: Sass_/SCSS for Python
 =====================================
 
 This package provides a simple Python extension module :mod:`sass` which is
-binding Libsass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
+binding LibSass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
 your :file:`setup.py`'s ``install_requires`` list or :file:`requirements.txt`
@@ -10,8 +10,8 @@ file.
 
 It currently supports CPython 2.6, 2.7, 3.4--3.6, and PyPy 2.3+!
 
-.. _SASS: http://sass-lang.com/
-.. _Libsass: https://github.com/sass/libsass
+.. _Sass: https://sass-lang.com/
+.. _LibSass: https://github.com/sass/libsass
 
 
 Features
@@ -19,7 +19,7 @@ Features
 
 - You don't need any Ruby/Node.js stack at all, for development or deployment
   either.
-- Fast. (Libsass_ is written in C++.)
+- Fast. (LibSass_ is written in C++.)
 - Simple API.  See :ref:`example code <example>` for details.
 - Custom functions.
 - ``@import`` callbacks.
@@ -59,14 +59,14 @@ It's available on PyPI_, so you can install it using :program:`pip`:
 Examples
 --------
 
-Compile a String of SASS to CSS
+Compile a String of Sass to CSS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> import sass
 >>> sass.compile(string='a { b { color: blue; } }')
 'a b {\n  color: blue; }\n'
 
-Compile a Directory of SASS Files to CSS
+Compile a Directory of Sass Files to CSS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 >>> import sass
@@ -113,17 +113,17 @@ References
 Credit
 ------
 
-Hong Minhee wrote this Python binding of Libsass_.
+Hong Minhee wrote this Python binding of LibSass_.
 
-Hampton Catlin and Aaron Leung wrote Libsass_, which is portable C/C++
-implementation of SASS_.
+Hampton Catlin and Aaron Leung wrote LibSass_, which is portable C/C++
+implementation of Sass_.
 
-Hampton Catlin originally designed SASS_ language and wrote the first
+Hampton Catlin originally designed Sass_ language and wrote the first
 reference implementation of it in Ruby.
 
 The above three softwares are all distributed under `MIT license`_.
 
-.. _MIT license: http://mit-license.org/
+.. _MIT license: https://mit-license.org/
 
 
 Open source
