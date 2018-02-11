@@ -608,9 +608,9 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
 
 static PyMethodDef PySass_methods[] = {
     {"compile_string", PySass_compile_string, METH_VARARGS,
-     "Compile a SASS string."},
+     "Compile a Sass string."},
     {"compile_filename", PySass_compile_filename, METH_VARARGS,
-     "Compile a SASS file."},
+     "Compile a Sass file."},
     {NULL, NULL, 0, NULL}
 };
 

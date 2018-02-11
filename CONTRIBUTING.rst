@@ -14,7 +14,7 @@ Coding style
   (``:raise:`` if it may raise an error) in their docstring.
 
 .. _flake8: https://gitlab.com/pycqa/flake8
-.. _PEP 8: www.python.org/dev/peps/pep-0008
+.. _PEP 8: https://www.python.org/dev/peps/pep-0008
 
 
 Tests
@@ -26,8 +26,8 @@ Tests
 - All commits will be tested by Travis_ (Linux) and
   AppVeyor_ (Windows).
 
-.. _tox:  http://tox.testrun.org/
-.. _Travis: http://travis-ci.org/sass/libsass-python
+.. _tox:  https://tox.readthedocs.io/
+.. _Travis: https://travis-ci.org/sass/libsass-python
 .. _AppVeyor: https://ci.appveyor.com/project/asottile/libsass-python
 
 

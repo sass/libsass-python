@@ -23,12 +23,12 @@ It will adds :class:`build_sass` command to the :file:`setup.py` script:
 
    $ python setup.py build_sass
 
-This commands builds SASS/SCSS files to compiled CSS files of the project
+This commands builds Sass/SCSS files to compiled CSS files of the project
 and makes the package archive (made by :class:`~distutils.command.sdist.sdist`,
 :class:`~distutils.command.bdist.bdist`, and so on) to include these compiled
 CSS files.
 
-To set the directory of SASS/SCSS source files and the directory to
+To set the directory of Sass/SCSS source files and the directory to
 store compiled CSS files, specify ``sass_manifests`` option::
 
     from setuptools import find_packages, setup
@@ -87,7 +87,7 @@ def validate_manifests(dist, attr, value):
 
 
 class build_sass(Command):
-    """Builds SASS/SCSS files to CSS files."""
+    """Builds Sass/SCSS files to CSS files."""
 
     description = __doc__
     user_options = [
@@ -165,7 +165,7 @@ class build_sass(Command):
 
 
 # Does monkey-patching the setuptools.command.sdist.sdist.check_readme()
-# method to include compiled SASS files as data files.
+# method to include compiled Sass files as data files.
 if not hasattr(sdist, '_wrapped_check_readme'):
     @functools.wraps(sdist.check_readme)
     def check_readme(self):

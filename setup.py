@@ -239,7 +239,7 @@ class upload_doc(distutils.cmd.Command):
 
 setup(
     name='libsass',
-    description='SASS for Python: '
+    description='Sass for Python: '
                 'A straightforward binding of libsass for Python.',
     long_description=readme(),
     version=version(),
