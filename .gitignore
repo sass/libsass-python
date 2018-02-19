@@ -6,7 +6,7 @@
 .*.swp
 .DS_Store
 ._.DS_Store
-.cache/
+.pytest_cache/
 .coverage
 .tox
 /.libsass-upstream-version
