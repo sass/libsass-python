@@ -69,15 +69,15 @@ class SassMiddleware(object):
             logging.basicConfig()
 
     :param app: the WSGI application to wrap
-    :type app: :class:`collections.Callable`
+    :type app: :class:`collections.abc.Callable`
     :param manifests: build settings.  the same format to
                       :file:`setup.py` script's ``sass_manifests``
                       option
-    :type manifests: :class:`collections.Mapping`
+    :type manifests: :class:`collections.abc.Mapping`
     :param package_dir: optional mapping of package names to directories.
                         the same format to :file:`setup.py` script's
                         ``package_dir`` option
-    :type package_dir: :class:`collections.Mapping`
+    :type package_dir: :class:`collections.abc.Mapping`
 
     .. versionchanged:: 0.4.0
        It creates also source map files with filenames followed by

@@ -35,11 +35,11 @@ __version__ = '0.13.7'
 libsass_version = _sass.libsass_version
 
 
-#: (:class:`collections.Mapping`) The dictionary of output styles.
+#: (:class:`collections.abc.Mapping`) The dictionary of output styles.
 #: Keys are output name strings, and values are flag integers.
 OUTPUT_STYLES = _sass.OUTPUT_STYLES
 
-#: (:class:`collections.Mapping`) The dictionary of source comments styles.
+#: (:class:`collections.abc.Mapping`) The dictionary of source comments styles.
 #: Keys are mode names, and values are corresponding flag integers.
 #:
 #: .. versionadded:: 0.4.0
@@ -47,8 +47,8 @@ OUTPUT_STYLES = _sass.OUTPUT_STYLES
 #: .. deprecated:: 0.6.0
 SOURCE_COMMENTS = {'none': 0, 'line_numbers': 1, 'default': 1, 'map': 2}
 
-#: (:class:`collections.Set`) The set of keywords :func:`compile()` can take.
-MODES = set(['string', 'filename', 'dirname'])
+#: (:class:`frozenset`) The set of keywords :func:`compile()` can take.
+MODES = frozenset(('string', 'filename', 'dirname'))
 
 
 def to_native_s(s):
@@ -83,9 +83,9 @@ class SassFunction(object):
     :param name: the function name
     :type name: :class:`str`
     :param arguments: the argument names
-    :type arguments: :class:`collections.Sequence`
+    :type arguments: :class:`collections.abc.Sequence`
     :param callable_: the actual function to be called
-    :type callable_: :class:`collections.Callable`
+    :type callable_: :class:`collections.abc.Callable`
 
     .. versionadded:: 0.7.0
 
@@ -283,15 +283,15 @@ def compile(**kwargs):
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
-    :type include_paths: :class:`collections.Sequence`
+    :type include_paths: :class:`collections.abc.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
                              <custom-functions_>`_ description
-    :type custom_functions: :class:`collections.Set`,
-                            :class:`collections.Sequence`,
-                            :class:`collections.Mapping`
+    :type custom_functions: :class:`set`,
+                            :class:`collections.abc.Sequence`,
+                            :class:`collections.abc.Mapping`
     :param indented: optional declaration that the string is Sass, not SCSS
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
@@ -299,7 +299,7 @@ def compile(**kwargs):
     :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks_>`_ description
-    :type importers: :class:`collections.Callable`
+    :type importers: :class:`collections.abc.Callable`
     :rtype: :class:`str`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given Sass has broken syntax)
@@ -323,19 +323,19 @@ def compile(**kwargs):
     :type source_map_filename: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
-    :type include_paths: :class:`collections.Sequence`
+    :type include_paths: :class:`collections.abc.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
                              <custom-functions_>`_ description
-    :type custom_functions: :class:`collections.Set`,
-                            :class:`collections.Sequence`,
-                            :class:`collections.Mapping`
+    :type custom_functions: :class:`set`,
+                            :class:`collections.abc.Sequence`,
+                            :class:`collections.abc.Mapping`
     :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks_>`_ description
-    :type importers: :class:`collections.Callable`
+    :type importers: :class:`collections.abc.Callable`
     :returns: the compiled CSS string, or a pair of the compiled CSS string
               and the source map string if ``source_map_filename`` is set
     :rtype: :class:`str`, :class:`tuple`
@@ -365,15 +365,15 @@ def compile(**kwargs):
     :type source_comments: :class:`bool`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
-    :type include_paths: :class:`collections.Sequence`
+    :type include_paths: :class:`collections.abc.Sequence`
     :param precision: optional precision for numbers. :const:`5` by default.
     :type precision: :class:`int`
     :param custom_functions: optional mapping of custom functions.
                              see also below `custom functions
                              <custom-functions_>`_ description
-    :type custom_functions: :class:`collections.Set`,
-                            :class:`collections.Sequence`,
-                            :class:`collections.Mapping`
+    :type custom_functions: :class:`set`,
+                            :class:`collections.abc.Sequence`,
+                            :class:`collections.abc.Mapping`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given Sass has broken syntax)
 
@@ -381,7 +381,7 @@ def compile(**kwargs):
 
     The ``custom_functions`` parameter can take three types of forms:
 
-    :class:`~collections.Set`/:class:`~collections.Sequence` of \
+    :class:`~set`/:class:`~collections.abc.Sequence` of \
     :class:`SassFunction`\ s
        It is the most general form.  Although pretty verbose, it can take
        any kind of callables like type objects, unnamed functions,
@@ -397,7 +397,7 @@ def compile(**kwargs):
               }
           )
 
-    :class:`~collections.Mapping` of names to functions
+    :class:`~collections.abc.Mapping` of names to functions
        Less general, but easier-to-use form.  Although it's not it can take
        any kind of callables, it can take any kind of *functions* defined
        using :keyword:`def`/:keyword:`lambda` syntax.
@@ -414,7 +414,7 @@ def compile(**kwargs):
               }
           )
 
-    :class:`~collections.Set`/:class:`~collections.Sequence` of \
+    :class:`~set`/:class:`~collections.abc.Sequence` of \
     named functions
        Not general, but the easiest-to-use form for *named* functions.
        It can take only named functions, defined using :keyword:`def`.
@@ -647,7 +647,7 @@ def and_join(strings):
     'Korea, Japan, China, and Taiwan'
 
     :param strings: a list of words to join
-    :type string: :class:`collections.Sequence`
+    :type string: :class:`collections.abc.Sequence`
     :returns: a joined string
     :rtype: :class:`str`, :class:`basestring`
 
