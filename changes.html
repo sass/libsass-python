@@ -392,7 +392,7 @@ parameter <code class="docutils literal"><span class="pre">output_style</span></
 <p>Released on September 23, 2014.</p>
 <ul class="simple">
 <li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a> yielded
-<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> instead of <code class="xref py py-class docutils literal"><span class="pre">bytes</span></code> on Python 3.</li>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> on Python 3.</li>
 <li>Fixed several Unicode-related bugs on Windows.</li>
 <li>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal"><span class="pre">build_directory()</span></code></a>,
 <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal"><span class="pre">SassMiddleware</span></code></a>, and
@@ -437,7 +437,7 @@ and version.</li>
 <p>Released on May 22, 2014.</p>
 <ul class="simple">
 <li>Fixed build failing on Mac OS X 10.8 or earlier.  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/19">#19</a>]</li>
-<li>Fixed <code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
+<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code></a> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
 contains any non-ASCII Unicode characters.</li>
 </ul>
 </div>
@@ -445,7 +445,7 @@ contains any non-ASCII Unicode characters.</li>
 <h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on May 20, 2014.</p>
 <ul class="simple">
-<li>Fixed <code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code> that rise when the input source contains
+<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code></a> that rise when the input source contains
 any non-ASCII Unicode characters.</li>
 </ul>
 </div>
@@ -529,14 +529,14 @@ exist yet, rather than siliently fails.
 <li>Added new <a class="reference internal" href="sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils</span></code></a> package.<ul>
 <li>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.builder</span></code></a> module to build the whole directory
 at a time.</li>
-<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/2/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and
+<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and
 <code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code> integration.</li>
 <li>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.wsgi</span></code></a> module which provides a development-purpose
 WSGI middleware.</li>
 </ul>
 </li>
 <li>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command for
-<a class="reference external" href="https://docs.python.org/2/library/distutils.html#module-distutils" title="(in Python v2.7)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>.</li>
+<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="version-0-1-1">
