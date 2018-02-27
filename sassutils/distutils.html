@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.13.7 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.13.7',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -31,8 +23,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
+  </head><body>
   
 
     <div class="document">
@@ -41,13 +32,13 @@
           <div class="body" role="main">
             
   <span class="target" id="module-sassutils.distutils"></span><div class="section" id="sassutils-distutils-setuptools-distutils-integration">
-<h1><a class="reference internal" href="#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal"><span class="pre">sassutils.distutils</span></code></a> — <code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> integration<a class="headerlink" href="#sassutils-distutils-setuptools-distutils-integration" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration<a class="headerlink" href="#sassutils-distutils-setuptools-distutils-integration" title="Permalink to this headline">¶</a></h1>
 <p>This module provides extensions (and some magical monkey-patches, sorry)
-of the standard <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> and <code class="xref py py-mod docutils literal"><span class="pre">setuptools</span></code> (now it’s named
+of the standard <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code> (now it’s named
 Distribute) for libsass.</p>
-<p>To use this, add <code class="docutils literal"><span class="pre">libsass</span></code> into <code class="docutils literal"><span class="pre">setup_requires</span></code> (not <code class="docutils literal"><span class="pre">install_requires</span></code>)
-option of the <code class="file docutils literal"><span class="pre">setup.py</span></code> script:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">setup</span>
+<p>To use this, add <code class="docutils literal notranslate"><span class="pre">libsass</span></code> into <code class="docutils literal notranslate"><span class="pre">setup_requires</span></code> (not <code class="docutils literal notranslate"><span class="pre">install_requires</span></code>)
+option of the <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">setup</span>
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="c1"># ...,</span>
@@ -55,17 +46,17 @@ option of the <code class="file docutils literal"><span class="pre">setup.py</sp
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>It will adds <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command to the <code class="file docutils literal"><span class="pre">setup.py</span></code> script:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py build_sass
+<p>It will adds <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal notranslate"><span class="pre">build_sass</span></code></a> command to the <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> script:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py build_sass
 </pre></div>
 </div>
 <p>This commands builds Sass/SCSS files to compiled CSS files of the project
-and makes the package archive (made by <code class="xref py py-class docutils literal"><span class="pre">sdist</span></code>,
-<code class="xref py py-class docutils literal"><span class="pre">bdist</span></code>, and so on) to include these compiled
+and makes the package archive (made by <code class="xref py py-class docutils literal notranslate"><span class="pre">sdist</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">bdist</span></code>, and so on) to include these compiled
 CSS files.</p>
 <p>To set the directory of Sass/SCSS source files and the directory to
-store compiled CSS files, specify <code class="docutils literal"><span class="pre">sass_manifests</span></code> option:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">setup</span>
+store compiled CSS files, specify <code class="docutils literal notranslate"><span class="pre">sass_manifests</span></code> option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">setup</span>
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;YourPackage&#39;</span><span class="p">,</span>
@@ -78,14 +69,14 @@ store compiled CSS files, specify <code class="docutils literal"><span class="pr
 </pre></div>
 </div>
 <p>The option should be a mapping of package names to pairs of paths, e.g.:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s1">&#39;package&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;static/sass&#39;</span><span class="p">,</span> <span class="s1">&#39;static/css&#39;</span><span class="p">),</span>
     <span class="s1">&#39;package.name&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;static/scss&#39;</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified">New in version 0.6.0: </span>Added <code class="docutils literal"><span class="pre">--output-style</span></code>/<code class="docutils literal"><span class="pre">-s</span></code> option to <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal"><span class="pre">build_sass</span></code></a> command.</p>
+<p><span class="versionmodified">New in version 0.6.0: </span>Added <code class="docutils literal notranslate"><span class="pre">--output-style</span></code>/<code class="docutils literal notranslate"><span class="pre">-s</span></code> option to <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal notranslate"><span class="pre">build_sass</span></code></a> command.</p>
 </div>
 <dl class="class">
 <dt id="sassutils.distutils.build_sass">
@@ -95,9 +86,9 @@ store compiled CSS files, specify <code class="docutils literal"><span class="pr
 <dt id="sassutils.distutils.build_sass.get_package_dir">
 <code class="descname">get_package_dir</code><span class="sig-paren">(</span><em>package</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory, relative to the top of the source
-distribution, where package <code class="docutils literal"><span class="pre">package</span></code> should be found
-(at least according to the <code class="xref py py-attr docutils literal"><span class="pre">package_dir</span></code> option, if any).</p>
-<p>Copied from <code class="xref py py-meth docutils literal"><span class="pre">distutils.command.build_py.get_package_dir()</span></code>
+distribution, where package <code class="docutils literal notranslate"><span class="pre">package</span></code> should be found
+(at least according to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">package_dir</span></code> option, if any).</p>
+<p>Copied from <code class="xref py py-meth docutils literal notranslate"><span class="pre">distutils.command.build_py.get_package_dir()</span></code>
 method.</p>
 </dd></dl>
 
@@ -106,8 +97,8 @@ method.</p>
 <dl class="function">
 <dt id="sassutils.distutils.validate_manifests">
 <code class="descclassname">sassutils.distutils.</code><code class="descname">validate_manifests</code><span class="sig-paren">(</span><em>dist</em>, <em>attr</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verifies that <code class="docutils literal"><span class="pre">value</span></code> is an expected mapping of package to
-<a class="reference internal" href="builder.html#sassutils.builder.Manifest" title="sassutils.builder.Manifest"><code class="xref py py-class docutils literal"><span class="pre">sassutils.builder.Manifest</span></code></a>.</p>
+<dd><p>Verifies that <code class="docutils literal notranslate"><span class="pre">value</span></code> is an expected mapping of package to
+<a class="reference internal" href="builder.html#sassutils.builder.Manifest" title="sassutils.builder.Manifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">sassutils.builder.Manifest</span></code></a>.</p>
 </dd></dl>
 
 </div>
@@ -121,9 +112,9 @@ method.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="../sassutils.html"><code class="docutils literal"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a><ul>
-      <li>Previous: <a href="builder.html" title="previous chapter"><code class="docutils literal"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
-      <li>Next: <a href="wsgi.html" title="next chapter"><code class="docutils literal"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+  <li><a href="../sassutils.html"><code class="docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a><ul>
+      <li>Previous: <a href="builder.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+      <li>Next: <a href="wsgi.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -137,12 +128,14 @@ method.</p>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -153,7 +146,7 @@ method.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
