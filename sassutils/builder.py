@@ -17,8 +17,8 @@ from sass import compile
 __all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
 
 
-#: (:class:`collections.Set`) The set of supported filename suffixes.
-SUFFIXES = frozenset(['sass', 'scss'])
+#: (:class:`frozenset`) The set of supported filename suffixes.
+SUFFIXES = frozenset(('sass', 'scss'))
 
 #: (:class:`re.RegexObject`) The regular expression pattern which matches to
 #: filenames of supported :const:`SUFFIXES`.
@@ -39,7 +39,7 @@ def build_directory(sass_path, css_path, output_style='nested',
                          ``'compact'``, ``'compressed'``
     :type output_style: :class:`str`
     :returns: a dictionary of source filenames to compiled CSS filenames
-    :rtype: :class:`collections.Mapping`
+    :rtype: :class:`collections.abc.Mapping`
 
     .. versionadded:: 0.6.0
        The ``output_style`` parameter.
@@ -165,7 +165,7 @@ class Manifest(object):
                              ``'expanded'``, ``'compact'``, ``'compressed'``
         :type output_style: :class:`str`
         :returns: the set of compiled CSS filenames
-        :rtype: :class:`collections.Set`
+        :rtype: :class:`frozenset`
 
         .. versionadded:: 0.6.0
            The ``output_style`` parameter.
