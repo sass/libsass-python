@@ -68,6 +68,8 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
             size_t i = 0;
             PyObject* items = PyTuple_New(sass_list_get_length(value));
             PyObject* separator = sass_comma;
+            int is_bracketed = sass_list_get_is_bracketed(value);
+            PyObject* bracketed = PyBool_FromLong(is_bracketed);
             switch (sass_list_get_separator(value)) {
                 case SASS_COMMA:
                     separator = sass_comma;
@@ -87,7 +89,7 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
                 );
             }
             retv = PyObject_CallMethod(
-                types_mod, "SassList", "OO", items, separator
+                types_mod, "SassList", "OOO", items, separator, bracketed
             );
             break;
         }
@@ -151,6 +153,7 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     Py_ssize_t i = 0;
     PyObject* items = PyObject_GetAttrString(value, "items");
     PyObject* separator = PyObject_GetAttrString(value, "separator");
+    PyObject* bracketed = PyObject_GetAttrString(value, "bracketed");
     Sass_Separator sep = SASS_COMMA;
     if (separator == sass_comma) {
         sep = SASS_COMMA;
@@ -159,7 +162,8 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     } else {
         assert(0);
     }
-    retv = sass_make_list(PyTuple_Size(items), sep);
+    int is_bracketed = bracketed == Py_True;
+    retv = sass_make_list(PyTuple_Size(items), sep, is_bracketed);
     for (i = 0; i < PyTuple_Size(items); i += 1) {
         sass_list_set_value(
             retv, i, _to_sass_value(PyTuple_GET_ITEM(items, i))
@@ -170,6 +174,7 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     Py_DECREF(sass_space);
     Py_DECREF(items);
     Py_DECREF(separator);
+    Py_DECREF(bracketed);
     return retv;
 }
 
