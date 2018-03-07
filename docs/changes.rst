@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 0.14.0
+--------------
+
+Released on March 6, 2018.
+
+- Follow up the libsass upstream: 3.5.0 --- See the release notes of LibSass
+  3.5.0__. [:issue:`241` by Anthony Sottile]
+- ``SassList`` type gained an additional option ``bracketed=False`` to match
+  the upstream changes to the ``sass_list`` type. [:issue:`184` by Anthony
+  Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.5.0
+
 
 Version 0.13.7
 --------------
