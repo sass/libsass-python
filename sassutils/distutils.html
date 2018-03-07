@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.13.7 documentation</title>
+    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.14.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="../_static/documentation_options.js"></script>
@@ -83,6 +83,19 @@ store compiled CSS files, specify <code class="docutils literal notranslate"><sp
 <em class="property">class </em><code class="descclassname">sassutils.distutils.</code><code class="descname">build_sass</code><span class="sig-paren">(</span><em>dist</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds Sass/SCSS files to CSS files.</p>
 <dl class="method">
+<dt id="sassutils.distutils.build_sass.finalize_options">
+<code class="descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.finalize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set final values for all the options that this command supports.
+This is always called as late as possible, ie.  after any option
+assignments from the command-line or from other commands have been
+done.  Thus, this is the place to code option dependencies: if
+‘foo’ depends on ‘bar’, then it is safe to set ‘foo’ from ‘bar’ as
+long as ‘foo’ still has the same value it was assigned in
+‘initialize_options()’.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="sassutils.distutils.build_sass.get_package_dir">
 <code class="descname">get_package_dir</code><span class="sig-paren">(</span><em>package</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory, relative to the top of the source
@@ -90,6 +103,30 @@ distribution, where package <code class="docutils literal notranslate"><span cla
 (at least according to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">package_dir</span></code> option, if any).</p>
 <p>Copied from <code class="xref py py-meth docutils literal notranslate"><span class="pre">distutils.command.build_py.get_package_dir()</span></code>
 method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sassutils.distutils.build_sass.initialize_options">
+<code class="descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.initialize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set default values for all the options that this command
+supports.  Note that these defaults may be overridden by other
+commands, by the setup script, by config files, or by the
+command-line.  Thus, this is not the place to code dependencies
+between options; generally, ‘initialize_options()’ implementations
+are just a bunch of “self.foo = None” assignments.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sassutils.distutils.build_sass.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>A command’s raison d’etre: carry out the action it exists to
+perform, controlled by the options initialized in
+‘initialize_options()’, customized by other commands, the setup
+script, the command-line, and config files, and finalized in
+‘finalize_options()’.  All terminal output and filesystem
+interaction should be done by ‘run()’.</p>
+<p>This method must be implemented by all command classes.</p>
 </dd></dl>
 
 </dd></dl>
