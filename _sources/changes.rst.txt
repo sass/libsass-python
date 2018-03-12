@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.14.1
+--------------
+
+Released on March 12, 2018.
+
+- Follow up the libsass upstream: 3.5.1 --- See the release notes of LibSass
+  3.5.1__. [:issue:`242` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.5.1
+
+
 Version 0.14.0
 --------------
 
