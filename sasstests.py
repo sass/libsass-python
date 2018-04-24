@@ -1411,6 +1411,14 @@ def test_imports_from_cwd(tmpdir):
         assert out == ''
 
 
+def test_import_no_css(tmpdir):
+    tmpdir.join('other.css').write('body {colour: green}')
+    main_scss = tmpdir.join('main.scss')
+    main_scss.write("@import 'other';")
+    with pytest.raises(sass.CompileError):
+        sass.compile(filename=main_scss.strpath)
+
+
 @pytest.mark.parametrize('exts', [
     '.css',
     ('.css',),

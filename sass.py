@@ -292,6 +292,10 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``'.css'``
+    :type custom_import_extensions: :class:`list`, :class:`str`,
+                                    :class:`tuple`
     :param indented: optional declaration that the string is Sass, not SCSS
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
@@ -332,6 +336,10 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``'.css'``
+    :type custom_import_extensions: :class:`list`, :class:`str`,
+                                    :class:`tuple`
     :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks_>`_ description
@@ -374,6 +382,10 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``'.css'``
+    :type custom_import_extensions: :class:`list`, :class:`str`,
+                                    :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given Sass has broken syntax)
 
