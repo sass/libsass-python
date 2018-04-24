@@ -1435,19 +1435,14 @@ def test_import_css(exts, tmpdir):
     assert out == 'body {\n  color: green; }\n'
 
 
-@pytest.mark.parametrize('exts', [
-    ['.css', 3],
-    '.css',
-    [b'.css'],
-])
-def test_import_css_error(exts, tmpdir):
+def test_import_css_error(tmpdir):
     tmpdir.join('other.css').write('body {color: green}')
     main_scss = tmpdir.join('main.scss')
     main_scss.write("@import 'other';")
     with pytest.raises(TypeError):
         sass.compile(
             filename=main_scss.strpath,
-            custom_import_extensions=exts,
+            custom_import_extensions='.css',
         )
 
 

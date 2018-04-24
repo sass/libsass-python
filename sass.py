@@ -600,15 +600,8 @@ def compile(**kwargs):
             'custom_import_extensions must be a list of strings '
             'not {}'.format(type(_custom_exts))
         )
-    custom_import_extensions = []
-    for ext in _custom_exts:
-        if isinstance(ext, text_type):
-            custom_import_extensions.append(ext.encode('utf-8'))
-        else:
-            raise TypeError(
-                'custom_import_extensions must be a list of strings '
-                'not {}'.format(type(ext))
-            )
+    custom_import_extensions = [ext.encode('utf-8') for ext in _custom_exts]
+
     importers = _validate_importers(kwargs.pop('importers', None))
 
     if 'string' in modes:
