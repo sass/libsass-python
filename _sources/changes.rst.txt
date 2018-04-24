@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.14.4
+--------------
+
+Released on April 24, 2018.
+
+- Add ability to specify imports for custom extensions.  This provides a
+  way to enable imports of ``.css`` files (which was removed in 3.5.3).
+  Specify ``--import-extensions .css`` to restore the previous behavior.
+  [:issue:`246` by Samuel Colvin]
+
+
 Version 0.14.3
 --------------
 
