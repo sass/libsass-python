@@ -222,7 +222,7 @@ def _raise(e):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions, importers
+    precision, custom_functions, importers, custom_import_extensions
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path, onerror=_raise):
@@ -240,6 +240,7 @@ def compile_dirname(
             s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
                 precision, None, custom_functions, importers, None,
+                custom_import_extensions,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -292,6 +293,9 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :param indented: optional declaration that the string is Sass, not SCSS
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
@@ -332,6 +336,9 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks_>`_ description
@@ -374,6 +381,9 @@ def compile(**kwargs):
     :type custom_functions: :class:`set`,
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
+    :param custom_import_extensions: optional extra file extensions which
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given Sass has broken syntax)
 
@@ -584,6 +594,14 @@ def compile(**kwargs):
             'not {1!r}'.format(SassFunction, custom_functions)
         )
 
+    _custom_exts = kwargs.pop('custom_import_extensions', []) or []
+    if not isinstance(_custom_exts, (list, tuple)):
+        raise TypeError(
+            'custom_import_extensions must be a list of strings '
+            'not {}'.format(type(_custom_exts))
+        )
+    custom_import_extensions = [ext.encode('utf-8') for ext in _custom_exts]
+
     importers = _validate_importers(kwargs.pop('importers', None))
 
     if 'string' in modes:
@@ -597,7 +615,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = _sass.compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions, indented, importers,
+            custom_functions, indented, importers, custom_import_extensions,
         )
         if s:
             return v.decode('utf-8')
@@ -613,7 +631,7 @@ def compile(**kwargs):
         s, v, source_map = _sass.compile_filename(
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions, importers,
-            output_filename_hint,
+            output_filename_hint, custom_import_extensions,
         )
         if s:
             v = v.decode('utf-8')
@@ -631,6 +649,7 @@ def compile(**kwargs):
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
             include_paths, precision, custom_functions, importers,
+            custom_import_extensions
         )
         if s:
             return
