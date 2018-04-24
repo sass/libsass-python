@@ -1409,3 +1409,55 @@ def test_imports_from_cwd(tmpdir):
     with tmpdir.as_cwd():
         out = sass.compile(filename=main_scss.strpath)
         assert out == ''
+
+
+@pytest.mark.parametrize('exts', [
+    '.css',
+    ('.css',),
+    ['.css'],
+    b'.css',
+    [b'.css'],
+    ['.foobar', '.css'],
+    ['.foobar', '.css', b'anything'],
+])
+def test_import_css(exts, tmpdir):
+    tmpdir.join('other.css').write('body {colour: green}')
+    main_scss = tmpdir.join('main.scss')
+    main_scss.write("@import 'other';")
+    out = sass.compile(
+        filename=main_scss.strpath,
+        custom_import_extensions=exts,
+    )
+    assert out == 'body {\n  colour: green; }\n'
+
+
+def test_import_css_string(tmpdir):
+    tmpdir.join('other.css').write('body {colour: green}')
+    with tmpdir.as_cwd():
+        out = sass.compile(
+            string="@import 'other';",
+            custom_import_extensions='.css',
+        )
+    assert out == 'body {\n  colour: green; }\n'
+
+
+def test_import_css_error(tmpdir):
+    tmpdir.join('other.css').write('body {colour: green}')
+    main_scss = tmpdir.join('main.scss')
+    main_scss.write("@import 'other';")
+    with pytest.raises(TypeError):
+        sass.compile(
+            filename=main_scss.strpath,
+            custom_import_extensions=['.css', 3],
+        )
+
+
+def test_import_ext_other(tmpdir):
+    tmpdir.join('other.foobar').write('body {colour: green}')
+    main_scss = tmpdir.join('main.scss')
+    main_scss.write("@import 'other';")
+    out = sass.compile(
+        filename=main_scss.strpath,
+        custom_import_extensions='.foobar',
+    )
+    assert out == 'body {\n  colour: green; }\n'

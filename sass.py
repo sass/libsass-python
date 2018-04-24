@@ -239,7 +239,7 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                precision, None, custom_functions, importers, None,
+                precision, None, custom_functions, importers, None, [],
             )
             if s:
                 v = v.decode('UTF-8')
@@ -584,6 +584,21 @@ def compile(**kwargs):
             'not {1!r}'.format(SassFunction, custom_functions)
         )
 
+    _custom_exts = kwargs.pop('custom_import_extensions', []) or []
+    if isinstance(_custom_exts, (text_type, bytes)):
+        _custom_exts = [_custom_exts]
+    custom_import_extensions = []
+    for ext in _custom_exts:
+        if isinstance(ext, text_type):
+            custom_import_extensions.append(ext.encode('utf-8'))
+        elif isinstance(ext, bytes):
+            custom_import_extensions.append(ext)
+        else:
+            raise TypeError(
+                'custom_import_extensions must be a list of strings '
+                'or bytes not {}'.format(type(ext))
+            )
+
     importers = _validate_importers(kwargs.pop('importers', None))
 
     if 'string' in modes:
@@ -597,7 +612,7 @@ def compile(**kwargs):
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = _sass.compile_string(
             string, output_style, source_comments, include_paths, precision,
-            custom_functions, indented, importers,
+            custom_functions, indented, importers, custom_import_extensions,
         )
         if s:
             return v.decode('utf-8')
@@ -613,7 +628,7 @@ def compile(**kwargs):
         s, v, source_map = _sass.compile_filename(
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions, importers,
-            output_filename_hint,
+            output_filename_hint, custom_import_extensions,
         )
         if s:
             v = v.decode('utf-8')
