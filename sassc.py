@@ -91,7 +91,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                            '(output css filename).')
     parser.add_option('-I', '--include-path', metavar='DIR',
                       dest='include_paths', action='append',
-                      help='Path to find "@import"ed (S)CSS source files.  '
+                      help='Path to find "@import"ed (S)CSS source files. '
                            'Can be multiply used.')
     parser.add_option(
         '-p', '--precision', action='store', type='int', default=5,
@@ -101,6 +101,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         '--source-comments', action='store_true', default=False,
         help='Include debug info in output',
     )
+    parser.add_option('--import-extensions',
+                      dest='custom_import_extensions', action='append',
+                      help='Extra extensions allowed for sass imports. '
+                           'Can be multiply used.')
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(print,
                               parser.get_prog_name() + ': error:',
@@ -130,7 +134,8 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 source_map_filename=source_map_filename,
                 output_filename_hint=args[1],
                 include_paths=options.include_paths,
-                precision=options.precision
+                precision=options.precision,
+                custom_import_extensions=options.custom_import_extensions,
             )
         else:
             source_map_filename = None
@@ -140,7 +145,8 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 output_style=options.style,
                 source_comments=options.source_comments,
                 include_paths=options.include_paths,
-                precision=options.precision
+                precision=options.precision,
+                custom_import_extensions=options.custom_import_extensions,
             )
     except (IOError, OSError) as e:
         error(e)

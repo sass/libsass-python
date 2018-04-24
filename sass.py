@@ -222,7 +222,7 @@ def _raise(e):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions, importers
+    precision, custom_functions, importers, custom_import_extensions
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path, onerror=_raise):
@@ -239,7 +239,8 @@ def compile_dirname(
             input_filename = input_filename.encode(fs_encoding)
             s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
-                precision, None, custom_functions, importers, None, [],
+                precision, None, custom_functions, importers, None,
+                custom_import_extensions,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -293,9 +294,8 @@ def compile(**kwargs):
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
     :param custom_import_extensions: optional extra file extensions which
-                                     allow can be imported, eg. ``'.css'``
-    :type custom_import_extensions: :class:`list`, :class:`str`,
-                                    :class:`tuple`
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :param indented: optional declaration that the string is Sass, not SCSS
                      formatted. :const:`False` by default
     :type indented: :class:`bool`
@@ -337,9 +337,8 @@ def compile(**kwargs):
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
     :param custom_import_extensions: optional extra file extensions which
-                                     allow can be imported, eg. ``'.css'``
-    :type custom_import_extensions: :class:`list`, :class:`str`,
-                                    :class:`tuple`
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :param importers: optional callback functions.
                      see also below `importer callbacks
                      <importer-callbacks_>`_ description
@@ -383,9 +382,8 @@ def compile(**kwargs):
                             :class:`collections.abc.Sequence`,
                             :class:`collections.abc.Mapping`
     :param custom_import_extensions: optional extra file extensions which
-                                     allow can be imported, eg. ``'.css'``
-    :type custom_import_extensions: :class:`list`, :class:`str`,
-                                    :class:`tuple`
+                                     allow can be imported, eg. ``['.css']``
+    :type custom_import_extensions: :class:`list`, :class:`tuple`
     :raises sass.CompileError: when it fails for any reason
                                (for example the given Sass has broken syntax)
 
@@ -597,20 +595,20 @@ def compile(**kwargs):
         )
 
     _custom_exts = kwargs.pop('custom_import_extensions', []) or []
-    if isinstance(_custom_exts, (text_type, bytes)):
-        _custom_exts = [_custom_exts]
+    if not isinstance(_custom_exts, (list, tuple)):
+        raise TypeError(
+            'custom_import_extensions must be a list of strings '
+            'not {}'.format(type(_custom_exts))
+        )
     custom_import_extensions = []
     for ext in _custom_exts:
         if isinstance(ext, text_type):
             custom_import_extensions.append(ext.encode('utf-8'))
-        elif isinstance(ext, bytes):
-            custom_import_extensions.append(ext)
         else:
             raise TypeError(
                 'custom_import_extensions must be a list of strings '
-                'or bytes not {}'.format(type(ext))
+                'not {}'.format(type(ext))
             )
-
     importers = _validate_importers(kwargs.pop('importers', None))
 
     if 'string' in modes:
@@ -658,6 +656,7 @@ def compile(**kwargs):
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
             include_paths, precision, custom_functions, importers,
+            custom_import_extensions
         )
         if s:
             return
