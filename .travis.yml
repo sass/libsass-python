@@ -9,7 +9,7 @@ python:
 install:
 - pip install -rrequirements-dev.txt coveralls
 script:
-- COVERAGE_PROCESS_START=$PWD/.coveragerc py.test sasstests.py
+- COVERAGE_PROCESS_START=$PWD/.coveragerc pytest sasstests.py
 - coverage combine
 - coverage report
 - flake8 .
