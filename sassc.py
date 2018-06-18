@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-""":mod:`sassc` --- SassC compliant command line interface
+r""":mod:`sassc` --- SassC compliant command line interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This provides SassC_ compliant CLI executable named :program:`sassc`:

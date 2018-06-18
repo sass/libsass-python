@@ -265,7 +265,7 @@ def _check_no_remaining_kwargs(func, kwargs):
 
 
 def compile(**kwargs):
-    """There are three modes of parameters :func:`compile()` can take:
+    r"""There are three modes of parameters :func:`compile()` can take:
     ``string``, ``filename``, and ``dirname``.
 
     The ``string`` parameter is the most basic way to compile Sass.
