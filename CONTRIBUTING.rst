@@ -67,5 +67,5 @@ Here's a brief check list for releasing a new version:
 Ping Hong Minhee (hongminhee@member.fsf.org, @dahlia on GitHub) if you need
 any help!
 
-.. _PyPI: https://pypi.python.org/pypi/libsass
+.. _PyPI: https://pypi.org/pypi/libsass/
 __ https://sass.github.io/libsass-python/

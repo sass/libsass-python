@@ -172,4 +172,4 @@ command before.  Make :file:`setup.cfg` config:
 Now it automatically builds Sass/SCSS sources and include compiled CSS files
 to the package archive when you run :program:`setup.py sdist`.
 
-.. _setuptools: https://pypi.python.org/pypi/setuptools
+.. _setuptools: https://pypi.org/pypi/setuptools/
