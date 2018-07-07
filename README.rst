@@ -3,7 +3,7 @@ libsass-python: Sass_/SCSS for Python
 
 .. image:: https://badge.fury.io/py/libsass.svg
    :alt: PyPI
-   :target: https://pypi.python.org/pypi/libsass
+   :target: https://pypi.org/pypi/libsass/
 
 .. image:: https://travis-ci.org/sass/libsass-python.svg
    :target: https://travis-ci.org/sass/libsass-python
@@ -67,7 +67,7 @@ It's available on PyPI_, so you can install it using ``pip`` (or
    You need a C++ compiler that support those features.
    See also libsass project's README_ file.
 
-.. _PyPI: https://pypi.python.org/pypi/libsass
+.. _PyPI: https://pypi.org/pypi/libsass/
 .. _README: https://github.com/sass/libsass#readme
 
 
