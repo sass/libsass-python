@@ -1,11 +1,14 @@
 language: python
 dist: trusty
-python:
-- pypy-5.4.1
-- 2.7
-- 3.4
-- 3.5
-- 3.6
+matrix:
+  include:
+    - python: pypy-5.4.1
+    - python: 3.7
+      dist: xenial
+      sudo: required
+    - python: 2.7
+    - python: 3.5
+    - python: 3.6
 install:
 - pip install -rrequirements-dev.txt coveralls
 script:

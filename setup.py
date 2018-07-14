@@ -273,7 +273,7 @@ setup(
         ]
     },
     install_requires=['six'],
-    extras_require={'upload_appveyor_builds': ['twine == 1.5.0']},
+    extras_require={'upload_appveyor_builds': ['twine == 1.11.0']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -284,9 +284,9 @@ setup(
         'Programming Language :: C++',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Programming Language :: Python :: Implementation :: Stackless',

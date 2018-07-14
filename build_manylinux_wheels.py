@@ -25,9 +25,9 @@ def main():
     os.makedirs('dist', exist_ok=True)
     for python in (
             'cp27-cp27mu',
-            'cp34-cp34m',
             'cp35-cp35m',
             'cp36-cp36m',
+            'cp37-cp37m',
     ):
         with tempfile.TemporaryDirectory() as work:
             pip = '/opt/python/{}/bin/pip'.format(python)
