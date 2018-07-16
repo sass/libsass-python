@@ -1,17 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # TODO: Upload to GitHub releases
 # TODO: .pypirc configuration
-from __future__ import print_function
-
 import argparse
 import json
 import os
 import os.path
 import shutil
 import subprocess
+from urllib.parse import urljoin
+from urllib.request import urlopen
 
-from six.moves.urllib.parse import urljoin
-from six.moves.urllib.request import urlopen
 from twine.commands import upload
 
 
@@ -27,7 +25,7 @@ APPVEYOR_API_JOB_URL = urljoin(APPVEYOR_API_BASE_URL, 'buildjobs/')
 
 def ci_builds():
     response = urlopen(APPVEYOR_API_BUILDS_URL)
-    projects = json.loads(response.read().decode('utf-8'))  # py3 compat
+    projects = json.load(response)
     response.close()
     return projects['builds']
 
@@ -62,7 +60,7 @@ def git_tags():
 def ci_jobs(build):
     url = urljoin(APPVEYOR_API_JOBS_URL, build['version'])
     response = urlopen(url)
-    build = json.loads(response.read().decode('utf-8'))  # py3 compat
+    build = json.load(response)
     response.close()
     return build['build']['jobs']
 
@@ -71,7 +69,7 @@ def ci_artifacts(job):
     url = urljoin(urljoin(APPVEYOR_API_JOB_URL, job['jobId'] + '/'),
                   'artifacts/')
     response = urlopen(url)
-    files = json.loads(response.read().decode('utf-8'))  # py3 compat
+    files = json.load(response)
     response.close()
     for file_ in files:
         file_['url'] = urljoin(url, file_['fileName'])
@@ -79,7 +77,7 @@ def ci_artifacts(job):
 
 
 def download_artifact(artifact, target_dir, overwrite=False):
-    print('Downloading {0}...'.format(artifact['fileName']))
+    print('Downloading {}...'.format(artifact['fileName']))
     response = urlopen(artifact['url'])
     filename = os.path.basename(artifact['fileName'])
     target_path = os.path.join(target_dir, filename)
@@ -123,7 +121,7 @@ def main():
         for artifact in artifacts:
             dist = download_artifact(artifact, args.dist_dir, args.overwrite)
             dists.append(dist)
-    print('Uploading {0} file(s)...'.format(len(dists)))
+    print('Uploading {} file(s)...'.format(len(dists)))
     upload.main(('-r', 'pypi') + tuple(dists))
 
 
