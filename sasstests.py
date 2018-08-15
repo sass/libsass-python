@@ -553,9 +553,14 @@ class ManifestTestCase(BaseTestCase):
         manifests = Manifest.normalize_manifests({
             'package': 'sass/path',
             'package.name': ('sass/path', 'css/path'),
-            'package.name2': Manifest('sass/path', 'css/path')
+            'package.name2': Manifest('sass/path', 'css/path'),
+            'package.name3': {
+                'sass_path': 'sass/path',
+                'css_path': 'css/path',
+                'strip_extension': True,
+            },
         })
-        assert len(manifests) == 3
+        assert len(manifests) == 4
         assert isinstance(manifests['package'], Manifest)
         assert manifests['package'].sass_path == 'sass/path'
         assert manifests['package'].css_path == 'sass/path'
@@ -565,6 +570,10 @@ class ManifestTestCase(BaseTestCase):
         assert isinstance(manifests['package.name2'], Manifest)
         assert manifests['package.name2'].sass_path == 'sass/path'
         assert manifests['package.name2'].css_path == 'css/path'
+        assert isinstance(manifests['package.name3'], Manifest)
+        assert manifests['package.name3'].sass_path == 'sass/path'
+        assert manifests['package.name3'].css_path == 'css/path'
+        assert manifests['package.name3'].strip_extension is True
 
     def test_build_one(self):
         with tempdir() as d:
@@ -624,6 +633,16 @@ class ManifestTestCase(BaseTestCase):
                 },
                 os.path.join(d, 'css', 'd.scss.css.map')
             )
+
+
+def test_manifest_strip_extension(tmpdir):
+    src = tmpdir.join('test').ensure_dir()
+    src.join('a.scss').write('a{b: c;}')
+
+    m = Manifest(sass_path='test', css_path='css', strip_extension=True)
+    m.build_one(str(tmpdir), 'a.scss')
+
+    assert tmpdir.join('css/a.css').read() == 'a {\n  b: c; }\n'
 
 
 class WsgiTestCase(BaseTestCase):

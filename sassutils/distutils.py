@@ -49,6 +49,20 @@ The option should be a mapping of package names to pairs of paths, e.g.::
         'package.name': ('static/scss', 'static')
     }
 
+The option can also be a mapping of package names to manifest dictionaries::
+
+    {
+        'package': {
+            'sass_path': 'static/sass',
+            'css_path': 'static/css',
+            'strip_extension': True,
+        },
+    }
+
+.. versionadded:: 0.15.0
+    Added ``strip_extension`` so ``a.scss`` is compiled to ``a.css`` instead
+    of ``a.scss.css``.  This option will default to ``True`` in the future.
+
 .. versionadded:: 0.6.0
    Added ``--output-style``/``-s`` option to :class:`build_sass` command.
 
