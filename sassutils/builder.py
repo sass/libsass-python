@@ -9,6 +9,7 @@ import io
 import os
 import os.path
 import re
+import warnings
 
 from six import string_types
 
@@ -86,7 +87,8 @@ class Manifest(object):
     :param css_path: the path of the directory to store compiled CSS
                      files
     :type css_path: :class:`str`, :class:`basestring`
-
+    :param strip_extension: whether to remove the original file extension
+    :type strip_extension: :class:`bool`
     """
 
     @classmethod
@@ -106,6 +108,8 @@ class Manifest(object):
                 continue
             elif isinstance(manifest, tuple):
                 manifest = Manifest(*manifest)
+            elif isinstance(manifest, collections.Mapping):
+                manifest = Manifest(**manifest)
             elif isinstance(manifest, string_types):
                 manifest = Manifest(manifest)
             else:
@@ -117,7 +121,13 @@ class Manifest(object):
             manifests[package_name] = manifest
         return manifests
 
-    def __init__(self, sass_path, css_path=None, wsgi_path=None):
+    def __init__(
+            self,
+            sass_path,
+            css_path=None,
+            wsgi_path=None,
+            strip_extension=None,
+    ):
         if not isinstance(sass_path, string_types):
             raise TypeError('sass_path must be a string, not ' +
                             repr(sass_path))
@@ -131,9 +141,23 @@ class Manifest(object):
         elif not isinstance(wsgi_path, string_types):
             raise TypeError('wsgi_path must be a string, not ' +
                             repr(wsgi_path))
+        if strip_extension is None:
+            warnings.warn(
+                '`strip_extension` was not specified, defaulting to `False`.\n'
+                'In the future, `strip_extension` will default to `True`.',
+                DeprecationWarning,
+            )
+            strip_extension = False
+        elif not isinstance(strip_extension, bool):
+            raise TypeError(
+                'strip_extension must be bool not {!r}'.format(
+                    strip_extension,
+                ),
+            )
         self.sass_path = sass_path
         self.css_path = css_path
         self.wsgi_path = wsgi_path
+        self.strip_extension = strip_extension
 
     def resolve_filename(self, package_dir, filename):
         """Gets a proper full relative path of Sass source and
@@ -149,6 +173,8 @@ class Manifest(object):
 
         """
         sass_path = os.path.join(package_dir, self.sass_path, filename)
+        if self.strip_extension:
+            filename, _ = os.path.splitext(filename)
         css_filename = filename + '.css'
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         return sass_path, css_path
