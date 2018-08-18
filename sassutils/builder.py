@@ -58,7 +58,8 @@ def build_directory(sass_path, css_path, output_style='nested',
             if name[0] == '_':
                 # Do not compile if it's partial
                 continue
-            css_fullname = os.path.join(css_path, name) + '.css'
+            basename = os.path.splitext(name)[0]
+            css_fullname = os.path.join(css_path, basename) + '.css'
             css = compile(filename=sass_fullname,
                           output_style=output_style,
                           include_paths=[_root_sass])
