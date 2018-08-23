@@ -27,7 +27,7 @@ SUFFIX_PATTERN = re.compile('[.](' + '|'.join(map(re.escape, SUFFIXES)) + ')$')
 
 
 def build_directory(sass_path, css_path, output_style='nested',
-                    _root_sass=None, _root_css=None):
+                    _root_sass=None, _root_css=None, strip_extension=False):
     """Compiles all Sass/SCSS files in ``path`` to CSS.
 
     :param sass_path: the path of the directory which contains source files
@@ -58,6 +58,8 @@ def build_directory(sass_path, css_path, output_style='nested',
             if name[0] == '_':
                 # Do not compile if it's partial
                 continue
+            if strip_extension:
+                name, _ = os.path.splitext(name)
             css_fullname = os.path.join(css_path, name) + '.css'
             css = compile(filename=sass_fullname,
                           output_style=output_style,
@@ -73,7 +75,8 @@ def build_directory(sass_path, css_path, output_style='nested',
             subresult = build_directory(sass_fullname, css_fullname,
                                         output_style=output_style,
                                         _root_sass=_root_sass,
-                                        _root_css=_root_css)
+                                        _root_css=_root_css,
+                                        strip_extension=strip_extension)
             result.update(subresult)
     return result
 
@@ -201,7 +204,8 @@ class Manifest(object):
         css_path = os.path.join(package_dir, self.css_path)
         css_files = build_directory(
             sass_path, css_path,
-            output_style=output_style
+            output_style=output_style,
+            strip_extension=self.strip_extension
         ).values()
         return frozenset(os.path.join(self.css_path, filename)
                          for filename in css_files)
