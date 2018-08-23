@@ -635,7 +635,7 @@ class ManifestTestCase(BaseTestCase):
             )
 
 
-def test_manifest_strip_extension(tmpdir):
+def test_manifest_build_one_strip_extension(tmpdir):
     src = tmpdir.join('test').ensure_dir()
     src.join('a.scss').write('a{b: c;}')
 
@@ -643,6 +643,16 @@ def test_manifest_strip_extension(tmpdir):
     m.build_one(str(tmpdir), 'a.scss')
 
     assert tmpdir.join('css/a.css').read() == 'a {\n  b: c; }\n'
+
+
+def test_manifest_build_strip_extension(tmpdir):
+    src = tmpdir.join('test').ensure_dir()
+    src.join('x.scss').write('a{b: c;}')
+
+    m = Manifest(sass_path='test', css_path='css', strip_extension=True)
+    m.build(package_dir=str(tmpdir))
+
+    assert tmpdir.join('css/x.css').read() == 'a {\n  b: c; }\n'
 
 
 class WsgiTestCase(BaseTestCase):
