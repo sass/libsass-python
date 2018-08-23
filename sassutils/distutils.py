@@ -96,7 +96,7 @@ def validate_manifests(dist, attr, value):
             attr + "must be a mapping object like: {'package.name': "
             "sassutils.distutils.Manifest('sass/path')}, or as shorten form: "
             "{'package.name': ('sass/path', 'css/path'}), not " +
-            repr(value)
+            repr(value),
         )
 
 
@@ -108,8 +108,8 @@ class build_sass(Command):
         (
             'output-style=', 's',
             'Coding style of the compiled result.  Choose one of ' +
-            ', '.join(OUTPUT_STYLES)
-        )
+            ', '.join(OUTPUT_STYLES),
+        ),
     ]
 
     def initialize_options(self):
@@ -134,7 +134,7 @@ class build_sass(Command):
             distutils.log.info("building '%s' sass", package_name)
             css_files = manifest.build(
                 package_dir,
-                output_style=self.output_style
+                output_style=self.output_style,
             )
             map(distutils.log.info, css_files)
             package_data.setdefault(package_name, []).extend(css_files)

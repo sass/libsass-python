@@ -141,7 +141,7 @@ class BaseTestCase(unittest.TestCase):
                 tree = json.load(f)
             except ValueError as e:  # pragma: no cover
                 f.seek(0)
-                msg = '{0!s}\n\n{1}:\n\n{2}'.format(e, filename, f.read())
+                msg = '{!s}\n\n{}:\n\n{}'.format(e, filename, f.read())
                 raise ValueError(msg)
         self.assert_source_map_equal(expected, tree)
 
@@ -158,11 +158,11 @@ class SassTestCase(BaseTestCase):
     def test_and_join(self):
         self.assertEqual(
             'Korea, Japan, China, and Taiwan',
-            sass.and_join(['Korea', 'Japan', 'China', 'Taiwan'])
+            sass.and_join(['Korea', 'Japan', 'China', 'Taiwan']),
         )
         self.assertEqual(
             'Korea, and Japan',
-            sass.and_join(['Korea', 'Japan'])
+            sass.and_join(['Korea', 'Japan']),
         )
         assert 'Korea' == sass.and_join(['Korea'])
         assert '' == sass.and_join([])
@@ -177,31 +177,49 @@ class CompileTestCase(BaseTestCase):
         self.assertRaises(TypeError, sass.compile, 'a { color: blue; }')
 
     def test_compile_exclusive_arguments(self):
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }', filename='test/a.scss')
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }', dirname='test/')
-        self.assertRaises(TypeError,  sass.compile,
-                          filename='test/a.scss', dirname='test/')
+        self.assertRaises(
+            TypeError, sass.compile,
+            string='a { color: blue; }', filename='test/a.scss',
+        )
+        self.assertRaises(
+            TypeError, sass.compile,
+            string='a { color: blue; }', dirname='test/',
+        )
+        self.assertRaises(
+            TypeError,  sass.compile,
+            filename='test/a.scss', dirname='test/',
+        )
 
     def test_compile_invalid_output_style(self):
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }',
-                          output_style=['compact'])
-        self.assertRaises(TypeError,  sass.compile,
-                          string='a { color: blue; }', output_style=123j)
-        self.assertRaises(ValueError,  sass.compile,
-                          string='a { color: blue; }', output_style='invalid')
+        self.assertRaises(
+            TypeError, sass.compile,
+            string='a { color: blue; }',
+            output_style=['compact'],
+        )
+        self.assertRaises(
+            TypeError,  sass.compile,
+            string='a { color: blue; }', output_style=123j,
+        )
+        self.assertRaises(
+            ValueError,  sass.compile,
+            string='a { color: blue; }', output_style='invalid',
+        )
 
     def test_compile_invalid_source_comments(self):
-        self.assertRaises(TypeError, sass.compile,
-                          string='a { color: blue; }',
-                          source_comments=['line_numbers'])
-        self.assertRaises(TypeError,  sass.compile,
-                          string='a { color: blue; }', source_comments=123j)
-        self.assertRaises(TypeError,  sass.compile,
-                          string='a { color: blue; }',
-                          source_comments='invalid')
+        self.assertRaises(
+            TypeError, sass.compile,
+            string='a { color: blue; }',
+            source_comments=['line_numbers'],
+        )
+        self.assertRaises(
+            TypeError,  sass.compile,
+            string='a { color: blue; }', source_comments=123j,
+        )
+        self.assertRaises(
+            TypeError,  sass.compile,
+            string='a { color: blue; }',
+            source_comments='invalid',
+        )
 
     def test_compile_disallows_arbitrary_arguments(self):
         for args in (
@@ -219,10 +237,12 @@ class CompileTestCase(BaseTestCase):
     def test_compile_string(self):
         actual = sass.compile(string='a { b { color: blue; } }')
         assert actual == 'a b {\n  color: blue; }\n'
-        commented = sass.compile(string='''a {
+        commented = sass.compile(
+            string='''a {
             b { color: blue; }
             color: red;
-        }''', source_comments=True)
+        }''', source_comments=True,
+        )
         assert commented == '''/* line 1, stdin */
 a {
   color: red; }
@@ -238,19 +258,25 @@ a {
 
 /* 유니코드 */
 ''',
-            actual
+            actual,
         )
-        self.assertRaises(sass.CompileError, sass.compile,
-                          string='a { b { color: blue; }')
+        self.assertRaises(
+            sass.CompileError, sass.compile,
+            string='a { b { color: blue; }',
+        )
         # sass.CompileError should be a subtype of ValueError
-        self.assertRaises(ValueError, sass.compile,
-                          string='a { b { color: blue; }')
+        self.assertRaises(
+            ValueError, sass.compile,
+            string='a { b { color: blue; }',
+        )
         self.assertRaises(TypeError, sass.compile, string=1234)
         self.assertRaises(TypeError, sass.compile, string=[])
 
     def test_compile_string_sass_style(self):
-        actual = sass.compile(string='a\n\tb\n\t\tcolor: blue;',
-                              indented=True)
+        actual = sass.compile(
+            string='a\n\tb\n\t\tcolor: blue;',
+            indented=True,
+        )
         assert actual == 'a b {\n  color: blue; }\n'
 
     def test_importer_one_arg(self):
@@ -322,7 +348,7 @@ a {
                     json.dumps({
                         "version": 3,
                         "sources": [
-                            path + ".db"
+                            path + ".db",
                         ],
                         "mappings": ";AAAA,CAAC,CAAC;EAAE,KAAK,EAAE,GAAI,GAAI",
                     }),
@@ -340,7 +366,7 @@ a {
 
     def test_importers_raises_exception(self):
         def importer(path):
-            raise ValueError('Bad path: {0}'.format(path))
+            raise ValueError('Bad path: {}'.format(path))
 
         with assert_raises_compile_error(RegexMatcher(
                 r'^Error: \n'
@@ -349,7 +375,7 @@ a {
                 r'ValueError: Bad path: hi\n'
                 r'        on line 1 of stdin\n'
                 r'>> @import "hi";\n'
-                r'   --------\^\n'
+                r'   --------\^\n',
         )):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
@@ -365,7 +391,7 @@ a {
                 r'length \(1, 2, 3\) but got 0: \(\)\n'
                 r'        on line 1 of stdin\n'
                 r'>> @import "hi";\n'
-                r'   --------\^\n'
+                r'   --------\^\n',
         )):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
@@ -381,7 +407,7 @@ a {
                 r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
                 r'        on line 1 of stdin\n'
                 r'>> @import "hi";\n'
-                r'   --------\^\n'
+                r'   --------\^\n',
         )):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
@@ -393,8 +419,10 @@ a {
         expected = sass.compile(string=source, source_comments=True)
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
-            actual = sass.compile(string=source,
-                                  source_comments='line_numbers')
+            actual = sass.compile(
+                string=source,
+                source_comments='line_numbers',
+            )
             assert len(w) == 1
             assert issubclass(w[-1].category, DeprecationWarning)
         assert expected == actual
@@ -408,8 +436,10 @@ a {
         assert D_EXPECTED_CSS == actual
         actual = sass.compile(filename='test/e.scss')
         assert actual == E_EXPECTED_CSS
-        self.assertRaises(IOError, sass.compile,
-                          filename='test/not-exist.sass')
+        self.assertRaises(
+            IOError, sass.compile,
+            filename='test/not-exist.sass',
+        )
         self.assertRaises(TypeError, sass.compile, filename=1234)
         self.assertRaises(TypeError, sass.compile, filename=[])
 
@@ -417,7 +447,7 @@ a {
         filename = 'test/a.scss'
         actual, source_map = sass.compile(
             filename=filename,
-            source_map_filename='a.scss.css.map'
+            source_map_filename='a.scss.css.map',
         )
         assert A_EXPECTED_CSS_WITH_MAP == actual
         self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
@@ -426,14 +456,14 @@ a {
         filename = 'test/a.scss'
         expected, expected_map = sass.compile(
             filename=filename,
-            source_map_filename='a.scss.css.map'
+            source_map_filename='a.scss.css.map',
         )
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             actual, actual_map = sass.compile(
                 filename=filename,
                 source_comments='map',
-                source_map_filename='a.scss.css.map'
+                source_map_filename='a.scss.css.map',
             )
             assert len(w) == 1
             assert issubclass(w[-1].category, DeprecationWarning)
@@ -447,23 +477,27 @@ a {
         assert actual == G_EXPECTED_CSS_WITH_PRECISION_8
 
     def test_regression_issue_2(self):
-        actual = sass.compile(string='''
+        actual = sass.compile(
+            string='''
             @media (min-width: 980px) {
                 a {
                     color: red;
                 }
             }
-        ''')
+        ''',
+        )
         normalized = re.sub(r'\s+', '', actual)
         assert normalized == '@media(min-width:980px){a{color:red;}}'
 
     def test_regression_issue_11(self):
-        actual = sass.compile(string='''
+        actual = sass.compile(
+            string='''
             $foo: 3;
             @media (max-width: $foo) {
                 body { color: black; }
             }
-        ''')
+        ''',
+        )
         normalized = re.sub(r'\s+', '', actual)
         assert normalized == '@media(max-width:3){body{color:black;}}'
 
@@ -515,7 +549,7 @@ class BuilderTestCase(BaseTestCase):
         assert E_EXPECTED_CSS == css
         self.assertEqual(
             os.path.join('subdir', 'recur.scss.css'),
-            result_files[os.path.join('subdir', 'recur.scss')]
+            result_files[os.path.join('subdir', 'recur.scss')],
         )
         with io.open(
             os.path.join(css_path, 'g.scss.css'), encoding='UTF-8',
@@ -524,7 +558,7 @@ class BuilderTestCase(BaseTestCase):
         assert G_EXPECTED_CSS == css
         self.assertEqual(
             os.path.join('subdir', 'recur.scss.css'),
-            result_files[os.path.join('subdir', 'recur.scss')]
+            result_files[os.path.join('subdir', 'recur.scss')],
         )
         with io.open(
             os.path.join(css_path, 'subdir', 'recur.scss.css'),
@@ -535,16 +569,20 @@ class BuilderTestCase(BaseTestCase):
 
     def test_output_style(self):
         css_path = self.css_path
-        result_files = build_directory(self.sass_path, css_path,
-                                       output_style='compressed')
+        result_files = build_directory(
+            self.sass_path, css_path,
+            output_style='compressed',
+        )
         assert len(result_files) == 7
         assert 'a.scss.css' == result_files['a.scss']
         with io.open(
             os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
-        self.assertEqual('body{background-color:green}body a{color:blue}\n',
-                         css)
+        self.assertEqual(
+            'body{background-color:green}body a{color:blue}\n',
+            css,
+        )
 
 
 class ManifestTestCase(BaseTestCase):
@@ -609,7 +647,7 @@ class ManifestTestCase(BaseTestCase):
                         'GAChB'
                     ),
                 },
-                os.path.join(d, 'css', 'b.scss.css.map')
+                os.path.join(d, 'css', 'b.scss.css.map'),
             )
             m.build_one(d, 'd.scss', source_map=True)
             with io.open(
@@ -631,7 +669,7 @@ class ManifestTestCase(BaseTestCase):
                         'GAC7B'
                     ),
                 },
-                os.path.join(d, 'css', 'd.scss.css.map')
+                os.path.join(d, 'css', 'd.scss.css.map'),
             )
 
 
@@ -666,9 +704,11 @@ class WsgiTestCase(BaseTestCase):
         with tempdir() as css_dir:
             src_dir = os.path.join(css_dir, 'src')
             shutil.copytree('test', src_dir)
-            app = SassMiddleware(self.sample_wsgi_app, {
-                __name__: (src_dir, css_dir, '/static')
-            })
+            app = SassMiddleware(
+                self.sample_wsgi_app, {
+                    __name__: (src_dir, css_dir, '/static'),
+                },
+            )
             client = Client(app, Response)
             r = client.get('/asdf')
             assert r.status_code == 200
@@ -707,7 +747,7 @@ class DistutilsTestCase(BaseTestCase):
         testpkg_path = os.path.join(os.path.dirname(__file__), 'testpkg')
         return subprocess.call(
             [sys.executable, 'setup.py', 'build_sass'] + list(args),
-            cwd=os.path.abspath(testpkg_path)
+            cwd=os.path.abspath(testpkg_path),
         )
 
     def test_build_sass(self):
@@ -715,12 +755,12 @@ class DistutilsTestCase(BaseTestCase):
         assert rv == 0
         self.assertEqual(
             ['a.scss.css'],
-            list(map(os.path.basename, self.list_built_css()))
+            list(map(os.path.basename, self.list_built_css())),
         )
         with open(self.css_path('a.scss.css')) as f:
             self.assertEqual(
                 'p a {\n  color: red; }\n\np b {\n  color: blue; }\n',
-                f.read()
+                f.read(),
             )
 
     def test_output_style(self):
@@ -729,7 +769,7 @@ class DistutilsTestCase(BaseTestCase):
         with open(self.css_path('a.scss.css')) as f:
             self.assertEqual(
                 'p a{color:red}p b{color:blue}\n',
-                f.read()
+                f.read(),
             )
 
 
@@ -750,7 +790,7 @@ class SasscTestCase(BaseTestCase):
     def test_three_args(self):
         exit_code = sassc.main(
             ['sassc', 'a.scss', 'b.scss', 'c.scss'],
-            self.out, self.err
+            self.out, self.err,
         )
         assert exit_code == 2
         err = self.err.getvalue()
@@ -768,8 +808,10 @@ class SasscTestCase(BaseTestCase):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(['sassc', 'test/a.scss', tmp],
-                                   self.out, self.err)
+            exit_code = sassc.main(
+                ['sassc', 'test/a.scss', tmp],
+                self.out, self.err,
+            )
             assert exit_code == 0
             assert self.err.getvalue() == ''
             assert self.out.getvalue() == ''
@@ -782,8 +824,10 @@ class SasscTestCase(BaseTestCase):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(['sassc', 'test/d.scss', tmp],
-                                   self.out, self.err)
+            exit_code = sassc.main(
+                ['sassc', 'test/d.scss', tmp],
+                self.out, self.err,
+            )
             assert exit_code == 0
             assert self.err.getvalue() == ''
             assert self.out.getvalue() == ''
@@ -796,9 +840,11 @@ class SasscTestCase(BaseTestCase):
         exit_code = sassc.main(['sassc', '-m', 'a.scss'], self.out, self.err)
         assert exit_code == 2
         err = self.err.getvalue()
-        assert err.strip().endswith('error: -m/-g/--sourcemap requires '
-                                    'the second argument, the output css '
-                                    'filename.'), \
+        assert err.strip().endswith(
+            'error: -m/-g/--sourcemap requires '
+            'the second argument, the output css '
+            'filename.',
+        ), \
             'actual error message is: ' + repr(err)
         assert self.out.getvalue() == ''
 
@@ -828,10 +874,14 @@ class CompileDirectoriesTest(unittest.TestCase):
             input_dir = os.path.join(tmpdir, 'input')
             output_dir = os.path.join(tmpdir, 'output')
             os.makedirs(os.path.join(input_dir, 'foo'))
-            write_file(os.path.join(input_dir, 'f1.scss'),
-                       'a { b { width: 100%; } }')
-            write_file(os.path.join(input_dir, 'foo/f2.scss'),
-                       'foo { width: 100%; }')
+            write_file(
+                os.path.join(input_dir, 'f1.scss'),
+                'a { b { width: 100%; } }',
+            )
+            write_file(
+                os.path.join(input_dir, 'foo/f2.scss'),
+                'foo { width: 100%; }',
+            )
             # Make sure we don't compile non-scss files
             write_file(os.path.join(input_dir, 'baz.txt'), 'Hello der')
 
@@ -881,7 +931,7 @@ class CompileDirectoriesTest(unittest.TestCase):
 
             with pytest.raises(sass.CompileError) as excinfo:
                 sass.compile(
-                    dirname=(input_dir, os.path.join(tmpdir, 'output'))
+                    dirname=(input_dir, os.path.join(tmpdir, 'output')),
                 )
             msg, = excinfo.value.args
             assert msg.startswith('Error: Invalid CSS after ')
@@ -890,10 +940,7 @@ class CompileDirectoriesTest(unittest.TestCase):
 class SassFunctionTest(unittest.TestCase):
 
     def test_from_lambda(self):
-        # Hack for https://gitlab.com/pycqa/flake8/issues/117
-        def noop(x):
-            return x
-        lambda_ = noop(lambda abc, d: None)  # pragma: no branch (lambda)
+        lambda_ = lambda abc, d: None  # pragma: no branch  # noqa: E731
         sf = sass.SassFunction.from_lambda('func_name', lambda_)
         assert 'func_name' == sf.name
         assert ('$abc', '$d') == sf.arguments
@@ -909,7 +956,7 @@ class SassFunctionTest(unittest.TestCase):
         sf = sass.SassFunction(  # pragma: no branch (doesn't run lambda)
             'func-name',
             ('$a', '$bc', '$d'),
-            lambda a, bc, d: None
+            lambda a, bc, d: None,
         )
         assert 'func-name($a, $bc, $d)' == sf.signature
         assert sf.signature == str(sf)
@@ -1161,7 +1208,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 r'        on line 1 of stdin, in function `raises`\n'
                 r'        from line 1 of stdin\n'
                 r'>> a { content: raises\(\); }\n'
-                r'   -------------\^\n$'
+                r'   -------------\^\n$',
         )):
             compile_with_func('a { content: raises(); }')
 
@@ -1172,7 +1219,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '        on line 1 of stdin, in function `returns_warning`\n'
                 '        from line 1 of stdin\n'
                 '>> a { content: returns_warning(); }\n'
-                '   -------------^\n'
+                '   -------------^\n',
         ):
             compile_with_func('a { content: returns_warning(); }')
 
@@ -1183,7 +1230,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '        on line 1 of stdin, in function `returns_error`\n'
                 '        from line 1 of stdin\n'
                 '>> a { content: returns_error(); }\n'
-                '   -------------^\n'
+                '   -------------^\n',
         ):
             compile_with_func('a { content: returns_error(); }')
 
@@ -1205,7 +1252,7 @@ class CustomFunctionsTest(unittest.TestCase):
                 '        on line 1 of stdin, in function `returns_unknown`\n'
                 '        from line 1 of stdin\n'
                 '>> a { content: returns_unknown(); }\n'
-                '   -------------^\n'
+                '   -------------^\n',
         ):
             compile_with_func('a { content: returns_unknown(); }')
 
@@ -1266,7 +1313,7 @@ class CustomFunctionsTest(unittest.TestCase):
     def test_bracketed_list(self):
         self.assertEqual(
             compile_with_func('a { content: returns_bracketed_list(); }'),
-            'a{content:[hello ohai]}\n'
+            'a{content:[hello ohai]}\n',
         )
 
     def test_py_dict(self):
@@ -1368,9 +1415,9 @@ class CustomFunctionsTest(unittest.TestCase):
             compile_with_func(
                 'a{content: '
                 'map-get(nth(identity(((foo: bar), (baz: womp))), 1), foo)'
-                '}'
+                '}',
             ),
-            'a{content:bar}\n'
+            'a{content:bar}\n',
         )
 
     def test_map_with_map_key(self):
@@ -1392,7 +1439,7 @@ def test_stack_trace_formatting():
         'CompileError: Error: Invalid CSS after "a{☃": expected "{", was ""\n'
         '        on line 1 of stdin\n'
         '>> a{☃\n'
-        '   --^\n\n'
+        '   --^\n\n',
     )
 
 
@@ -1448,11 +1495,13 @@ def test_import_no_css(tmpdir):
         sass.compile(filename=main_scss.strpath)
 
 
-@pytest.mark.parametrize('exts', [
-    ('.css',),
-    ['.css'],
-    ['.foobar', '.css'],
-])
+@pytest.mark.parametrize(
+    'exts', [
+        ('.css',),
+        ['.css'],
+        ['.foobar', '.css'],
+    ],
+)
 def test_import_css(exts, tmpdir):
     tmpdir.join('other.css').write('body {color: green}')
     main_scss = tmpdir.join('main.scss')

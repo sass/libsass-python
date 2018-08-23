@@ -110,17 +110,19 @@ class SassFunction(object):
         if PY2:  # pragma: no cover
             a = inspect.getargspec(lambda_)
             varargs, varkw, defaults, kwonlyargs = (
-                a.varargs, a.keywords, a.defaults, None)
+                a.varargs, a.keywords, a.defaults, None,
+            )
         else:  # pragma: no cover
             a = inspect.getfullargspec(lambda_)
             varargs, varkw, defaults, kwonlyargs = (
-                a.varargs, a.varkw, a.defaults, a.kwonlyargs)
+                a.varargs, a.varkw, a.defaults, a.kwonlyargs,
+            )
 
         if varargs or varkw or defaults or kwonlyargs:
             raise TypeError(
-                'functions cannot have starargs or defaults: {0} {1}'.format(
-                    name, lambda_
-                )
+                'functions cannot have starargs or defaults: {} {}'.format(
+                    name, lambda_,
+                ),
             )
         return cls(name, a.args, lambda_)
 
@@ -157,7 +159,7 @@ class SassFunction(object):
     @property
     def signature(self):
         """Signature string of the function."""
-        return '{0}({1})'.format(self.name, ', '.join(self.arguments))
+        return '{}({})'.format(self.name, ', '.join(self.arguments))
 
     def __call__(self, *args, **kwargs):
         return self.callable_(*args, **kwargs)
@@ -177,7 +179,7 @@ def _normalize_importer_return_value(result):
         if len(single_result) not in (1, 2, 3):
             raise ValueError(
                 'Expected importer result to be a tuple of length (1, 2, 3) '
-                'but got {0}: {1!r}'.format(len(single_result), single_result)
+                'but got {}: {!r}'.format(len(single_result), single_result),
             )
 
         def _to_bytes(obj):
@@ -222,7 +224,7 @@ def _raise(e):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions, importers, custom_import_extensions
+    precision, custom_functions, importers, custom_import_extensions,
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path, onerror=_raise):
@@ -257,10 +259,10 @@ def compile_dirname(
 def _check_no_remaining_kwargs(func, kwargs):
     if kwargs:
         raise TypeError(
-            '{0}() got unexpected keyword argument(s) {1}'.format(
+            '{}() got unexpected keyword argument(s) {}'.format(
                 func.__name__,
-                ', '.join("'{0}'".format(arg) for arg in sorted(kwargs)),
-            )
+                ', '.join("'{}'".format(arg) for arg in sorted(kwargs)),
+            ),
         )
 
 
@@ -511,8 +513,10 @@ def compile(**kwargs):
     if not modes:
         raise TypeError('choose one at least in ' + and_join(MODES))
     elif len(modes) > 1:
-        raise TypeError(and_join(modes) + ' are exclusive each other; '
-                        'cannot be used at a time')
+        raise TypeError(
+            and_join(modes) + ' are exclusive each other; '
+            'cannot be used at a time',
+        )
     precision = kwargs.pop('precision', 5)
     output_style = kwargs.pop('output_style', 'nested')
     if not isinstance(output_style, string_types):
@@ -521,13 +525,15 @@ def compile(**kwargs):
     try:
         output_style = OUTPUT_STYLES[output_style]
     except KeyError:
-        raise CompileError('{0} is unsupported output_style; choose one of {1}'
+        raise CompileError('{} is unsupported output_style; choose one of {}'
                            ''.format(output_style, and_join(OUTPUT_STYLES)))
     source_comments = kwargs.pop('source_comments', False)
     if source_comments in SOURCE_COMMENTS:
         if source_comments == 'none':
-            deprecation_message = ('you can simply pass False to '
-                                   "source_comments instead of 'none'")
+            deprecation_message = (
+                'you can simply pass False to '
+                "source_comments instead of 'none'"
+            )
             source_comments = False
         elif source_comments in ('line_numbers', 'default'):
             deprecation_message = ('you can simply pass True to '
@@ -535,15 +541,17 @@ def compile(**kwargs):
                                    repr(source_comments))
             source_comments = True
         else:
-            deprecation_message = ("you don't have to pass 'map' to "
-                                   'source_comments but just need to '
-                                   'specify source_map_filename')
+            deprecation_message = (
+                "you don't have to pass 'map' to "
+                'source_comments but just need to '
+                'specify source_map_filename'
+            )
             source_comments = False
         warnings.warn(
             "values like 'none', 'line_numbers', and 'map' for "
             'the source_comments parameter are deprecated; ' +
             deprecation_message,
-            DeprecationWarning
+            DeprecationWarning,
         )
     if not isinstance(source_comments, bool):
         raise TypeError('source_comments must be bool, not ' +
@@ -559,7 +567,7 @@ def compile(**kwargs):
         if ret and 'filename' not in modes:
             raise CompileError(
                 '{} is only available with filename= keyword argument since '
-                'has to be aware of it'.format(key)
+                'has to be aware of it'.format(key),
             )
         return ret
 
@@ -591,14 +599,14 @@ def compile(**kwargs):
             '- a set/sequence of {0.__module__}.{0.__name__} objects,\n'
             '- a mapping of function name strings to lambda functions,\n'
             '- a set/sequence of named functions,\n'
-            'not {1!r}'.format(SassFunction, custom_functions)
+            'not {1!r}'.format(SassFunction, custom_functions),
         )
 
     _custom_exts = kwargs.pop('custom_import_extensions', []) or []
     if not isinstance(_custom_exts, (list, tuple)):
         raise TypeError(
             'custom_import_extensions must be a list of strings '
-            'not {}'.format(type(_custom_exts))
+            'not {}'.format(type(_custom_exts)),
         )
     custom_import_extensions = [ext.encode('utf-8') for ext in _custom_exts]
 
@@ -624,7 +632,7 @@ def compile(**kwargs):
         if not isinstance(filename, string_types):
             raise TypeError('filename must be a string, not ' + repr(filename))
         elif not os.path.isfile(filename):
-            raise IOError('{0!r} seems not a file'.format(filename))
+            raise IOError('{!r} seems not a file'.format(filename))
         elif isinstance(filename, text_type):
             filename = filename.encode(fs_encoding)
         _check_no_remaining_kwargs(compile, kwargs)
@@ -643,13 +651,15 @@ def compile(**kwargs):
         try:
             search_path, output_path = kwargs.pop('dirname')
         except ValueError:
-            raise ValueError('dirname must be a pair of (source_dir, '
-                             'output_dir)')
+            raise ValueError(
+                'dirname must be a pair of (source_dir, '
+                'output_dir)',
+            )
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
             include_paths, precision, custom_functions, importers,
-            custom_import_extensions
+            custom_import_extensions,
         )
         if s:
             return
@@ -777,7 +787,7 @@ class SassMap(collections.Mapping):
     # Our interface
 
     def __repr__(self):
-        return '{0}({1})'.format(type(self).__name__, frozenset(self.items()))
+        return '{}({})'.format(type(self).__name__, frozenset(self.items()))
 
     def __hash__(self):
         return self._hash

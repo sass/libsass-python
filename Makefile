@@ -41,4 +41,3 @@ _sass.so: $(C_OBJECTS) $(CPP_OBJECTS) build2/pysass.o
 .PHONY: clean
 clean:
 	rm -rf build2 _sass.so
-

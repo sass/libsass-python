@@ -471,7 +471,7 @@ or Visual Studio 2013 Update 4+.
 - Follow up the libsass upstream: 3.0 --- See the `release note`__ of LibSass.
 
   - Decent extends support
-  - Basic Sass Maps Support 
+  - Basic Sass Maps Support
   - Better UTF-8 Support
   - ``call()`` function
   - Better Windows Support
@@ -602,7 +602,7 @@ Released on February 21, 2014.
   exist yet, rather than siliently fails.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
 - Merged recent changes from libsass 1.0.1: `57a2f62--v1.0.1`_.
-            
+
   - Supports `variable arguments`_.
   - Supports sourcemaps.
 

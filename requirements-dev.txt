@@ -1,6 +1,6 @@
 -e .
 coverage
 coverage-enable-subprocess
-flake8>=2.4.0
+pre-commit
 pytest
 werkzeug>=0.9

@@ -14,12 +14,18 @@ from twine.commands import upload
 
 
 APPVEYOR_API_BASE_URL = 'https://ci.appveyor.com/api/'
-APPVEYOR_API_PROJECT_URL = urljoin(APPVEYOR_API_BASE_URL,
-                                   'projects/asottile/libsass-python/')
-APPVEYOR_API_BUILDS_URL = urljoin(APPVEYOR_API_PROJECT_URL,
-                                  'history?recordsNumber=50&branch=master')
-APPVEYOR_API_JOBS_URL = urljoin(APPVEYOR_API_PROJECT_URL,
-                                'build/')
+APPVEYOR_API_PROJECT_URL = urljoin(
+    APPVEYOR_API_BASE_URL,
+    'projects/asottile/libsass-python/',
+)
+APPVEYOR_API_BUILDS_URL = urljoin(
+    APPVEYOR_API_PROJECT_URL,
+    'history?recordsNumber=50&branch=master',
+)
+APPVEYOR_API_JOBS_URL = urljoin(
+    APPVEYOR_API_PROJECT_URL,
+    'build/',
+)
 APPVEYOR_API_JOB_URL = urljoin(APPVEYOR_API_BASE_URL, 'buildjobs/')
 
 
@@ -66,8 +72,10 @@ def ci_jobs(build):
 
 
 def ci_artifacts(job):
-    url = urljoin(urljoin(APPVEYOR_API_JOB_URL, job['jobId'] + '/'),
-                  'artifacts/')
+    url = urljoin(
+        urljoin(APPVEYOR_API_JOB_URL, job['jobId'] + '/'),
+        'artifacts/',
+    )
     response = urlopen(url)
     files = json.load(response)
     response.close()
@@ -97,14 +105,20 @@ def download_artifact(artifact, target_dir, overwrite=False):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--overwrite', action='store_true', default=False,
-                        help='Overwrite files if already exist')
-    parser.add_argument('--dist-dir', default='./dist/',
-                        help='The temporary directory to download artifacts')
+    parser.add_argument(
+        '--overwrite', action='store_true', default=False,
+        help='Overwrite files if already exist',
+    )
+    parser.add_argument(
+        '--dist-dir', default='./dist/',
+        help='The temporary directory to download artifacts',
+    )
     parser.add_argument(
         'tag',
-        help=('Git tag of the version to upload.  If it has a leading slash, '
-              'it means AppVeyor build number rather than Git tag.')
+        help=(
+            'Git tag of the version to upload.  If it has a leading slash, '
+            'it means AppVeyor build number rather than Git tag.'
+        ),
     )
     args = parser.parse_args()
     if args.tag.startswith('/'):

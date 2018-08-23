@@ -30,8 +30,10 @@ suppress_warnings = ['image.nonlocal_uri']
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
-              'sphinx.ext.extlinks']
+extensions = [
+    'sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
+    'sphinx.ext.extlinks',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -191,8 +193,10 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'libsass.tex', u'libsass Documentation',
-   u'Hong Minhee', 'manual'),
+  (
+      'index', 'libsass.tex', u'libsass Documentation',
+      u'Hong Minhee', 'manual',
+  ),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -221,8 +225,10 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'libsass', u'libsass Documentation',
-     [u'Hong Minhee'], 1)
+    (
+        'index', 'libsass', u'libsass Documentation',
+        [u'Hong Minhee'], 1,
+    ),
 ]
 
 # If true, show URL addresses after external links.
@@ -235,9 +241,11 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'libsass', u'libsass Documentation',
-   u'Hong Minhee', 'libsass', 'One line description of project.',
-   'Miscellaneous'),
+  (
+      'index', 'libsass', u'libsass Documentation',
+      u'Hong Minhee', 'libsass', 'One line description of project.',
+      'Miscellaneous',
+  ),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -254,14 +262,16 @@ texinfo_documents = [
 intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
     'setuptools': ('https://setuptools.readthedocs.io/', None),
-    'flask': ('http://flask.pocoo.org/docs/', None)
+    'flask': ('http://flask.pocoo.org/docs/', None),
 }
 
 
 extlinks = {
     'issue': ('https://github.com/sass/libsass-python/issues/%s', '#'),
-    'branch': ('https://github.com/sass/libsass-python/compare/master...%s',
-               ''),
+    'branch': (
+        'https://github.com/sass/libsass-python/compare/master...%s',
+        '',
+    ),
     'commit': ('https://github.com/sass/libsass-python/commit/%s', ''),
     'upcommit': ('https://github.com/sass/libsass/commit/%s', ''),
 }
