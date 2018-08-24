@@ -15,9 +15,10 @@ script:
 - COVERAGE_PROCESS_START=$PWD/.coveragerc pytest sasstests.py
 - coverage combine
 - coverage report
-- flake8 .
+- pre-commit run --all-files --show-diff-on-failure
 after_success:
 - coveralls
 cache:
     directories:
         - $HOME/.cache/pip
+        - $HOME/.cache/pre-commit

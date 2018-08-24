@@ -99,13 +99,14 @@ else:
         if sys.platform == 'win32':
             # This looks wrong, but is required for some reason :(
             version_define = r'/DLIBSASS_VERSION="\"{}\""'.format(
-                                                            libsass_version)
+                libsass_version,
+            )
         else:
             version_define = '-DLIBSASS_VERSION="{}"'.format(libsass_version)
 
     for directory in (
             os.path.join('libsass', 'src'),
-            os.path.join('libsass', 'include')
+            os.path.join('libsass', 'include'),
     ):
         for pth, _, filenames in os.walk(directory):
             for filename in filenames:
@@ -119,13 +120,15 @@ else:
         from distutils.msvc9compiler import get_build_version
         vscomntools_env = 'VS{}{}COMNTOOLS'.format(
             int(get_build_version()),
-            int(get_build_version() * 10) % 10
+            int(get_build_version() * 10) % 10,
         )
         try:
             os.environ[vscomntools_env] = os.environ['VS140COMNTOOLS']
         except KeyError:
-            distutils.log.warn('You probably need Visual Studio 2015 (14.0) '
-                               'or higher')
+            distutils.log.warn(
+                'You probably need Visual Studio 2015 (14.0) '
+                'or higher',
+            )
         from distutils import msvccompiler, msvc9compiler
         if msvccompiler.get_build_version() < 14.0:
             msvccompiler.get_build_version = lambda: 14.0
@@ -154,13 +157,13 @@ else:
                 f.write(
                     '#ifdef __cplusplus\n'
                     'extern "C" {\n'
-                    '#endif\n'
+                    '#endif\n',
                 )
                 f.write(cencode_body)
                 f.write(
                     '#ifdef __cplusplus\n'
                     '}\n'
-                    '#endif\n'
+                    '#endif\n',
                 )
 
             @atexit.register
@@ -186,7 +189,7 @@ sass_extension = Extension(
     depends=headers,
     extra_compile_args=extra_compile_args,
     extra_link_args=link_flags,
-    libraries=libraries
+    libraries=libraries,
 )
 
 
@@ -224,11 +227,15 @@ class upload_doc(distutils.cmd.Command):
 
     def run(self):
         path = tempfile.mkdtemp()
-        build = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             'build', 'sphinx', 'html')
+        build = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'build', 'sphinx', 'html',
+        )
         os.chdir(path)
-        os.system('git clone -b gh-pages --depth 5 '
-                  'git@github.com:sass/libsass-python.git .')
+        os.system(
+            'git clone -b gh-pages --depth 5 '
+            'git@github.com:sass/libsass-python.git .',
+        )
         os.system('git rm -r .')
         os.system('touch .nojekyll')
         os.system('cp -r ' + build + '/* .')
@@ -250,8 +257,8 @@ setup(
     package_data={
         '': [
             'README.rst',
-            'test/*.sass'
-        ]
+            'test/*.sass',
+        ],
     },
     scripts=['sassc.py'],
     license='MIT License',
@@ -261,16 +268,16 @@ setup(
     download_url='https://github.com/sass/libsass-python/releases',
     entry_points={
         'distutils.commands': [
-            'build_sass = sassutils.distutils:build_sass'
+            'build_sass = sassutils.distutils:build_sass',
         ],
         'distutils.setup_keywords': [
-            'sass_manifests = sassutils.distutils:validate_manifests'
+            'sass_manifests = sassutils.distutils:validate_manifests',
         ],
         'console_scripts': [
             ['pysassc = sassc:main'],
             # TODO: deprecate `sassc` and remove (#134)
             ['sassc = sassc:main'],
-        ]
+        ],
     },
     install_requires=['six'],
     extras_require={'upload_appveyor_builds': ['twine == 1.11.0']},
@@ -293,7 +300,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development :: Code Generators',
-        'Topic :: Software Development :: Compilers'
+        'Topic :: Software Development :: Compilers',
     ],
-    cmdclass={'upload_doc': upload_doc}
+    cmdclass={'upload_doc': upload_doc},
 )

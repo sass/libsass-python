@@ -71,7 +71,7 @@ import sass
 def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     parser = optparse.OptionParser(
         usage='%prog [options] SCSS_FILE [OUT_CSS_FILE]',
-        version='%prog {0} (sass/libsass {1})'.format(
+        version='%prog {} (sass/libsass {})'.format(
             sass.__version__, sass.libsass_version,
         ),
     )
@@ -85,30 +85,38 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
             output_styles + '. [default: %default]'
         ),
     )
-    parser.add_option('-m', '-g', '--sourcemap', dest='source_map',
-                      action='store_true', default=False,
-                      help='Emit source map.  Requires the second argument '
-                           '(output css filename).')
-    parser.add_option('-I', '--include-path', metavar='DIR',
-                      dest='include_paths', action='append',
-                      help='Path to find "@import"ed (S)CSS source files. '
-                           'Can be multiply used.')
+    parser.add_option(
+        '-m', '-g', '--sourcemap', dest='source_map',
+        action='store_true', default=False,
+        help='Emit source map.  Requires the second argument '
+             '(output css filename).',
+    )
+    parser.add_option(
+        '-I', '--include-path', metavar='DIR',
+        dest='include_paths', action='append',
+        help='Path to find "@import"ed (S)CSS source files. '
+             'Can be multiply used.',
+    )
     parser.add_option(
         '-p', '--precision', action='store', type='int', default=5,
-        help='Set the precision for numbers. [default: %default]'
+        help='Set the precision for numbers. [default: %default]',
     )
     parser.add_option(
         '--source-comments', action='store_true', default=False,
         help='Include debug info in output',
     )
-    parser.add_option('--import-extensions',
-                      dest='custom_import_extensions', action='append',
-                      help='Extra extensions allowed for sass imports. '
-                           'Can be multiply used.')
+    parser.add_option(
+        '--import-extensions',
+        dest='custom_import_extensions', action='append',
+        help='Extra extensions allowed for sass imports. '
+             'Can be multiply used.',
+    )
     options, args = parser.parse_args(argv[1:])
-    error = functools.partial(print,
-                              parser.get_prog_name() + ': error:',
-                              file=stderr)
+    error = functools.partial(
+        print,
+        parser.get_prog_name() + ': error:',
+        file=stderr,
+    )
     if not args:
         parser.print_usage(stderr)
         error('too few arguments')
@@ -120,8 +128,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
     filename = args[0]
     if options.source_map and len(args) < 2:
         parser.print_usage(stderr)
-        error('-m/-g/--sourcemap requires the second argument, the output '
-              'css filename.')
+        error(
+            '-m/-g/--sourcemap requires the second argument, the output '
+            'css filename.',
+        )
         return 2
 
     try:

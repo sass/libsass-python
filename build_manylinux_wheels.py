@@ -41,7 +41,7 @@ def main():
                 'quay.io/pypa/manylinux1_x86_64:latest',
                 'bash', '-exc',
                 '{} wheel --verbose --wheel-dir /work --no-deps libsass && '
-                'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip)
+                'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip),
             )
     dists = tuple(os.path.join('dist', p) for p in os.listdir('dist'))
     return upload.main(('-r', 'pypi', '--skip-existing') + dists)

@@ -89,8 +89,10 @@ class SassMiddleware(object):
 
     """
 
-    def __init__(self, app, manifests, package_dir={},
-                 error_status='200 OK'):
+    def __init__(
+        self, app, manifests, package_dir={},
+        error_status='200 OK',
+    ):
         if not callable(app):
             raise TypeError('app must be a WSGI-compliant callable object, '
                             'not ' + repr(app))
@@ -125,9 +127,11 @@ class SassMiddleware(object):
                 css_filename = path[len(prefix):]
                 sass_filename = css_filename[:-4]
                 try:
-                    result = manifest.build_one(package_dir,
-                                                sass_filename,
-                                                source_map=True)
+                    result = manifest.build_one(
+                        package_dir,
+                        sass_filename,
+                        source_map=True,
+                    )
                 except (IOError, OSError):
                     break
                 except CompileError as e:
@@ -135,7 +139,7 @@ class SassMiddleware(object):
                     logger.error(str(e))
                     start_response(
                         self.error_status,
-                        [('Content-Type', 'text/css; charset=utf-8')]
+                        [('Content-Type', 'text/css; charset=utf-8')],
                     )
                     return [
                         b'/*\n', str(e).encode('utf-8'), b'\n*/\n\n',
@@ -144,7 +148,7 @@ class SassMiddleware(object):
                         b'; color: maroon; background-color: white',
                         b'; white-space: pre-wrap; display: block',
                         b'; font-family: "Courier New", monospace'
-                        b'; user-select: text; }'
+                        b'; user-select: text; }',
                     ]
 
                 def read_file(path):
