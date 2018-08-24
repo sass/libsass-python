@@ -138,7 +138,12 @@ class build_sass(Command):
             )
             map(distutils.log.info, css_files)
             package_data.setdefault(package_name, []).extend(css_files)
-            data_files.extend((package_dir, f) for f in css_files)
+            data_files.append(
+                (
+                    package_dir,
+                    [os.path.join(package_dir, f) for f in css_files],
+                ),
+            )
         self.distribution.package_data = package_data
         self.distribution.data_files = data_files
         self.distribution.has_data_files = lambda: True
