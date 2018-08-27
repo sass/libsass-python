@@ -253,14 +253,13 @@ setup(
     version=version(),
     ext_modules=[sass_extension],
     packages=['sassutils'],
-    py_modules=['sass', 'sassc', 'sasstests'],
+    py_modules=['pysassc', 'sass', 'sassc', 'sasstests'],
     package_data={
         '': [
             'README.rst',
             'test/*.sass',
         ],
     },
-    scripts=['sassc.py'],
     license='MIT License',
     author='Hong Minhee',
     author_email='minhee' '@' 'dahlia.kr',
@@ -274,8 +273,8 @@ setup(
             'sass_manifests = sassutils.distutils:validate_manifests',
         ],
         'console_scripts': [
-            ['pysassc = sassc:main'],
-            # TODO: deprecate `sassc` and remove (#134)
+            ['pysassc = pysassc:main'],
+            # TODO: remove `sassc` entry (#134)
             ['sassc = sassc:main'],
         ],
     },

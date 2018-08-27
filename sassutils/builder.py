@@ -154,7 +154,7 @@ class Manifest(object):
             warnings.warn(
                 '`strip_extension` was not specified, defaulting to `False`.\n'
                 'In the future, `strip_extension` will default to `True`.',
-                DeprecationWarning,
+                FutureWarning,
             )
             strip_extension = False
         elif not isinstance(strip_extension, bool):
