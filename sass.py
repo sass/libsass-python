@@ -25,6 +25,7 @@ import warnings
 from six import string_types, text_type, PY2, PY3
 
 import _sass
+from sassutils._compat import collections_abc
 
 __all__ = (
     'MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError', 'SassColor',
@@ -144,7 +145,7 @@ class SassFunction(object):
     def __init__(self, name, arguments, callable_):
         if not isinstance(name, string_types):
             raise TypeError('name must be a string, not ' + repr(name))
-        elif not isinstance(arguments, collections.Sequence):
+        elif not isinstance(arguments, collections_abc.Sequence):
             raise TypeError('arguments must be a sequence, not ' +
                             repr(arguments))
         elif not callable(callable_):
@@ -582,12 +583,15 @@ def compile(**kwargs):
         include_paths = include_paths.encode(fs_encoding)
 
     custom_functions = kwargs.pop('custom_functions', ())
-    if isinstance(custom_functions, collections.Mapping):
+    if isinstance(custom_functions, collections_abc.Mapping):
         custom_functions = [
             SassFunction.from_lambda(name, lambda_)
             for name, lambda_ in custom_functions.items()
         ]
-    elif isinstance(custom_functions, (collections.Set, collections.Sequence)):
+    elif isinstance(
+            custom_functions,
+            (collections_abc.Set, collections_abc.Sequence),
+    ):
         custom_functions = [
             func if isinstance(func, SassFunction)
             else SassFunction.from_named_function(func)
@@ -758,7 +762,7 @@ class SassWarning(collections.namedtuple('SassWarning', ('msg',))):
         return super(SassWarning, cls).__new__(cls, msg)
 
 
-class SassMap(collections.Mapping):
+class SassMap(collections_abc.Mapping):
     """Because sass maps can have mapping types as keys, we need an immutable
     hashable mapping type.
 

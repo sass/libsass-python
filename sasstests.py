@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
-import collections
 import contextlib
 import glob
 import json
@@ -25,6 +24,7 @@ from werkzeug.wrappers import Response
 import pysassc
 import sass
 import sassc
+from sassutils._compat import collections_abc
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -127,6 +127,12 @@ body p {
 '''
 
 
+@pytest.fixture(autouse=True)
+def no_warnings(recwarn):
+    yield
+    assert len(recwarn) == 0
+
+
 class BaseTestCase(unittest.TestCase):
 
     def assert_source_map_equal(self, expected, actual):
@@ -153,7 +159,7 @@ class SassTestCase(BaseTestCase):
         assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
 
     def test_output_styles(self):
-        assert isinstance(sass.OUTPUT_STYLES, collections.Mapping)
+        assert isinstance(sass.OUTPUT_STYLES, collections_abc.Mapping)
         assert 'nested' in sass.OUTPUT_STYLES
 
     def test_and_join(self):
@@ -926,8 +932,10 @@ class CompileDirectoriesTest(unittest.TestCase):
             assert os.path.exists(os.path.join(output_dir, 'foo/f2.css'))
             assert not os.path.exists(os.path.join(output_dir, 'baz.txt'))
 
-            contentsf1 = open(os.path.join(output_dir, 'f1.css')).read()
-            contentsf2 = open(os.path.join(output_dir, 'foo/f2.css')).read()
+            with open(os.path.join(output_dir, 'f1.css')) as f:
+                contentsf1 = f.read()
+            with open(os.path.join(output_dir, 'foo/f2.css')) as f:
+                contentsf2 = f.read()
             assert contentsf1 == 'a b {\n  width: 100%; }\n'
             assert contentsf2 == 'foo {\n  width: 100%; }\n'
 
