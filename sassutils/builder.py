@@ -4,7 +4,6 @@
 """
 from __future__ import with_statement
 
-import collections
 import io
 import os
 import os.path
@@ -14,6 +13,7 @@ import warnings
 from six import string_types
 
 from sass import compile
+from sassutils._compat import collections_abc
 
 __all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
 
@@ -104,7 +104,7 @@ class Manifest(object):
     def normalize_manifests(cls, manifests):
         if manifests is None:
             manifests = {}
-        elif isinstance(manifests, collections.Mapping):
+        elif isinstance(manifests, collections_abc.Mapping):
             manifests = dict(manifests)
         else:
             raise TypeError('manifests must be a mapping object, not ' +
@@ -117,7 +117,7 @@ class Manifest(object):
                 continue
             elif isinstance(manifest, tuple):
                 manifest = Manifest(*manifest)
-            elif isinstance(manifest, collections.Mapping):
+            elif isinstance(manifest, collections_abc.Mapping):
                 manifest = Manifest(**manifest)
             elif isinstance(manifest, string_types):
                 manifest = Manifest(manifest)

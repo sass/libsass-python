@@ -4,9 +4,11 @@
 #if PY_MAJOR_VERSION >= 3
 #define PySass_IF_PY3(three, two) (three)
 #define PySass_Object_Bytes(o) PyUnicode_AsUTF8String(PyObject_Str(o))
+#define COLLECTIONS_ABC_MOD "collections.abc"
 #else
 #define PySass_IF_PY3(three, two) (two)
 #define PySass_Object_Bytes(o) PyObject_Str(o)
+#define COLLECTIONS_ABC_MOD "collections"
 #endif
 
 #ifdef __cplusplus
@@ -322,7 +324,7 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     PyObject* sass_list_t = PyObject_GetAttrString(types_mod, "SassList");
     PyObject* sass_warning_t = PyObject_GetAttrString(types_mod, "SassWarning");
     PyObject* sass_error_t = PyObject_GetAttrString(types_mod, "SassError");
-    PyObject* collections_mod = PyImport_ImportModule("collections");
+    PyObject* collections_mod = PyImport_ImportModule(COLLECTIONS_ABC_MOD);
     PyObject* mapping_t = PyObject_GetAttrString(collections_mod, "Mapping");
 
     if (value == Py_None) {
