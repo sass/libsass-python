@@ -1,5 +1,5 @@
 
-.. program:: sassc
+.. program:: pysassc
 
-.. automodule:: sassc
+.. automodule:: pysassc
    :members:

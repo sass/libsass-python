@@ -22,6 +22,7 @@ from six import StringIO, b, string_types, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
+import pysassc
 import sass
 import sassc
 from sassutils.builder import Manifest, build_directory
@@ -424,7 +425,7 @@ a {
                 source_comments='line_numbers',
             )
             assert len(w) == 1
-            assert issubclass(w[-1].category, DeprecationWarning)
+            assert issubclass(w[-1].category, FutureWarning)
         assert expected == actual
 
     def test_compile_filename(self):
@@ -466,7 +467,7 @@ a {
                 source_map_filename='a.scss.css.map',
             )
             assert len(w) == 1
-            assert issubclass(w[-1].category, DeprecationWarning)
+            assert issubclass(w[-1].category, FutureWarning)
         assert expected == actual
         self.assert_source_map_equal(expected_map, actual_map)
 
@@ -588,16 +589,20 @@ class BuilderTestCase(BaseTestCase):
 class ManifestTestCase(BaseTestCase):
 
     def test_normalize_manifests(self):
-        manifests = Manifest.normalize_manifests({
-            'package': 'sass/path',
-            'package.name': ('sass/path', 'css/path'),
-            'package.name2': Manifest('sass/path', 'css/path'),
-            'package.name3': {
-                'sass_path': 'sass/path',
-                'css_path': 'css/path',
-                'strip_extension': True,
-            },
-        })
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            manifests = Manifest.normalize_manifests({
+                'package': 'sass/path',
+                'package.name': ('sass/path', 'css/path'),
+                'package.name2': Manifest('sass/path', 'css/path'),
+                'package.name3': {
+                    'sass_path': 'sass/path',
+                    'css_path': 'css/path',
+                    'strip_extension': True,
+                },
+            })
+            assert len(w) == 3
+            assert all(issubclass(x.category, FutureWarning) for x in w)
         assert len(manifests) == 4
         assert isinstance(manifests['package'], Manifest)
         assert manifests['package'].sass_path == 'sass/path'
@@ -624,7 +629,12 @@ class ManifestTestCase(BaseTestCase):
                 return s.replace('SOURCE', test_source_path(name))
 
             shutil.copytree('test', src_path)
-            m = Manifest(sass_path='test', css_path='css')
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter('always')
+                m = Manifest(sass_path='test', css_path='css')
+                assert len(w) == 1
+                assert issubclass(w[-1].category, FutureWarning)
+
             m.build_one(d, 'a.scss')
             with open(os.path.join(d, 'css', 'a.scss.css')) as f:
                 assert A_EXPECTED_CSS == f.read()
@@ -704,11 +714,15 @@ class WsgiTestCase(BaseTestCase):
         with tempdir() as css_dir:
             src_dir = os.path.join(css_dir, 'src')
             shutil.copytree('test', src_dir)
-            app = SassMiddleware(
-                self.sample_wsgi_app, {
-                    __name__: (src_dir, css_dir, '/static'),
-                },
-            )
+            with warnings.catch_warnings(record=True) as w:
+                warnings.simplefilter('always')
+                app = SassMiddleware(
+                    self.sample_wsgi_app, {
+                        __name__: (src_dir, css_dir, '/static'),
+                    },
+                )
+                assert len(w) == 1
+                assert issubclass(w[-1].category, FutureWarning)
             client = Client(app, Response)
             r = client.get('/asdf')
             assert r.status_code == 200
@@ -780,7 +794,7 @@ class SasscTestCase(BaseTestCase):
         self.err = StringIO()
 
     def test_no_args(self):
-        exit_code = sassc.main(['sassc'], self.out, self.err)
+        exit_code = pysassc.main(['pysassc'], self.out, self.err)
         assert exit_code == 2
         err = self.err.getvalue()
         assert err.strip().endswith('error: too few arguments'), \
@@ -788,8 +802,8 @@ class SasscTestCase(BaseTestCase):
         assert '' == self.out.getvalue()
 
     def test_three_args(self):
-        exit_code = sassc.main(
-            ['sassc', 'a.scss', 'b.scss', 'c.scss'],
+        exit_code = pysassc.main(
+            ['pysassc', 'a.scss', 'b.scss', 'c.scss'],
             self.out, self.err,
         )
         assert exit_code == 2
@@ -798,18 +812,35 @@ class SasscTestCase(BaseTestCase):
             'actual error message is: ' + repr(err)
         assert self.out.getvalue() == ''
 
-    def test_sassc_stdout(self):
-        exit_code = sassc.main(['sassc', 'test/a.scss'], self.out, self.err)
+    def test_pysassc_stdout(self):
+        exit_code = pysassc.main(
+            ['pysassc', 'test/a.scss'],
+            self.out, self.err,
+        )
         assert exit_code == 0
         assert self.err.getvalue() == ''
         assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
 
-    def test_sassc_output(self):
+    def test_sassc_stdout(self):
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            exit_code = sassc.main(
+                ['sassc', 'test/a.scss'],
+                self.out, self.err,
+            )
+            assert len(w) == 1
+            assert issubclass(w[-1].category, FutureWarning)
+            assert 'use `pysassc`' in str(w[-1].message)
+        assert exit_code == 0
+        assert self.err.getvalue() == ''
+        assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
+
+    def test_pysassc_output(self):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(
-                ['sassc', 'test/a.scss', tmp],
+            exit_code = pysassc.main(
+                ['pysassc', 'test/a.scss', tmp],
                 self.out, self.err,
             )
             assert exit_code == 0
@@ -820,12 +851,12 @@ class SasscTestCase(BaseTestCase):
         finally:
             os.remove(tmp)
 
-    def test_sassc_output_unicode(self):
+    def test_pysassc_output_unicode(self):
         fd, tmp = tempfile.mkstemp('.css')
         try:
             os.close(fd)
-            exit_code = sassc.main(
-                ['sassc', 'test/d.scss', tmp],
+            exit_code = pysassc.main(
+                ['pysassc', 'test/d.scss', tmp],
                 self.out, self.err,
             )
             assert exit_code == 0
@@ -836,8 +867,11 @@ class SasscTestCase(BaseTestCase):
         finally:
             os.remove(tmp)
 
-    def test_sassc_source_map_without_css_filename(self):
-        exit_code = sassc.main(['sassc', '-m', 'a.scss'], self.out, self.err)
+    def test_pysassc_source_map_without_css_filename(self):
+        exit_code = pysassc.main(
+            ['pysassc', '-m', 'a.scss'],
+            self.out, self.err,
+        )
         assert exit_code == 2
         err = self.err.getvalue()
         assert err.strip().endswith(
@@ -1448,15 +1482,15 @@ def test_source_comments():
     assert out == '/* line 1, stdin */\na {\n  color: red; }\n'
 
 
-def test_sassc_sourcemap(tmpdir):
+def test_pysassc_sourcemap(tmpdir):
     src_file = tmpdir.join('src').ensure_dir().join('a.scss')
     out_file = tmpdir.join('a.scss.css')
     out_map_file = tmpdir.join('a.scss.css.map')
 
     src_file.write('.c { font-size: 5px + 5px; }')
 
-    exit_code = sassc.main([
-        'sassc', '-m', src_file.strpath, out_file.strpath,
+    exit_code = pysassc.main([
+        'pysassc', '-m', src_file.strpath, out_file.strpath,
     ])
     assert exit_code == 0
 

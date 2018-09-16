@@ -551,7 +551,7 @@ def compile(**kwargs):
             "values like 'none', 'line_numbers', and 'map' for "
             'the source_comments parameter are deprecated; ' +
             deprecation_message,
-            DeprecationWarning,
+            FutureWarning,
         )
     if not isinstance(source_comments, bool):
         raise TypeError('source_comments must be bool, not ' +
