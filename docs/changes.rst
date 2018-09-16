@@ -1,6 +1,23 @@
 Changelog
 =========
 
+Version 0.15.0
+--------------
+
+Released on September 16, 2018.
+
+- Fix invalid escape sequences [:issue:`249` by Anthony Sottile]
+- Add code of conduct [:issue:`251` by Nick Schonning]
+- Add support for python3.7 and remove testing for python3.4 [:issue:`254`
+  by Anthony Sottile]
+- Add ``strip_extension`` option for wsgi / distutils builder [:issue:`55`
+  :issue:`258` by Anthony Sottile :issue:`260` by Morten Brekkevold]
+- Deprecate ``sassc`` (replaced by ``pysassc``).  [:issue:`262` by
+  Anthony Sottile]
+- Import abc classes from ``collections.abc`` to remove ``DeprecationWarning``
+  [:issue:`264` by Gary van der Merwe :issue:`265` by Anthony Sottile]
+
+
 Version 0.14.5
 --------------
 
