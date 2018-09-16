@@ -6,16 +6,17 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Changelog &#8212; libsass 0.14.5 documentation</title>
+    <title>Changelog &#8212; libsass 0.15.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="sassc — SassC compliant command line interface" href="sassc.html" />
+    <link rel="next" title="sass — Binding of libsass" href="sass.html" />
     <link rel="prev" title="Using with Flask" href="frameworks/flask.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -29,10 +30,28 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-15-0">
+<h2>Version 0.15.0<a class="headerlink" href="#version-0-15-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on September 16, 2018.</p>
+<ul class="simple">
+<li>Fix invalid escape sequences [<a class="reference external" href="https://github.com/sass/libsass-python/issues/249">#249</a> by Anthony Sottile]</li>
+<li>Add code of conduct [<a class="reference external" href="https://github.com/sass/libsass-python/issues/251">#251</a> by Nick Schonning]</li>
+<li>Add support for python3.7 and remove testing for python3.4 [<a class="reference external" href="https://github.com/sass/libsass-python/issues/254">#254</a>
+by Anthony Sottile]</li>
+<li>Add <code class="docutils literal notranslate"><span class="pre">strip_extension</span></code> option for wsgi / distutils builder [<a class="reference external" href="https://github.com/sass/libsass-python/issues/55">#55</a>
+<a class="reference external" href="https://github.com/sass/libsass-python/issues/258">#258</a> by Anthony Sottile <a class="reference external" href="https://github.com/sass/libsass-python/issues/260">#260</a> by Morten Brekkevold]</li>
+<li>Deprecate <code class="docutils literal notranslate"><span class="pre">sassc</span></code> (replaced by <code class="docutils literal notranslate"><span class="pre">pysassc</span></code>).  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/262">#262</a> by
+Anthony Sottile]</li>
+<li>Import abc classes from <code class="docutils literal notranslate"><span class="pre">collections.abc</span></code> to remove <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code>
+[<a class="reference external" href="https://github.com/sass/libsass-python/issues/264">#264</a> by Gary van der Merwe <a class="reference external" href="https://github.com/sass/libsass-python/issues/265">#265</a> by Anthony Sottile]</li>
+</ul>
+</div>
 <div class="section" id="version-0-14-5">
 <h2>Version 0.14.5<a class="headerlink" href="#version-0-14-5" title="Permalink to this headline">¶</a></h2>
 <p>Released on April 25, 2018.</p>
@@ -374,7 +393,7 @@ with level <code class="docutils literal notranslate"><span class="pre">ERROR</s
 </li>
 <li>Added <code class="docutils literal notranslate"><span class="pre">precision</span></code> parameter to <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">sass.compile()</span></code></a> function.
 [<a class="reference external" href="https://github.com/sass/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-p"><code class="xref std std-option docutils literal notranslate"><span class="pre">--precision</span></code></a> option.  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
+<li><strong class="program">sassc</strong> has a new <code class="xref std std-option docutils literal notranslate"><span class="pre">-p</span></code>/<code class="xref std std-option docutils literal notranslate"><span class="pre">--precision</span></code> option.  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/39">#39</a> by Andrea Stagi]</li>
 </ul>
 </div>
 <div class="section" id="version-0-6-2">
@@ -436,7 +455,7 @@ parameter <code class="docutils literal notranslate"><span class="pre">output_st
 <p>Released on September 23, 2014.</p>
 <ul class="simple">
 <li>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a> yielded
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> on Python 3.</li>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> on Python 3.</li>
 <li>Fixed several Unicode-related bugs on Windows.</li>
 <li>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_directory()</span></code></a>,
 <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a>, and
@@ -481,7 +500,7 @@ and version.</li>
 <p>Released on May 22, 2014.</p>
 <ul class="simple">
 <li>Fixed build failing on Mac OS X 10.8 or earlier.  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/19">#19</a>]</li>
-<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
+<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
 contains any non-ASCII Unicode characters.</li>
 </ul>
 </div>
@@ -489,7 +508,7 @@ contains any non-ASCII Unicode characters.</li>
 <h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on May 20, 2014.</p>
 <ul class="simple">
-<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.6)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that rise when the input source contains
+<li>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that rise when the input source contains
 any non-ASCII Unicode characters.</li>
 </ul>
 </div>
@@ -499,7 +518,7 @@ any non-ASCII Unicode characters.</li>
 <ul class="simple">
 <li><strong class="program">sassc</strong> has a new <code class="xref std std-option docutils literal notranslate"><span class="pre">-w</span></code>/<code class="xref std std-option docutils literal notranslate"><span class="pre">--watch</span></code> option.</li>
 <li>Expose source maps support:<ul>
-<li><strong class="program">sassc</strong> has a new <a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal notranslate"><span class="pre">-m</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal notranslate"><span class="pre">-g</span></code></a>/<a class="reference internal" href="sassc.html#cmdoption-sassc-m"><code class="xref std std-option docutils literal notranslate"><span class="pre">--sourcemap</span></code></a> option.</li>
+<li><strong class="program">sassc</strong> has a new <code class="xref std std-option docutils literal notranslate"><span class="pre">-m</span></code>/<code class="xref std std-option docutils literal notranslate"><span class="pre">-g</span></code>/<code class="xref std std-option docutils literal notranslate"><span class="pre">--sourcemap</span></code> option.</li>
 <li><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a> now also creates source map files
 with filenames followed by <code class="file docutils literal notranslate"><span class="pre">.map</span></code> suffix.</li>
 <li><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a> method
@@ -537,7 +556,7 @@ exist yet, rather than siliently fails.
 <h2>Version 0.2.4<a class="headerlink" href="#version-0-2-4" title="Permalink to this headline">¶</a></h2>
 <p>Released on December 4, 2012.</p>
 <ul class="simple">
-<li>Added <a class="reference internal" href="sassc.html#module-sassc" title="sassc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassc</span></code></a> CLI executable script.</li>
+<li>Added <code class="xref py py-mod docutils literal notranslate"><span class="pre">sassc</span></code> CLI executable script.</li>
 <li>Added <a class="reference internal" href="sass.html#sass.OUTPUT_STYLES" title="sass.OUTPUT_STYLES"><code class="xref py py-const docutils literal notranslate"><span class="pre">sass.OUTPUT_STYLES</span></code></a> constant map.</li>
 <li>Merged recent changes from libsass upstream:
 <a class="reference external" href="https://github.com/sass/libsass/compare/e9971023785dabd41aa44f431f603f62b15e6017...a84b181a6e59463c0ac9796ca7fdaf4864f0ad84">e997102–a84b181</a>.</li>
@@ -573,14 +592,14 @@ exist yet, rather than siliently fails.
 <li>Added new <a class="reference internal" href="sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code></a> package.<ul>
 <li>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code></a> module to build the whole directory
 at a time.</li>
-<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> and
+<li>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> and
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code> integration.</li>
 <li>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> module which provides a development-purpose
 WSGI middleware.</li>
 </ul>
 </li>
 <li>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal notranslate"><span class="pre">build_sass</span></code></a> command for
-<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>.</li>
+<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="version-0-1-1">
@@ -599,82 +618,92 @@ Now it raises a proper <code class="docutils literal notranslate"><span class="p
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#version-0-14-5">Version 0.14.5</a></li>
-<li><a class="reference internal" href="#version-0-14-4">Version 0.14.4</a></li>
-<li><a class="reference internal" href="#version-0-14-3">Version 0.14.3</a></li>
-<li><a class="reference internal" href="#version-0-14-2">Version 0.14.2</a></li>
-<li><a class="reference internal" href="#version-0-14-1">Version 0.14.1</a></li>
-<li><a class="reference internal" href="#version-0-14-0">Version 0.14.0</a></li>
-<li><a class="reference internal" href="#version-0-13-7">Version 0.13.7</a></li>
-<li><a class="reference internal" href="#version-0-13-6">Version 0.13.6</a></li>
-<li><a class="reference internal" href="#version-0-13-5">Version 0.13.5</a></li>
-<li><a class="reference internal" href="#version-0-13-4">Version 0.13.4</a></li>
-<li><a class="reference internal" href="#version-0-13-3">Version 0.13.3</a></li>
-<li><a class="reference internal" href="#version-0-13-2">Version 0.13.2</a></li>
-<li><a class="reference internal" href="#version-0-13-1">Version 0.13.1</a></li>
-<li><a class="reference internal" href="#version-0-13-0">Version 0.13.0</a></li>
-<li><a class="reference internal" href="#version-0-12-3">Version 0.12.3</a></li>
-<li><a class="reference internal" href="#version-0-12-2">Version 0.12.2</a></li>
-<li><a class="reference internal" href="#version-0-12-1">Version 0.12.1</a></li>
-<li><a class="reference internal" href="#version-0-12-0">Version 0.12.0</a></li>
-<li><a class="reference internal" href="#version-0-11-2">Version 0.11.2</a></li>
-<li><a class="reference internal" href="#version-0-11-1">Version 0.11.1</a></li>
-<li><a class="reference internal" href="#version-0-11-0">Version 0.11.0</a></li>
-<li><a class="reference internal" href="#version-0-10-1">Version 0.10.1</a></li>
-<li><a class="reference internal" href="#version-0-10-0">Version 0.10.0</a></li>
-<li><a class="reference internal" href="#version-0-9-3">Version 0.9.3</a></li>
-<li><a class="reference internal" href="#version-0-9-2">Version 0.9.2</a></li>
-<li><a class="reference internal" href="#version-0-9-1">Version 0.9.1</a></li>
-<li><a class="reference internal" href="#version-0-9-0">Version 0.9.0</a></li>
-<li><a class="reference internal" href="#version-0-8-3">Version 0.8.3</a></li>
-<li><a class="reference internal" href="#version-0-8-2">Version 0.8.2</a></li>
-<li><a class="reference internal" href="#version-0-8-1">Version 0.8.1</a></li>
-<li><a class="reference internal" href="#version-0-8-0">Version 0.8.0</a></li>
-<li><a class="reference internal" href="#version-0-7-0">Version 0.7.0</a></li>
-<li><a class="reference internal" href="#version-0-6-2">Version 0.6.2</a></li>
-<li><a class="reference internal" href="#version-0-6-1">Version 0.6.1</a></li>
-<li><a class="reference internal" href="#version-0-6-0">Version 0.6.0</a></li>
-<li><a class="reference internal" href="#version-0-5-1">Version 0.5.1</a></li>
-<li><a class="reference internal" href="#version-0-5-0">Version 0.5.0</a></li>
-<li><a class="reference internal" href="#unstable-version-0-4-2-20140529-cd3ee1cbe3">Unstable version 0.4.2.20140529.cd3ee1cbe3</a></li>
-<li><a class="reference internal" href="#unstable-version-0-4-2-20140528-cd3ee1cbe3">Unstable Version 0.4.2-20140528-cd3ee1cbe3</a></li>
-<li><a class="reference internal" href="#version-0-4-2">Version 0.4.2</a></li>
-<li><a class="reference internal" href="#version-0-4-1">Version 0.4.1</a></li>
-<li><a class="reference internal" href="#version-0-4-0">Version 0.4.0</a></li>
-<li><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
-<li><a class="reference internal" href="#version-0-2-4">Version 0.2.4</a></li>
-<li><a class="reference internal" href="#version-0-2-3">Version 0.2.3</a></li>
-<li><a class="reference internal" href="#version-0-2-2">Version 0.2.2</a></li>
-<li><a class="reference internal" href="#version-0-2-1">Version 0.2.1</a></li>
-<li><a class="reference internal" href="#version-0-2-0">Version 0.2.0</a></li>
-<li><a class="reference internal" href="#version-0-1-1">Version 0.1.1</a></li>
-<li><a class="reference internal" href="#version-0-1-0">Version 0.1.0</a></li>
+<h1 class="logo"><a href="index.html">libsass</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-15-0">Version 0.15.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-5">Version 0.14.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-4">Version 0.14.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-3">Version 0.14.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-2">Version 0.14.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-1">Version 0.14.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-14-0">Version 0.14.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-7">Version 0.13.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-6">Version 0.13.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-5">Version 0.13.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-4">Version 0.13.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-3">Version 0.13.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-2">Version 0.13.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-1">Version 0.13.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-13-0">Version 0.13.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-12-3">Version 0.12.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-12-2">Version 0.12.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-12-1">Version 0.12.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-12-0">Version 0.12.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-11-2">Version 0.11.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-11-1">Version 0.11.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-11-0">Version 0.11.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-10-1">Version 0.10.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-10-0">Version 0.10.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-9-3">Version 0.9.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-9-2">Version 0.9.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-9-1">Version 0.9.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-9-0">Version 0.9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-8-3">Version 0.8.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-8-2">Version 0.8.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-8-1">Version 0.8.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-8-0">Version 0.8.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-7-0">Version 0.7.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-6-2">Version 0.6.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-6-1">Version 0.6.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-6-0">Version 0.6.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-5-1">Version 0.5.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-5-0">Version 0.5.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unstable-version-0-4-2-20140529-cd3ee1cbe3">Unstable version 0.4.2.20140529.cd3ee1cbe3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unstable-version-0-4-2-20140528-cd3ee1cbe3">Unstable Version 0.4.2-20140528-cd3ee1cbe3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-2">Version 0.4.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-1">Version 0.4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-0">Version 0.4.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-4">Version 0.2.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-3">Version 0.2.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-2">Version 0.2.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-1">Version 0.2.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-0">Version 0.1.0</a></li>
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+</ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="frameworks/flask.html" title="previous chapter">Using with Flask</a></li>
-      <li>Next: <a href="sassc.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">sassc</span></code> — SassC compliant command line interface</a></li>
+      <li>Next: <a href="sass.html" title="next chapter"><code class="docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/changes.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -695,8 +724,8 @@ Now it raises a proper <code class="docutils literal notranslate"><span class="p
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="_sources/changes.rst.txt"

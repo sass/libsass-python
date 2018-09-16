@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.14.5 documentation</title>
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.15.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using with Flask" href="frameworks/flask.html" />
@@ -28,6 +29,8 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="libsass-python-sass-scss-for-python">
@@ -38,7 +41,7 @@ It’s very straightforward and there isn’t any headache related Python
 distribution/deployment.  That means you can add just <code class="docutils literal notranslate"><span class="pre">libsass</span></code> into
 your <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">install_requires</span></code> list or <code class="file docutils literal notranslate"><span class="pre">requirements.txt</span></code>
 file.</p>
-<p>It currently supports CPython 2.6, 2.7, 3.4–3.6, and PyPy 2.3+!</p>
+<p>It currently supports CPython 2.6, 2.7, 3.5–3.7, and PyPy 2.3+!</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -52,7 +55,7 @@ either.</li>
 <li>WSGI middleware for ease of development.
 It automatically compiles Sass/SCSS files for each request.
 See also <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> for details.</li>
-<li><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.6)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration.
+<li><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration.
 You can build all Sass/SCSS files using
 <strong class="program">setup.py build_sass</strong> command.
 See also <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> for details.</li>
@@ -62,7 +65,7 @@ See also <a class="reference internal" href="sassutils/distutils.html#module-sas
 </div>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p>It’s available on <a class="reference external" href="https://pypi.python.org/pypi/libsass">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
+<p>It’s available on <a class="reference external" href="https://pypi.org/pypi/libsass/">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install libsass
 </pre></div>
 </div>
@@ -119,6 +122,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-15-0">Version 0.15.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-14-5">Version 0.14.5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-14-4">Version 0.14.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-14-3">Version 0.14.3</a></li>
@@ -178,7 +182,6 @@ See also libsass project’s <a class="reference external" href="https://github.
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sassc.html"><code class="docutils literal notranslate"><span class="pre">sassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
@@ -216,8 +219,8 @@ reference implementation of it in Ruby.</p>
 <a class="last reference external image-reference" href="https://coveralls.io/r/sass/libsass-python"><img alt="Coverage Status" src="https://coveralls.io/repos/github/sass/libsass-python/badge.svg?branch=master" /></a>
 </dd>
 <dt>PyPI</dt>
-<dd><p class="first"><a class="reference external" href="https://pypi.python.org/pypi/libsass">https://pypi.python.org/pypi/libsass</a></p>
-<a class="last reference external image-reference" href="https://pypi.python.org/pypi/libsass"><img alt="PyPI" src="https://badge.fury.io/py/libsass.svg" /></a>
+<dd><p class="first"><a class="reference external" href="https://pypi.org/pypi/libsass/">https://pypi.org/pypi/libsass/</a></p>
+<a class="last reference external image-reference" href="https://pypi.org/pypi/libsass/"><img alt="PyPI" src="https://badge.fury.io/py/libsass.svg" /></a>
 </dd>
 <dt>Changelog</dt>
 <dd><a class="reference internal" href="changes.html"><span class="doc">Changelog</span></a></dd>
@@ -235,28 +238,30 @@ reference implementation of it in Ruby.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">libsass-python: Sass/SCSS for Python</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
-<li><a class="reference internal" href="#install">Install</a></li>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#compile-a-string-of-sass-to-css">Compile a String of Sass to CSS</a></li>
-<li><a class="reference internal" href="#compile-a-directory-of-sass-files-to-css">Compile a Directory of Sass Files to CSS</a></li>
+<h1 class="logo"><a href="#">libsass</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#user-s-guide">User’s Guide</a></li>
-<li><a class="reference internal" href="#references">References</a></li>
-<li><a class="reference internal" href="#credit">Credit</a></li>
-<li><a class="reference internal" href="#open-source">Open source</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
 </ul>
-</li>
-</ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -265,13 +270,6 @@ reference implementation of it in Ruby.</p>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -292,8 +290,8 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
       |
       <a href="_sources/index.rst.txt"
