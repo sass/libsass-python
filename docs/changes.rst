@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.15.1
+--------------
+
+Released on September 24, 2018.
+
+- Fix ``setup.py sdist`` (regressed in 0.15.0) [:issue:`267` by
+  Anthony Sottile]
+
+
 Version 0.15.0
 --------------
 
