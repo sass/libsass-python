@@ -51,6 +51,13 @@ def _maybe_macos(flags):
         )
 
 
+if sys.platform == 'win32':
+    extra_link_args = []
+elif platform.system() in {'Darwin', 'FreeBSD'}:
+    extra_link_args = ['-fPIC', '-lc++']
+else:
+    extra_link_args = ['-fPIC', '-lstdc++']
+
 if system_sass:
     flags = [
         '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
@@ -58,14 +65,9 @@ if system_sass:
     _maybe_clang(flags)
     _maybe_macos(flags)
 
-    if platform.system() == 'FreeBSD':
-        link_flags = ['-fPIC', '-lc++']
-    else:
-        link_flags = ['-fPIC', '-lstdc++']
     libraries = ['sass']
     include_dirs = []
     extra_compile_args = flags
-    extra_link_args = link_flags
 else:
     LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
@@ -136,7 +138,6 @@ else:
             msvc9compiler.get_build_version = lambda: 14.0
             msvc9compiler.VERSION = 14.0
         flags = ['/Od', '/EHsc', '/MT']
-        link_flags = []
     else:
         flags = [
             '-fPIC', '-std=gnu++0x', '-Wall',
@@ -172,15 +173,9 @@ else:
                     with open(cencode_path, 'w') as f:
                         f.write(cencode_body)
 
-        if platform.system() == 'FreeBSD':
-            link_flags = ['-fPIC', '-lc++']
-        else:
-            link_flags = ['-fPIC', '-lstdc++']
-
     libraries = []
     include_dirs = [os.path.join('.', 'libsass', 'include')]
     extra_compile_args = flags + [version_define]
-    extra_link_args = link_flags
 
 sass_extension = Extension(
     '_sass',
@@ -188,7 +183,7 @@ sass_extension = Extension(
     include_dirs=include_dirs,
     depends=headers,
     extra_compile_args=extra_compile_args,
-    extra_link_args=link_flags,
+    extra_link_args=extra_link_args,
     libraries=libraries,
 )
 
