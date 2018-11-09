@@ -731,6 +731,27 @@ class WsgiTestCase(BaseTestCase):
             self.assertEqual(b'/static/not-exists.sass.css', r.data)
             assert r.mimetype == 'text/plain'
 
+    def test_wsgi_sass_middleware_without_extension(self):
+        with tempdir() as css_dir:
+            src_dir = os.path.join(css_dir, 'src')
+            shutil.copytree('test', src_dir)
+            app = SassMiddleware(
+                self.sample_wsgi_app, {
+                    __name__: {
+                        'sass_path': src_dir,
+                        'css_path': css_dir,
+                        'wsgi_path': '/static',
+                        'strip_extension': True,
+                    },
+                },
+            )
+            client = Client(app, Response)
+            r = client.get('/static/a.css')
+            assert r.status_code == 200
+            expected = A_EXPECTED_CSS_WITH_MAP.replace('.scss.css', '.css')
+            self.assertEqual(expected.encode(), r.data)
+            assert r.mimetype == 'text/css'
+
 
 class DistutilsTestCase(BaseTestCase):
 
