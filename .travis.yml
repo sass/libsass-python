@@ -2,7 +2,7 @@ language: python
 dist: trusty
 matrix:
   include:
-    - python: pypy-5.4.1
+    - python: pypy2.7-5.10.0
     - python: 3.7
       dist: xenial
       sudo: required
