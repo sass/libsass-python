@@ -188,6 +188,20 @@ class Manifest(object):
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         return sass_path, css_path
 
+    def unresolve_filename(self, filename):
+        """Retrieves the probable source path from the output filename.  Pass
+        in a .css path to get out a .scss path.
+
+        :param filename: the css filename
+        :type filename: :class:`str`
+        :returns: the scss filename
+        :rtype: :class:`str`
+        """
+        filename, _ = os.path.splitext(filename)
+        if self.strip_extension:
+            filename = filename + '.scss'
+        return filename
+
     def build(self, package_dir, output_style='nested'):
         """Builds the Sass/SCSS files in the specified :attr:`sass_path`.
         It finds :attr:`sass_path` and locates :attr:`css_path`

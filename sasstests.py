@@ -14,7 +14,6 @@ import sys
 import tempfile
 import traceback
 import unittest
-import warnings
 
 import pytest
 from six import StringIO, b, string_types, text_type
@@ -424,14 +423,11 @@ a {
             color: red;
         }'''
         expected = sass.compile(string=source, source_comments=True)
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        with pytest.warns(FutureWarning):
             actual = sass.compile(
                 string=source,
                 source_comments='line_numbers',
             )
-            assert len(w) == 1
-            assert issubclass(w[-1].category, FutureWarning)
         assert expected == actual
 
     def test_compile_filename(self):
@@ -465,15 +461,12 @@ a {
             filename=filename,
             source_map_filename='a.scss.css.map',
         )
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        with pytest.warns(FutureWarning):
             actual, actual_map = sass.compile(
                 filename=filename,
                 source_comments='map',
                 source_map_filename='a.scss.css.map',
             )
-            assert len(w) == 1
-            assert issubclass(w[-1].category, FutureWarning)
         assert expected == actual
         self.assert_source_map_equal(expected_map, actual_map)
 
@@ -595,8 +588,7 @@ class BuilderTestCase(BaseTestCase):
 class ManifestTestCase(BaseTestCase):
 
     def test_normalize_manifests(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        with pytest.warns(FutureWarning) as warninfo:
             manifests = Manifest.normalize_manifests({
                 'package': 'sass/path',
                 'package.name': ('sass/path', 'css/path'),
@@ -607,8 +599,7 @@ class ManifestTestCase(BaseTestCase):
                     'strip_extension': True,
                 },
             })
-            assert len(w) == 3
-            assert all(issubclass(x.category, FutureWarning) for x in w)
+        assert len(warninfo) == 3
         assert len(manifests) == 4
         assert isinstance(manifests['package'], Manifest)
         assert manifests['package'].sass_path == 'sass/path'
@@ -635,11 +626,8 @@ class ManifestTestCase(BaseTestCase):
                 return s.replace('SOURCE', test_source_path(name))
 
             shutil.copytree('test', src_path)
-            with warnings.catch_warnings(record=True) as w:
-                warnings.simplefilter('always')
+            with pytest.warns(FutureWarning):
                 m = Manifest(sass_path='test', css_path='css')
-                assert len(w) == 1
-                assert issubclass(w[-1].category, FutureWarning)
 
             m.build_one(d, 'a.scss')
             with open(os.path.join(d, 'css', 'a.scss.css')) as f:
@@ -720,15 +708,12 @@ class WsgiTestCase(BaseTestCase):
         with tempdir() as css_dir:
             src_dir = os.path.join(css_dir, 'src')
             shutil.copytree('test', src_dir)
-            with warnings.catch_warnings(record=True) as w:
-                warnings.simplefilter('always')
+            with pytest.warns(FutureWarning):
                 app = SassMiddleware(
                     self.sample_wsgi_app, {
                         __name__: (src_dir, css_dir, '/static'),
                     },
                 )
-                assert len(w) == 1
-                assert issubclass(w[-1].category, FutureWarning)
             client = Client(app, Response)
             r = client.get('/asdf')
             assert r.status_code == 200
@@ -745,6 +730,27 @@ class WsgiTestCase(BaseTestCase):
             assert r.status_code == 200
             self.assertEqual(b'/static/not-exists.sass.css', r.data)
             assert r.mimetype == 'text/plain'
+
+    def test_wsgi_sass_middleware_without_extension(self):
+        with tempdir() as css_dir:
+            src_dir = os.path.join(css_dir, 'src')
+            shutil.copytree('test', src_dir)
+            app = SassMiddleware(
+                self.sample_wsgi_app, {
+                    __name__: {
+                        'sass_path': src_dir,
+                        'css_path': css_dir,
+                        'wsgi_path': '/static',
+                        'strip_extension': True,
+                    },
+                },
+            )
+            client = Client(app, Response)
+            r = client.get('/static/a.css')
+            assert r.status_code == 200
+            expected = A_EXPECTED_CSS_WITH_MAP.replace('.scss.css', '.css')
+            self.assertEqual(expected.encode(), r.data)
+            assert r.mimetype == 'text/css'
 
 
 class DistutilsTestCase(BaseTestCase):
@@ -828,15 +834,12 @@ class SasscTestCase(BaseTestCase):
         assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
 
     def test_sassc_stdout(self):
-        with warnings.catch_warnings(record=True) as w:
-            warnings.simplefilter('always')
+        with pytest.warns(FutureWarning) as warninfo:
             exit_code = sassc.main(
                 ['sassc', 'test/a.scss'],
                 self.out, self.err,
             )
-            assert len(w) == 1
-            assert issubclass(w[-1].category, FutureWarning)
-            assert 'use `pysassc`' in str(w[-1].message)
+        assert 'use `pysassc`' in warninfo[0].message.args[0]
         assert exit_code == 0
         assert self.err.getvalue() == ''
         assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
