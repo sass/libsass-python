@@ -507,17 +507,6 @@ static void _add_custom_importers(
     sass_option_set_c_importers(options, importer_list);
 }
 
-static void _add_custom_import_extensions(
-        struct Sass_Options* options, PyObject* custom_import_extensions
-) {
-    Py_ssize_t i;
-
-    for (i = 0; i < PyList_GET_SIZE(custom_import_extensions); i += 1) {
-        PyObject* ext = PyList_GET_ITEM(custom_import_extensions, i);
-        sass_option_push_import_extension(options, PyBytes_AS_STRING(ext));
-    }
-}
-
 static PyObject *
 PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
@@ -529,15 +518,13 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     int source_comments, error_status, precision, indented;
     PyObject *custom_functions;
     PyObject *custom_importers;
-    PyObject *custom_import_extensions;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOiOO", "siisiOiOO"),
+                          PySass_IF_PY3("yiiyiOiO", "siisiOiO"),
                           &string, &output_style, &source_comments,
                           &include_paths, &precision,
-                          &custom_functions, &indented, &custom_importers,
-                          &custom_import_extensions)) {
+                          &custom_functions, &indented, &custom_importers)) {
         return NULL;
     }
 
@@ -550,7 +537,6 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     sass_option_set_is_indented_syntax_src(options, indented);
     _add_custom_functions(options, custom_functions);
     _add_custom_importers(options, custom_importers);
-    _add_custom_import_extensions(options, custom_import_extensions);
     sass_compile_data_context(context);
 
     ctx = sass_data_context_get_context(context);
@@ -576,15 +562,14 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     Sass_Output_Style output_style;
     int source_comments, error_status, precision;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
-             *result, *output_filename_hint, *custom_import_extensions;
+             *result, *output_filename_hint;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOOOOO", "siisiOOOOO"),
+                          PySass_IF_PY3("yiiyiOOOO", "siisiOOOO"),
                           &filename, &output_style, &source_comments,
                           &include_paths, &precision,
                           &source_map_filename, &custom_functions,
-                          &custom_importers, &output_filename_hint,
-                          &custom_import_extensions)) {
+                          &custom_importers, &output_filename_hint)) {
         return NULL;
     }
 
@@ -611,7 +596,6 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     sass_option_set_precision(options, precision);
     _add_custom_functions(options, custom_functions);
     _add_custom_importers(options, custom_importers);
-    _add_custom_import_extensions(options, custom_import_extensions);
     sass_compile_file_context(context);
 
     ctx = sass_file_context_get_context(context);
