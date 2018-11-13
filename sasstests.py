@@ -891,6 +891,12 @@ class SasscTestCase(BaseTestCase):
             'actual error message is: ' + repr(err)
         assert self.out.getvalue() == ''
 
+    def test_pysassc_warning_import_extensions(self):
+        with pytest.warns(FutureWarning):
+            pysassc.main(
+                ['pysassc', os.devnull, '--import-extensions', '.css'],
+            )
+
 
 @contextlib.contextmanager
 def tempdir():
@@ -1532,59 +1538,21 @@ def test_imports_from_cwd(tmpdir):
         assert out == ''
 
 
-def test_import_no_css(tmpdir):
+def test_import_css(tmpdir):
     tmpdir.join('other.css').write('body {color: green}')
     main_scss = tmpdir.join('main.scss')
     main_scss.write("@import 'other';")
-    with pytest.raises(sass.CompileError):
-        sass.compile(filename=main_scss.strpath)
-
-
-@pytest.mark.parametrize(
-    'exts', [
-        ('.css',),
-        ['.css'],
-        ['.foobar', '.css'],
-    ],
-)
-def test_import_css(exts, tmpdir):
-    tmpdir.join('other.css').write('body {color: green}')
-    main_scss = tmpdir.join('main.scss')
-    main_scss.write("@import 'other';")
-    out = sass.compile(
-        filename=main_scss.strpath,
-        custom_import_extensions=exts,
-    )
+    out = sass.compile(filename=main_scss.strpath)
     assert out == 'body {\n  color: green; }\n'
-
-
-def test_import_css_error(tmpdir):
-    tmpdir.join('other.css').write('body {color: green}')
-    main_scss = tmpdir.join('main.scss')
-    main_scss.write("@import 'other';")
-    with pytest.raises(TypeError):
-        sass.compile(
-            filename=main_scss.strpath,
-            custom_import_extensions='.css',
-        )
 
 
 def test_import_css_string(tmpdir):
     tmpdir.join('other.css').write('body {color: green}')
     with tmpdir.as_cwd():
-        out = sass.compile(
-            string="@import 'other';",
-            custom_import_extensions=['.css'],
-        )
+        out = sass.compile(string="@import 'other';")
     assert out == 'body {\n  color: green; }\n'
 
 
-def test_import_ext_other(tmpdir):
-    tmpdir.join('other.foobar').write('body {color: green}')
-    main_scss = tmpdir.join('main.scss')
-    main_scss.write("@import 'other';")
-    out = sass.compile(
-        filename=main_scss.strpath,
-        custom_import_extensions=['.foobar'],
-    )
-    assert out == 'body {\n  color: green; }\n'
+def test_custom_import_extensions_warning():
+    with pytest.warns(FutureWarning):
+        sass.compile(string='a{b: c}', custom_import_extensions=['.css'])

@@ -64,6 +64,7 @@ import functools
 import io
 import optparse
 import sys
+import warnings
 
 import sass
 
@@ -105,12 +106,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         '--source-comments', action='store_true', default=False,
         help='Include debug info in output',
     )
-    parser.add_option(
-        '--import-extensions',
-        dest='custom_import_extensions', action='append',
-        help='Extra extensions allowed for sass imports. '
-             'Can be multiply used.',
-    )
+    parser.add_option('--import-extensions', help=optparse.SUPPRESS_HELP)
     options, args = parser.parse_args(argv[1:])
     error = functools.partial(
         print,
@@ -134,6 +130,13 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         )
         return 2
 
+    if options.import_extensions:
+        warnings.warn(
+            '`--import-extensions` has no effect and will be removed in '
+            'a future version.',
+            FutureWarning,
+        )
+
     try:
         if options.source_map:
             source_map_filename = args[1] + '.map'  # FIXME
@@ -145,7 +148,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 output_filename_hint=args[1],
                 include_paths=options.include_paths,
                 precision=options.precision,
-                custom_import_extensions=options.custom_import_extensions,
             )
         else:
             source_map_filename = None
@@ -156,7 +158,6 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 source_comments=options.source_comments,
                 include_paths=options.include_paths,
                 precision=options.precision,
-                custom_import_extensions=options.custom_import_extensions,
             )
     except (IOError, OSError) as e:
         error(e)
