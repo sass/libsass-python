@@ -1,6 +1,21 @@
 Changelog
 =========
 
+Version 0.16.0
+--------------
+
+Released on November 13, 2018.
+
+- Use ``-lc++`` link flag when compiling with ``clang`` [:issue:`270` by
+  Christian Thieme :issue:`271` by Anthony Sottile]
+- Honor ``strip_extension`` in ``SassMiddleware`` [:issue:`274` by Anthony
+  Sottile]
+- Follow up the libsass upstream: 3.5.5 --- See the release notes of LibSass
+  3.5.5__. [:issue:`275` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.5.5
+
+
 Version 0.15.1
 --------------
 
