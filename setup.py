@@ -54,7 +54,7 @@ def _maybe_macos(flags):
 if sys.platform == 'win32':
     extra_link_args = []
 elif platform.system() in {'Darwin', 'FreeBSD'}:
-    extra_link_args = ['-fPIC', '-lc++']
+    extra_link_args = ['-fPIC', '-stdlib=libc++']
 else:
     extra_link_args = ['-fPIC', '-lstdc++']
 
