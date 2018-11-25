@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 0.16.1
+--------------
+
+Released on November 25, 2018.
+
+- Fix compilation on macos mojave [:issue:`276` :issue:`277` by Anthony
+  Sottile]
+- Fix ``.sass`` in ``WsgiMiddleware`` for ``strip_extension=True``
+  [:issue:`278` by Anthony Sottile]
+
+
 Version 0.16.0
 --------------
 
