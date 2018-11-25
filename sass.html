@@ -47,7 +47,7 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'filename', 'string', 'dirname'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'string', 'dirname', 'filename'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
@@ -341,8 +341,9 @@ see also below <a class="reference internal" href="#custom-functions">custom fun
 </tbody>
 </table>
 <p id="custom-functions">The <code class="docutils literal notranslate"><span class="pre">custom_functions</span></code> parameter can take three types of forms:</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a>s
-It is the most general form.  Although pretty verbose, it can take
+<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a>s</p>
+<blockquote>
+<div><p>It is the most general form.  Although pretty verbose, it can take
 any kind of callables like type objects, unnamed functions,
 and user-defined callables.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -354,6 +355,7 @@ and user-defined callables.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
 <dl class="docutils">
 <dt><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> of names to functions</dt>
 <dd><p class="first">Less general, but easier-to-use form.  Although it’s not it can take
