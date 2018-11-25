@@ -14,17 +14,31 @@ import tempfile
 
 from setuptools import Extension, setup
 
-system_sass = os.environ.get('SYSTEM_SASS', False)
+MACOS_FLAG = ['-mmacosx-version-min=10.7']
+FLAGS_POSIX = [
+    '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+]
+FLAGS_CLANG = ['-c', '-O3'] + FLAGS_POSIX + ['-stdlib=libc++']
+LFLAGS_POSIX = ['-fPIC',  '-lstdc++']
+LFLAGS_CLANG = ['-fPIC', '-stdlib=libc++']
 
 sources = ['pysass.cpp']
 headers = []
-version_define = ''
 
+if sys.platform == 'win32':
+    extra_compile_args = ['/Od', '/EHsc', '/MT']
+    extra_link_args = []
+elif platform.system() == 'Darwin':
+    extra_compile_args = FLAGS_CLANG + MACOS_FLAG
+    extra_link_args = LFLAGS_CLANG + MACOS_FLAG
+elif platform.system() == 'FreeBSD':
+    extra_compile_args = FLAGS_CLANG
+    extra_link_args = LFLAGS_CLANG
+else:
+    extra_compile_args = FLAGS_POSIX
+    extra_link_args = LFLAGS_POSIX
 
-def _maybe_clang(flags):
-    if platform.system() not in ('Darwin', 'FreeBSD'):
-        return
-
+if platform.system() in {'Darwin', 'FreeBSD'}:
     os.environ.setdefault('CC', 'clang')
     os.environ.setdefault('CXX', 'clang++')
     orig_customize_compiler = distutils.sysconfig.customize_compiler
@@ -37,37 +51,10 @@ def _maybe_clang(flags):
         compiler.linker_so[0] = os.environ['CXX']
         return compiler
     distutils.sysconfig.customize_compiler = customize_compiler
-    flags[:] = ['-c', '-O3'] + flags + ['-stdlib=libc++']
 
-
-def _maybe_macos(flags):
-    if platform.system() != 'Darwin':
-        return
-    flags.append('-mmacosx-version-min=10.7',)
-    macver = tuple(map(int, platform.mac_ver()[0].split('.')))
-    if macver >= (10, 9):
-        flags.append(
-            '-Wno-error=unused-command-line-argument-hard-error-in-future',
-        )
-
-
-if sys.platform == 'win32':
-    extra_link_args = []
-elif platform.system() in {'Darwin', 'FreeBSD'}:
-    extra_link_args = ['-fPIC', '-stdlib=libc++']
-else:
-    extra_link_args = ['-fPIC', '-lstdc++']
-
-if system_sass:
-    flags = [
-        '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
-    ]
-    _maybe_clang(flags)
-    _maybe_macos(flags)
-
+if os.environ.get('SYSTEM_SASS', False):
     libraries = ['sass']
     include_dirs = []
-    extra_compile_args = flags
 else:
     LIBSASS_SOURCE_DIR = os.path.join('libsass', 'src')
 
@@ -83,15 +70,10 @@ else:
 
     # Determine the libsass version from the git checkout
     if os.path.exists(os.path.join('libsass', '.git')):
-        proc = subprocess.Popen(
-            (
-                'git', '-C', 'libsass', 'describe',
-                '--abbrev=4', '--dirty', '--always', '--tags',
-            ),
-            stdout=subprocess.PIPE,
-        )
-        out, _ = proc.communicate()
-        assert not proc.returncode, proc.returncode
+        out = subprocess.check_output((
+            'git', '-C', 'libsass', 'describe',
+            '--abbrev=4', '--dirty', '--always', '--tags',
+        ))
         with open('.libsass-upstream-version', 'wb') as libsass_version_file:
             libsass_version_file.write(out)
 
@@ -100,11 +82,9 @@ else:
         libsass_version = libsass_version_file.read().decode('UTF-8').strip()
         if sys.platform == 'win32':
             # This looks wrong, but is required for some reason :(
-            version_define = r'/DLIBSASS_VERSION="\"{}\""'.format(
-                libsass_version,
-            )
+            define = r'/DLIBSASS_VERSION="\"{}\""'.format(libsass_version)
         else:
-            version_define = '-DLIBSASS_VERSION="{}"'.format(libsass_version)
+            define = '-DLIBSASS_VERSION="{}"'.format(libsass_version)
 
     for directory in (
             os.path.join('libsass', 'src'),
@@ -137,45 +117,36 @@ else:
         if get_build_version() < 14.0:
             msvc9compiler.get_build_version = lambda: 14.0
             msvc9compiler.VERSION = 14.0
-        flags = ['/Od', '/EHsc', '/MT']
-    else:
-        flags = [
-            '-fPIC', '-std=gnu++0x', '-Wall',
-            '-Wno-parentheses', '-Werror=switch',
-        ]
-        _maybe_clang(flags)
-        _maybe_macos(flags)
+    elif platform.system() in ('Darwin', 'FreeBSD'):
+        # Dirty workaround to avoid link error...
+        # Python distutils doesn't provide any way
+        # to configure different flags for each cc and c++.
+        cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
+        cencode_body = ''
+        with open(cencode_path) as f:
+            cencode_body = f.read()
+        with open(cencode_path, 'w') as f:
+            f.write(
+                '#ifdef __cplusplus\n'
+                'extern "C" {\n'
+                '#endif\n',
+            )
+            f.write(cencode_body)
+            f.write(
+                '#ifdef __cplusplus\n'
+                '}\n'
+                '#endif\n',
+            )
 
-        if platform.system() in ('Darwin', 'FreeBSD'):
-            # Dirty workaround to avoid link error...
-            # Python distutils doesn't provide any way
-            # to configure different flags for each cc and c++.
-            cencode_path = os.path.join(LIBSASS_SOURCE_DIR, 'cencode.c')
-            cencode_body = ''
-            with open(cencode_path) as f:
-                cencode_body = f.read()
-            with open(cencode_path, 'w') as f:
-                f.write(
-                    '#ifdef __cplusplus\n'
-                    'extern "C" {\n'
-                    '#endif\n',
-                )
-                f.write(cencode_body)
-                f.write(
-                    '#ifdef __cplusplus\n'
-                    '}\n'
-                    '#endif\n',
-                )
-
-            @atexit.register
-            def restore_cencode():
-                if os.path.isfile(cencode_path):
-                    with open(cencode_path, 'w') as f:
-                        f.write(cencode_body)
+        @atexit.register
+        def restore_cencode():
+            if os.path.isfile(cencode_path):
+                with open(cencode_path, 'w') as f:
+                    f.write(cencode_body)
 
     libraries = []
     include_dirs = [os.path.join('.', 'libsass', 'include')]
-    extra_compile_args = flags + [version_define]
+    extra_compile_args.append(define)
 
 sass_extension = Extension(
     '_sass',
@@ -192,8 +163,7 @@ def version(sass_filename='sass.py'):
     with open(sass_filename) as f:
         tree = ast.parse(f.read(), sass_filename)
     for node in tree.body:
-        if isinstance(node, ast.Assign) and \
-           len(node.targets) == 1:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
             target, = node.targets
             if isinstance(target, ast.Name) and target.id == '__version__':
                 return node.value.s
