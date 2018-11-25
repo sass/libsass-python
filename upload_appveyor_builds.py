@@ -40,9 +40,11 @@ def ci_tag_build(tag):
     builds = ci_builds()
     commit_id = git_tags().get(tag)
     for build in builds:
-        if build['isTag'] and build['tag'] == tag:
+        if build['status'] != 'success':
+            continue
+        if build['commitId'] == commit_id:
             return build
-        elif build['commitId'] == commit_id:
+        elif build['isTag'] and build['tag'] == tag:
             return build
 
 
