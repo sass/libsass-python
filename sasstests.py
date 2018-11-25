@@ -752,6 +752,32 @@ class WsgiTestCase(BaseTestCase):
             self.assertEqual(expected.encode(), r.data)
             assert r.mimetype == 'text/css'
 
+    def test_wsgi_sass_middleware_without_extension_sass(self):
+        with tempdir() as css_dir:
+            src_dir = os.path.join(css_dir, 'src')
+            os.makedirs(src_dir)
+            with open(os.path.join(src_dir, 'a.sass'), 'w') as f:
+                f.write('a\n\tb\n\t\tcolor: blue;')
+            app = SassMiddleware(
+                self.sample_wsgi_app, {
+                    __name__: {
+                        'sass_path': src_dir,
+                        'css_path': css_dir,
+                        'wsgi_path': '/static',
+                        'strip_extension': True,
+                    },
+                },
+            )
+            client = Client(app, Response)
+            r = client.get('/static/a.css')
+            assert r.status_code == 200
+            expected = (
+                'a b {\n  color: blue; }\n\n'
+                '/*# sourceMappingURL=../a.css.map */'
+            )
+            self.assertEqual(expected.encode(), r.data)
+            assert r.mimetype == 'text/css'
+
 
 class DistutilsTestCase(BaseTestCase):
 

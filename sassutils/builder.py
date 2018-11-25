@@ -199,8 +199,14 @@ class Manifest(object):
         """
         filename, _ = os.path.splitext(filename)
         if self.strip_extension:
-            filename = filename + '.scss'
-        return filename
+            for ext in ('.scss', '.sass'):
+                test_path = os.path.join(self.sass_path, filename + ext)
+                if os.path.exists(test_path):
+                    return filename + ext
+            else:  # file not found, let it error with `.scss` extension
+                return filename + '.scss'
+        else:
+            return filename
 
     def build(self, package_dir, output_style='nested'):
         """Builds the Sass/SCSS files in the specified :attr:`sass_path`.
