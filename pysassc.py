@@ -47,6 +47,36 @@ There are options as well:
 
    .. versionadded:: 0.11.0
 
+.. option:: --sourcemap-file
+
+   Output file for source map
+
+   .. versionadded:: 0.17.0
+
+.. option:: --sourcemap-contents
+
+   Embed sourcesContent in source map.
+
+   .. versionadded:: 0.17.0
+
+.. option:: --sourcemap-embed
+
+   Embed sourceMappingUrl as data URI
+
+   .. versionadded:: 0.17.0
+
+.. option:: --omit-sourcemap-url
+
+   Omit source map URL comment from output
+
+   .. versionadded:: 0.17.0
+
+.. option:: --sourcemap-root
+
+   Base path, will be emitted to sourceRoot in source-map as is
+
+   .. versionadded:: 0.17.0
+
 .. option:: -v, --version
 
    Prints the program version.
@@ -91,6 +121,32 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         action='store_true', default=False,
         help='Emit source map.  Requires the second argument '
              '(output css filename).',
+    )
+    parser.add_option(
+        '--sourcemap-file', dest='source_map_file', metavar='FILE',
+        action='store',
+        help='Output file for source map. If omitted, source map is based on '
+             'the output css filename',
+    )
+    parser.add_option(
+        '--sourcemap-contents', dest='source_map_contents',
+        action='store_true', default=False,
+        help='Embed sourcesContent in source map',
+    )
+    parser.add_option(
+        '--sourcemap-embed', dest='source_map_embed',
+        action='store_true', default=False,
+        help='Embed sourceMappingUrl as data URI',
+    )
+    parser.add_option(
+        '--omit-sourcemap-url', dest='omit_source_map_url',
+        action='store_true', default=False,
+        help='Omit source map URL comment from output',
+    )
+    parser.add_option(
+        '--sourcemap-root', metavar='DIR',
+        dest='source_map_root', action='store',
+        help='Base path, will be emitted to sourceRoot in source-map as is',
     )
     parser.add_option(
         '-I', '--include-path', metavar='DIR',
@@ -139,12 +195,16 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
 
     try:
         if options.source_map:
-            source_map_filename = args[1] + '.map'  # FIXME
+            source_map_filename = options.source_map_file or args[1] + '.map'
             css, source_map = sass.compile(
                 filename=filename,
                 output_style=options.style,
                 source_comments=options.source_comments,
                 source_map_filename=source_map_filename,
+                source_map_contents=options.source_map_contents,
+                source_map_embed=options.source_map_embed,
+                omit_source_map_url=options.omit_source_map_url,
+                source_map_root=options.source_map_root,
                 output_filename_hint=args[1],
                 include_paths=options.include_paths,
                 precision=options.precision,

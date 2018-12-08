@@ -225,7 +225,8 @@ def _raise(e):
 
 def compile_dirname(
     search_path, output_path, output_style, source_comments, include_paths,
-    precision, custom_functions, importers,
+    precision, custom_functions, importers, source_map_contents,
+    source_map_embed, omit_source_map_url, source_map_root,
 ):
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
     for dirpath, _, filenames in os.walk(search_path, onerror=_raise):
@@ -243,6 +244,8 @@ def compile_dirname(
             s, v, _ = _sass.compile_filename(
                 input_filename, output_style, source_comments, include_paths,
                 precision, None, custom_functions, importers, None,
+                source_map_contents, source_map_embed, omit_source_map_url,
+                source_map_root,
             )
             if s:
                 v = v.decode('UTF-8')
@@ -284,6 +287,14 @@ def compile(**kwargs):
     :param source_comments: whether to add comments about source lines.
                             :const:`False` by default
     :type source_comments: :class:`bool`
+    :param source_map_contents: embed include contents in map
+    :type source_map_contents: :class:`bool`
+    :param source_map_embed: embed sourceMappingUrl as data URI
+    :type source_map_embed: :class:`bool`
+    :param omit_source_map_url: omit source map URL comment from output
+    :type omit_source_map_url: :class:`bool`
+    :param source_map_root: base path, will be emitted in source map as is
+    :type source_map_root: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
     :type include_paths: :class:`collections.abc.Sequence`
@@ -325,6 +336,14 @@ def compile(**kwargs):
                                 output filename.  :const:`None` means not
                                 using source maps.  :const:`None` by default.
     :type source_map_filename: :class:`str`
+    :param source_map_contents: embed include contents in map
+    :type source_map_contents: :class:`bool`
+    :param source_map_embed: embed sourceMappingUrl as data URI
+    :type source_map_embed: :class:`bool`
+    :param omit_source_map_url: omit source map URL comment from output
+    :type omit_source_map_url: :class:`bool`
+    :param source_map_root: base path, will be emitted in source map as is
+    :type source_map_root: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
     :type include_paths: :class:`collections.abc.Sequence`
@@ -368,6 +387,14 @@ def compile(**kwargs):
     :param source_comments: whether to add comments about source lines.
                             :const:`False` by default
     :type source_comments: :class:`bool`
+    :param source_map_contents: embed include contents in map
+    :type source_map_contents: :class:`bool`
+    :param source_map_embed: embed sourceMappingUrl as data URI
+    :type source_map_embed: :class:`bool`
+    :param omit_source_map_url: omit source map URL comment from output
+    :type omit_source_map_url: :class:`bool`
+    :param source_map_root: base path, will be emitted in source map as is
+    :type source_map_root: :class:`str`
     :param include_paths: an optional list of paths to find ``@import``\ ed
                           Sass/CSS source files
     :type include_paths: :class:`collections.abc.Sequence`
@@ -499,6 +526,10 @@ def compile(**kwargs):
     .. versionadded:: 0.11.0
        ``source_map_filename`` no longer implies ``source_comments``.
 
+    .. versionadded:: 0.17.0
+       Added ``source_map_contents``, ``source_map_embed``,
+       ``omit_source_map_url``, and ``source_map_root`` parameters.
+
     """
     modes = set()
     for mode_name in MODES:
@@ -568,6 +599,14 @@ def compile(**kwargs):
     source_map_filename = _get_file_arg('source_map_filename')
     output_filename_hint = _get_file_arg('output_filename_hint')
 
+    source_map_contents = kwargs.pop('source_map_contents', False)
+    source_map_embed = kwargs.pop('source_map_embed', False)
+    omit_source_map_url = kwargs.pop('omit_source_map_url', False)
+    source_map_root = kwargs.pop('source_map_root', None)
+
+    if isinstance(source_map_root, text_type):
+        source_map_root = source_map_root.encode('utf-8')
+
     # #208: cwd is always included in include paths
     include_paths = (os.getcwd(),)
     include_paths += tuple(kwargs.pop('include_paths', ()) or ())
@@ -620,6 +659,8 @@ def compile(**kwargs):
         s, v = _sass.compile_string(
             string, output_style, source_comments, include_paths, precision,
             custom_functions, indented, importers,
+            source_map_contents, source_map_embed, omit_source_map_url,
+            source_map_root,
         )
         if s:
             return v.decode('utf-8')
@@ -636,6 +677,8 @@ def compile(**kwargs):
             filename, output_style, source_comments, include_paths, precision,
             source_map_filename, custom_functions, importers,
             output_filename_hint,
+            source_map_contents, source_map_embed, omit_source_map_url,
+            source_map_root,
         )
         if s:
             v = v.decode('utf-8')
@@ -655,6 +698,8 @@ def compile(**kwargs):
         s, v = compile_dirname(
             search_path, output_path, output_style, source_comments,
             include_paths, precision, custom_functions, importers,
+            source_map_contents, source_map_embed, omit_source_map_url,
+            source_map_root,
         )
         if s:
             return
