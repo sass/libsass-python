@@ -188,10 +188,12 @@ class Manifest(object):
         css_path = os.path.join(package_dir, self.css_path, css_filename)
         return sass_path, css_path
 
-    def unresolve_filename(self, filename):
+    def unresolve_filename(self, package_dir, filename):
         """Retrieves the probable source path from the output filename.  Pass
         in a .css path to get out a .scss path.
 
+        :param package_dir: the path of the package directory
+        :type package_dir: :class:`str`
         :param filename: the css filename
         :type filename: :class:`str`
         :returns: the scss filename
@@ -200,7 +202,9 @@ class Manifest(object):
         filename, _ = os.path.splitext(filename)
         if self.strip_extension:
             for ext in ('.scss', '.sass'):
-                test_path = os.path.join(self.sass_path, filename + ext)
+                test_path = os.path.join(
+                    package_dir, self.sass_path, filename + ext,
+                )
                 if os.path.exists(test_path):
                     return filename + ext
             else:  # file not found, let it error with `.scss` extension
@@ -268,6 +272,7 @@ class Manifest(object):
                 filename=sass_filename,
                 include_paths=[root_path],
                 source_map_filename=source_map_path,  # FIXME
+                output_filename_hint=css_path,
             )
         else:
             css = compile(filename=sass_filename, include_paths=[root_path])

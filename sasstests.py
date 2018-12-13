@@ -143,6 +143,14 @@ re_sourcemap_url = re.compile(r'/\*# sourceMappingURL=([^\s]+?) \*/')
 re_base64_data_uri = re.compile(r'^data:[^;]*?;base64,(.+)$')
 
 
+def _map_in_output_dir(s):
+    def cb(match):
+        filename = os.path.basename(match.group(1))
+        return '/*# sourceMappingURL={} */'.format(filename)
+
+    return re_sourcemap_url.sub(cb, s)
+
+
 @pytest.fixture(autouse=True)
 def no_warnings(recwarn):
     yield
@@ -696,12 +704,6 @@ class ManifestTestCase(BaseTestCase):
         with tempdir() as d:
             src_path = os.path.join(d, 'test')
 
-            def test_source_path(*path):
-                return normalize_path(os.path.join(d, 'test', *path))
-
-            def replace_source_path(s, name):
-                return s.replace('SOURCE', test_source_path(name))
-
             shutil.copytree('test', src_path)
             with pytest.warns(FutureWarning):
                 m = Manifest(sass_path='test', css_path='css')
@@ -713,14 +715,11 @@ class ManifestTestCase(BaseTestCase):
             with io.open(
                 os.path.join(d, 'css', 'b.scss.css'), encoding='UTF-8',
             ) as f:
-                self.assertEqual(
-                    replace_source_path(B_EXPECTED_CSS_WITH_MAP, 'b.scss'),
-                    f.read(),
-                )
+                assert f.read() == _map_in_output_dir(B_EXPECTED_CSS_WITH_MAP)
             self.assert_source_map_file(
                 {
                     'version': 3,
-                    'file': '../test/b.css',
+                    'file': 'b.scss.css',
                     'sources': ['../test/b.scss'],
                     'names': [],
                     'mappings': (
@@ -734,14 +733,11 @@ class ManifestTestCase(BaseTestCase):
             with io.open(
                 os.path.join(d, 'css', 'd.scss.css'), encoding='UTF-8',
             ) as f:
-                assert (
-                    replace_source_path(D_EXPECTED_CSS_WITH_MAP, 'd.scss') ==
-                    f.read()
-                )
+                assert f.read() == _map_in_output_dir(D_EXPECTED_CSS_WITH_MAP)
             self.assert_source_map_file(
                 {
                     'version': 3,
-                    'file': '../test/d.css',
+                    'file': 'd.scss.css',
                     'sources': ['../test/d.scss'],
                     'names': [],
                     'mappings': (
@@ -799,7 +795,7 @@ class WsgiTestCase(BaseTestCase):
             r = client.get('/static/a.scss.css')
             assert r.status_code == 200
             self.assertEqual(
-                b(A_EXPECTED_CSS_WITH_MAP),
+                b(_map_in_output_dir(A_EXPECTED_CSS_WITH_MAP)),
                 r.data,
             )
             assert r.mimetype == 'text/css'
@@ -825,20 +821,18 @@ class WsgiTestCase(BaseTestCase):
             client = Client(app, Response)
             r = client.get('/static/a.css')
             assert r.status_code == 200
-            expected = A_EXPECTED_CSS_WITH_MAP.replace('.scss.css', '.css')
+            expected = A_EXPECTED_CSS_WITH_MAP
+            expected = expected.replace('.scss.css', '.css')
+            expected = _map_in_output_dir(expected)
             self.assertEqual(expected.encode(), r.data)
             assert r.mimetype == 'text/css'
 
     def test_wsgi_sass_middleware_without_extension_sass(self):
         with tempdir() as css_dir:
-            src_dir = os.path.join(css_dir, 'src')
-            os.makedirs(src_dir)
-            with open(os.path.join(src_dir, 'a.sass'), 'w') as f:
-                f.write('a\n\tb\n\t\tcolor: blue;')
             app = SassMiddleware(
                 self.sample_wsgi_app, {
                     __name__: {
-                        'sass_path': src_dir,
+                        'sass_path': 'test',
                         'css_path': css_dir,
                         'wsgi_path': '/static',
                         'strip_extension': True,
@@ -846,11 +840,11 @@ class WsgiTestCase(BaseTestCase):
                 },
             )
             client = Client(app, Response)
-            r = client.get('/static/a.css')
+            r = client.get('/static/h.css')
             assert r.status_code == 200
             expected = (
                 'a b {\n  color: blue; }\n\n'
-                '/*# sourceMappingURL=../a.css.map */'
+                '/*# sourceMappingURL=h.css.map */'
             )
             self.assertEqual(expected.encode(), r.data)
             assert r.mimetype == 'text/css'
