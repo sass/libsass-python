@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import with_statement
 
+import base64
 import contextlib
 import glob
 import json
@@ -63,6 +64,13 @@ A_EXPECTED_MAP = {
     ),
 }
 
+with open('test/a.scss') as f:
+    A_EXPECTED_MAP_CONTENTS = dict(
+        A_EXPECTED_MAP, **{
+            'sourcesContent': [f.read()],
+        }
+    )
+
 B_EXPECTED_CSS = '''\
 b i {
   font-size: 20px; }
@@ -120,10 +128,19 @@ body {
   height: 1.42857143; }
 '''
 
+H_EXPECTED_CSS = '''\
+a b {
+  color: blue; }
+'''
+
 SUBDIR_RECUR_EXPECTED_CSS = '''\
 body p {
   color: blue; }
 '''
+
+
+re_sourcemap_url = re.compile(r'/\*# sourceMappingURL=([^\s]+?) \*/')
+re_base64_data_uri = re.compile(r'^data:[^;]*?;base64,(.+)$')
 
 
 @pytest.fixture(autouse=True)
@@ -150,6 +167,16 @@ class BaseTestCase(unittest.TestCase):
                 msg = '{!s}\n\n{}:\n\n{}'.format(e, filename, f.read())
                 raise ValueError(msg)
         self.assert_source_map_equal(expected, tree)
+
+    def assert_source_map_embed(self, expected, src):
+        url_matches = re_sourcemap_url.search(src)
+        assert url_matches is not None
+        embed_url = url_matches.group(1)
+        b64_matches = re_base64_data_uri.match(embed_url)
+        assert b64_matches is not None
+        decoded = base64.b64decode(b64_matches.group(1)).decode('utf-8')
+        actual = json.loads(decoded)
+        self.assert_source_map_equal(expected, actual)
 
 
 class SassTestCase(BaseTestCase):
@@ -283,6 +310,10 @@ a {
             string='a\n\tb\n\t\tcolor: blue;',
             indented=True,
         )
+        assert actual == 'a b {\n  color: blue; }\n'
+
+    def test_compile_file_sass_style(self):
+        actual = sass.compile(filename='test/h.sass')
         assert actual == 'a b {\n  color: blue; }\n'
 
     def test_importer_one_arg(self):
@@ -455,6 +486,46 @@ a {
         assert A_EXPECTED_CSS_WITH_MAP == actual
         self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
 
+    def test_compile_source_map_root(self):
+        filename = 'test/a.scss'
+        actual, source_map = sass.compile(
+            filename=filename,
+            source_map_filename='a.scss.css.map',
+            source_map_root='/',
+        )
+        assert A_EXPECTED_CSS_WITH_MAP == actual
+        expected = dict(A_EXPECTED_MAP, sourceRoot='/')
+        self.assert_source_map_equal(expected, source_map)
+
+    def test_compile_source_map_omit_source_url(self):
+        filename = 'test/a.scss'
+        actual, source_map = sass.compile(
+            filename=filename,
+            source_map_filename='a.scss.css.map',
+            omit_source_map_url=True,
+        )
+        assert A_EXPECTED_CSS == actual
+        self.assert_source_map_equal(A_EXPECTED_MAP, source_map)
+
+    def test_compile_source_map_source_map_contents(self):
+        filename = 'test/a.scss'
+        actual, source_map = sass.compile(
+            filename=filename,
+            source_map_filename='a.scss.css.map',
+            source_map_contents=True,
+        )
+        assert A_EXPECTED_CSS_WITH_MAP == actual
+        self.assert_source_map_equal(A_EXPECTED_MAP_CONTENTS, source_map)
+
+    def test_compile_source_map_embed(self):
+        filename = 'test/a.scss'
+        actual, source_map = sass.compile(
+            filename=filename,
+            source_map_filename='a.scss.css.map',
+            source_map_embed=True,
+        )
+        self.assert_source_map_embed(A_EXPECTED_MAP, actual)
+
     def test_compile_source_map_deprecated_source_comments_map(self):
         filename = 'test/a.scss'
         expected, expected_map = sass.compile(
@@ -516,7 +587,7 @@ class BuilderTestCase(BaseTestCase):
     def test_builder_build_directory(self):
         css_path = self.css_path
         result_files = build_directory(self.sass_path, css_path)
-        assert len(result_files) == 7
+        assert len(result_files) == 8
         assert 'a.scss.css' == result_files['a.scss']
         with io.open(
             os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
@@ -560,6 +631,12 @@ class BuilderTestCase(BaseTestCase):
             os.path.join('subdir', 'recur.scss.css'),
             result_files[os.path.join('subdir', 'recur.scss')],
         )
+        assert 'h.sass.css' == result_files['h.sass']
+        with io.open(
+            os.path.join(css_path, 'h.sass.css'), encoding='UTF-8',
+        ) as f:
+            css = f.read()
+        assert H_EXPECTED_CSS == css
         with io.open(
             os.path.join(css_path, 'subdir', 'recur.scss.css'),
             encoding='UTF-8',
@@ -573,7 +650,7 @@ class BuilderTestCase(BaseTestCase):
             self.sass_path, css_path,
             output_style='compressed',
         )
-        assert len(result_files) == 7
+        assert len(result_files) == 8
         assert 'a.scss.css' == result_files['a.scss']
         with io.open(
             os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',

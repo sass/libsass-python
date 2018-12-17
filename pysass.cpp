@@ -512,19 +512,24 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
     struct Sass_Data_Context *context;
     struct Sass_Options *options;
-    char *string, *include_paths;
+    char *string, *include_paths, *source_map_file;
     const char *error_message, *output_string;
     Sass_Output_Style output_style;
-    int source_comments, error_status, precision, indented;
+    int source_comments, error_status, precision, indented,
+        source_map_embed, source_map_contents, source_map_file_urls,
+        omit_source_map_url;
     PyObject *custom_functions;
     PyObject *custom_importers;
+    PyObject *source_map_root;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOiO", "siisiOiO"),
+                          PySass_IF_PY3("yiiyiOiOiiiO", "siisiOiOiiiO"),
                           &string, &output_style, &source_comments,
                           &include_paths, &precision,
-                          &custom_functions, &indented, &custom_importers)) {
+                          &custom_functions, &indented, &custom_importers,
+                          &source_map_contents, &source_map_embed,
+                          &omit_source_map_url, &source_map_root)) {
         return NULL;
     }
 
@@ -535,6 +540,16 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     sass_option_set_include_path(options, include_paths);
     sass_option_set_precision(options, precision);
     sass_option_set_is_indented_syntax_src(options, indented);
+    sass_option_set_source_map_contents(options, source_map_contents);
+    sass_option_set_source_map_embed(options, source_map_embed);
+    sass_option_set_omit_source_map_url(options, omit_source_map_url);
+
+    if (PyBytes_Check(source_map_root) && PyBytes_GET_SIZE(source_map_root)) {
+        sass_option_set_source_map_root(
+            options, PyBytes_AS_STRING(source_map_root)
+        );
+    }
+
     _add_custom_functions(options, custom_functions);
     _add_custom_importers(options, custom_importers);
     sass_compile_data_context(context);
@@ -560,16 +575,19 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     char *filename, *include_paths;
     const char *error_message, *output_string, *source_map_string;
     Sass_Output_Style output_style;
-    int source_comments, error_status, precision;
+    int source_comments, error_status, precision, source_map_embed,
+        source_map_contents, source_map_file_urls, omit_source_map_url;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
-             *result, *output_filename_hint;
+             *result, *output_filename_hint, *source_map_root;
 
     if (!PyArg_ParseTuple(args,
-                          PySass_IF_PY3("yiiyiOOOO", "siisiOOOO"),
+                          PySass_IF_PY3("yiiyiOOOOiiiO", "siisiOOOOiiiO"),
                           &filename, &output_style, &source_comments,
                           &include_paths, &precision,
                           &source_map_filename, &custom_functions,
-                          &custom_importers, &output_filename_hint)) {
+                          &custom_importers, &output_filename_hint,
+                          &source_map_contents, &source_map_embed,
+                          &omit_source_map_url, &source_map_root)) {
         return NULL;
     }
 
@@ -590,10 +608,20 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
             );
         }
     }
+
+    if (PyBytes_Check(source_map_root) && PyBytes_GET_SIZE(source_map_root)) {
+        sass_option_set_source_map_root(
+            options, PyBytes_AS_STRING(source_map_root)
+        );
+    }
+
     sass_option_set_output_style(options, output_style);
     sass_option_set_source_comments(options, source_comments);
     sass_option_set_include_path(options, include_paths);
     sass_option_set_precision(options, precision);
+    sass_option_set_source_map_contents(options, source_map_contents);
+    sass_option_set_source_map_embed(options, source_map_embed);
+    sass_option_set_omit_source_map_url(options, omit_source_map_url);
     _add_custom_functions(options, custom_functions);
     _add_custom_importers(options, custom_importers);
     sass_compile_file_context(context);
