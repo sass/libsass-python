@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 0.17.0
+--------------
+
+Release on January 03, 2019
+
+- Add several new cli options [:issue:`279` :issue:`268` by Frankie Dintino]
+    - ``--sourcemap-file``: output file for source map
+    - ``--sourcemap-contents``: embed ``sourcesContent`` in source map
+    - ``--sourcemap-embed``: embed ``sourceMappingURL`` as data uri
+    - ``--omit-sourcemap-url``: omit source map url comment from output
+    - ``--sourcemap-root``: base path, emitted as ``sourceRoot`` in source map
+- Fix ``.sass`` in ``WsgiMiddleware`` (again) [:issue:`280` by Anthony Sottile]
+
 Version 0.16.1
 --------------
 

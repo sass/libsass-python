@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>sass — Binding of libsass &#8212; libsass 0.16.1 documentation</title>
+    <title>sass — Binding of libsass &#8212; libsass 0.17.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sassutils — Additional utilities related to Sass" href="sassutils.html" />
@@ -47,7 +48,7 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'string', 'dirname', 'filename'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'string', 'filename', 'dirname'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
@@ -229,6 +230,10 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
 <code class="docutils literal notranslate"><span class="pre">'compact'</span></code>, <code class="docutils literal notranslate"><span class="pre">'compressed'</span></code></li>
 <li><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
 <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</li>
+<li><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</li>
+<li><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</li>
+<li><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</li>
+<li><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</li>
 <li><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</li>
 <li><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</li>
@@ -273,6 +278,10 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
 <li><strong>source_map_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – use source maps and indicate the source map
 output filename.  <code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code> means not
 using source maps.  <code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code> by default.</li>
+<li><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</li>
+<li><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</li>
+<li><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</li>
+<li><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</li>
 <li><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</li>
 <li><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</li>
@@ -323,6 +332,10 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
 <code class="docutils literal notranslate"><span class="pre">'compact'</span></code>, <code class="docutils literal notranslate"><span class="pre">'compressed'</span></code></li>
 <li><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
 <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</li>
+<li><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</li>
+<li><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</li>
+<li><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</li>
+<li><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</li>
 <li><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</li>
 <li><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</li>
@@ -444,6 +457,10 @@ the <code class="docutils literal notranslate"><span class="pre">source_comments
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.11.0: </span><code class="docutils literal notranslate"><span class="pre">source_map_filename</span></code> no longer implies <code class="docutils literal notranslate"><span class="pre">source_comments</span></code>.</p>
 </div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17.0: </span>Added <code class="docutils literal notranslate"><span class="pre">source_map_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">source_map_embed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">omit_source_map_url</span></code>, and <code class="docutils literal notranslate"><span class="pre">source_map_root</span></code> parameters.</p>
+</div>
 </dd></dl>
 
 </div>
@@ -512,7 +529,7 @@ the <code class="docutils literal notranslate"><span class="pre">source_comments
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
