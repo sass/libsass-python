@@ -423,9 +423,14 @@ static Sass_Import_List _call_py_importer_f(
     PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
     PyObject* py_result = NULL;
     Sass_Import_List sass_imports = NULL;
+    struct Sass_Import* previous;
+    const char* prev_path;
     Py_ssize_t i;
 
-    py_result = PyObject_CallFunction(pyfunc, PySass_IF_PY3("y", "s"), path);
+    previous = sass_compiler_get_last_import(comp);
+    prev_path = sass_import_get_abs_path(previous);
+
+    py_result = PyObject_CallFunction(pyfunc, PySass_IF_PY3("yy", "ss"), path, prev_path);
 
     /* Handle importer throwing an exception */
     if (!py_result) goto done;
