@@ -341,6 +341,23 @@ a {
         )
         assert ret == 'b i{font-size:20px}.foo-one-arg{color:blue}\n'
 
+    def test_importer_prev_path(self):
+        def importer(path, prev):
+            assert path in ('a', 'b')
+            if path == 'a':
+                assert prev == 'stdin'
+                return ((path, '@import "b";'),)
+            elif path == 'b':
+                assert prev == 'a'
+                return ((path, 'a { color: red; }'),)
+
+        ret = sass.compile(
+            string='@import "a";',
+            importers=((0, importer),),
+            output_style='compressed',
+        )
+        assert ret == 'a{color:red}\n'
+
     def test_importer_does_not_handle_returns_None(self):
         def importer_one(path):
             if path == 'one':

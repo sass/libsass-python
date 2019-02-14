@@ -195,9 +195,19 @@ def _normalize_importer_return_value(result):
 
 
 def _importer_callback_wrapper(func):
+    if PY2:
+        argspec = inspect.getargspec(func)
+    else:
+        argspec = inspect.getfullargspec(func)
+
+    num_args = len(argspec.args)
+
     @functools.wraps(func)
-    def inner(path):
-        ret = func(path.decode('UTF-8'))
+    def inner(path, prev):
+        if num_args == 2:
+            ret = func(path.decode('UTF-8'), prev.decode('UTF-8'))
+        else:
+            ret = func(path.decode('UTF-8'))
         return _normalize_importer_return_value(ret)
     return inner
 
@@ -477,8 +487,10 @@ def compile(**kwargs):
     A priority of zero is acceptable; priority determines the order callbacks
     are attempted.
 
-    These callbacks must accept a single string argument representing the path
-    passed to the ``@import`` directive, and either return ``None`` to
+    These callbacks can accept one or two string arguments. The first argument
+    is the path that was passed to the ``@import`` directive; the second
+    (optional) argument is the previous resolved path, where the ``@import``
+    directive was found. The callbacks must either return ``None`` to
     indicate the path wasn't handled by that callback (to continue with others
     or fall back on internal ``libsass`` filesystem behaviour) or a list of
     one or more tuples, each in one of three forms:
@@ -494,7 +506,7 @@ def compile(**kwargs):
 
     .. code-block:: python
 
-        def my_importer(path):
+        def my_importer(path, prev):
             return [(path, '#' + path + ' { color: red; }')]
 
         sass.compile(
@@ -529,6 +541,10 @@ def compile(**kwargs):
     .. versionadded:: 0.17.0
        Added ``source_map_contents``, ``source_map_embed``,
        ``omit_source_map_url``, and ``source_map_root`` parameters.
+
+    .. versionadded:: 0.18.0
+        The importer callbacks can now take a second argument, the previously-
+        resolved path, so that importers can do relative path resolution.
 
     """
     modes = set()
