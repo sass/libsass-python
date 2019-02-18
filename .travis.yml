@@ -1,5 +1,4 @@
 language: python
-dist: trusty
 matrix:
   include:
     - python: pypy2.7-5.10.0
