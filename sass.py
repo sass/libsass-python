@@ -13,7 +13,6 @@ type.
 from __future__ import absolute_import
 
 import collections
-import functools
 import inspect
 import io
 import os
@@ -195,19 +194,21 @@ def _normalize_importer_return_value(result):
 
 
 def _importer_callback_wrapper(func):
-    if PY2:
-        argspec = inspect.getargspec(func)
-    else:
-        argspec = inspect.getfullargspec(func)
-
-    num_args = len(argspec.args)
-
-    @functools.wraps(func)
     def inner(path, prev):
-        if num_args == 2:
-            ret = func(path.decode('UTF-8'), prev.decode('UTF-8'))
+        path, prev = path.decode('UTF-8'), prev.decode('UTF-8')
+        num_args = getattr(inner, '_num_args', None)
+        if num_args is None:
+            try:
+                ret = func(path, prev)
+            except TypeError:
+                inner._num_args = 1
+                ret = func(path)
+            else:
+                inner._num_args = 2
+        elif num_args == 2:
+            ret = func(path, prev)
         else:
-            ret = func(path.decode('UTF-8'))
+            ret = func(path)
         return _normalize_importer_return_value(ret)
     return inner
 
