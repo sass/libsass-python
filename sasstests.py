@@ -3,6 +3,7 @@ from __future__ import with_statement
 
 import base64
 import contextlib
+import functools
 import glob
 import json
 import io
@@ -354,6 +355,23 @@ a {
         ret = sass.compile(
             string='@import "a";',
             importers=((0, importer),),
+            output_style='compressed',
+        )
+        assert ret == 'a{color:red}\n'
+
+    def test_importer_prev_path_partial(self):
+        def importer(a_css, path, prev):
+            assert path in ('a', 'b')
+            if path == 'a':
+                assert prev == 'stdin'
+                return ((path, '@import "b";'),)
+            elif path == 'b':
+                assert prev == 'a'
+                return ((path, a_css),)
+
+        ret = sass.compile(
+            string='@import "a";',
+            importers=((0, functools.partial(importer, 'a { color: red; }')),),
             output_style='compressed',
         )
         assert ret == 'a{color:red}\n'
