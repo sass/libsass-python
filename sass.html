@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>sass — Binding of libsass &#8212; libsass 0.17.0 documentation</title>
+    <title>sass — Binding of libsass &#8212; libsass 0.18.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -48,7 +48,7 @@ type.</p>
 </div>
 <dl class="data">
 <dt id="sass.MODES">
-<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'string', 'filename', 'dirname'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">sass.</code><code class="descname">MODES</code><em class="property"> = frozenset({'filename', 'string', 'dirname'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
@@ -411,8 +411,10 @@ parameter. The callables must be passed as 2-tuples in the form:</p>
 </div>
 <p>A priority of zero is acceptable; priority determines the order callbacks
 are attempted.</p>
-<p>These callbacks must accept a single string argument representing the path
-passed to the <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code> directive, and either return <code class="docutils literal notranslate"><span class="pre">None</span></code> to
+<p>These callbacks can accept one or two string arguments. The first argument
+is the path that was passed to the <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code> directive; the second
+(optional) argument is the previous resolved path, where the <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>
+directive was found. The callbacks must either return <code class="docutils literal notranslate"><span class="pre">None</span></code> to
 indicate the path wasn’t handled by that callback (to continue with others
 or fall back on internal <code class="docutils literal notranslate"><span class="pre">libsass</span></code> filesystem behaviour) or a list of
 one or more tuples, each in one of three forms:</p>
@@ -425,7 +427,7 @@ represents; or,</li>
 </ul>
 <p>All tuple return values must be strings. As a not overly realistic
 example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_importer</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_importer</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39; { color: red; }&#39;</span><span class="p">)]</span>
 
 <span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -460,6 +462,10 @@ the <code class="docutils literal notranslate"><span class="pre">source_comments
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.17.0: </span>Added <code class="docutils literal notranslate"><span class="pre">source_map_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">source_map_embed</span></code>,
 <code class="docutils literal notranslate"><span class="pre">omit_source_map_url</span></code>, and <code class="docutils literal notranslate"><span class="pre">source_map_root</span></code> parameters.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.18.0: </span>The importer callbacks can now take a second argument, the previously-
+resolved path, so that importers can do relative path resolution.</p>
 </div>
 </dd></dl>
 
@@ -529,7 +535,7 @@ the <code class="docutils literal notranslate"><span class="pre">source_comments
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
