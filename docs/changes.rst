@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.18.0
+--------------
+
+Release on March 13, 2019
+
+- Add support for previous import path to importer callbacks [:issue:`287`
+  :issue:`291` by Frankie Dintino]
+
 Version 0.17.0
 --------------
 
