@@ -448,47 +448,53 @@ a {
         def importer(path):
             raise ValueError('Bad path: {}'.format(path))
 
-        with assert_raises_compile_error(RegexMatcher(
-                r'^Error: \n'
-                r'       Traceback \(most recent call last\):\n'
-                r'.+'
-                r'ValueError: Bad path: hi\n'
-                r'        on line 1 of stdin\n'
-                r'>> @import "hi";\n'
-                r'   --------\^\n',
-        )):
+        with assert_raises_compile_error(
+            RegexMatcher(
+                    r'^Error: \n'
+                    r'       Traceback \(most recent call last\):\n'
+                    r'.+'
+                    r'ValueError: Bad path: hi\n'
+                    r'        on line 1 of stdin\n'
+                    r'>> @import "hi";\n'
+                    r'   --------\^\n',
+            ),
+        ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
     def test_importer_returns_wrong_tuple_size_zero(self):
         def importer(path):
             return ((),)
 
-        with assert_raises_compile_error(RegexMatcher(
-                r'^Error: \n'
-                r'       Traceback \(most recent call last\):\n'
-                r'.+'
-                r'ValueError: Expected importer result to be a tuple of '
-                r'length \(1, 2, 3\) but got 0: \(\)\n'
-                r'        on line 1 of stdin\n'
-                r'>> @import "hi";\n'
-                r'   --------\^\n',
-        )):
+        with assert_raises_compile_error(
+            RegexMatcher(
+                    r'^Error: \n'
+                    r'       Traceback \(most recent call last\):\n'
+                    r'.+'
+                    r'ValueError: Expected importer result to be a tuple of '
+                    r'length \(1, 2, 3\) but got 0: \(\)\n'
+                    r'        on line 1 of stdin\n'
+                    r'>> @import "hi";\n'
+                    r'   --------\^\n',
+            ),
+        ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
     def test_importer_returns_wrong_tuple_size_too_big(self):
         def importer(path):
             return (('a', 'b', 'c', 'd'),)
 
-        with assert_raises_compile_error(RegexMatcher(
-                r'^Error: \n'
-                r'       Traceback \(most recent call last\):\n'
-                r'.+'
-                r'ValueError: Expected importer result to be a tuple of '
-                r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
-                r'        on line 1 of stdin\n'
-                r'>> @import "hi";\n'
-                r'   --------\^\n',
-        )):
+        with assert_raises_compile_error(
+            RegexMatcher(
+                    r'^Error: \n'
+                    r'       Traceback \(most recent call last\):\n'
+                    r'.+'
+                    r'ValueError: Expected importer result to be a tuple of '
+                    r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
+                    r'        on line 1 of stdin\n'
+                    r'>> @import "hi";\n'
+                    r'   --------\^\n',
+            ),
+        ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
 
     def test_compile_string_deprecated_source_comments_line_numbers(self):
@@ -1383,16 +1389,18 @@ class RegexMatcher(object):
 class CustomFunctionsTest(unittest.TestCase):
 
     def test_raises(self):
-        with assert_raises_compile_error(RegexMatcher(
-                r'^Error: error in C function raises: \n'
-                r'       Traceback \(most recent call last\):\n'
-                r'.+'
-                r'AssertionError: foo\n'
-                r'        on line 1 of stdin, in function `raises`\n'
-                r'        from line 1 of stdin\n'
-                r'>> a { content: raises\(\); }\n'
-                r'   -------------\^\n$',
-        )):
+        with assert_raises_compile_error(
+            RegexMatcher(
+                    r'^Error: error in C function raises: \n'
+                    r'       Traceback \(most recent call last\):\n'
+                    r'.+'
+                    r'AssertionError: foo\n'
+                    r'        on line 1 of stdin, in function `raises`\n'
+                    r'        from line 1 of stdin\n'
+                    r'>> a { content: raises\(\); }\n'
+                    r'   -------------\^\n$',
+            ),
+        ):
             compile_with_func('a { content: raises(); }')
 
     def test_warning(self):
