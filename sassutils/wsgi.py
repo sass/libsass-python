@@ -94,13 +94,17 @@ class SassMiddleware(object):
         error_status='200 OK',
     ):
         if not callable(app):
-            raise TypeError('app must be a WSGI-compliant callable object, '
-                            'not ' + repr(app))
+            raise TypeError(
+                'app must be a WSGI-compliant callable object, '
+                'not ' + repr(app),
+            )
         self.app = app
         self.manifests = Manifest.normalize_manifests(manifests)
         if not isinstance(package_dir, collections_abc.Mapping):
-            raise TypeError('package_dir must be a mapping object, not ' +
-                            repr(package_dir))
+            raise TypeError(
+                'package_dir must be a mapping object, not ' +
+                repr(package_dir),
+            )
         self.error_status = error_status
         self.package_dir = dict(package_dir)
         for package_name in self.manifests:

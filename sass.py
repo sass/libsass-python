@@ -145,8 +145,10 @@ class SassFunction(object):
         if not isinstance(name, string_types):
             raise TypeError('name must be a string, not ' + repr(name))
         elif not isinstance(arguments, collections_abc.Sequence):
-            raise TypeError('arguments must be a sequence, not ' +
-                            repr(arguments))
+            raise TypeError(
+                'arguments must be a sequence, not ' +
+                repr(arguments),
+            )
         elif not callable(callable_):
             raise TypeError(repr(callable_) + ' is not callable')
         self.name = name
@@ -562,13 +564,17 @@ def compile(**kwargs):
     precision = kwargs.pop('precision', 5)
     output_style = kwargs.pop('output_style', 'nested')
     if not isinstance(output_style, string_types):
-        raise TypeError('output_style must be a string, not ' +
-                        repr(output_style))
+        raise TypeError(
+            'output_style must be a string, not ' +
+            repr(output_style),
+        )
     try:
         output_style = OUTPUT_STYLES[output_style]
     except KeyError:
-        raise CompileError('{} is unsupported output_style; choose one of {}'
-                           ''.format(output_style, and_join(OUTPUT_STYLES)))
+        raise CompileError(
+            '{} is unsupported output_style; choose one of {}'
+            ''.format(output_style, and_join(OUTPUT_STYLES)),
+        )
     source_comments = kwargs.pop('source_comments', False)
     if source_comments in SOURCE_COMMENTS:
         if source_comments == 'none':
@@ -578,9 +584,11 @@ def compile(**kwargs):
             )
             source_comments = False
         elif source_comments in ('line_numbers', 'default'):
-            deprecation_message = ('you can simply pass True to '
-                                   "source_comments instead of " +
-                                   repr(source_comments))
+            deprecation_message = (
+                'you can simply pass True to '
+                "source_comments instead of " +
+                repr(source_comments)
+            )
             source_comments = True
         else:
             deprecation_message = (
@@ -596,8 +604,10 @@ def compile(**kwargs):
             FutureWarning,
         )
     if not isinstance(source_comments, bool):
-        raise TypeError('source_comments must be bool, not ' +
-                        repr(source_comments))
+        raise TypeError(
+            'source_comments must be bool, not ' +
+            repr(source_comments),
+        )
     fs_encoding = sys.getfilesystemencoding() or sys.getdefaultencoding()
 
     def _get_file_arg(key):
@@ -670,8 +680,10 @@ def compile(**kwargs):
             string = string.encode('utf-8')
         indented = kwargs.pop('indented', False)
         if not isinstance(indented, bool):
-            raise TypeError('indented must be bool, not ' +
-                            repr(source_comments))
+            raise TypeError(
+                'indented must be bool, not ' +
+                repr(source_comments),
+            )
         _check_no_remaining_kwargs(compile, kwargs)
         s, v = _sass.compile_string(
             string, output_style, source_comments, include_paths, precision,
@@ -788,9 +800,11 @@ SASS_SEPARATOR_SPACE = collections.namedtuple('SASS_SEPARATOR_SPACE', ())()
 SEPARATORS = frozenset((SASS_SEPARATOR_COMMA, SASS_SEPARATOR_SPACE))
 
 
-class SassList(collections.namedtuple(
-        'SassList', ('items', 'separator', 'bracketed'),
-)):
+class SassList(
+    collections.namedtuple(
+            'SassList', ('items', 'separator', 'bracketed'),
+    ),
+):
 
     def __new__(cls, items, separator, bracketed=False):
         items = tuple(items)

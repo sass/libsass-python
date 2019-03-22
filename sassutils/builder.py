@@ -107,12 +107,16 @@ class Manifest(object):
         elif isinstance(manifests, collections_abc.Mapping):
             manifests = dict(manifests)
         else:
-            raise TypeError('manifests must be a mapping object, not ' +
-                            repr(manifests))
+            raise TypeError(
+                'manifests must be a mapping object, not ' +
+                repr(manifests),
+            )
         for package_name, manifest in manifests.items():
             if not isinstance(package_name, string_types):
-                raise TypeError('manifest keys must be a string of package '
-                                'name, not ' + repr(package_name))
+                raise TypeError(
+                    'manifest keys must be a string of package '
+                    'name, not ' + repr(package_name),
+                )
             if isinstance(manifest, Manifest):
                 continue
             elif isinstance(manifest, tuple):
@@ -138,18 +142,24 @@ class Manifest(object):
             strip_extension=None,
     ):
         if not isinstance(sass_path, string_types):
-            raise TypeError('sass_path must be a string, not ' +
-                            repr(sass_path))
+            raise TypeError(
+                'sass_path must be a string, not ' +
+                repr(sass_path),
+            )
         if css_path is None:
             css_path = sass_path
         elif not isinstance(css_path, string_types):
-            raise TypeError('css_path must be a string, not ' +
-                            repr(css_path))
+            raise TypeError(
+                'css_path must be a string, not ' +
+                repr(css_path),
+            )
         if wsgi_path is None:
             wsgi_path = css_path
         elif not isinstance(wsgi_path, string_types):
-            raise TypeError('wsgi_path must be a string, not ' +
-                            repr(wsgi_path))
+            raise TypeError(
+                'wsgi_path must be a string, not ' +
+                repr(wsgi_path),
+            )
         if strip_extension is None:
             warnings.warn(
                 '`strip_extension` was not specified, defaulting to `False`.\n'
