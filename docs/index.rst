@@ -132,26 +132,19 @@ Open source
 GitHub (Git repository + issues)
    https://github.com/sass/libsass-python
 
-Travis CI
-   https://travis-ci.org/sass/libsass-python
+Azure Pipelines CI (linux + windows)
+   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
 
-   .. image:: https://travis-ci.org/sass/libsass-python.svg
-      :target: https://travis-ci.org/sass/libsass-python
-      :alt: Build Status
+    .. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=master
+       :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+       :alt: Build Status
 
-AppVeyor (CI for Windows)
-   https://ci.appveyor.com/project/asottile/libsass-python
+Azure Pipelines Coverage (Test coverage)
+   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
 
-   .. image:: https://ci.appveyor.com/api/projects/status/asgquaxlffnuryoq/branch/master?svg=true
-      :target: https://ci.appveyor.com/project/asottile/libsass-python
-      :alt: Build Status (Windows)
-
-Coveralls (Test coverage)
-   https://coveralls.io/r/sass/libsass-python
-
-   .. image:: https://coveralls.io/repos/github/sass/libsass-python/badge.svg?branch=master
-      :target: https://coveralls.io/r/sass/libsass-python
-      :alt: Coverage Status
+    .. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/master.svg
+       :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+       :alt: Coverage Status
 
 PyPI
    https://pypi.org/pypi/libsass/

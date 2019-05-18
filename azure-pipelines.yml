@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include: [master, test-me-*]
+  tags:
+    include: ['*']
+
+resources:
+  repositories:
+    - repository: self
+      checkoutOptions:
+        submodules: true
+    - repository: asottile
+      type: github
+      endpoint: github
+      name: asottile/azure-pipeline-templates
+      ref: refs/tags/v0.0.13
+
+jobs:
+- template: job--pre-commit.yml@asottile
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [py27, py35, py36, py37]
+    os: windows
+    wheel_tags: true
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [py27, py35, py36, py37]
+    os: windows
+    architecture: x86
+    name_postfix: _x86
+    wheel_tags: true
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [pypy, pypy3, py27, py35, py36, py37]
+    os: linux

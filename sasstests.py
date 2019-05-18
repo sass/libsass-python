@@ -39,6 +39,13 @@ else:   # pragma: no cover (non-windows)
         return path
 
 
+@pytest.fixture(scope='session', autouse=True)
+def set_coverage_instrumentation():
+    if 'PWD' in os.environ:  # pragma: no branch
+        rcfile = os.path.join(os.environ['PWD'], '.coveragerc')
+        os.environ['COVERAGE_PROCESS_START'] = rcfile
+
+
 A_EXPECTED_CSS = '''\
 body {
   background-color: green; }
@@ -65,12 +72,8 @@ A_EXPECTED_MAP = {
     ),
 }
 
-with open('test/a.scss') as f:
-    A_EXPECTED_MAP_CONTENTS = dict(
-        A_EXPECTED_MAP, **{
-            'sourcesContent': [f.read()],
-        }
-    )
+with io.open('test/a.scss', newline='') as f:
+    A_EXPECTED_MAP_CONTENTS = dict(A_EXPECTED_MAP, sourcesContent=[f.read()])
 
 B_EXPECTED_CSS = '''\
 b i {

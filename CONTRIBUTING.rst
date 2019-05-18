@@ -23,12 +23,10 @@ Tests
 - All code patches should contain one or more unit tests or regression tests.
 - All code patches have to successfully run tests on every Python version
   we aim to support.  tox_ would help.
-- All commits will be tested by Travis_ (Linux) and
-  AppVeyor_ (Windows).
+- All commits will be tested by `Azure Pipelines`_ (Linux and Windows).
 
 .. _tox:  https://tox.readthedocs.io/
-.. _Travis: https://travis-ci.org/sass/libsass-python
-.. _AppVeyor: https://ci.appveyor.com/project/asottile/libsass-python
+.. _`Azure Pipelines`: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
 
 
 Maintainer's guide
@@ -52,11 +50,11 @@ Here's a brief check list for releasing a new version:
 - Make a source distribution and upload it to PyPI
   (``python3 setup.py sdist upload``).
   If it's successful the new version must appear on PyPI_.
-- AppVeyor_ automatically makes binary wheels for Windows, but each CI build
-  takes longer than an hour.  These wheels are not automatically uploaded,
-  but there's upload_appveyor_builds.py script that downloads built wheels and
-  uploads them to PyPI.
-- Run build_manylinux_wheels.py to build linux wheels and upload them to
+- `Azure Pipelines`_ automatically makes binary wheels for Windows, but each
+  CI build takes a while.  These wheels are not automatically uploaded,
+  but there's ``./bin/download-windows-wheels`` script that downloads built
+  wheels.  Then upload them with ``twine``.
+- Run ``./bin/build-manylinux-wheels`` to build linux wheels and upload them to
   PyPI (takes ~10 minutes).
 - The `docs website`__ also has to be updated.
   It's currently a static website deployed on GitHub Pages.
