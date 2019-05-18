@@ -457,7 +457,7 @@ a {
                     r'       Traceback \(most recent call last\):\n'
                     r'.+'
                     r'ValueError: Bad path: hi\n'
-                    r'        on line 1 of stdin\n'
+                    r'        on line 1:9 of stdin\n'
                     r'>> @import "hi";\n'
                     r'   --------\^\n',
             ),
@@ -475,7 +475,7 @@ a {
                     r'.+'
                     r'ValueError: Expected importer result to be a tuple of '
                     r'length \(1, 2, 3\) but got 0: \(\)\n'
-                    r'        on line 1 of stdin\n'
+                    r'        on line 1:9 of stdin\n'
                     r'>> @import "hi";\n'
                     r'   --------\^\n',
             ),
@@ -493,7 +493,7 @@ a {
                     r'.+'
                     r'ValueError: Expected importer result to be a tuple of '
                     r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
-                    r'        on line 1 of stdin\n'
+                    r'        on line 1:9 of stdin\n'
                     r'>> @import "hi";\n'
                     r'   --------\^\n',
             ),
@@ -1398,8 +1398,8 @@ class CustomFunctionsTest(unittest.TestCase):
                     r'       Traceback \(most recent call last\):\n'
                     r'.+'
                     r'AssertionError: foo\n'
-                    r'        on line 1 of stdin, in function `raises`\n'
-                    r'        from line 1 of stdin\n'
+                    r'        on line 1:14 of stdin, in function `raises`\n'
+                    r'        from line 1:14 of stdin\n'
                     r'>> a { content: raises\(\); }\n'
                     r'   -------------\^\n$',
             ),
@@ -1410,8 +1410,9 @@ class CustomFunctionsTest(unittest.TestCase):
         with assert_raises_compile_error(
                 'Error: warning in C function returns_warning: '
                 'This is a warning\n'
-                '        on line 1 of stdin, in function `returns_warning`\n'
-                '        from line 1 of stdin\n'
+                '        on line 1:14 of stdin, '
+                'in function `returns_warning`\n'
+                '        from line 1:14 of stdin\n'
                 '>> a { content: returns_warning(); }\n'
                 '   -------------^\n',
         ):
@@ -1421,8 +1422,8 @@ class CustomFunctionsTest(unittest.TestCase):
         with assert_raises_compile_error(
                 'Error: error in C function returns_error: '
                 'This is an error\n'
-                '        on line 1 of stdin, in function `returns_error`\n'
-                '        from line 1 of stdin\n'
+                '        on line 1:14 of stdin, in function `returns_error`\n'
+                '        from line 1:14 of stdin\n'
                 '>> a { content: returns_error(); }\n'
                 '   -------------^\n',
         ):
@@ -1443,8 +1444,9 @@ class CustomFunctionsTest(unittest.TestCase):
                 '       - SassMap\n'
                 '       - SassWarning\n'
                 '       - SassError\n'
-                '        on line 1 of stdin, in function `returns_unknown`\n'
-                '        from line 1 of stdin\n'
+                '        on line 1:14 of stdin, '
+                'in function `returns_unknown`\n'
+                '        from line 1:14 of stdin\n'
                 '>> a { content: returns_unknown(); }\n'
                 '   -------------^\n',
         ):
@@ -1631,7 +1633,7 @@ def test_stack_trace_formatting():
         tb = traceback.format_exc()
     assert tb.endswith(
         'CompileError: Error: Invalid CSS after "a{☃": expected "{", was ""\n'
-        '        on line 1 of stdin\n'
+        '        on line 1:3 of stdin\n'
         '>> a{☃\n'
         '   --^\n\n',
     )
