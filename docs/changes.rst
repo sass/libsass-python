@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.19.1
+--------------
+
+Released on May 18, 2019.
+
+- Re-release of 0.19.0 with windows python2.7 wheels [:issue:`297` by Anthony
+  Sottile]
+
+
 Version 0.19.0
 --------------
 
