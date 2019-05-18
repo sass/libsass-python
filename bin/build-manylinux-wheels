@@ -10,8 +10,6 @@ import pipes
 import subprocess
 import tempfile
 
-from twine.commands import upload
-
 
 def check_call(*cmd):
     print(
@@ -43,8 +41,7 @@ def main():
                 '{} wheel --verbose --wheel-dir /work --no-deps libsass && '
                 'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip),
             )
-    dists = tuple(os.path.join('dist', p) for p in os.listdir('dist'))
-    return upload.main(('-r', 'pypi', '--skip-existing') + dists)
+    return 0
 
 
 if __name__ == '__main__':
