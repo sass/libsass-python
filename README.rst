@@ -5,16 +5,12 @@ libsass-python: Sass_/SCSS for Python
    :alt: PyPI
    :target: https://pypi.org/pypi/libsass/
 
-.. image:: https://travis-ci.org/sass/libsass-python.svg
-   :target: https://travis-ci.org/sass/libsass-python
+.. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=master
+   :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
    :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/asgquaxlffnuryoq/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/asottile/libsass-python
-   :alt: Build Status (Windows)
-
-.. image:: https://coveralls.io/repos/github/sass/libsass-python/badge.svg?branch=master
-   :target: https://coveralls.io/github/sass/libsass-python?branch=master
+.. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/master.svg
+   :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
    :alt: Coverage Status
 
 This package provides a simple Python extension module ``sass`` which is

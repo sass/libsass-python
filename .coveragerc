@@ -4,11 +4,9 @@ branch = True
 source = $PWD
 data_file = $PWD/.coverage
 omit =
-    .tox/*
+    */.tox/*
     /usr/*
     */setup.py
-    */build_manylinux_wheels.py
-    */upload_appveyor_builds.py
 
 [report]
 show_missing = True

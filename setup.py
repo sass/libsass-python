@@ -244,7 +244,6 @@ setup(
         ],
     },
     install_requires=['six'],
-    extras_require={'upload_appveyor_builds': ['twine == 1.11.0']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
