@@ -19,12 +19,29 @@ jobs:
 - template: job--pre-commit.yml@asottile
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py27, py35, py36, py37]
+    toxenvs: [py27]
+    os: windows
+    name_postfix: _py27
+    wheel_tags: true
+    pre_test:
+    - script: rm -rf libsass/test
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [py27]
+    os: windows
+    architecture: x86
+    name_postfix: _py27_x86
+    wheel_tags: true
+    pre_test:
+    - script: rm -rf libsass/test
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [py35, py36, py37]
     os: windows
     wheel_tags: true
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py27, py35, py36, py37]
+    toxenvs: [py35, py36, py37]
     os: windows
     architecture: x86
     name_postfix: _x86
