@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.19.1 documentation</title>
+    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.19.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
 <h1><a class="reference internal" href="#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> — WSGI middleware for development purpose<a class="headerlink" href="#sassutils-wsgi-wsgi-middleware-for-development-purpose" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sassutils.wsgi.SassMiddleware">
-<em class="property">class </em><code class="descclassname">sassutils.wsgi.</code><code class="descname">SassMiddleware</code><span class="sig-paren">(</span><em>app</em>, <em>manifests</em>, <em>package_dir={}</em>, <em>error_status='200 OK'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sassutils.wsgi.</code><code class="sig-name descname">SassMiddleware</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">manifests</em>, <em class="sig-param">package_dir={}</em>, <em class="sig-param">error_status='200 OK'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
 <dd><p>WSGI middleware for development purpose.  Everytime a CSS file has
 requested it finds a matched Sass/SCSS source file and then compiled
 it into CSS.</p>
@@ -101,9 +101,9 @@ the same format to <code class="file docutils literal notranslate"><span class="
 <p><span class="versionmodified added">New in version 0.8.0: </span>It logs syntax errors if exist during compilation to
 <code class="docutils literal notranslate"><span class="pre">sassutils.wsgi.SassMiddleware</span></code> logger with level <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>.</p>
 </div>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="sassutils.wsgi.SassMiddleware.quote_css_string">
-<em class="property">static </em><code class="descname">quote_css_string</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware.quote_css_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">quote_css_string</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware.quote_css_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quotes a string as CSS string literal.</p>
 </dd></dl>
 
@@ -154,10 +154,10 @@ the same format to <code class="file docutils literal notranslate"><span class="
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -179,7 +179,7 @@ the same format to <code class="file docutils literal notranslate"><span class="
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

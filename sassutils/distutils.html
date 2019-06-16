@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.19.1 documentation</title>
+    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.19.2 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -95,11 +95,11 @@ of <code class="docutils literal notranslate"><span class="pre">a.scss.css</span
 </div>
 <dl class="class">
 <dt id="sassutils.distutils.build_sass">
-<em class="property">class </em><code class="descclassname">sassutils.distutils.</code><code class="descname">build_sass</code><span class="sig-paren">(</span><em>dist</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">build_sass</code><span class="sig-paren">(</span><em class="sig-param">dist</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds Sass/SCSS files to CSS files.</p>
 <dl class="method">
 <dt id="sassutils.distutils.build_sass.finalize_options">
-<code class="descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.finalize_options" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.finalize_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set final values for all the options that this command supports.
 This is always called as late as possible, ie.  after any option
 assignments from the command-line or from other commands have been
@@ -112,7 +112,7 @@ long as ‘foo’ still has the same value it was assigned in
 
 <dl class="method">
 <dt id="sassutils.distutils.build_sass.get_package_dir">
-<code class="descname">get_package_dir</code><span class="sig-paren">(</span><em>package</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_package_dir</code><span class="sig-paren">(</span><em class="sig-param">package</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory, relative to the top of the source
 distribution, where package <code class="docutils literal notranslate"><span class="pre">package</span></code> should be found
 (at least according to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">package_dir</span></code> option, if any).</p>
@@ -122,7 +122,7 @@ method.</p>
 
 <dl class="method">
 <dt id="sassutils.distutils.build_sass.initialize_options">
-<code class="descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.initialize_options" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.initialize_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set default values for all the options that this command
 supports.  Note that these defaults may be overridden by other
 commands, by the setup script, by config files, or by the
@@ -134,7 +134,7 @@ are just a bunch of “self.foo = None” assignments.</p>
 
 <dl class="method">
 <dt id="sassutils.distutils.build_sass.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A command’s raison d’etre: carry out the action it exists to
 perform, controlled by the options initialized in
 ‘initialize_options()’, customized by other commands, the setup
@@ -148,7 +148,7 @@ interaction should be done by ‘run()’.</p>
 
 <dl class="function">
 <dt id="sassutils.distutils.validate_manifests">
-<code class="descclassname">sassutils.distutils.</code><code class="descname">validate_manifests</code><span class="sig-paren">(</span><em>dist</em>, <em>attr</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">validate_manifests</code><span class="sig-paren">(</span><em class="sig-param">dist</em>, <em class="sig-param">attr</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies that <code class="docutils literal notranslate"><span class="pre">value</span></code> is an expected mapping of package to
 <a class="reference internal" href="builder.html#sassutils.builder.Manifest" title="sassutils.builder.Manifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">sassutils.builder.Manifest</span></code></a>.</p>
 </dd></dl>
@@ -199,10 +199,10 @@ interaction should be done by ‘run()’.</p>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -224,7 +224,7 @@ interaction should be done by ‘run()’.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
