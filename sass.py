@@ -21,7 +21,7 @@ import re
 import sys
 import warnings
 
-from six import string_types, text_type, PY2, PY3
+from six import string_types, text_type, PY2
 
 import _sass
 from sassutils._compat import collections_abc
@@ -52,7 +52,7 @@ MODES = frozenset(('string', 'filename', 'dirname'))
 
 
 def to_native_s(s):
-    if isinstance(s, bytes) and PY3:  # pragma: no cover (py3)
+    if isinstance(s, bytes) and not PY2:  # pragma: no cover (py3)
         s = s.decode('UTF-8')
     elif isinstance(s, text_type) and PY2:  # pragma: no cover (py2)
         s = s.encode('UTF-8')
