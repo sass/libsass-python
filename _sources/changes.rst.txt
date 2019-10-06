@@ -2,6 +2,17 @@ Changelog
 =========
 
 
+Version 0.19.3
+--------------
+
+Released on June 16, 2019.
+
+- Follow up the libsass upstream: 3.6.2 --- See the release notes of LibSass
+  3.6.2__. [:issue:`302` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.6.2
+
+
 Version 0.19.2
 --------------
 

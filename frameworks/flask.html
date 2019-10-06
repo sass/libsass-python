@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Using with Flask &#8212; libsass 0.19.2 documentation</title>
+    <title>Using with Flask &#8212; libsass 0.19.3 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -108,7 +108,7 @@ Keys are packages names.  Values are tuples of paths.</p>
 <dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt><dd><p>The section which explains how to integrate WSGI middlewares to
 Flask.</p>
 </dd>
-<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/appdispatch/#app-dispatch" title="(in Flask v1.1)"><span>Application Dispatching</span></a></dt><dd><p>The documentation which explains how Flask dispatch each
+<dt>Flask — <a class="reference external" href="https://flask.palletsprojects.com/en/1.1.x/patterns/appdispatch/#app-dispatch" title="(in Flask v1.1.x)"><span>Application Dispatching</span></a></dt><dd><p>The documentation which explains how Flask dispatch each
 request internally.</p>
 </dd>
 </dl>
@@ -134,7 +134,7 @@ Flask.</p>
 <span class="p">})</span>
 </pre></div>
 </div>
-<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="http://flask.pocoo.org/docs/api/#flask.url_for" title="(in Flask v1.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">url_for()</span></code></a>
+<p>And then, if you want to link a compiled CSS file, use <a class="reference external" href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.url_for" title="(in Flask v1.1.x)"><code class="xref py py-func docutils literal notranslate"><span class="pre">url_for()</span></code></a>
 function:</p>
 <div class="highlight-html+jinja notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
       <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
@@ -155,7 +155,7 @@ All compiled filenames have trailing <code class="docutils literal notranslate">
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/patterns/distribute/#distribute-deployment" title="(in Flask v1.1)"><span>Deploying with Setuptools</span></a></dt><dd><p>How to deploy Flask application using <a class="reference external" href="https://pypi.org/pypi/setuptools/">setuptools</a>.</p>
+<dt>Flask — <a class="reference external" href="https://flask.palletsprojects.com/en/1.1.x/patterns/distribute/#distribute-deployment" title="(in Flask v1.1.x)"><span>Deploying with Setuptools</span></a></dt><dd><p>How to deploy Flask application using <a class="reference external" href="https://pypi.org/pypi/setuptools/">setuptools</a>.</p>
 </dd>
 </dl>
 </div>
@@ -268,7 +268,7 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
