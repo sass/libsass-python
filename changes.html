@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Changelog &#8212; libsass 0.19.3 documentation</title>
+    <title>Changelog &#8212; libsass 0.19.4 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -34,9 +34,17 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-19-4">
+<h2>Version 0.19.4<a class="headerlink" href="#version-0-19-4" title="Permalink to this headline">¶</a></h2>
+<p>Released on November 3, 2019.</p>
+<ul class="simple">
+<li><p>Follow up the libsass upstream: 3.6.3 — See the release notes of LibSass
+<a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.6.3">3.6.3</a>. [<a class="reference external" href="https://github.com/sass/libsass-python/issues/304">#304</a> by Anthony Sottile]</p></li>
+</ul>
+</div>
 <div class="section" id="version-0-19-3">
 <h2>Version 0.19.3<a class="headerlink" href="#version-0-19-3" title="Permalink to this headline">¶</a></h2>
-<p>Released on June 16, 2019.</p>
+<p>Released on October 5, 2019.</p>
 <ul class="simple">
 <li><p>Follow up the libsass upstream: 3.6.2 — See the release notes of LibSass
 <a class="reference external" href="https://github.com/sass/libsass/releases/tag/3.6.2">3.6.2</a>. [<a class="reference external" href="https://github.com/sass/libsass-python/issues/302">#302</a> by Anthony Sottile]</p></li>
@@ -546,7 +554,7 @@ parameter <code class="docutils literal notranslate"><span class="pre">output_st
 <p>Released on September 23, 2014.</p>
 <ul class="simple">
 <li><p>Fixed a bug that <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a> yielded
-<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> on Python 3.</p></li>
+<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> on Python 3.</p></li>
 <li><p>Fixed several Unicode-related bugs on Windows.</p></li>
 <li><p>Fixed a bug that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory" title="sassutils.builder.build_directory"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_directory()</span></code></a>,
 <a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware" title="sassutils.wsgi.SassMiddleware"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a>, and
@@ -592,7 +600,7 @@ and version.</p></li>
 <p>Released on May 22, 2014.</p>
 <ul class="simple">
 <li><p>Fixed build failing on Mac OS X 10.8 or earlier.  [<a class="reference external" href="https://github.com/sass/libsass-python/issues/19">#19</a>]</p></li>
-<li><p>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
+<li><p>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that <a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one" title="sassutils.builder.Manifest.build_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a> method rises when the input source
 contains any non-ASCII Unicode characters.</p></li>
 </ul>
 </div>
@@ -600,7 +608,7 @@ contains any non-ASCII Unicode characters.</p></li>
 <h2>Version 0.4.1<a class="headerlink" href="#version-0-4-1" title="Permalink to this headline">¶</a></h2>
 <p>Released on May 20, 2014.</p>
 <ul class="simple">
-<li><p>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that rise when the input source contains
+<li><p>Fixed <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#UnicodeEncodeError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> that rise when the input source contains
 any non-ASCII Unicode characters.</p></li>
 </ul>
 </div>
@@ -687,14 +695,14 @@ exist yet, rather than siliently fails.
 <ul>
 <li><p>Added <a class="reference internal" href="sassutils/builder.html#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code></a> module to build the whole directory
 at a time.</p></li>
-<li><p>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> and
+<li><p>Added <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> module for <a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> and
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code> integration.</p></li>
 <li><p>Added <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> module which provides a development-purpose
 WSGI middleware.</p></li>
 </ul>
 </li>
 <li><p>Added <a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal notranslate"><span class="pre">build_sass</span></code></a> command for
-<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>.</p></li>
+<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>.</p></li>
 </ul>
 </div>
 <div class="section" id="version-0-1-1">
@@ -731,6 +739,7 @@ Now it raises a proper <code class="docutils literal notranslate"><span class="p
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-19-4">Version 0.19.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-19-3">Version 0.19.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-19-2">Version 0.19.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-19-1">Version 0.19.1</a></li>
@@ -835,7 +844,7 @@ Now it raises a proper <code class="docutils literal notranslate"><span class="p
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.19.3 documentation</title>
+    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.19.4 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -62,7 +62,7 @@ pseudo-class of <code class="docutils literal notranslate"><span class="pre">bod
 working document because it will removes all other styles and leaves
 only a red text.</p>
 </dd>
-<dt><a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></dt><dd><p>It logs syntax errors if exist during compilation to
+<dt><a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></dt><dd><p>It logs syntax errors if exist during compilation to
 <code class="docutils literal notranslate"><span class="pre">sassutils.wsgi.SassMiddleware</span></code> logger with level <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>.</p>
 <p>To enable this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">Formatter</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span>
@@ -83,11 +83,11 @@ only a red text.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>app</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – the WSGI application to wrap</p></li>
-<li><p><strong>manifests</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – build settings.  the same format to
+<li><p><strong>app</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – the WSGI application to wrap</p></li>
+<li><p><strong>manifests</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – build settings.  the same format to
 <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> script’s <code class="docutils literal notranslate"><span class="pre">sass_manifests</span></code>
 option</p></li>
-<li><p><strong>package_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of package names to directories.
+<li><p><strong>package_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of package names to directories.
 the same format to <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> script’s
 <code class="docutils literal notranslate"><span class="pre">package_dir</span></code> option</p></li>
 </ul>
@@ -179,7 +179,7 @@ the same format to <code class="file docutils literal notranslate"><span class="
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
