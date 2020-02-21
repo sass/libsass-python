@@ -11,10 +11,6 @@
 #define COLLECTIONS_ABC_MOD "collections"
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 static PyObject* _to_py_value(const union Sass_Value* value);
 static union Sass_Value* _to_sass_value(PyObject* value);
 
@@ -156,7 +152,7 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     PyObject* items = PyObject_GetAttrString(value, "items");
     PyObject* separator = PyObject_GetAttrString(value, "separator");
     PyObject* bracketed = PyObject_GetAttrString(value, "bracketed");
-    Sass_Separator sep = SASS_COMMA;
+    enum Sass_Separator sep = SASS_COMMA;
     if (separator == sass_comma) {
         sep = SASS_COMMA;
     } else if (separator == sass_space) {
@@ -519,7 +515,7 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Options *options;
     char *string, *include_paths, *source_map_file;
     const char *error_message, *output_string;
-    Sass_Output_Style output_style;
+    enum Sass_Output_Style output_style;
     int source_comments, error_status, precision, indented,
         source_map_embed, source_map_contents, source_map_file_urls,
         omit_source_map_url;
@@ -579,7 +575,7 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     struct Sass_Options *options;
     char *filename, *include_paths;
     const char *error_message, *output_string, *source_map_string;
-    Sass_Output_Style output_style;
+    enum Sass_Output_Style output_style;
     int source_comments, error_status, precision, source_map_embed,
         source_map_contents, source_map_file_urls, omit_source_map_url;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
@@ -702,8 +698,4 @@ init_sass()
     }
 }
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

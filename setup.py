@@ -22,7 +22,7 @@ FLAGS_CLANG = ['-c', '-O3'] + FLAGS_POSIX + ['-stdlib=libc++']
 LFLAGS_POSIX = ['-fPIC',  '-lstdc++']
 LFLAGS_CLANG = ['-fPIC', '-stdlib=libc++']
 
-sources = ['pysass.cpp']
+sources = ['_sass.c']
 headers = []
 
 if sys.platform == 'win32':
