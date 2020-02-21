@@ -148,6 +148,15 @@ else:
     include_dirs = [os.path.join('.', 'libsass', 'include')]
     extra_compile_args.append(define)
 
+# Py_LIMITED_API does not work for pypy
+# https://foss.heptapod.net/pypy/pypy/issues/3173
+if not hasattr(sys, 'pypy_version_info'):
+    py_limited_api = True
+    define_macros = [('Py_LIMITED_API', None)]
+else:
+    py_limited_api = False
+    define_macros = []
+
 sass_extension = Extension(
     '_sass',
     sorted(sources),
@@ -156,6 +165,8 @@ sass_extension = Extension(
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args,
     libraries=libraries,
+    py_limited_api=py_limited_api,
+    define_macros=define_macros,
 )
 
 
@@ -208,6 +219,26 @@ class upload_doc(distutils.cmd.Command):
         os.system('git commit -a -m "Documentation updated."')
         os.system('git push origin gh-pages')
         shutil.rmtree(path)
+
+
+cmdclass = {'upload_doc': upload_doc}
+
+if (
+        sys.platform != 'win32' and
+        sys.version_info >= (3,) and
+        platform.python_implementation() == 'CPython'
+):
+    try:
+        import wheel.bdist_wheel
+    except ImportError:
+        pass
+    else:
+        class bdist_wheel(wheel.bdist_wheel.bdist_wheel):
+            def finalize_options(self):
+                self.py_limited_api = 'cp3{}'.format(sys.version_info[1])
+                super().finalize_options()
+
+        cmdclass['bdist_wheel'] = bdist_wheel
 
 
 setup(
@@ -265,5 +296,5 @@ setup(
         'Topic :: Software Development :: Code Generators',
         'Topic :: Software Development :: Compilers',
     ],
-    cmdclass={'upload_doc': upload_doc},
+    cmdclass=cmdclass,
 )
