@@ -11,10 +11,6 @@
 #define COLLECTIONS_ABC_MOD "collections"
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 static PyObject* _to_py_value(const union Sass_Value* value);
 static union Sass_Value* _to_sass_value(PyObject* value);
 
@@ -156,7 +152,7 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     PyObject* items = PyObject_GetAttrString(value, "items");
     PyObject* separator = PyObject_GetAttrString(value, "separator");
     PyObject* bracketed = PyObject_GetAttrString(value, "bracketed");
-    Sass_Separator sep = SASS_COMMA;
+    enum Sass_Separator sep = SASS_COMMA;
     if (separator == sass_comma) {
         sep = SASS_COMMA;
     } else if (separator == sass_space) {
@@ -168,7 +164,7 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     retv = sass_make_list(PyTuple_Size(items), sep, is_bracketed);
     for (i = 0; i < PyTuple_Size(items); i += 1) {
         sass_list_set_value(
-            retv, i, _to_sass_value(PyTuple_GET_ITEM(items, i))
+            retv, i, _to_sass_value(PyTuple_GetItem(items, i))
         );
     }
     Py_DECREF(types_mod);
@@ -204,7 +200,7 @@ static union Sass_Value* _number_to_sass_value(PyObject* value) {
     PyObject* unit = PyObject_GetAttrString(value, "unit");
     PyObject* bytes = PyUnicode_AsEncodedString(unit, "UTF-8", "strict");
     retv = sass_make_number(
-        PyFloat_AsDouble(d_value), PyBytes_AS_STRING(bytes)
+        PyFloat_AsDouble(d_value), PyBytes_AsString(bytes)
     );
     Py_DECREF(d_value);
     Py_DECREF(unit);
@@ -215,7 +211,7 @@ static union Sass_Value* _number_to_sass_value(PyObject* value) {
 static union Sass_Value* _unicode_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
-    retv = sass_make_string(PyBytes_AS_STRING(bytes));
+    retv = sass_make_string(PyBytes_AsString(bytes));
     Py_DECREF(bytes);
     return retv;
 }
@@ -224,7 +220,7 @@ static union Sass_Value* _warning_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-    retv = sass_make_warning(PyBytes_AS_STRING(bytes));
+    retv = sass_make_warning(PyBytes_AsString(bytes));
     Py_DECREF(msg);
     Py_DECREF(bytes);
     return retv;
@@ -234,7 +230,7 @@ static union Sass_Value* _error_to_sass_value(PyObject* value) {
     union Sass_Value* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
-    retv = sass_make_error(PyBytes_AS_STRING(bytes));
+    retv = sass_make_error(PyBytes_AsString(bytes));
     Py_DECREF(msg);
     Py_DECREF(bytes);
     return retv;
@@ -263,7 +259,7 @@ static union Sass_Value* _unknown_type_to_sass_error(PyObject* value) {
         format_meth, type_name, NULL
     );
     PyObject* bytes = PyUnicode_AsEncodedString(result, "UTF-8", "strict");
-    retv = sass_make_error(PyBytes_AS_STRING(bytes));
+    retv = sass_make_error(PyBytes_AsString(bytes));
     Py_DECREF(type);
     Py_DECREF(type_name);
     Py_DECREF(fmt);
@@ -302,7 +298,7 @@ static PyObject* _exception_to_bytes() {
 
 static union Sass_Value* _exception_to_sass_error() {
     PyObject* bytes = _exception_to_bytes();
-    union Sass_Value* retv = sass_make_error(PyBytes_AS_STRING(bytes));
+    union Sass_Value* retv = sass_make_error(PyBytes_AsString(bytes));
     Py_DECREF(bytes);
     return retv;
 }
@@ -311,7 +307,7 @@ static Sass_Import_List _exception_to_sass_import_error(const char* path) {
     PyObject* bytes = _exception_to_bytes();
     Sass_Import_List import_list = sass_make_import_list(1);
     import_list[0] = sass_make_import_entry(path, 0, 0);
-    sass_import_set_error(import_list[0], PyBytes_AS_STRING(bytes), 0, 0);
+    sass_import_set_error(import_list[0], PyBytes_AsString(bytes), 0, 0);
     Py_DECREF(bytes);
     return import_list;
 }
@@ -334,7 +330,7 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     } else if (PyUnicode_Check(value)) {
         retv = _unicode_to_sass_value(value);
     } else if (PyBytes_Check(value)) {
-        retv = sass_make_string(PyBytes_AS_STRING(value));
+        retv = sass_make_string(PyBytes_AsString(value));
     /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
     /* XXX: pypy derps on dicts: https://bitbucket.org/pypy/pypy/issue/1970 */
     } else if (PyDict_Check(value) || PyObject_IsInstance(value, mapping_t)) {
@@ -404,11 +400,11 @@ static void _add_custom_functions(
     Sass_Function_List fn_list = sass_make_function_list(
         PyList_Size(custom_functions)
     );
-    for (i = 0; i < PyList_GET_SIZE(custom_functions); i += 1) {
-        PyObject* sass_function = PyList_GET_ITEM(custom_functions, i);
+    for (i = 0; i < PyList_Size(custom_functions); i += 1) {
+        PyObject* sass_function = PyList_GetItem(custom_functions, i);
         PyObject* signature = PySass_Object_Bytes(sass_function);
         Sass_Function_Entry fn = sass_make_function(
-            PyBytes_AS_STRING(signature),
+            PyBytes_AsString(signature),
             _call_py_f,
             sass_function
         );
@@ -443,13 +439,13 @@ static Sass_Import_List _call_py_importer_f(
 
     /* Otherwise, we know our importer is well formed (because we wrap it)
      * The return value will be a tuple of 1, 2, or 3 tuples */
-    sass_imports = sass_make_import_list(PyTuple_GET_SIZE(py_result));
-    for (i = 0; i < PyTuple_GET_SIZE(py_result); i += 1) {
+    sass_imports = sass_make_import_list(PyTuple_Size(py_result));
+    for (i = 0; i < PyTuple_Size(py_result); i += 1) {
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
         char* sourcemap_str = NULL;
-        PyObject* tup = PyTuple_GET_ITEM(py_result, i);
-        Py_ssize_t size = PyTuple_GET_SIZE(tup);
+        PyObject* tup = PyTuple_GetItem(py_result, i);
+        Py_ssize_t size = PyTuple_Size(tup);
 
         if (size == 1) {
             PyArg_ParseTuple(tup, PySass_IF_PY3("y", "s"), &path_str);
@@ -495,10 +491,10 @@ static void _add_custom_importers(
         return;
     }
 
-    importer_list = sass_make_importer_list(PyTuple_GET_SIZE(custom_importers));
+    importer_list = sass_make_importer_list(PyTuple_Size(custom_importers));
 
-    for (i = 0; i < PyTuple_GET_SIZE(custom_importers); i += 1) {
-        PyObject* item = PyTuple_GET_ITEM(custom_importers, i);
+    for (i = 0; i < PyTuple_Size(custom_importers); i += 1) {
+        PyObject* item = PyTuple_GetItem(custom_importers, i);
         int priority = 0;
         PyObject* import_function = NULL;
 
@@ -517,11 +513,11 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     struct Sass_Context *ctx;
     struct Sass_Data_Context *context;
     struct Sass_Options *options;
-    char *string, *include_paths, *source_map_file;
+    char *string, *include_paths;
     const char *error_message, *output_string;
-    Sass_Output_Style output_style;
+    enum Sass_Output_Style output_style;
     int source_comments, error_status, precision, indented,
-        source_map_embed, source_map_contents, source_map_file_urls,
+        source_map_embed, source_map_contents,
         omit_source_map_url;
     PyObject *custom_functions;
     PyObject *custom_importers;
@@ -549,9 +545,9 @@ PySass_compile_string(PyObject *self, PyObject *args) {
     sass_option_set_source_map_embed(options, source_map_embed);
     sass_option_set_omit_source_map_url(options, omit_source_map_url);
 
-    if (PyBytes_Check(source_map_root) && PyBytes_GET_SIZE(source_map_root)) {
+    if (PyBytes_Check(source_map_root) && PyBytes_Size(source_map_root)) {
         sass_option_set_source_map_root(
-            options, PyBytes_AS_STRING(source_map_root)
+            options, PyBytes_AsString(source_map_root)
         );
     }
 
@@ -579,9 +575,9 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     struct Sass_Options *options;
     char *filename, *include_paths;
     const char *error_message, *output_string, *source_map_string;
-    Sass_Output_Style output_style;
+    enum Sass_Output_Style output_style;
     int source_comments, error_status, precision, source_map_embed,
-        source_map_contents, source_map_file_urls, omit_source_map_url;
+        source_map_contents, omit_source_map_url;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
              *result, *output_filename_hint, *source_map_root;
 
@@ -600,23 +596,23 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
     options = sass_file_context_get_options(context);
 
     if (PyBytes_Check(source_map_filename)) {
-        if (PyBytes_GET_SIZE(source_map_filename)) {
+        if (PyBytes_Size(source_map_filename)) {
             sass_option_set_source_map_file(
-                options, PyBytes_AS_STRING(source_map_filename)
+                options, PyBytes_AsString(source_map_filename)
             );
         }
     }
     if (PyBytes_Check(output_filename_hint)) {
-        if (PyBytes_GET_SIZE(output_filename_hint)) {
+        if (PyBytes_Size(output_filename_hint)) {
             sass_option_set_output_path(
-                options, PyBytes_AS_STRING(output_filename_hint)
+                options, PyBytes_AsString(output_filename_hint)
             );
         }
     }
 
-    if (PyBytes_Check(source_map_root) && PyBytes_GET_SIZE(source_map_root)) {
+    if (PyBytes_Check(source_map_root) && PyBytes_Size(source_map_root)) {
         sass_option_set_source_map_root(
-            options, PyBytes_AS_STRING(source_map_root)
+            options, PyBytes_AsString(source_map_root)
         );
     }
 
@@ -702,8 +698,4 @@ init_sass()
     }
 }
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif
