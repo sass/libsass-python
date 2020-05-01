@@ -55,11 +55,11 @@ Here's a brief check list for releasing a new version:
   but there's ``./bin/download-windows-wheels`` script that downloads built
   wheels.  Then upload them with ``twine``.
 - Run ``./bin/build-manylinux-wheels`` to build linux wheels and upload them to
-  PyPI (takes ~10 minutes).
+  PyPI (takes ~5 minutes).
 - The `docs website`__ also has to be updated.
   It's currently a static website deployed on GitHub Pages.
   Use ``python setup.py upload_doc`` command.
-  Although it seems possible to be automated using Travis.
+  Although it seems possible to be automated using Github Actions.
 - Manually create a release through https://github.com/sass/libsass-python/releases/
 
 Ping Hong Minhee (hongminhee@member.fsf.org, @dahlia on GitHub) if you need
