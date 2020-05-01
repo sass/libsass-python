@@ -2,6 +2,18 @@ Changelog
 =========
 
 
+Version 0.20.0
+--------------
+
+Released on November 3, 2019.
+
+- Produce abi3 wheels on macos / linux [:issue:`307` by Anthony Sottile]
+- Follow up the libsass upstream: 3.6.4 --- See the release notes of LibSass
+  3.6.4__. [:issue:`313` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.6.4
+
+
 Version 0.19.4
 --------------
 

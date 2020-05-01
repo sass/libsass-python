@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.19.4 documentation</title>
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.20.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using with Flask" href="frameworks/flask.html" />
@@ -78,7 +78,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 <span id="example"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="compile-a-string-of-sass-to-css">
 <h3>Compile a String of Sass to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
 </pre></div>
@@ -86,7 +86,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 <div class="section" id="compile-a-directory-of-sass-files-to-css">
 <h3>Compile a Directory of Sass Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;css&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;sass&#39;</span><span class="p">)</span>
@@ -120,6 +120,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-20-0">Version 0.20.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-19-4">Version 0.19.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-19-3">Version 0.19.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-19-2">Version 0.19.2</a></li>
@@ -282,7 +283,7 @@ reference implementation of it in Ruby.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -299,7 +300,7 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

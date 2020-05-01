@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.19.4 documentation</title>
+    <title>sassutils.distutils — setuptools/distutils integration &#8212; libsass 0.20.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sassutils.wsgi — WSGI middleware for development purpose" href="wsgi.html" />
@@ -39,7 +39,7 @@ of the standard <a class="reference external" href="https://docs.python.org/3/li
 Distribute) for libsass.</p>
 <p>To use this, add <code class="docutils literal notranslate"><span class="pre">libsass</span></code> into <code class="docutils literal notranslate"><span class="pre">setup_requires</span></code> (not <code class="docutils literal notranslate"><span class="pre">install_requires</span></code>)
 option of the <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code> script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">setup</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="c1"># ...,</span>
@@ -57,7 +57,7 @@ and makes the package archive (made by <code class="xref py py-class docutils li
 CSS files.</p>
 <p>To set the directory of Sass/SCSS source files and the directory to
 store compiled CSS files, specify <code class="docutils literal notranslate"><span class="pre">sass_manifests</span></code> option:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="k">import</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">setup</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">find_packages</span><span class="p">,</span> <span class="n">setup</span>
 
 <span class="n">setup</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;YourPackage&#39;</span><span class="p">,</span>
@@ -93,11 +93,11 @@ of <code class="docutils literal notranslate"><span class="pre">a.scss.css</span
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.6.0: </span>Added <code class="docutils literal notranslate"><span class="pre">--output-style</span></code>/<code class="docutils literal notranslate"><span class="pre">-s</span></code> option to <a class="reference internal" href="#sassutils.distutils.build_sass" title="sassutils.distutils.build_sass"><code class="xref py py-class docutils literal notranslate"><span class="pre">build_sass</span></code></a> command.</p>
 </div>
-<dl class="class">
+<dl class="py class">
 <dt id="sassutils.distutils.build_sass">
-<em class="property">class </em><code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">build_sass</code><span class="sig-paren">(</span><em class="sig-param">dist</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">build_sass</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds Sass/SCSS files to CSS files.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.distutils.build_sass.finalize_options">
 <code class="sig-name descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.finalize_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set final values for all the options that this command supports.
@@ -110,9 +110,9 @@ long as ‘foo’ still has the same value it was assigned in
 <p>This method must be implemented by all command classes.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.distutils.build_sass.get_package_dir">
-<code class="sig-name descname">get_package_dir</code><span class="sig-paren">(</span><em class="sig-param">package</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_package_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.get_package_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the directory, relative to the top of the source
 distribution, where package <code class="docutils literal notranslate"><span class="pre">package</span></code> should be found
 (at least according to the <code class="xref py py-attr docutils literal notranslate"><span class="pre">package_dir</span></code> option, if any).</p>
@@ -120,7 +120,7 @@ distribution, where package <code class="docutils literal notranslate"><span cla
 method.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.distutils.build_sass.initialize_options">
 <code class="sig-name descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.initialize_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set default values for all the options that this command
@@ -132,7 +132,7 @@ are just a bunch of “self.foo = None” assignments.</p>
 <p>This method must be implemented by all command classes.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.distutils.build_sass.run">
 <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.build_sass.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>A command’s raison d’etre: carry out the action it exists to
@@ -146,9 +146,9 @@ interaction should be done by ‘run()’.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="sassutils.distutils.validate_manifests">
-<code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">validate_manifests</code><span class="sig-paren">(</span><em class="sig-param">dist</em>, <em class="sig-param">attr</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sassutils.distutils.</code><code class="sig-name descname">validate_manifests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dist</span></em>, <em class="sig-param"><span class="n">attr</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.distutils.validate_manifests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies that <code class="docutils literal notranslate"><span class="pre">value</span></code> is an expected mapping of package to
 <a class="reference internal" href="builder.html#sassutils.builder.Manifest" title="sassutils.builder.Manifest"><code class="xref py py-class docutils literal notranslate"><span class="pre">sassutils.builder.Manifest</span></code></a>.</p>
 </dd></dl>
@@ -207,7 +207,7 @@ interaction should be done by ‘run()’.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -224,7 +224,7 @@ interaction should be done by ‘run()’.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

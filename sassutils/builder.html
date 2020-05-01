@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.builder — Build the whole directory &#8212; libsass 0.19.4 documentation</title>
+    <title>sassutils.builder — Build the whole directory &#8212; libsass 0.20.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sassutils.distutils — setuptools/distutils integration" href="distutils.html" />
@@ -34,22 +34,22 @@
             
   <span class="target" id="module-sassutils.builder"></span><div class="section" id="sassutils-builder-build-the-whole-directory">
 <h1><a class="reference internal" href="#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code></a> — Build the whole directory<a class="headerlink" href="#sassutils-builder-build-the-whole-directory" title="Permalink to this headline">¶</a></h1>
-<dl class="data">
+<dl class="py data">
 <dt id="sassutils.builder.SUFFIXES">
 <code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIXES</code><em class="property"> = frozenset({'sass', 'scss'})</em><a class="headerlink" href="#sassutils.builder.SUFFIXES" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of supported filename suffixes.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="py data">
 <dt id="sassutils.builder.SUFFIX_PATTERN">
 <code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIX_PATTERN</code><em class="property"> = re.compile('[.](scss|sass)$')</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
 <dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">re.RegexObject</span></code>) The regular expression pattern which matches to
 filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><code class="xref py py-const docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a>.</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="sassutils.builder.Manifest">
-<em class="property">class </em><code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">Manifest</code><span class="sig-paren">(</span><em class="sig-param">sass_path</em>, <em class="sig-param">css_path=None</em>, <em class="sig-param">wsgi_path=None</em>, <em class="sig-param">strip_extension=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">Manifest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sass_path</span></em>, <em class="sig-param"><span class="n">css_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wsgi_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building manifest of Sass/SCSS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -62,9 +62,9 @@ files</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.builder.Manifest.build">
-<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param">package_dir</em>, <em class="sig-param">output_style='nested'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.build" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package_dir</span></em>, <em class="sig-param"><span class="n">output_style</span><span class="o">=</span><span class="default_value">'nested'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the Sass/SCSS files in the specified <code class="xref py py-attr docutils literal notranslate"><span class="pre">sass_path</span></code>.
 It finds <code class="xref py py-attr docutils literal notranslate"><span class="pre">sass_path</span></code> and locates <code class="xref py py-attr docutils literal notranslate"><span class="pre">css_path</span></code>
 as relative to the given <code class="docutils literal notranslate"><span class="pre">package_dir</span></code>.</p>
@@ -89,9 +89,9 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.builder.Manifest.build_one">
-<code class="sig-name descname">build_one</code><span class="sig-paren">(</span><em class="sig-param">package_dir</em>, <em class="sig-param">filename</em>, <em class="sig-param">source_map=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.build_one" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package_dir</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">source_map</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.build_one" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds one Sass/SCSS file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -116,9 +116,9 @@ default is <code class="xref py py-const docutils literal notranslate"><span cla
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.builder.Manifest.resolve_filename">
-<code class="sig-name descname">resolve_filename</code><span class="sig-paren">(</span><em class="sig-param">package_dir</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.resolve_filename" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resolve_filename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package_dir</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.resolve_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a proper full relative path of Sass source and
 CSS source that will be generated, according to <code class="docutils literal notranslate"><span class="pre">package_dir</span></code>
 and <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p>
@@ -138,9 +138,9 @@ and <code class="docutils literal notranslate"><span class="pre">filename</span>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.builder.Manifest.unresolve_filename">
-<code class="sig-name descname">unresolve_filename</code><span class="sig-paren">(</span><em class="sig-param">package_dir</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.unresolve_filename" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unresolve_filename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package_dir</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest.unresolve_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the probable source path from the output filename.  Pass
 in a .css path to get out a .scss path.</p>
 <dl class="field-list simple">
@@ -161,9 +161,9 @@ in a .css path to get out a .scss path.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="sassutils.builder.build_directory">
-<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">build_directory</code><span class="sig-paren">(</span><em class="sig-param">sass_path</em>, <em class="sig-param">css_path</em>, <em class="sig-param">output_style='nested'</em>, <em class="sig-param">_root_sass=None</em>, <em class="sig-param">_root_css=None</em>, <em class="sig-param">strip_extension=False</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.build_directory" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">build_directory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sass_path</span></em>, <em class="sig-param"><span class="n">css_path</span></em>, <em class="sig-param"><span class="n">output_style</span><span class="o">=</span><span class="default_value">'nested'</span></em>, <em class="sig-param"><span class="n">_root_sass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_root_css</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_extension</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.build_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles all Sass/SCSS files in <code class="docutils literal notranslate"><span class="pre">path</span></code> to CSS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -242,7 +242,7 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -259,7 +259,7 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

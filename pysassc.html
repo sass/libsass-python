@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pysassc — SassC compliant command line interface &#8212; libsass 0.19.4 documentation</title>
+    <title>pysassc — SassC compliant command line interface &#8212; libsass 0.20.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sass — Binding of libsass" href="sass.html" />
@@ -40,32 +40,32 @@
 </pre></div>
 </div>
 <p>There are options as well:</p>
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-t">
-<code class="sig-name descname">-t</code><code class="sig-prename descclassname"> &lt;style&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--style</code><code class="sig-prename descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-pysassc-t" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-style"></span><code class="sig-name descname">-t</code><code class="sig-prename descclassname"> &lt;style&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--style</code><code class="sig-prename descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-pysassc-t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coding style of the compiled result.  The same as <a class="reference internal" href="sass.html#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">sass.compile()</span></code></a>
 function’s <code class="docutils literal notranslate"><span class="pre">output_style</span></code> keyword argument.  Default is <code class="docutils literal notranslate"><span class="pre">nested</span></code>.</p>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-s">
-<code class="sig-name descname">-s</code><code class="sig-prename descclassname"> &lt;style&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--output-style</code><code class="sig-prename descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-pysassc-s" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-output-style"></span><code class="sig-name descname">-s</code><code class="sig-prename descclassname"> &lt;style&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--output-style</code><code class="sig-prename descclassname"> &lt;style&gt;</code><a class="headerlink" href="#cmdoption-pysassc-s" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for -t / –style.</p>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 0.11.0.</span></p>
 </div>
 </dd></dl>
 
-<dl class="option">
-<dt id="cmdoption-pysassc-i">
-<code class="sig-name descname">-I</code><code class="sig-prename descclassname"> &lt;dir&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--include-path</code><code class="sig-prename descclassname"> &lt;dir&gt;</code><a class="headerlink" href="#cmdoption-pysassc-i" title="Permalink to this definition">¶</a></dt>
+<dl class="std option">
+<dt id="cmdoption-pysassc-I">
+<span id="cmdoption-pysassc-include-path"></span><code class="sig-name descname">-I</code><code class="sig-prename descclassname"> &lt;dir&gt;</code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--include-path</code><code class="sig-prename descclassname"> &lt;dir&gt;</code><a class="headerlink" href="#cmdoption-pysassc-I" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional directory path to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed (S)CSS files.
 Can be multiply used.</p>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-m">
-<code class="sig-name descname">-m</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">-g</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--sourcemap</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-m" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-g"></span><span id="cmdoption-pysassc-sourcemap"></span><code class="sig-name descname">-m</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">-g</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--sourcemap</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-m" title="Permalink to this definition">¶</a></dt>
 <dd><p>Emit source map.  Requires the second argument (output CSS filename).
 The filename of source map will be the output CSS filename followed by
 <code class="file docutils literal notranslate"><span class="pre">.map</span></code>.</p>
@@ -74,16 +74,16 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-p">
-<code class="sig-name descname">-p</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--precision</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-p" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-precision"></span><code class="sig-name descname">-p</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--precision</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-p" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the precision for numbers. Default is 5.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.7.0.</span></p>
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-source-comments">
 <code class="sig-name descname">--source-comments</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-source-comments" title="Permalink to this definition">¶</a></dt>
 <dd><p>Include debug info in output.</p>
@@ -92,7 +92,7 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-sourcemap-file">
 <code class="sig-name descname">--sourcemap-file</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-sourcemap-file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output file for source map</p>
@@ -101,7 +101,7 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-sourcemap-contents">
 <code class="sig-name descname">--sourcemap-contents</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-sourcemap-contents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Embed sourcesContent in source map.</p>
@@ -110,7 +110,7 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-sourcemap-embed">
 <code class="sig-name descname">--sourcemap-embed</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-sourcemap-embed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Embed sourceMappingUrl as data URI</p>
@@ -119,7 +119,7 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-omit-sourcemap-url">
 <code class="sig-name descname">--omit-sourcemap-url</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-omit-sourcemap-url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Omit source map URL comment from output</p>
@@ -128,7 +128,7 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-sourcemap-root">
 <code class="sig-name descname">--sourcemap-root</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-sourcemap-root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base path, will be emitted to sourceRoot in source-map as is</p>
@@ -137,15 +137,15 @@ The filename of source map will be the output CSS filename followed by
 </div>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-v">
-<code class="sig-name descname">-v</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--version</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-v" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-version"></span><code class="sig-name descname">-v</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--version</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-v" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the program version.</p>
 </dd></dl>
 
-<dl class="option">
+<dl class="std option">
 <dt id="cmdoption-pysassc-h">
-<code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-h" title="Permalink to this definition">¶</a></dt>
+<span id="cmdoption-pysassc-help"></span><code class="sig-name descname">-h</code><code class="sig-prename descclassname"></code><code class="sig-prename descclassname">, </code><code class="sig-name descname">--help</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-pysassc-h" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the help message.</p>
 </dd></dl>
 
@@ -196,7 +196,7 @@ The filename of source map will be the output CSS filename followed by
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -213,7 +213,7 @@ The filename of source map will be the output CSS filename followed by
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

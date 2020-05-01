@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.19.4 documentation</title>
+    <title>sassutils.wsgi — WSGI middleware for development purpose &#8212; libsass 0.20.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="sassutils.distutils — setuptools/distutils integration" href="distutils.html" />
@@ -33,9 +33,9 @@
             
   <span class="target" id="module-sassutils.wsgi"></span><div class="section" id="sassutils-wsgi-wsgi-middleware-for-development-purpose">
 <h1><a class="reference internal" href="#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> — WSGI middleware for development purpose<a class="headerlink" href="#sassutils-wsgi-wsgi-middleware-for-development-purpose" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="sassutils.wsgi.SassMiddleware">
-<em class="property">class </em><code class="sig-prename descclassname">sassutils.wsgi.</code><code class="sig-name descname">SassMiddleware</code><span class="sig-paren">(</span><em class="sig-param">app</em>, <em class="sig-param">manifests</em>, <em class="sig-param">package_dir={}</em>, <em class="sig-param">error_status='200 OK'</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sassutils.wsgi.</code><code class="sig-name descname">SassMiddleware</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app</span></em>, <em class="sig-param"><span class="n">manifests</span></em>, <em class="sig-param"><span class="n">package_dir</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">error_status</span><span class="o">=</span><span class="default_value">'200 OK'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware" title="Permalink to this definition">¶</a></dt>
 <dd><p>WSGI middleware for development purpose.  Everytime a CSS file has
 requested it finds a matched Sass/SCSS source file and then compiled
 it into CSS.</p>
@@ -65,7 +65,7 @@ only a red text.</p>
 <dt><a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></dt><dd><p>It logs syntax errors if exist during compilation to
 <code class="docutils literal notranslate"><span class="pre">sassutils.wsgi.SassMiddleware</span></code> logger with level <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>.</p>
 <p>To enable this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">Formatter</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">Formatter</span><span class="p">,</span> <span class="n">StreamHandler</span><span class="p">,</span> <span class="n">getLogger</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;sassutils.wsgi.SassMiddleware&#39;</span><span class="p">)</span>
 <span class="n">handler</span> <span class="o">=</span> <span class="n">StreamHandler</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
 <span class="n">formatter</span> <span class="o">=</span> <span class="n">Formatter</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">80</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="si">%(message)s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
@@ -101,9 +101,9 @@ the same format to <code class="file docutils literal notranslate"><span class="
 <p><span class="versionmodified added">New in version 0.8.0: </span>It logs syntax errors if exist during compilation to
 <code class="docutils literal notranslate"><span class="pre">sassutils.wsgi.SassMiddleware</span></code> logger with level <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>.</p>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="sassutils.wsgi.SassMiddleware.quote_css_string">
-<em class="property">static </em><code class="sig-name descname">quote_css_string</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware.quote_css_string" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">quote_css_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.wsgi.SassMiddleware.quote_css_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quotes a string as CSS string literal.</p>
 </dd></dl>
 
@@ -162,7 +162,7 @@ the same format to <code class="file docutils literal notranslate"><span class="
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -179,7 +179,7 @@ the same format to <code class="file docutils literal notranslate"><span class="
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
