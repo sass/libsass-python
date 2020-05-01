@@ -1630,11 +1630,12 @@ def test_stack_trace_formatting():
         raise AssertionError('expected to raise CompileError')
     except sass.CompileError:
         tb = traceback.format_exc()
+    # TODO: https://github.com/sass/libsass/issues/3092
     assert tb.endswith(
         'CompileError: Error: Invalid CSS after "a{☃": expected "{", was ""\n'
-        '        on line 1:3 of stdin\n'
+        '        on line 1:5 of stdin\n'
         '>> a{☃\n'
-        '   --^\n\n',
+        '   ----^\n\n',
     )
 
 
