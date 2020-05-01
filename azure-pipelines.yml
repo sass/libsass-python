@@ -19,6 +19,11 @@ jobs:
 - template: job--pre-commit.yml@asottile
 - template: job--python-tox.yml@asottile
   parameters:
+    toxenvs: [py27, py36]
+    os: macos
+    wheel_tags: true
+- template: job--python-tox.yml@asottile
+  parameters:
     toxenvs: [py27]
     os: windows
     architectures: [x64, x86]
