@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>sass — Binding of libsass &#8212; libsass 0.20.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sass — Binding of libsass &#8212; libsass 0.20.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -44,6 +45,13 @@ type.</p>
 <span class="go">&#39;</span>
 </pre></div>
 </div>
+<dl class="py exception">
+<dt id="sass.CompileError">
+<em class="property">exception </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">CompileError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a>.
+It is a subtype of <code class="xref py py-exc docutils literal notranslate"><span class="pre">exceptions.ValueError</span></code>.</p>
+</dd></dl>
+
 <dl class="py data">
 <dt id="sass.MODES">
 <code class="sig-prename descclassname">sass.</code><code class="sig-name descname">MODES</code><em class="property"> = frozenset({'dirname', 'filename', 'string'})</em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
@@ -70,21 +78,14 @@ Keys are mode names, and values are corresponding flag integers.</p>
 </div>
 </dd></dl>
 
-<dl class="py exception">
-<dt id="sass.CompileError">
-<em class="property">exception </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">CompileError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
-<dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a>.
-It is a subtype of <code class="xref py py-exc docutils literal notranslate"><span class="pre">exceptions.ValueError</span></code>.</p>
-</dd></dl>
-
 <dl class="py class">
 <dt id="sass.SassColor">
-<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassColor</code><a class="headerlink" href="#sass.SassColor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassColor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">r</span></em>, <em class="sig-param"><span class="n">g</span></em>, <em class="sig-param"><span class="n">b</span></em>, <em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassColor" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt id="sass.SassError">
-<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassError</code><a class="headerlink" href="#sass.SassError" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassError" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
@@ -154,7 +155,7 @@ Function name and arguments are automatically inspected.</p>
 
 <dl class="py class">
 <dt id="sass.SassList">
-<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassList</code><a class="headerlink" href="#sass.SassList" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassList</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em>, <em class="sig-param"><span class="n">separator</span></em>, <em class="sig-param"><span class="n">bracketed</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassList" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
@@ -169,12 +170,12 @@ hashable mapping type.</p>
 
 <dl class="py class">
 <dt id="sass.SassNumber">
-<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassNumber</code><a class="headerlink" href="#sass.SassNumber" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassNumber</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">unit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassNumber" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt id="sass.SassWarning">
-<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassWarning</code><a class="headerlink" href="#sass.SassWarning" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sass.</code><code class="sig-name descname">SassWarning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassWarning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -508,7 +509,7 @@ resolved path, so that importers can do relative path resolution.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

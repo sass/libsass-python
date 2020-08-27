@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>sassutils.builder — Build the whole directory &#8212; libsass 0.20.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sassutils.builder — Build the whole directory &#8212; libsass 0.20.1 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -34,19 +35,6 @@
             
   <span class="target" id="module-sassutils.builder"></span><div class="section" id="sassutils-builder-build-the-whole-directory">
 <h1><a class="reference internal" href="#module-sassutils.builder" title="sassutils.builder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code></a> — Build the whole directory<a class="headerlink" href="#sassutils-builder-build-the-whole-directory" title="Permalink to this headline">¶</a></h1>
-<dl class="py data">
-<dt id="sassutils.builder.SUFFIXES">
-<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIXES</code><em class="property"> = frozenset({'sass', 'scss'})</em><a class="headerlink" href="#sassutils.builder.SUFFIXES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of supported filename suffixes.</p>
-</dd></dl>
-
-<dl class="py data">
-<dt id="sassutils.builder.SUFFIX_PATTERN">
-<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIX_PATTERN</code><em class="property"> = re.compile('[.](scss|sass)$')</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">re.RegexObject</span></code>) The regular expression pattern which matches to
-filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><code class="xref py py-const docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a>.</p>
-</dd></dl>
-
 <dl class="py class">
 <dt id="sassutils.builder.Manifest">
 <em class="property">class </em><code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">Manifest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sass_path</span></em>, <em class="sig-param"><span class="n">css_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wsgi_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.Manifest" title="Permalink to this definition">¶</a></dt>
@@ -161,6 +149,19 @@ in a .css path to get out a .scss path.</p>
 
 </dd></dl>
 
+<dl class="py data">
+<dt id="sassutils.builder.SUFFIXES">
+<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIXES</code><em class="property"> = frozenset({'sass', 'scss'})</em><a class="headerlink" href="#sassutils.builder.SUFFIXES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of supported filename suffixes.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="sassutils.builder.SUFFIX_PATTERN">
+<code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">SUFFIX_PATTERN</code><em class="property"> = re.compile('[.](sass|scss)$')</em><a class="headerlink" href="#sassutils.builder.SUFFIX_PATTERN" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<code class="xref py py-class docutils literal notranslate"><span class="pre">re.RegexObject</span></code>) The regular expression pattern which matches to
+filenames of supported <a class="reference internal" href="#sassutils.builder.SUFFIXES" title="sassutils.builder.SUFFIXES"><code class="xref py py-const docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a>.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt id="sassutils.builder.build_directory">
 <code class="sig-prename descclassname">sassutils.builder.</code><code class="sig-name descname">build_directory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sass_path</span></em>, <em class="sig-param"><span class="n">css_path</span></em>, <em class="sig-param"><span class="n">output_style</span><span class="o">=</span><span class="default_value">'nested'</span></em>, <em class="sig-param"><span class="n">_root_sass</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">_root_css</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strip_extension</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sassutils.builder.build_directory" title="Permalink to this definition">¶</a></dt>
@@ -259,7 +260,7 @@ choose one of: <code class="docutils literal notranslate"><span class="pre">'nes
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
