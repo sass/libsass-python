@@ -108,6 +108,6 @@ implementation of Sass_.
 Hampton Catlin originally designed Sass_ language and wrote the first
 reference implementation of it in Ruby.
 
-The above three softwares are all distributed under `MIT license`_.
+The above three are all distributed under `MIT license`_.
 
 .. _MIT license: https://mit-license.org/
