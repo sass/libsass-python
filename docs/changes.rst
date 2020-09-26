@@ -744,8 +744,8 @@ Released on February 21, 2014.
 - Dropped support for Python 2.5.
 - Fixed build failing on Mac OS X.
   [:issue:`4`, :issue:`5`, :issue:`6` by Hyungoo Kang]
-- Now builder creates target recursive subdirectories even if it doesn't
-  exist yet, rather than siliently fails.
+- Now the builder creates target subdirectories recursively even if they don't
+  exist yet, rather than silently failing.
   [:issue:`8`, :issue:`9` by Philipp Volguine]
 - Merged recent changes from libsass 1.0.1: `57a2f62--v1.0.1`_.
 
