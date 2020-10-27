@@ -13,7 +13,7 @@ resources:
       type: github
       endpoint: github
       name: asottile/azure-pipeline-templates
-      ref: refs/tags/v2.0.0
+      ref: refs/tags/v2.1.0
 
 jobs:
 - template: job--pre-commit.yml@asottile
@@ -33,11 +33,11 @@ jobs:
     - script: rm -rf libsass/test
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py36, py37, py38]
+    toxenvs: [py36, py37, py38, py39]
     os: windows
     architectures: [x64, x86]
     wheel_tags: true
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [pypy, pypy3, py27, py36, py37, py38]
+    toxenvs: [pypy, pypy3, py27, py36, py37, py38, py39]
     os: linux
