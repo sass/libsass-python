@@ -33,7 +33,7 @@ jobs:
     - script: rm -rf libsass/test
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py36, py37, py38, py39]
+    toxenvs: [py36]
     os: windows
     architectures: [x64, x86]
     wheel_tags: true
