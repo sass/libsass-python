@@ -13,6 +13,10 @@ libsass-python: Sass_/SCSS for Python
    :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
    :alt: Coverage Status
 
+.. image:: https://results.pre-commit.ci/badge/github/sass/libsass-python/master.svg
+   :target: https://results.pre-commit.ci/latest/github/sass/libsass-python/master
+   :alt: pre-commit.ci status
+
 This package provides a simple Python extension module ``sass`` which is
 binding LibSass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
