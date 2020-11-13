@@ -171,11 +171,9 @@ static struct SassValue* _list_to_sass_value(PyObject* value) {
         assert(0);
     }
     int is_bracketed = bracketed == Py_True;
-    retv = sass_make_list(PyTuple_Size(items), sep, is_bracketed);
+    retv = sass_make_list(sep, is_bracketed);
     for (i = 0; i < PyTuple_Size(items); i += 1) {
-        sass_list_set_value(
-            retv, i, _to_sass_value(PyTuple_GetItem(items, i))
-        );
+        sass_list_push(retv, _to_sass_value(PyTuple_GetItem(items, i)));
     }
     Py_DECREF(types_mod);
     Py_DECREF(sass_comma);
