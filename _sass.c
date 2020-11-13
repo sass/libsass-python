@@ -309,13 +309,17 @@ static struct SassValue* _exception_to_sass_error() {
     return retv;
 }
 
-static Sass_Import_List _exception_to_sass_import_error(const char* path) {
+static struct SassImportList* _exception_to_sass_import_error(const char* path) {
+    return 0;
+    /*
     PyObject* bytes = _exception_to_bytes();
-    Sass_Import_List import_list = sass_make_import_list(1);
-    import_list[0] = sass_make_import_entry(path, 0, 0);
-    sass_import_set_error(import_list[0], PyBytes_AsString(bytes), 0, 0);
+    struct SassImportList* import_list = sass_make_import_list();
+    struct SassImport* import = sass_make_import_error(PyBytes_AsString(bytes));
+    sass_import_list_push(import_list, import);
+    sass_import_set_error_msg(import, PyBytes_AsString(bytes), 0, 0);
     Py_DECREF(bytes);
     return import_list;
+    */
 }
 
 static struct SassValue* _to_sass_value(PyObject* value) {
@@ -420,12 +424,12 @@ static void _add_custom_functions(
     sass_option_set_c_functions(options, fn_list);
 }
 
-static Sass_Import_List _call_py_importer_f(
+static struct SassImportList* _call_py_importer_f(
         const char* path, Sass_Importer_Entry cb, struct Sass_Compiler* comp
 ) {
     PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
     PyObject* py_result = NULL;
-    Sass_Import_List sass_imports = NULL;
+    struct SassImportList* sass_imports = NULL;
     struct Sass_Import* previous;
     const char* prev_path;
     Py_ssize_t i;
