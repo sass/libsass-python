@@ -64,7 +64,7 @@ static PyObject* _to_py_value(struct SassValue* value) {
             break;
         case SASS_LIST: {
             size_t i = 0;
-            PyObject* items = PyTuple_New(sass_list_get_length(value));
+            PyObject* items = PyTuple_New(sass_list_get_size(value));
             PyObject* separator = sass_comma;
             int is_bracketed = sass_list_get_is_bracketed(value);
             PyObject* bracketed = PyBool_FromLong(is_bracketed);
@@ -75,11 +75,11 @@ static PyObject* _to_py_value(struct SassValue* value) {
                 case SASS_SPACE:
                     separator = sass_space;
                     break;
-                case SASS_HASH:
+                case SASS_UNDEF:  /* TODO: is this possible? */
                     assert(0);
                     break;
             }
-            for (i = 0; i < sass_list_get_length(value); i += 1) {
+            for (i = 0; i < sass_list_get_size(value); i += 1) {
                 PyTuple_SetItem(
                     items,
                     i,
@@ -116,6 +116,8 @@ static PyObject* _to_py_value(struct SassValue* value) {
             Py_DECREF(items);
             break;
         }
+        case SASS_PARENT:  /* TODO: can SASS_PARENT be passed? */
+        case SASS_FUNCTION:  /* TODO: can SASS_FUNCTION be passed? */
         case SASS_ERROR:
         case SASS_WARNING:
             /* @warning and @error cannot be passed */
@@ -160,7 +162,7 @@ static struct SassValue* _list_to_sass_value(PyObject* value) {
     PyObject* items = PyObject_GetAttrString(value, "items");
     PyObject* separator = PyObject_GetAttrString(value, "separator");
     PyObject* bracketed = PyObject_GetAttrString(value, "bracketed");
-    enum Sass_Separator sep = SASS_COMMA;
+    enum SassSeparator sep = SASS_COMMA;
     if (separator == sass_comma) {
         sep = SASS_COMMA;
     } else if (separator == sass_space) {
@@ -377,11 +379,11 @@ static struct SassValue* _call_py_f(
 ) {
     size_t i;
     PyObject* pyfunc = (PyObject*)sass_function_get_cookie(cb);
-    PyObject* py_args = PyTuple_New(sass_list_get_length(sass_args));
+    PyObject* py_args = PyTuple_New(sass_list_get_size(sass_args));
     PyObject* py_result = NULL;
     struct SassValue* sass_result = NULL;
 
-    for (i = 0; i < sass_list_get_length(sass_args); i += 1) {
+    for (i = 0; i < sass_list_get_size(sass_args); i += 1) {
         struct SassValue* sass_arg = sass_list_get_value(sass_args, i);
         PyObject* py_arg = NULL;
         if (!(py_arg = _to_py_value(sass_arg))) goto done;
