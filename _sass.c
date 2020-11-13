@@ -376,7 +376,7 @@ static struct SassValue* _to_sass_value(PyObject* value) {
 static struct SassValue* _call_py_f(
         struct SassValue* sass_args,
         Sass_Function_Entry cb,
-        struct Sass_Compiler* compiler
+        struct SassCompiler* compiler
 ) {
     size_t i;
     PyObject* pyfunc = (PyObject*)sass_function_get_cookie(cb);
@@ -425,7 +425,7 @@ static void _add_custom_functions(
 }
 
 static struct SassImportList* _call_py_importer_f(
-        const char* path, Sass_Importer_Entry cb, struct Sass_Compiler* comp
+        const char* path, Sass_Importer_Entry cb, struct SassCompiler* comp
 ) {
     PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
     PyObject* py_result = NULL;
