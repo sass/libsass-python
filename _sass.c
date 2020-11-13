@@ -186,17 +186,14 @@ static struct SassValue* _list_to_sass_value(PyObject* value) {
 
 static struct SassValue* _mapping_to_sass_value(PyObject* value) {
     struct SassValue* retv = NULL;
-    size_t i = 0;
     Py_ssize_t pos = 0;
     PyObject* d_key = NULL;
     PyObject* d_value = NULL;
     PyObject* dct = PyDict_New();
     PyDict_Update(dct, value);
-    retv = sass_make_map(PyDict_Size(dct));
+    retv = sass_make_map();
     while (PyDict_Next(dct, &pos, &d_key, &d_value)) {
-        sass_map_set_key(retv, i, _to_sass_value(d_key));
-        sass_map_set_value(retv, i, _to_sass_value(d_value));
-        i += 1;
+        sass_map_set(retv, _to_sass_value(d_key), _to_sass_value(d_value));
     }
     Py_DECREF(dct);
     return retv;
