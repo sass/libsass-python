@@ -11,7 +11,7 @@
 #define COLLECTIONS_ABC_MOD "collections"
 #endif
 
-static PyObject* _to_py_value(const struct SassValue* value);
+static PyObject* _to_py_value(struct SassValue* value);
 static struct SassValue* _to_sass_value(PyObject* value);
 
 static struct SassValue* _color_to_sass_value(PyObject* value);
@@ -25,7 +25,7 @@ static struct SassValue* _unknown_type_to_sass_error(PyObject* value);
 static struct SassValue* _exception_to_sass_error();
 
 
-static PyObject* _to_py_value(const struct SassValue* value) {
+static PyObject* _to_py_value(struct SassValue* value) {
     PyObject* retv = NULL;
     PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
@@ -363,7 +363,7 @@ static struct SassValue* _to_sass_value(PyObject* value) {
 }
 
 static struct SassValue* _call_py_f(
-        const struct SassValue* sass_args,
+        struct SassValue* sass_args,
         Sass_Function_Entry cb,
         struct Sass_Compiler* compiler
 ) {
@@ -374,7 +374,7 @@ static struct SassValue* _call_py_f(
     struct SassValue* sass_result = NULL;
 
     for (i = 0; i < sass_list_get_length(sass_args); i += 1) {
-        const struct SassValue* sass_arg = sass_list_get_value(sass_args, i);
+        struct SassValue* sass_arg = sass_list_get_value(sass_args, i);
         PyObject* py_arg = NULL;
         if (!(py_arg = _to_py_value(sass_arg))) goto done;
         PyTuple_SetItem(py_args, i, py_arg);
