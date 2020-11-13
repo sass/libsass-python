@@ -92,18 +92,26 @@ static PyObject* _to_py_value(struct SassValue* value) {
             break;
         }
         case SASS_MAP: {
-            size_t i = 0;
-            PyObject* items = PyTuple_New(sass_map_get_length(value));
-            for (i = 0; i < sass_map_get_length(value); i += 1) {
+            PyObject* items;
+            PyObject* lst = PyList_New(0);
+
+            struct SassMapIterator* iter = sass_map_make_iterator(value);
+            while (!sass_map_iterator_exhausted(iter)) {
                 PyObject* kvp = PyTuple_New(2);
                 PyTuple_SetItem(
-                    kvp, 0, _to_py_value(sass_map_get_key(value, i))
+                    kvp, 0, _to_py_value(sass_map_iterator_get_key(iter))
                 );
                 PyTuple_SetItem(
-                    kvp, 1, _to_py_value(sass_map_get_value(value, i))
+                    kvp, 1, _to_py_value(sass_map_iterator_get_value(iter))
                 );
-                PyTuple_SetItem(items, i, kvp);
+                PyList_Append(lst, kvp);
+
+                sass_map_iterator_next(iter);
             }
+            sass_map_delete_iterator(iter);
+
+            items = PySequence_Tuple(lst);
+            Py_DECREF(lst);
             retv = PyObject_CallMethod(types_mod, "SassMap", "(O)", items);
             Py_DECREF(items);
             break;
