@@ -216,7 +216,8 @@ static struct SassValue* _number_to_sass_value(PyObject* value) {
 static struct SassValue* _unicode_to_sass_value(PyObject* value) {
     struct SassValue* retv = NULL;
     PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
-    retv = sass_make_string(PyBytes_AsString(bytes));
+    /* TODO: need a way to set quoted vs not (second arg) */
+    retv = sass_make_string(PyBytes_AsString(bytes), 0);
     Py_DECREF(bytes);
     return retv;
 }
@@ -335,7 +336,8 @@ static struct SassValue* _to_sass_value(PyObject* value) {
     } else if (PyUnicode_Check(value)) {
         retv = _unicode_to_sass_value(value);
     } else if (PyBytes_Check(value)) {
-        retv = sass_make_string(PyBytes_AsString(value));
+        /* TODO: need a way to set quoted vs not (second arg) */
+        retv = sass_make_string(PyBytes_AsString(value), 0);
     /* XXX: PyMapping_Check returns true for lists and tuples in python3 :( */
     /* XXX: pypy derps on dicts: https://bitbucket.org/pypy/pypy/issue/1970 */
     } else if (PyDict_Check(value) || PyObject_IsInstance(value, mapping_t)) {
