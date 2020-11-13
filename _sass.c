@@ -11,21 +11,21 @@
 #define COLLECTIONS_ABC_MOD "collections"
 #endif
 
-static PyObject* _to_py_value(const union Sass_Value* value);
-static union Sass_Value* _to_sass_value(PyObject* value);
+static PyObject* _to_py_value(const struct SassValue* value);
+static struct SassValue* _to_sass_value(PyObject* value);
 
-static union Sass_Value* _color_to_sass_value(PyObject* value);
-static union Sass_Value* _number_to_sass_value(PyObject* value);
-static union Sass_Value* _list_to_sass_value(PyObject* value);
-static union Sass_Value* _mapping_to_sass_value(PyObject* value);
-static union Sass_Value* _unicode_to_sass_value(PyObject* value);
-static union Sass_Value* _warning_to_sass_value(PyObject* value);
-static union Sass_Value* _error_to_sass_value(PyObject* value);
-static union Sass_Value* _unknown_type_to_sass_error(PyObject* value);
-static union Sass_Value* _exception_to_sass_error();
+static struct SassValue* _color_to_sass_value(PyObject* value);
+static struct SassValue* _number_to_sass_value(PyObject* value);
+static struct SassValue* _list_to_sass_value(PyObject* value);
+static struct SassValue* _mapping_to_sass_value(PyObject* value);
+static struct SassValue* _unicode_to_sass_value(PyObject* value);
+static struct SassValue* _warning_to_sass_value(PyObject* value);
+static struct SassValue* _error_to_sass_value(PyObject* value);
+static struct SassValue* _unknown_type_to_sass_error(PyObject* value);
+static struct SassValue* _exception_to_sass_error();
 
 
-static PyObject* _to_py_value(const union Sass_Value* value) {
+static PyObject* _to_py_value(const struct SassValue* value) {
     PyObject* retv = NULL;
     PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
@@ -124,8 +124,8 @@ static PyObject* _to_py_value(const union Sass_Value* value) {
     return retv;
 }
 
-static union Sass_Value* _color_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _color_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* r_value = PyObject_GetAttrString(value, "r");
     PyObject* g_value = PyObject_GetAttrString(value, "g");
     PyObject* b_value = PyObject_GetAttrString(value, "b");
@@ -143,11 +143,11 @@ static union Sass_Value* _color_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _list_to_sass_value(PyObject* value) {
+static struct SassValue* _list_to_sass_value(PyObject* value) {
     PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_comma = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_COMMA");
     PyObject* sass_space = PyObject_GetAttrString(types_mod, "SASS_SEPARATOR_SPACE");
-    union Sass_Value* retv = NULL;
+    struct SassValue* retv = NULL;
     Py_ssize_t i = 0;
     PyObject* items = PyObject_GetAttrString(value, "items");
     PyObject* separator = PyObject_GetAttrString(value, "separator");
@@ -176,8 +176,8 @@ static union Sass_Value* _list_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _mapping_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _mapping_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     size_t i = 0;
     Py_ssize_t pos = 0;
     PyObject* d_key = NULL;
@@ -194,8 +194,8 @@ static union Sass_Value* _mapping_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _number_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _number_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* d_value = PyObject_GetAttrString(value, "value");
     PyObject* unit = PyObject_GetAttrString(value, "unit");
     PyObject* bytes = PyUnicode_AsEncodedString(unit, "UTF-8", "strict");
@@ -208,16 +208,16 @@ static union Sass_Value* _number_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _unicode_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _unicode_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* bytes = PyUnicode_AsEncodedString(value, "UTF-8", "strict");
     retv = sass_make_string(PyBytes_AsString(bytes));
     Py_DECREF(bytes);
     return retv;
 }
 
-static union Sass_Value* _warning_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _warning_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
     retv = sass_make_warning(PyBytes_AsString(bytes));
@@ -226,8 +226,8 @@ static union Sass_Value* _warning_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _error_to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _error_to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* msg = PyObject_GetAttrString(value, "msg");
     PyObject* bytes = PyUnicode_AsEncodedString(msg, "UTF-8", "strict");
     retv = sass_make_error(PyBytes_AsString(bytes));
@@ -236,8 +236,8 @@ static union Sass_Value* _error_to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _unknown_type_to_sass_error(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _unknown_type_to_sass_error(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* type = PyObject_Type(value);
     PyObject* type_name = PyObject_GetAttrString(type, "__name__");
     PyObject* fmt = PyUnicode_FromString(
@@ -296,9 +296,9 @@ static PyObject* _exception_to_bytes() {
     return retv;
 }
 
-static union Sass_Value* _exception_to_sass_error() {
+static struct SassValue* _exception_to_sass_error() {
     PyObject* bytes = _exception_to_bytes();
-    union Sass_Value* retv = sass_make_error(PyBytes_AsString(bytes));
+    struct SassValue* retv = sass_make_error(PyBytes_AsString(bytes));
     Py_DECREF(bytes);
     return retv;
 }
@@ -312,8 +312,8 @@ static Sass_Import_List _exception_to_sass_import_error(const char* path) {
     return import_list;
 }
 
-static union Sass_Value* _to_sass_value(PyObject* value) {
-    union Sass_Value* retv = NULL;
+static struct SassValue* _to_sass_value(PyObject* value) {
+    struct SassValue* retv = NULL;
     PyObject* types_mod = PyImport_ImportModule("sass");
     PyObject* sass_number_t = PyObject_GetAttrString(types_mod, "SassNumber");
     PyObject* sass_color_t = PyObject_GetAttrString(types_mod, "SassColor");
@@ -362,8 +362,8 @@ static union Sass_Value* _to_sass_value(PyObject* value) {
     return retv;
 }
 
-static union Sass_Value* _call_py_f(
-        const union Sass_Value* sass_args,
+static struct SassValue* _call_py_f(
+        const struct SassValue* sass_args,
         Sass_Function_Entry cb,
         struct Sass_Compiler* compiler
 ) {
@@ -371,10 +371,10 @@ static union Sass_Value* _call_py_f(
     PyObject* pyfunc = (PyObject*)sass_function_get_cookie(cb);
     PyObject* py_args = PyTuple_New(sass_list_get_length(sass_args));
     PyObject* py_result = NULL;
-    union Sass_Value* sass_result = NULL;
+    struct SassValue* sass_result = NULL;
 
     for (i = 0; i < sass_list_get_length(sass_args); i += 1) {
-        const union Sass_Value* sass_arg = sass_list_get_value(sass_args, i);
+        const struct SassValue* sass_arg = sass_list_get_value(sass_args, i);
         PyObject* py_arg = NULL;
         if (!(py_arg = _to_py_value(sass_arg))) goto done;
         PyTuple_SetItem(py_args, i, py_arg);
