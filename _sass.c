@@ -405,13 +405,9 @@ done:
 
 
 static void _add_custom_functions(
-        struct Sass_Options* options, PyObject* custom_functions
+        struct SassCompiler* compiler, PyObject* custom_functions
 ) {
-    Py_ssize_t i;
-    Sass_Function_List fn_list = sass_make_function_list(
-        PyList_Size(custom_functions)
-    );
-    for (i = 0; i < PyList_Size(custom_functions); i += 1) {
+    for (Py_ssize_t i = 0; i < PyList_Size(custom_functions); i += 1) {
         PyObject* sass_function = PyList_GetItem(custom_functions, i);
         PyObject* signature = PySass_Object_Bytes(sass_function);
         Sass_Function_Entry fn = sass_make_function(
@@ -419,9 +415,8 @@ static void _add_custom_functions(
             _call_py_f,
             sass_function
         );
-        sass_function_set_list_entry(fn_list, i, fn);
+        sass_compiler_add_custom_function(compiler, fn);
     }
-    sass_option_set_c_functions(options, fn_list);
 }
 
 static struct SassImportList* _call_py_importer_f(
@@ -430,7 +425,7 @@ static struct SassImportList* _call_py_importer_f(
     PyObject* pyfunc = (PyObject*)sass_importer_get_cookie(cb);
     PyObject* py_result = NULL;
     struct SassImportList* sass_imports = NULL;
-    struct Sass_Import* previous;
+    struct SassImport* previous;
     const char* prev_path;
     Py_ssize_t i;
 
@@ -450,8 +445,9 @@ static struct SassImportList* _call_py_importer_f(
 
     /* Otherwise, we know our importer is well formed (because we wrap it)
      * The return value will be a tuple of 1, 2, or 3 tuples */
-    sass_imports = sass_make_import_list(PyTuple_Size(py_result));
+    sass_imports = sass_make_import_list();
     for (i = 0; i < PyTuple_Size(py_result); i += 1) {
+        struct SassImport* import = NULL;
         char* path_str = NULL;  /* XXX: Memory leak? */
         char* source_str = NULL;
         char* sourcemap_str = NULL;
@@ -477,9 +473,9 @@ static struct SassImportList* _call_py_importer_f(
         if (source_str) source_str = sass_copy_c_string(source_str);
         if (sourcemap_str) sourcemap_str = sass_copy_c_string(sourcemap_str);
 
-        sass_imports[i] = sass_make_import_entry(
-            path_str, source_str, sourcemap_str
-        );
+        /* XXX: is this correct? source_map_str is gone? */
+        import = sass_make_content_import(source_str, path_str);
+        sass_import_list_push(sass_imports, import);
     }
 
 done:
@@ -493,40 +489,36 @@ done:
 }
 
 static void _add_custom_importers(
-        struct Sass_Options* options, PyObject* custom_importers
+        struct SassCompiler* compiler, PyObject* custom_importers
 ) {
-    Py_ssize_t i;
-    Sass_Importer_List importer_list;
-
     if (custom_importers == Py_None) {
         return;
     }
 
-    importer_list = sass_make_importer_list(PyTuple_Size(custom_importers));
-
-    for (i = 0; i < PyTuple_Size(custom_importers); i += 1) {
+    for (Py_ssize_t i = 0; i < PyTuple_Size(custom_importers); i += 1) {
+        struct SassImporter* importer;
         PyObject* item = PyTuple_GetItem(custom_importers, i);
         int priority = 0;
         PyObject* import_function = NULL;
 
         PyArg_ParseTuple(item, "iO", &priority, &import_function);
 
-        importer_list[i] = sass_make_importer(
+        importer = sass_make_importer(
             _call_py_importer_f, priority, import_function
         );
+        sass_compiler_add_custom_importer(compiler, importer);
     }
-
-    sass_option_set_c_importers(options, importer_list);
 }
 
 static PyObject *
 PySass_compile_string(PyObject *self, PyObject *args) {
-    struct Sass_Context *ctx;
-    struct Sass_Data_Context *context;
-    struct Sass_Options *options;
+    struct SassCompiler* compiler;
+    struct SassImport* entry;
+    const struct SassError* error;
     char *string, *include_paths;
     const char *error_message, *output_string;
-    enum Sass_Output_Style output_style;
+    enum SassSrcMapMode srcmap_mode;
+    enum SassOutputStyle output_style;
     int source_comments, error_status, precision, indented,
         source_map_embed, source_map_contents,
         omit_source_map_url;
@@ -545,48 +537,67 @@ PySass_compile_string(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    context = sass_make_data_context(sass_copy_c_string(string));
-    options = sass_data_context_get_options(context);
-    sass_option_set_output_style(options, output_style);
-    sass_option_set_source_comments(options, source_comments);
-    sass_option_set_include_path(options, include_paths);
-    sass_option_set_precision(options, precision);
-    sass_option_set_is_indented_syntax_src(options, indented);
-    sass_option_set_source_map_contents(options, source_map_contents);
-    sass_option_set_source_map_embed(options, source_map_embed);
-    sass_option_set_omit_source_map_url(options, omit_source_map_url);
+    compiler = sass_make_compiler();
+    sass_compiler_set_output_style(compiler, output_style);
+    sass_compiler_set_source_comments(compiler, source_comments);
+    sass_compiler_add_include_paths(compiler, include_paths);
+    sass_compiler_set_precision(compiler, precision);
+    /* XXX: this is probably wrong */
+    srcmap_mode = SASS_SRCMAP_NONE;
+    if (source_map_contents) {
+        srcmap_mode = SASS_SRCMAP_EMBED_LINK;
+    }
+    if (source_map_embed) {
+        srcmap_mode = SASS_SRCMAP_EMBED_JSON;
+    }
+    if (srcmap_mode != SASS_SRCMAP_NONE) {
+        sass_compiler_set_srcmap_embed_contents(compiler, !omit_source_map_url);
+    }
+    sass_compiler_set_srcmap_mode(compiler, srcmap_mode);
 
     if (PyBytes_Check(source_map_root) && PyBytes_Size(source_map_root)) {
-        sass_option_set_source_map_root(
-            options, PyBytes_AsString(source_map_root)
+        sass_compiler_set_srcmap_root(
+            compiler, PyBytes_AsString(source_map_root)
         );
     }
 
-    _add_custom_functions(options, custom_functions);
-    _add_custom_importers(options, custom_importers);
-    sass_compile_data_context(context);
+    _add_custom_functions(compiler, custom_functions);
+    _add_custom_importers(compiler, custom_importers);
 
-    ctx = sass_data_context_get_context(context);
-    error_status = sass_context_get_error_status(ctx);
-    error_message = sass_context_get_error_message(ctx);
-    output_string = sass_context_get_output_string(ctx);
+    entry = sass_make_content_import(sass_copy_c_string(string), NULL);
+    if (indented) {
+        sass_import_set_format(entry, SASS_IMPORT_SASS);
+    } else {
+        sass_import_set_format(entry, SASS_IMPORT_SCSS);
+    }
+    sass_compiler_set_entry_point(compiler, entry);
+    sass_delete_import(entry);
+
+    sass_compiler_parse(compiler);
+    sass_compiler_compile(compiler);
+    sass_compiler_render(compiler);
+
+    error = sass_compiler_get_error(compiler);
+    error_status = sass_error_get_status(error);
+    output_string = sass_compiler_get_output_string(compiler);
     result = Py_BuildValue(
         PySass_IF_PY3("hy", "hs"),
         (short int) !error_status,
-        error_status ? error_message : output_string
+        error_status ? sass_error_get_formatted(error) : output_string
     );
-    sass_delete_data_context(context);
+    sass_delete_compiler(compiler);
     return result;
 }
 
 static PyObject *
 PySass_compile_filename(PyObject *self, PyObject *args) {
-    struct Sass_Context *ctx;
-    struct Sass_File_Context *context;
-    struct Sass_Options *options;
+    struct SassCompiler* compiler;
+    struct SassImport* entry;
+    const struct SassError* error;
     char *filename, *include_paths;
-    const char *error_message, *output_string, *source_map_string;
-    enum Sass_Output_Style output_style;
+    const char *output_string, *source_map_string;
+    enum SassSrcMapMode srcmap_mode;
+    enum SassOutputStyle output_style;
     int source_comments, error_status, precision, source_map_embed,
         source_map_contents, omit_source_map_url;
     PyObject *source_map_filename, *custom_functions, *custom_importers,
@@ -603,53 +614,66 @@ PySass_compile_filename(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-    context = sass_make_file_context(filename);
-    options = sass_file_context_get_options(context);
+    compiler = sass_make_compiler();
 
-    if (PyBytes_Check(source_map_filename)) {
-        if (PyBytes_Size(source_map_filename)) {
-            sass_option_set_source_map_file(
-                options, PyBytes_AsString(source_map_filename)
-            );
-        }
-    }
     if (PyBytes_Check(output_filename_hint)) {
         if (PyBytes_Size(output_filename_hint)) {
-            sass_option_set_output_path(
-                options, PyBytes_AsString(output_filename_hint)
+            sass_compiler_set_output_path(
+                compiler, PyBytes_AsString(output_filename_hint)
             );
         }
     }
 
     if (PyBytes_Check(source_map_root) && PyBytes_Size(source_map_root)) {
-        sass_option_set_source_map_root(
-            options, PyBytes_AsString(source_map_root)
+        sass_compiler_set_srcmap_root(
+            compiler, PyBytes_AsString(source_map_root)
         );
     }
 
-    sass_option_set_output_style(options, output_style);
-    sass_option_set_source_comments(options, source_comments);
-    sass_option_set_include_path(options, include_paths);
-    sass_option_set_precision(options, precision);
-    sass_option_set_source_map_contents(options, source_map_contents);
-    sass_option_set_source_map_embed(options, source_map_embed);
-    sass_option_set_omit_source_map_url(options, omit_source_map_url);
-    _add_custom_functions(options, custom_functions);
-    _add_custom_importers(options, custom_importers);
-    sass_compile_file_context(context);
+    sass_compiler_set_output_style(compiler, output_style);
+    sass_compiler_set_source_comments(compiler, source_comments);
+    sass_compiler_add_include_paths(compiler, include_paths);
+    sass_compiler_set_precision(compiler, precision);
+    /* XXX: this is probably wrong */
+    srcmap_mode = SASS_SRCMAP_NONE;
+    if (PyBytes_Check(source_map_filename) && PyBytes_Size(source_map_filename)) {
+        srcmap_mode = SASS_SRCMAP_EMBED_LINK;
+        sass_compiler_set_srcmap_path(
+            compiler, PyBytes_AsString(source_map_filename)
+        );
+    }
+    if (source_map_contents) {
+        srcmap_mode = SASS_SRCMAP_EMBED_LINK;
+    }
+    if (source_map_embed) {
+        srcmap_mode = SASS_SRCMAP_EMBED_JSON;
+    }
+    if (srcmap_mode != SASS_SRCMAP_NONE) {
+        sass_compiler_set_srcmap_embed_contents(compiler, !omit_source_map_url);
+    }
+    sass_compiler_set_srcmap_mode(compiler, srcmap_mode);
+    _add_custom_functions(compiler, custom_functions);
+    _add_custom_importers(compiler, custom_importers);
 
-    ctx = sass_file_context_get_context(context);
-    error_status = sass_context_get_error_status(ctx);
-    error_message = sass_context_get_error_message(ctx);
-    output_string = sass_context_get_output_string(ctx);
-    source_map_string = sass_context_get_source_map_string(ctx);
+    entry = sass_make_file_import(sass_copy_c_string(filename));
+    sass_compiler_set_entry_point(compiler, entry);
+    sass_delete_import(entry);
+
+    sass_compiler_parse(compiler);
+    sass_compiler_compile(compiler);
+    sass_compiler_render(compiler);
+
+    error = sass_compiler_get_error(compiler);
+    error_status = sass_error_get_status(error);
+    output_string = sass_compiler_get_output_string(compiler);
+    source_map_string = sass_compiler_get_srcmap_string(compiler);
     result = Py_BuildValue(
         PySass_IF_PY3("hyy", "hss"),
         (short int) !error_status,
-        error_status ? error_message : output_string,
+        error_status ? sass_error_get_formatted(error) : output_string,
         error_status || source_map_string == NULL ? "" : source_map_string
     );
-    sass_delete_file_context(context);
+    sass_delete_compiler(compiler);
     return result;
 }
 
