@@ -48,15 +48,17 @@ def set_coverage_instrumentation():
 A_EXPECTED_CSS = '''\
 body {
   background-color: green; }
-  body a {
-    color: blue; }
+
+body a {
+  color: blue; }
 '''
 
 A_EXPECTED_CSS_WITH_MAP = '''\
 body {
   background-color: green; }
-  body a {
-    color: blue; }
+
+body a {
+  color: blue; }
 
 /*# sourceMappingURL=../a.scss.css.map */'''
 
@@ -88,8 +90,9 @@ b i {
 C_EXPECTED_CSS = '''\
 body {
   background-color: green; }
-  body a {
-    color: blue; }
+
+body a {
+  color: blue; }
 
 h1 a {
   color: green; }
@@ -99,16 +102,18 @@ D_EXPECTED_CSS = u'''\
 @charset "UTF-8";
 body {
   background-color: green; }
-  body a {
-    font: '나눔고딕', sans-serif; }
+
+body a {
+  font: "나눔고딕", sans-serif; }
 '''
 
 D_EXPECTED_CSS_WITH_MAP = u'''\
 @charset "UTF-8";
 body {
   background-color: green; }
-  body a {
-    font: '나눔고딕', sans-serif; }
+
+body a {
+  font: '나눔고딕', sans-serif; }
 
 /*# sourceMappingURL=../css/d.scss.css.map */'''
 
