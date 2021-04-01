@@ -22,7 +22,9 @@ SUFFIXES = frozenset(('sass', 'scss'))
 
 #: (:class:`re.RegexObject`) The regular expression pattern which matches to
 #: filenames of supported :const:`SUFFIXES`.
-SUFFIX_PATTERN = re.compile('[.](' + '|'.join(map(re.escape, SUFFIXES)) + ')$')
+SUFFIX_PATTERN = re.compile(
+    '[.](' + '|'.join(map(re.escape, sorted(SUFFIXES))) + ')$',
+)
 
 
 def build_directory(
