@@ -270,7 +270,7 @@ setup(
             ['sassc = sassc:main'],
         ],
     },
-    install_requires=['six'],
+    install_requires=['setuptools', 'six'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
