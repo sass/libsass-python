@@ -785,8 +785,8 @@ class ManifestTestCase(BaseTestCase):
                     'names': [],
                     'mappings': (
                         ';AAKA,AAAA,IAAI,CAAC;EAHH,gBAAgB,EAAE,KAAK,GAQxB;'
-                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,sBAAsB,'
-                        'GAC7B'
+                        'EALD,AAEE,IAFE,CAEF,CAAC,CAAC;IACA,IAAI,EAAE,kBAAkB,'
+                        'GACzB'
                     ),
                 },
                 os.path.join(d, 'css', 'd.scss.css.map'),
@@ -1633,9 +1633,9 @@ def test_stack_trace_formatting():
     # TODO: https://github.com/sass/libsass/issues/3092
     assert tb.endswith(
         'CompileError: Error: Invalid CSS after "a{☃": expected "{", was ""\n'
-        '        on line 1:5 of stdin\n'
+        '        on line 1:4 of stdin\n'
         '>> a{☃\n'
-        '   ----^\n\n',
+        '   ---^\n\n',
     )
 
 
