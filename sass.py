@@ -31,7 +31,7 @@ __all__ = (
     'SassError', 'SassFunction', 'SassList', 'SassMap', 'SassNumber',
     'SassWarning', 'and_join', 'compile', 'libsass_version',
 )
-__version__ = '0.20.1'
+__version__ = '0.21.0'
 libsass_version = _sass.libsass_version
 
 

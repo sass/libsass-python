@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 0.21.1
+--------------
+
+Released on May 20, 2021.
+
+- Fix build on OpenBSD. [:issue:`310` by Denis Fondras].
+- Produce abi3 wheels on windows. [:issue:`322` by Anthony Sottile]
+- Make the manpage build reproducible. [:issue:`319` by Chris Lamb]
+- Follow up the libsass upstream: 3.6.5 --- See the release notes of LibSass
+  3.6.5__. [:issue:`344` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.6.5
+
 Version 0.20.1
 --------------
 
