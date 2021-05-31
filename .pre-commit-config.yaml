@@ -12,7 +12,7 @@ repos:
     -   id: flake8
         exclude: ^docs/conf.py
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.18.2
+    rev: v2.19.0
     hooks:
     -   id: pyupgrade
 -   repo: https://github.com/asottile/add-trailing-comma
