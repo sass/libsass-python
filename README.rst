@@ -22,7 +22,7 @@ binding LibSass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
 It's very straightforward and there isn't any headache related Python
 distribution/deployment.  That means you can add just ``libsass`` into
 your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
-Need no Ruby nor Node.js.
+No need for Ruby nor Node.js.
 
 It currently supports CPython 2.7, 3.6--3.8, and PyPy 2.3+!
 
