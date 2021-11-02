@@ -16,7 +16,7 @@ from setuptools import Extension, setup
 
 MACOS_FLAG = ['-mmacosx-version-min=10.7']
 FLAGS_POSIX = [
-    '-fPIC', '-std=gnu++0x', '-Wall', '-Wno-parentheses', '-Werror=switch',
+    '-fPIC', '-std=gnu++11', '-Wall', '-Wno-parentheses', '-Werror=switch',
 ]
 FLAGS_CLANG = ['-c', '-O3'] + FLAGS_POSIX + ['-stdlib=libc++']
 LFLAGS_POSIX = ['-fPIC',  '-lstdc++']
