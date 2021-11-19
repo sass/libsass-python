@@ -3,16 +3,12 @@
 
 """
 
-import io
-import os
+import collections.abc
 import os.path
 import re
 import warnings
 
-from six import string_types
-
 from sass import compile
-from sassutils._compat import collections_abc
 
 __all__ = 'SUFFIXES', 'SUFFIX_PATTERN', 'Manifest', 'build_directory'
 
@@ -69,7 +65,7 @@ def build_directory(
                 output_style=output_style,
                 include_paths=[_root_sass],
             )
-            with io.open(
+            with open(
                 css_fullname, 'w', encoding='utf-8', newline='',
             ) as css_file:
                 css_file.write(css)
@@ -88,7 +84,7 @@ def build_directory(
     return result
 
 
-class Manifest(object):
+class Manifest:
     """Building manifest of Sass/SCSS.
 
     :param sass_path: the path of the directory that contains Sass/SCSS
@@ -105,7 +101,7 @@ class Manifest(object):
     def normalize_manifests(cls, manifests):
         if manifests is None:
             manifests = {}
-        elif isinstance(manifests, collections_abc.Mapping):
+        elif isinstance(manifests, collections.abc.Mapping):
             manifests = dict(manifests)
         else:
             raise TypeError(
@@ -113,7 +109,7 @@ class Manifest(object):
                 repr(manifests),
             )
         for package_name, manifest in manifests.items():
-            if not isinstance(package_name, string_types):
+            if not isinstance(package_name, str):
                 raise TypeError(
                     'manifest keys must be a string of package '
                     'name, not ' + repr(package_name),
@@ -122,9 +118,9 @@ class Manifest(object):
                 continue
             elif isinstance(manifest, tuple):
                 manifest = Manifest(*manifest)
-            elif isinstance(manifest, collections_abc.Mapping):
+            elif isinstance(manifest, collections.abc.Mapping):
                 manifest = Manifest(**manifest)
-            elif isinstance(manifest, string_types):
+            elif isinstance(manifest, str):
                 manifest = Manifest(manifest)
             else:
                 raise TypeError(
@@ -142,21 +138,21 @@ class Manifest(object):
             wsgi_path=None,
             strip_extension=None,
     ):
-        if not isinstance(sass_path, string_types):
+        if not isinstance(sass_path, str):
             raise TypeError(
                 'sass_path must be a string, not ' +
                 repr(sass_path),
             )
         if css_path is None:
             css_path = sass_path
-        elif not isinstance(css_path, string_types):
+        elif not isinstance(css_path, str):
             raise TypeError(
                 'css_path must be a string, not ' +
                 repr(css_path),
             )
         if wsgi_path is None:
             wsgi_path = css_path
-        elif not isinstance(wsgi_path, string_types):
+        elif not isinstance(wsgi_path, str):
             raise TypeError(
                 'wsgi_path must be a string, not ' +
                 repr(wsgi_path),
@@ -292,11 +288,11 @@ class Manifest(object):
         css_folder = os.path.dirname(css_path)
         if not os.path.exists(css_folder):
             os.makedirs(css_folder)
-        with io.open(css_path, 'w', encoding='utf-8', newline='') as f:
+        with open(css_path, 'w', encoding='utf-8', newline='') as f:
             f.write(css)
         if source_map:
             # Source maps are JSON, and JSON has to be UTF-8 encoded
-            with io.open(
+            with open(
                 source_map_path, 'w', encoding='utf-8', newline='',
             ) as f:
                 f.write(source_map)

@@ -8,7 +8,7 @@ distribution/deployment.  That means you can add just ``libsass`` into
 your :file:`setup.py`'s ``install_requires`` list or :file:`requirements.txt`
 file.
 
-It currently supports CPython 2.6, 2.7, 3.5--3.7, and PyPy 2.3+!
+It currently supports CPython 3.6+ and PyPy 3!
 
 .. _Sass: https://sass-lang.com/
 .. _LibSass: https://github.com/sass/libsass

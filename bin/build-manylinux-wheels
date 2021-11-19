@@ -23,13 +23,13 @@ def main():
     os.makedirs('dist', exist_ok=True)
     for python in ('cp27-cp27mu', 'cp36-cp36m'):
         with tempfile.TemporaryDirectory() as work:
-            pip = '/opt/python/{}/bin/pip'.format(python)
+            pip = f'/opt/python/{python}/bin/pip'
             check_call(
                 'docker', 'run', '-ti',
                 # Use this so the files are not owned by root
-                '--user', '{}:{}'.format(os.getuid(), os.getgid()),
+                '--user', f'{os.getuid()}:{os.getgid()}',
                 # We'll do building in /work and copy results to /dist
-                '-v', '{}:/work:rw'.format(work),
+                '-v', f'{work}:/work:rw',
                 '-v', '{}:/dist:rw'.format(os.path.abspath('dist')),
                 'quay.io/pypa/manylinux1_x86_64:latest',
                 'bash', '-exc',

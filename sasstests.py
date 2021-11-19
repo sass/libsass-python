@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-
 import base64
+import collections.abc
 import contextlib
 import functools
 import glob
-import json
 import io
+import json
 import os
 import os.path
 import re
@@ -17,14 +16,12 @@ import traceback
 import unittest
 
 import pytest
-from six import StringIO, b, string_types, text_type
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
 import pysassc
 import sass
 import sassc
-from sassutils._compat import collections_abc
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -71,7 +68,7 @@ A_EXPECTED_MAP = {
     ),
 }
 
-with io.open('test/a.scss', newline='') as f:
+with open('test/a.scss', newline='') as f:
     A_EXPECTED_MAP_CONTENTS = dict(A_EXPECTED_MAP, sourcesContent=[f.read()])
 
 B_EXPECTED_CSS = '''\
@@ -95,7 +92,7 @@ h1 a {
   color: green; }
 '''
 
-D_EXPECTED_CSS = u'''\
+D_EXPECTED_CSS = '''\
 @charset "UTF-8";
 body {
   background-color: green; }
@@ -103,7 +100,7 @@ body {
     font: '나눔고딕', sans-serif; }
 '''
 
-D_EXPECTED_CSS_WITH_MAP = u'''\
+D_EXPECTED_CSS_WITH_MAP = '''\
 @charset "UTF-8";
 body {
   background-color: green; }
@@ -149,7 +146,7 @@ re_base64_data_uri = re.compile(r'^data:[^;]*?;base64,(.+)$')
 def _map_in_output_dir(s):
     def cb(match):
         filename = os.path.basename(match.group(1))
-        return '/*# sourceMappingURL={} */'.format(filename)
+        return f'/*# sourceMappingURL={filename} */'
 
     return re_sourcemap_url.sub(cb, s)
 
@@ -163,9 +160,9 @@ def no_warnings(recwarn):
 class BaseTestCase(unittest.TestCase):
 
     def assert_source_map_equal(self, expected, actual):
-        if isinstance(expected, string_types):
+        if isinstance(expected, str):
             expected = json.loads(expected)
-        if isinstance(actual, string_types):
+        if isinstance(actual, str):
             actual = json.loads(actual)
         assert expected == actual
 
@@ -175,7 +172,7 @@ class BaseTestCase(unittest.TestCase):
                 tree = json.load(f)
             except ValueError as e:  # pragma: no cover
                 f.seek(0)
-                msg = '{!s}\n\n{}:\n\n{}'.format(e, filename, f.read())
+                msg = f'{e!s}\n\n{filename}:\n\n{f.read()}'
                 raise ValueError(msg)
         self.assert_source_map_equal(expected, tree)
 
@@ -196,7 +193,7 @@ class SassTestCase(BaseTestCase):
         assert re.match(r'^\d+\.\d+\.\d+$', sass.__version__)
 
     def test_output_styles(self):
-        assert isinstance(sass.OUTPUT_STYLES, collections_abc.Mapping)
+        assert isinstance(sass.OUTPUT_STYLES, collections.abc.Mapping)
         assert 'nested' in sass.OUTPUT_STYLES
 
     def test_and_join(self):
@@ -294,9 +291,9 @@ a {
   a b {
     color: blue; }
 '''
-        actual = sass.compile(string=u'a { color: blue; } /* 유니코드 */')
+        actual = sass.compile(string='a { color: blue; } /* 유니코드 */')
         self.assertEqual(
-            u'''@charset "UTF-8";
+            '''@charset "UTF-8";
 a {
   color: blue; }
 
@@ -330,11 +327,11 @@ a {
     def test_importer_one_arg(self):
         """Demonstrates one-arg importers + chaining."""
         def importer_returning_one_argument(path):
-            assert type(path) is text_type
+            assert type(path) is str
             return (
                 # Trigger the import of an actual file
                 ('test/b.scss',),
-                (path, '.{0}-one-arg {{ color: blue; }}'.format(path)),
+                (path, f'.{path}-one-arg {{ color: blue; }}'),
             )
 
         ret = sass.compile(
@@ -448,7 +445,7 @@ a {
 
     def test_importers_raises_exception(self):
         def importer(path):
-            raise ValueError('Bad path: {}'.format(path))
+            raise ValueError(f'Bad path: {path}')
 
         with assert_raises_compile_error(
             RegexMatcher(
@@ -640,31 +637,31 @@ class BuilderTestCase(BaseTestCase):
         result_files = build_directory(self.sass_path, css_path)
         assert len(result_files) == 8
         assert 'a.scss.css' == result_files['a.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
         assert A_EXPECTED_CSS == css
         assert 'b.scss.css' == result_files['b.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'b.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
         assert B_EXPECTED_CSS == css
         assert 'c.scss.css' == result_files['c.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'c.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
         assert C_EXPECTED_CSS == css
         assert 'd.scss.css' == result_files['d.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'd.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
         assert D_EXPECTED_CSS == css
         assert 'e.scss.css' == result_files['e.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'e.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
@@ -673,7 +670,7 @@ class BuilderTestCase(BaseTestCase):
             os.path.join('subdir', 'recur.scss.css'),
             result_files[os.path.join('subdir', 'recur.scss')],
         )
-        with io.open(
+        with open(
             os.path.join(css_path, 'g.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
@@ -683,12 +680,12 @@ class BuilderTestCase(BaseTestCase):
             result_files[os.path.join('subdir', 'recur.scss')],
         )
         assert 'h.sass.css' == result_files['h.sass']
-        with io.open(
+        with open(
             os.path.join(css_path, 'h.sass.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
         assert H_EXPECTED_CSS == css
-        with io.open(
+        with open(
             os.path.join(css_path, 'subdir', 'recur.scss.css'),
             encoding='UTF-8',
         ) as f:
@@ -703,7 +700,7 @@ class BuilderTestCase(BaseTestCase):
         )
         assert len(result_files) == 8
         assert 'a.scss.css' == result_files['a.scss']
-        with io.open(
+        with open(
             os.path.join(css_path, 'a.scss.css'), encoding='UTF-8',
         ) as f:
             css = f.read()
@@ -755,7 +752,7 @@ class ManifestTestCase(BaseTestCase):
             with open(os.path.join(d, 'css', 'a.scss.css')) as f:
                 assert A_EXPECTED_CSS == f.read()
             m.build_one(d, 'b.scss', source_map=True)
-            with io.open(
+            with open(
                 os.path.join(d, 'css', 'b.scss.css'), encoding='UTF-8',
             ) as f:
                 assert f.read() == _map_in_output_dir(B_EXPECTED_CSS_WITH_MAP)
@@ -773,7 +770,7 @@ class ManifestTestCase(BaseTestCase):
                 os.path.join(d, 'css', 'b.scss.css.map'),
             )
             m.build_one(d, 'd.scss', source_map=True)
-            with io.open(
+            with open(
                 os.path.join(d, 'css', 'd.scss.css'), encoding='UTF-8',
             ) as f:
                 assert f.read() == _map_in_output_dir(D_EXPECTED_CSS_WITH_MAP)
@@ -838,7 +835,7 @@ class WsgiTestCase(BaseTestCase):
             r = client.get('/static/a.scss.css')
             assert r.status_code == 200
             self.assertEqual(
-                b(_map_in_output_dir(A_EXPECTED_CSS_WITH_MAP)),
+                _map_in_output_dir(A_EXPECTED_CSS_WITH_MAP).encode(),
                 r.data,
             )
             assert r.mimetype == 'text/css'
@@ -903,7 +900,7 @@ class DistutilsTestCase(BaseTestCase):
         return os.path.join(
             os.path.dirname(__file__),
             'testpkg', 'testpkg', 'static', 'css',
-            *args
+            *args,
         )
 
     def list_built_css(self):
@@ -942,8 +939,8 @@ class DistutilsTestCase(BaseTestCase):
 class SasscTestCase(BaseTestCase):
 
     def setUp(self):
-        self.out = StringIO()
-        self.err = StringIO()
+        self.out = io.StringIO()
+        self.err = io.StringIO()
 
     def test_no_args(self):
         exit_code = pysassc.main(['pysassc'], self.out, self.err)
@@ -995,7 +992,7 @@ class SasscTestCase(BaseTestCase):
             assert exit_code == 0
             assert self.err.getvalue() == ''
             assert self.out.getvalue() == ''
-            with io.open(tmp, encoding='UTF-8', newline='') as f:
+            with open(tmp, encoding='UTF-8', newline='') as f:
                 assert A_EXPECTED_CSS.strip() == f.read().strip()
         finally:
             os.remove(tmp)
@@ -1011,7 +1008,7 @@ class SasscTestCase(BaseTestCase):
             assert exit_code == 0
             assert self.err.getvalue() == ''
             assert self.out.getvalue() == ''
-            with io.open(tmp, encoding='UTF-8') as f:
+            with open(tmp, encoding='UTF-8') as f:
                 assert D_EXPECTED_CSS.strip() == f.read().strip()
         finally:
             os.remove(tmp)
@@ -1093,10 +1090,10 @@ class CompileDirectoriesTest(unittest.TestCase):
             input_dir = os.path.join(tmpdir, 'input')
             output_dir = os.path.join(tmpdir, 'output')
             os.makedirs(input_dir)
-            with io.open(
+            with open(
                 os.path.join(input_dir, 'test.scss'), 'w', encoding='UTF-8',
             ) as f:
-                f.write(u'a { content: "☃"; }')
+                f.write('a { content: "☃"; }')
             # Raised a UnicodeEncodeError in py2 before #82 (issue #72)
             # Also raised a UnicodeEncodeError in py3 if the default encoding
             # couldn't represent it (such as cp1252 on windows)
@@ -1164,14 +1161,14 @@ def test_sass_func_type_errors(func):
 
 class SassTypesTest(unittest.TestCase):
     def test_number_no_conversion(self):
-        num = sass.SassNumber(123., u'px')
+        num = sass.SassNumber(123., 'px')
         assert type(num.value) is float, type(num.value)
-        assert type(num.unit) is text_type, type(num.unit)
+        assert type(num.unit) is str, type(num.unit)
 
     def test_number_conversion(self):
         num = sass.SassNumber(123, b'px')
         assert type(num.value) is float, type(num.value)
-        assert type(num.unit) is text_type, type(num.unit)
+        assert type(num.unit) is str, type(num.unit)
 
     def test_color_no_conversion(self):
         color = sass.SassColor(1., 2., 3., .5)
@@ -1198,20 +1195,20 @@ class SassTypesTest(unittest.TestCase):
         assert lst.separator is sass.SASS_SEPARATOR_SPACE, lst.separator
 
     def test_sass_warning_no_conversion(self):
-        warn = sass.SassWarning(u'error msg')
-        assert type(warn.msg) is text_type, type(warn.msg)
+        warn = sass.SassWarning('error msg')
+        assert type(warn.msg) is str, type(warn.msg)
 
     def test_sass_warning_no_conversion_bytes_message(self):
         warn = sass.SassWarning(b'error msg')
-        assert type(warn.msg) is text_type, type(warn.msg)
+        assert type(warn.msg) is str, type(warn.msg)
 
     def test_sass_error_no_conversion(self):
-        err = sass.SassError(u'error msg')
-        assert type(err.msg) is text_type, type(err.msg)
+        err = sass.SassError('error msg')
+        assert type(err.msg) is str, type(err.msg)
 
     def test_sass_error_conversion(self):
         err = sass.SassError(b'error msg')
-        assert type(err.msg) is text_type, type(err.msg)
+        assert type(err.msg) is str, type(err.msg)
 
 
 def raises():
@@ -1244,11 +1241,11 @@ def returns_none():
 
 
 def returns_unicode():
-    return u'☃'
+    return '☃'
 
 
 def returns_bytes():
-    return u'☃'.encode('UTF-8')
+    return '☃'.encode()
 
 
 def returns_number():
@@ -1380,7 +1377,7 @@ def assert_raises_compile_error(expected):
     assert msg == expected, (msg, expected)
 
 
-class RegexMatcher(object):
+class RegexMatcher:
     def __init__(self, reg, flags=None):
         self.reg = re.compile(reg, re.MULTILINE | re.DOTALL)
 
@@ -1472,13 +1469,13 @@ class CustomFunctionsTest(unittest.TestCase):
     def test_unicode(self):
         self.assertEqual(
             compile_with_func('a { content: returns_unicode(); }'),
-            u'\ufeffa{content:☃}\n',
+            '\ufeffa{content:☃}\n',
         )
 
     def test_bytes(self):
         self.assertEqual(
             compile_with_func('a { content: returns_bytes(); }'),
-            u'\ufeffa{content:☃}\n',
+            '\ufeffa{content:☃}\n',
         )
 
     def test_number(self):
@@ -1550,7 +1547,7 @@ class CustomFunctionsTest(unittest.TestCase):
     def test_identity_strings(self):
         self.assertEqual(
             compile_with_func('a { content: identity(returns_unicode()); }'),
-            u'\ufeffa{content:☃}\n',
+            '\ufeffa{content:☃}\n',
         )
 
     def test_identity_number(self):
@@ -1626,7 +1623,7 @@ class CustomFunctionsTest(unittest.TestCase):
 
 def test_stack_trace_formatting():
     try:
-        sass.compile(string=u'a{☃')
+        sass.compile(string='a{☃')
         raise AssertionError('expected to raise CompileError')
     except sass.CompileError:
         tb = traceback.format_exc()

@@ -2,8 +2,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
-from __future__ import absolute_import
 
+import collections.abc
 import logging
 import os
 import os.path
@@ -11,13 +11,12 @@ import os.path
 from pkg_resources import resource_filename
 
 from sass import CompileError
-from sassutils._compat import collections_abc
 from .builder import Manifest
 
 __all__ = 'SassMiddleware',
 
 
-class SassMiddleware(object):
+class SassMiddleware:
     r"""WSGI middleware for development purpose.  Every time a CSS file has
     requested it finds a matched Sass/SCSS source file and then compiled
     it into CSS.
@@ -100,7 +99,7 @@ class SassMiddleware(object):
             )
         self.app = app
         self.manifests = Manifest.normalize_manifests(manifests)
-        if not isinstance(package_dir, collections_abc.Mapping):
+        if not isinstance(package_dir, collections.abc.Mapping):
             raise TypeError(
                 'package_dir must be a mapping object, not ' +
                 repr(package_dir),
@@ -138,7 +137,7 @@ class SassMiddleware(object):
                         sass_filename,
                         source_map=True,
                     )
-                except (IOError, OSError):
+                except OSError:
                     break
                 except CompileError as e:
                     logger = logging.getLogger(__name__ + '.SassMiddleware')

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import ast
 import atexit
 import distutils.cmd
@@ -82,9 +80,9 @@ else:
         libsass_version = libsass_version_file.read().decode('UTF-8').strip()
         if sys.platform == 'win32':
             # This looks wrong, but is required for some reason :(
-            define = r'/DLIBSASS_VERSION="\"{}\""'.format(libsass_version)
+            define = fr'/DLIBSASS_VERSION="\"{libsass_version}\""'
         else:
-            define = '-DLIBSASS_VERSION="{}"'.format(libsass_version)
+            define = f'-DLIBSASS_VERSION="{libsass_version}"'
 
     for directory in (
             os.path.join('libsass', 'src'),
@@ -184,7 +182,7 @@ def readme():
     try:
         with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
             return f.read()
-    except IOError:
+    except OSError:
         pass
 
 
@@ -231,7 +229,7 @@ if sys.version_info >= (3,) and platform.python_implementation() == 'CPython':
     else:
         class bdist_wheel(wheel.bdist_wheel.bdist_wheel):
             def finalize_options(self):
-                self.py_limited_api = 'cp3{}'.format(sys.version_info[1])
+                self.py_limited_api = f'cp3{sys.version_info[1]}'
                 super().finalize_options()
 
         cmdclass['bdist_wheel'] = bdist_wheel
@@ -270,7 +268,6 @@ setup(
             ['sassc = sassc:main'],
         ],
     },
-    install_requires=['six'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -279,7 +276,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: C',
         'Programming Language :: C++',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -293,5 +289,6 @@ setup(
         'Topic :: Software Development :: Code Generators',
         'Topic :: Software Development :: Compilers',
     ],
+    python_requires='>=3.6',
     cmdclass=cmdclass,
 )

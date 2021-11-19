@@ -18,18 +18,9 @@ resources:
 jobs:
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py27, py36]
+    toxenvs: [py36]
     os: macos
     wheel_tags: true
-- template: job--python-tox.yml@asottile
-  parameters:
-    toxenvs: [py27]
-    os: windows
-    architectures: [x64, x86]
-    name_postfix: _py27
-    wheel_tags: true
-    pre_test:
-    - script: rm -rf libsass/test
 - template: job--python-tox.yml@asottile
   parameters:
     toxenvs: [py36]
@@ -38,5 +29,5 @@ jobs:
     wheel_tags: true
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [pypy, pypy3, py27, py36, py37, py38, py39]
+    toxenvs: [pypy3, py36, py37, py38, py39]
     os: linux
