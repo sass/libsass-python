@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # libsass documentation build configuration file, created by
 # sphinx-quickstart on Sun Aug 19 22:45:57 2012.
@@ -48,8 +47,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'libsass'
-copyright = u'2012, Hong Minhee'
+project = 'libsass'
+copyright = '2012, Hong Minhee'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -194,8 +193,8 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   (
-      'index', 'libsass.tex', u'libsass Documentation',
-      u'Hong Minhee', 'manual',
+      'index', 'libsass.tex', 'libsass Documentation',
+      'Hong Minhee', 'manual',
   ),
 ]
 
@@ -226,8 +225,8 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (
-        'index', 'libsass', u'libsass Documentation',
-        [u'Hong Minhee'], 1,
+        'index', 'libsass', 'libsass Documentation',
+        ['Hong Minhee'], 1,
     ),
 ]
 
@@ -242,8 +241,8 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   (
-      'index', 'libsass', u'libsass Documentation',
-      u'Hong Minhee', 'libsass', 'One line description of project.',
+      'index', 'libsass', 'libsass Documentation',
+      'Hong Minhee', 'libsass', 'One line description of project.',
       'Miscellaneous',
   ),
 ]

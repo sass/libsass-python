@@ -10,21 +10,15 @@ type.
 'a b {\n  color: blue; }\n'
 
 """
-from __future__ import absolute_import
 
-import collections
+import collections.abc
 import inspect
-import io
-import os
 import os.path
 import re
 import sys
 import warnings
 
-from six import string_types, text_type, PY2
-
 import _sass
-from sassutils._compat import collections_abc
 
 __all__ = (
     'MODES', 'OUTPUT_STYLES', 'SOURCE_COMMENTS', 'CompileError', 'SassColor',
@@ -52,11 +46,10 @@ MODES = frozenset(('string', 'filename', 'dirname'))
 
 
 def to_native_s(s):
-    if isinstance(s, bytes) and not PY2:  # pragma: no cover (py3)
-        s = s.decode('UTF-8')
-    elif isinstance(s, text_type) and PY2:  # pragma: no cover (py2)
-        s = s.encode('UTF-8')
-    return s
+    if isinstance(s, bytes):
+        return s.decode('UTF-8')
+    else:
+        return s
 
 
 class CompileError(ValueError):
@@ -64,7 +57,7 @@ class CompileError(ValueError):
     It is a subtype of :exc:`exceptions.ValueError`.
     """
     def __init__(self, msg):
-        super(CompileError, self).__init__(to_native_s(msg))
+        super().__init__(to_native_s(msg))
 
 
 def mkdirp(path):
@@ -76,7 +69,7 @@ def mkdirp(path):
         raise
 
 
-class SassFunction(object):
+class SassFunction:
     """Custom function for Sass.  It can be instantiated using
     :meth:`from_lambda()` and :meth:`from_named_function()` as well.
 
@@ -107,16 +100,10 @@ class SassFunction(object):
         :rtype: :class:`SassFunction`
 
         """
-        if PY2:  # pragma: no cover
-            a = inspect.getargspec(lambda_)
-            varargs, varkw, defaults, kwonlyargs = (
-                a.varargs, a.keywords, a.defaults, None,
-            )
-        else:  # pragma: no cover
-            a = inspect.getfullargspec(lambda_)
-            varargs, varkw, defaults, kwonlyargs = (
-                a.varargs, a.varkw, a.defaults, a.kwonlyargs,
-            )
+        a = inspect.getfullargspec(lambda_)
+        varargs, varkw, defaults, kwonlyargs = (
+            a.varargs, a.varkw, a.defaults, a.kwonlyargs,
+        )
 
         if varargs or varkw or defaults or kwonlyargs:
             raise TypeError(
@@ -142,9 +129,9 @@ class SassFunction(object):
         return cls.from_lambda(function.__name__, function)
 
     def __init__(self, name, arguments, callable_):
-        if not isinstance(name, string_types):
+        if not isinstance(name, str):
             raise TypeError('name must be a string, not ' + repr(name))
-        elif not isinstance(arguments, collections_abc.Sequence):
+        elif not isinstance(arguments, collections.abc.Sequence):
             raise TypeError(
                 'arguments must be a sequence, not ' +
                 repr(arguments),
@@ -263,7 +250,7 @@ def compile_dirname(
             if s:
                 v = v.decode('UTF-8')
                 mkdirp(os.path.dirname(output_filename))
-                with io.open(
+                with open(
                     output_filename, 'w', encoding='UTF-8', newline='',
                 ) as output_file:
                     output_file.write(v)
@@ -277,7 +264,7 @@ def _check_no_remaining_kwargs(func, kwargs):
         raise TypeError(
             '{}() got unexpected keyword argument(s) {}'.format(
                 func.__name__,
-                ', '.join("'{}'".format(arg) for arg in sorted(kwargs)),
+                ', '.join(f"'{arg}'" for arg in sorted(kwargs)),
             ),
         )
 
@@ -563,7 +550,7 @@ def compile(**kwargs):
         )
     precision = kwargs.pop('precision', 5)
     output_style = kwargs.pop('output_style', 'nested')
-    if not isinstance(output_style, string_types):
+    if not isinstance(output_style, str):
         raise TypeError(
             'output_style must be a string, not ' +
             repr(output_style),
@@ -612,9 +599,9 @@ def compile(**kwargs):
 
     def _get_file_arg(key):
         ret = kwargs.pop(key, None)
-        if ret is not None and not isinstance(ret, string_types):
-            raise TypeError('{} must be a string, not {!r}'.format(key, ret))
-        elif isinstance(ret, text_type):
+        if ret is not None and not isinstance(ret, str):
+            raise TypeError(f'{key} must be a string, not {ret!r}')
+        elif isinstance(ret, str):
             ret = ret.encode(fs_encoding)
         if ret and 'filename' not in modes:
             raise CompileError(
@@ -631,25 +618,25 @@ def compile(**kwargs):
     omit_source_map_url = kwargs.pop('omit_source_map_url', False)
     source_map_root = kwargs.pop('source_map_root', None)
 
-    if isinstance(source_map_root, text_type):
+    if isinstance(source_map_root, str):
         source_map_root = source_map_root.encode('utf-8')
 
     # #208: cwd is always included in include paths
     include_paths = (os.getcwd(),)
     include_paths += tuple(kwargs.pop('include_paths', ()) or ())
     include_paths = os.pathsep.join(include_paths)
-    if isinstance(include_paths, text_type):
+    if isinstance(include_paths, str):
         include_paths = include_paths.encode(fs_encoding)
 
     custom_functions = kwargs.pop('custom_functions', ())
-    if isinstance(custom_functions, collections_abc.Mapping):
+    if isinstance(custom_functions, collections.abc.Mapping):
         custom_functions = [
             SassFunction.from_lambda(name, lambda_)
             for name, lambda_ in custom_functions.items()
         ]
     elif isinstance(
             custom_functions,
-            (collections_abc.Set, collections_abc.Sequence),
+            (collections.abc.Set, collections.abc.Sequence),
     ):
         custom_functions = [
             func if isinstance(func, SassFunction)
@@ -676,7 +663,7 @@ def compile(**kwargs):
 
     if 'string' in modes:
         string = kwargs.pop('string')
-        if isinstance(string, text_type):
+        if isinstance(string, str):
             string = string.encode('utf-8')
         indented = kwargs.pop('indented', False)
         if not isinstance(indented, bool):
@@ -695,11 +682,11 @@ def compile(**kwargs):
             return v.decode('utf-8')
     elif 'filename' in modes:
         filename = kwargs.pop('filename')
-        if not isinstance(filename, string_types):
+        if not isinstance(filename, str):
             raise TypeError('filename must be a string, not ' + repr(filename))
         elif not os.path.isfile(filename):
-            raise IOError('{!r} seems not a file'.format(filename))
-        elif isinstance(filename, text_type):
+            raise OSError(f'{filename!r} seems not a file')
+        elif isinstance(filename, str):
             filename = filename.encode(fs_encoding)
         _check_no_remaining_kwargs(compile, kwargs)
         s, v, source_map = _sass.compile_filename(
@@ -780,9 +767,9 @@ class SassNumber(collections.namedtuple('SassNumber', ('value', 'unit'))):
 
     def __new__(cls, value, unit):
         value = float(value)
-        if not isinstance(unit, text_type):
+        if not isinstance(unit, str):
             unit = unit.decode('UTF-8')
-        return super(SassNumber, cls).__new__(cls, value, unit)
+        return super().__new__(cls, value, unit)
 
 
 class SassColor(collections.namedtuple('SassColor', ('r', 'g', 'b', 'a'))):
@@ -792,7 +779,7 @@ class SassColor(collections.namedtuple('SassColor', ('r', 'g', 'b', 'a'))):
         g = float(g)
         b = float(b)
         a = float(a)
-        return super(SassColor, cls).__new__(cls, r, g, b, a)
+        return super().__new__(cls, r, g, b, a)
 
 
 SASS_SEPARATOR_COMMA = collections.namedtuple('SASS_SEPARATOR_COMMA', ())()
@@ -810,26 +797,26 @@ class SassList(
         items = tuple(items)
         assert separator in SEPARATORS, separator
         assert isinstance(bracketed, bool), bracketed
-        return super(SassList, cls).__new__(cls, items, separator, bracketed)
+        return super().__new__(cls, items, separator, bracketed)
 
 
 class SassError(collections.namedtuple('SassError', ('msg',))):
 
     def __new__(cls, msg):
-        if not isinstance(msg, text_type):
+        if not isinstance(msg, str):
             msg = msg.decode('UTF-8')
-        return super(SassError, cls).__new__(cls, msg)
+        return super().__new__(cls, msg)
 
 
 class SassWarning(collections.namedtuple('SassWarning', ('msg',))):
 
     def __new__(cls, msg):
-        if not isinstance(msg, text_type):
+        if not isinstance(msg, str):
             msg = msg.decode('UTF-8')
-        return super(SassWarning, cls).__new__(cls, msg)
+        return super().__new__(cls, msg)
 
 
-class SassMap(collections_abc.Mapping):
+class SassMap(collections.abc.Mapping):
     """Because sass maps can have mapping types as keys, we need an immutable
     hashable mapping type.
 
@@ -858,7 +845,7 @@ class SassMap(collections_abc.Mapping):
     # Our interface
 
     def __repr__(self):
-        return '{}({})'.format(type(self).__name__, frozenset(self.items()))
+        return f'{type(self).__name__}({frozenset(self.items())})'
 
     def __hash__(self):
         return self._hash

@@ -88,10 +88,8 @@ There are options as well:
 .. _SassC: https://github.com/sass/sassc
 
 """
-from __future__ import print_function
 
 import functools
-import io
 import optparse
 import sys
 import warnings
@@ -219,7 +217,7 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
                 include_paths=options.include_paths,
                 precision=options.precision,
             )
-    except (IOError, OSError) as e:
+    except OSError as e:
         error(e)
         return 3
     except sass.CompileError as e:
@@ -229,10 +227,10 @@ def main(argv=sys.argv, stdout=sys.stdout, stderr=sys.stderr):
         if len(args) < 2:
             print(css, file=stdout)
         else:
-            with io.open(args[1], 'w', encoding='utf-8', newline='') as f:
+            with open(args[1], 'w', encoding='utf-8', newline='') as f:
                 f.write(css)
         if source_map_filename:
-            with io.open(
+            with open(
                 source_map_filename, 'w', encoding='utf-8', newline='',
             ) as f:
                 f.write(source_map)
