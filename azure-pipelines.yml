@@ -13,12 +13,12 @@ resources:
       type: github
       endpoint: github
       name: asottile/azure-pipeline-templates
-      ref: refs/tags/v2.2.0
+      ref: refs/tags/v2.4.0
 
 jobs:
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py36]
+    toxenvs: [py37]
     os: macos
     wheel_tags: true
 - template: job--python-tox.yml@asottile
