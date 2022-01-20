@@ -537,10 +537,7 @@ def compile(**kwargs):
         resolved path, so that importers can do relative path resolution.
 
     """
-    modes = set()
-    for mode_name in MODES:
-        if mode_name in kwargs:
-            modes.add(mode_name)
+    modes = {mode_name for mode_name in MODES if mode_name in kwargs}
     if not modes:
         raise TypeError('choose one at least in ' + and_join(MODES))
     elif len(modes) > 1:
