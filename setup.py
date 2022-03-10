@@ -243,7 +243,7 @@ setup(
     version=version(),
     ext_modules=[sass_extension],
     packages=['sassutils'],
-    py_modules=['pysassc', 'sass', 'sassc', 'sasstests'],
+    py_modules=['pysassc', 'sass', 'sasstests'],
     package_data={
         '': [
             'README.rst',
@@ -264,8 +264,6 @@ setup(
         ],
         'console_scripts': [
             ['pysassc = pysassc:main'],
-            # TODO: remove `sassc` entry (#134)
-            ['sassc = sassc:main'],
         ],
     },
     classifiers=[

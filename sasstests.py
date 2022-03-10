@@ -21,7 +21,6 @@ from werkzeug.wrappers import Response
 
 import pysassc
 import sass
-import sassc
 from sassutils.builder import Manifest, build_directory
 from sassutils.wsgi import SassMiddleware
 
@@ -966,17 +965,6 @@ class SasscTestCase(BaseTestCase):
             ['pysassc', 'test/a.scss'],
             self.out, self.err,
         )
-        assert exit_code == 0
-        assert self.err.getvalue() == ''
-        assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
-
-    def test_sassc_stdout(self):
-        with pytest.warns(FutureWarning) as warninfo:
-            exit_code = sassc.main(
-                ['sassc', 'test/a.scss'],
-                self.out, self.err,
-            )
-        assert 'use `pysassc`' in warninfo[0].message.args[0]
         assert exit_code == 0
         assert self.err.getvalue() == ''
         assert A_EXPECTED_CSS.strip() == self.out.getvalue().strip()
