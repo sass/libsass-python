@@ -268,7 +268,7 @@ intersphinx_mapping = {
 extlinks = {
     'issue': ('https://github.com/sass/libsass-python/issues/%s', '#'),
     'branch': (
-        'https://github.com/sass/libsass-python/compare/master...%s',
+        'https://github.com/sass/libsass-python/compare/main...%s',
         '',
     ),
     'commit': ('https://github.com/sass/libsass-python/commit/%s', ''),

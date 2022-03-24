@@ -1,6 +1,6 @@
 trigger:
   branches:
-    include: [master, test-me-*]
+    include: [main, test-me-*]
   tags:
     include: ['*']
 
@@ -23,7 +23,7 @@ jobs:
     wheel_tags: true
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py36]
+    toxenvs: [py37]
     os: windows
     architectures: [x64, x86]
     wheel_tags: true

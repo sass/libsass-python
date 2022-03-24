@@ -133,17 +133,17 @@ GitHub (Git repository + issues)
    https://github.com/sass/libsass-python
 
 Azure Pipelines CI (linux + windows)
-   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
 
-   .. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=master
-      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+   .. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=main
+      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
       :alt: Build Status
 
 Azure Pipelines Coverage (Test coverage)
-   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
 
-   .. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/master.svg
-      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+   .. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/main.svg
+      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
       :alt: Coverage Status
 
 PyPI
