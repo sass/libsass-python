@@ -26,7 +26,7 @@ Tests
 - All commits will be tested by `Azure Pipelines`_ (Linux and Windows).
 
 .. _tox:  https://tox.readthedocs.io/
-.. _`Azure Pipelines`: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=master
+.. _`Azure Pipelines`: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
 
 
 Maintainer's guide
