@@ -67,8 +67,6 @@ The option can also be a mapping of package names to manifest dictionaries::
    Added ``--output-style``/``-s`` option to :class:`build_sass` command.
 
 """
-from __future__ import annotations
-
 import functools
 import os.path
 

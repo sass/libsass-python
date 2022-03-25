@@ -10,8 +10,6 @@ type.
 'a b {\n  color: blue; }\n'
 
 """
-from __future__ import annotations
-
 import collections.abc
 import inspect
 import os.path

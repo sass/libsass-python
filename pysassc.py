@@ -88,8 +88,6 @@ There are options as well:
 .. _SassC: https://github.com/sass/sassc
 
 """
-from __future__ import annotations
-
 import functools
 import optparse
 import sys
