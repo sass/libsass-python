@@ -2,16 +2,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 """
+from __future__ import annotations
 
 import collections.abc
 import logging
-import os
 import os.path
 
 from pkg_resources import resource_filename
 
-from sass import CompileError
 from .builder import Manifest
+from sass import CompileError
 
 __all__ = 'SassMiddleware',
 

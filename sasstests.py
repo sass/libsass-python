@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import base64
 import collections.abc
 import contextlib
@@ -5,7 +7,6 @@ import functools
 import glob
 import io
 import json
-import os
 import os.path
 import re
 import shutil
@@ -21,7 +22,8 @@ from werkzeug.wrappers import Response
 
 import pysassc
 import sass
-from sassutils.builder import Manifest, build_directory
+from sassutils.builder import build_directory
+from sassutils.builder import Manifest
 from sassutils.wsgi import SassMiddleware
 
 
@@ -424,11 +426,11 @@ a {
                     path,
                     'a { color: red; }',
                     json.dumps({
-                        "version": 3,
-                        "sources": [
-                            path + ".db",
+                        'version': 3,
+                        'sources': [
+                            path + '.db',
                         ],
-                        "mappings": ";AAAA,CAAC,CAAC;EAAE,KAAK,EAAE,GAAI,GAAI",
+                        'mappings': ';AAAA,CAAC,CAAC;EAAE,KAAK,EAAE,GAAI,GAAI',
                     }),
                 ),
             )
@@ -448,13 +450,13 @@ a {
 
         with assert_raises_compile_error(
             RegexMatcher(
-                    r'^Error: \n'
-                    r'       Traceback \(most recent call last\):\n'
-                    r'.+'
-                    r'ValueError: Bad path: hi\n'
-                    r'        on line 1:9 of stdin\n'
-                    r'>> @import "hi";\n'
-                    r'   --------\^\n',
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Bad path: hi\n'
+                r'        on line 1:9 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n',
             ),
         ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
@@ -465,14 +467,14 @@ a {
 
         with assert_raises_compile_error(
             RegexMatcher(
-                    r'^Error: \n'
-                    r'       Traceback \(most recent call last\):\n'
-                    r'.+'
-                    r'ValueError: Expected importer result to be a tuple of '
-                    r'length \(1, 2, 3\) but got 0: \(\)\n'
-                    r'        on line 1:9 of stdin\n'
-                    r'>> @import "hi";\n'
-                    r'   --------\^\n',
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Expected importer result to be a tuple of '
+                r'length \(1, 2, 3\) but got 0: \(\)\n'
+                r'        on line 1:9 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n',
             ),
         ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
@@ -483,14 +485,14 @@ a {
 
         with assert_raises_compile_error(
             RegexMatcher(
-                    r'^Error: \n'
-                    r'       Traceback \(most recent call last\):\n'
-                    r'.+'
-                    r'ValueError: Expected importer result to be a tuple of '
-                    r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
-                    r'        on line 1:9 of stdin\n'
-                    r'>> @import "hi";\n'
-                    r'   --------\^\n',
+                r'^Error: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'ValueError: Expected importer result to be a tuple of '
+                r"length \(1, 2, 3\) but got 4: \('a', 'b', 'c', 'd'\)\n"
+                r'        on line 1:9 of stdin\n'
+                r'>> @import "hi";\n'
+                r'   --------\^\n',
             ),
         ):
             sass.compile(string='@import "hi";', importers=((0, importer),))
@@ -1116,7 +1118,7 @@ class CompileDirectoriesTest(unittest.TestCase):
 class SassFunctionTest(unittest.TestCase):
 
     def test_from_lambda(self):
-        lambda_ = lambda abc, d: None  # pragma: no branch  # noqa: E731
+        def lambda_(abc, d): return None  # pragma: no branch  # noqa: E731
         sf = sass.SassFunction.from_lambda('func_name', lambda_)
         assert 'func_name' == sf.name
         assert ('$abc', '$d') == sf.arguments
@@ -1378,14 +1380,14 @@ class CustomFunctionsTest(unittest.TestCase):
     def test_raises(self):
         with assert_raises_compile_error(
             RegexMatcher(
-                    r'^Error: error in C function raises: \n'
-                    r'       Traceback \(most recent call last\):\n'
-                    r'.+'
-                    r'AssertionError: foo\n'
-                    r'        on line 1:14 of stdin, in function `raises`\n'
-                    r'        from line 1:14 of stdin\n'
-                    r'>> a { content: raises\(\); }\n'
-                    r'   -------------\^\n$',
+                r'^Error: error in C function raises: \n'
+                r'       Traceback \(most recent call last\):\n'
+                r'.+'
+                r'AssertionError: foo\n'
+                r'        on line 1:14 of stdin, in function `raises`\n'
+                r'        from line 1:14 of stdin\n'
+                r'>> a { content: raises\(\); }\n'
+                r'   -------------\^\n$',
             ),
         ):
             compile_with_func('a { content: raises(); }')

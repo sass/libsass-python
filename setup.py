@@ -1,8 +1,7 @@
+from __future__ import annotations
+
 import ast
 import atexit
-import distutils.cmd
-import distutils.log
-import distutils.sysconfig
 import os.path
 import platform
 import shutil
@@ -10,7 +9,11 @@ import subprocess
 import sys
 import tempfile
 
-from setuptools import Extension, setup
+import distutils.cmd
+import distutils.log
+import distutils.sysconfig
+from setuptools import Extension
+from setuptools import setup
 
 MACOS_FLAG = ['-mmacosx-version-min=10.7']
 FLAGS_POSIX = [

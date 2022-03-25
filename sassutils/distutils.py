@@ -67,18 +67,19 @@ The option can also be a mapping of package names to manifest dictionaries::
    Added ``--output-style``/``-s`` option to :class:`build_sass` command.
 
 """
+from __future__ import annotations
+
+import functools
+import os.path
 
 import distutils.errors
 import distutils.log
 import distutils.util
-import functools
-import os.path
-
 from setuptools import Command
 from setuptools.command.sdist import sdist
 
-from sass import OUTPUT_STYLES
 from .builder import Manifest
+from sass import OUTPUT_STYLES
 
 __all__ = 'build_sass', 'validate_manifests'
 
