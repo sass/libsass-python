@@ -10,7 +10,6 @@ type.
 'a b {\n  color: blue; }\n'
 
 """
-
 import collections.abc
 import inspect
 import os.path
@@ -56,6 +55,7 @@ class CompileError(ValueError):
     """The exception type that is raised by :func:`compile()`.
     It is a subtype of :exc:`exceptions.ValueError`.
     """
+
     def __init__(self, msg):
         super().__init__(to_native_s(msg))
 
@@ -573,7 +573,7 @@ def compile(**kwargs):
         elif source_comments in ('line_numbers', 'default'):
             deprecation_message = (
                 'you can simply pass True to '
-                "source_comments instead of " +
+                'source_comments instead of ' +
                 repr(source_comments)
             )
             source_comments = True
@@ -789,7 +789,7 @@ SEPARATORS = frozenset((SASS_SEPARATOR_COMMA, SASS_SEPARATOR_SPACE))
 
 class SassList(
     collections.namedtuple(
-            'SassList', ('items', 'separator', 'bracketed'),
+        'SassList', ('items', 'separator', 'bracketed'),
     ),
 ):
 
