@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+"""Script for building 'manylinux' & 'musllinux' wheels for libsass.
+
+Run me after putting the source distribution on pypi.
+
+See: https://www.python.org/dev/peps/pep-0513/
+"""
+import os
+import pipes
+import subprocess
+import tempfile
+
+
+def check_call(*cmd):
+    print(
+        'build-linux-wheels>> ' +
+        ' '.join(pipes.quote(part) for part in cmd),
+    )
+    subprocess.check_call(cmd)
+
+
+def main():
+    os.makedirs('dist', exist_ok=True)
+    for platform in ('manylinux1', 'musllinux_1_1'):
+        with tempfile.TemporaryDirectory() as work:
+            pip = '/opt/python/cp37-cp37m/bin/pip'
+            check_call(
+                'docker', 'run', '-ti',
+                # Use this so the files are not owned by root
+                '--user', f'{os.getuid()}:{os.getgid()}',
+                # We'll do building in /work and copy results to /dist
+                '-v', f'{work}:/work:rw',
+                '-v', '{}:/dist:rw'.format(os.path.abspath('dist')),
+                f'quay.io/pypa/{platform}_x86_64:latest',
+                'bash', '-exc',
+                '{} wheel --verbose --wheel-dir /work --no-deps libsass && '
+                'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip),
+            )
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

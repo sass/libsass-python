@@ -54,7 +54,7 @@ Here's a brief check list for releasing a new version:
   CI build takes a while.  These wheels are not automatically uploaded,
   but there's ``./bin/download-windows-wheels`` script that downloads built
   wheels.  Then upload them with ``twine``.
-- Run ``./bin/build-manylinux-wheels`` to build linux wheels and upload them to
+- Run ``./bin/build-linux-wheels`` to build linux wheels and upload them to
   PyPI (takes ~5 minutes).
 - The `docs website`__ also has to be updated.
   It's currently a static website deployed on GitHub Pages.
