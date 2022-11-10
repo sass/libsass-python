@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 0.21.1
+Version 0.21.0
 --------------
 
 Released on May 20, 2021.
