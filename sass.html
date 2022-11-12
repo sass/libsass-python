@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sass — Binding of libsass &#8212; libsass 0.21.0 documentation</title>
+    <title>sass — Binding of libsass &#8212; libsass 0.22.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sassutils — Additional utilities related to Sass" href="sassutils.html" />
@@ -34,7 +36,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-sass"></span><section id="sass-binding-of-libsass">
-<h1><a class="reference internal" href="#module-sass" title="sass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code></a> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code><a class="headerlink" href="#sass-binding-of-libsass" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-sass" title="sass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code></a> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code><a class="headerlink" href="#sass-binding-of-libsass" title="Permalink to this heading">¶</a></h1>
 <p>This simple C extension module provides a very simple binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code>,
 which is written in C/C++.  It contains only one function and one exception
 type.</p>
@@ -45,30 +47,31 @@ type.</p>
 <span class="go">&#39;</span>
 </pre></div>
 </div>
+</section>
 <dl class="py exception">
 <dt class="sig sig-object py" id="sass.CompileError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">CompileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">CompileError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.CompileError" title="Permalink to this definition">¶</a></dt>
 <dd><p>The exception type that is raised by <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a>.
 It is a subtype of <code class="xref py py-exc docutils literal notranslate"><span class="pre">exceptions.ValueError</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="sass.MODES">
-<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">MODES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">frozenset({'dirname',</span> <span class="pre">'filename',</span> <span class="pre">'string'})</span></em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> can take.</p>
+<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">MODES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">frozenset({'dirname',</span> <span class="pre">'filename',</span> <span class="pre">'string'})</span></em><a class="headerlink" href="#sass.MODES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>) The set of keywords <a class="reference internal" href="#sass.compile" title="sass.compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> can take.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="sass.OUTPUT_STYLES">
-<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_STYLES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'compact':</span> <span class="pre">2,</span> <span class="pre">'compressed':</span> <span class="pre">3,</span> <span class="pre">'expanded':</span> <span class="pre">1,</span> <span class="pre">'nested':</span> <span class="pre">0}</span></em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) The dictionary of output styles.
+<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_STYLES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'compact':</span> <span class="pre">2,</span> <span class="pre">'compressed':</span> <span class="pre">3,</span> <span class="pre">'expanded':</span> <span class="pre">1,</span> <span class="pre">'nested':</span> <span class="pre">0}</span></em><a class="headerlink" href="#sass.OUTPUT_STYLES" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) The dictionary of output styles.
 Keys are output name strings, and values are flag integers.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="sass.SOURCE_COMMENTS">
-<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SOURCE_COMMENTS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'default':</span> <span class="pre">1,</span> <span class="pre">'line_numbers':</span> <span class="pre">1,</span> <span class="pre">'map':</span> <span class="pre">2,</span> <span class="pre">'none':</span> <span class="pre">0}</span></em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
-<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) The dictionary of source comments styles.
+<span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SOURCE_COMMENTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'default':</span> <span class="pre">1,</span> <span class="pre">'line_numbers':</span> <span class="pre">1,</span> <span class="pre">'map':</span> <span class="pre">2,</span> <span class="pre">'none':</span> <span class="pre">0}</span></em><a class="headerlink" href="#sass.SOURCE_COMMENTS" title="Permalink to this definition">¶</a></dt>
+<dd><p>(<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) The dictionary of source comments styles.
 Keys are mode names, and values are corresponding flag integers.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.4.0.</span></p>
@@ -80,25 +83,25 @@ Keys are mode names, and values are corresponding flag integers.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassColor">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassColor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassColor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassColor" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassError">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassError" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassFunction">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Custom function for Sass.  It can be instantiated using
 <a class="reference internal" href="#sass.SassFunction.from_lambda" title="sass.SassFunction.from_lambda"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_lambda()</span></code></a> and <a class="reference internal" href="#sass.SassFunction.from_named_function" title="sass.SassFunction.from_named_function"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_named_function()</span></code></a> as well.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the function name</p></li>
-<li><p><strong>arguments</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – the argument names</p></li>
-<li><p><strong>callable</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – the actual function to be called</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the function name</p></li>
+<li><p><strong>arguments</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – the argument names</p></li>
+<li><p><strong>callable</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – the actual function to be called</p></li>
 </ul>
 </dd>
 </dl>
@@ -107,21 +110,21 @@ Keys are mode names, and values are corresponding flag integers.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sass.SassFunction.from_lambda">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_lambda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_lambda" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_lambda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_lambda" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a> object from the given <code class="docutils literal notranslate"><span class="pre">lambda_</span></code>
 function.  Since lambda functions don’t have their name, it need
 its <code class="docutils literal notranslate"><span class="pre">name</span></code> as well.  Arguments are automatically inspected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the function name</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the function name</p></li>
 <li><p><strong>lambda</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">types.LambdaType</span></code>) – the actual lambda function to be called</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a custom function wrapper of the <code class="docutils literal notranslate"><span class="pre">lambda_</span></code> function</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a></p>
 </dd>
 </dl>
@@ -129,17 +132,17 @@ its <code class="docutils literal notranslate"><span class="pre">name</span></co
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sass.SassFunction.from_named_function">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_named_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_named_function" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_named_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassFunction.from_named_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a> object from the named <code class="docutils literal notranslate"><span class="pre">function</span></code>.
 Function name and arguments are automatically inspected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>function</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">types.FunctionType</span></code>) – the named function to be called</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a custom function wrapper of the <code class="docutils literal notranslate"><span class="pre">function</span></code></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a></p>
 </dd>
 </dl>
@@ -147,7 +150,7 @@ Function name and arguments are automatically inspected.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sass.SassFunction.signature">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#sass.SassFunction.signature" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signature</span></span><a class="headerlink" href="#sass.SassFunction.signature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signature string of the function.</p>
 </dd></dl>
 
@@ -155,12 +158,12 @@ Function name and arguments are automatically inspected.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassList">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bracketed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassList" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bracketed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassList" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassMap">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassMap" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Because sass maps can have mapping types as keys, we need an immutable
 hashable mapping type.</p>
 <div class="versionadded">
@@ -170,12 +173,12 @@ hashable mapping type.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassNumber">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassNumber" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassNumber" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sass.SassWarning">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassWarning" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sass.</span></span><span class="sig-name descname"><span class="pre">SassWarning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sass.SassWarning" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -187,14 +190,14 @@ hashable mapping type.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>strings</strong> – a list of words to join</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a joined string</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">basestring</span></code></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">basestring</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -208,40 +211,40 @@ hashable mapping type.</p>
 It simply takes a string of Sass code, and then returns a compiled
 CSS string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Sass source code to compile.  it’s exclusive to
+<li><p><strong>string</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Sass source code to compile.  it’s exclusive to
 <code class="docutils literal notranslate"><span class="pre">filename</span></code> and <code class="docutils literal notranslate"><span class="pre">dirname</span></code> parameters</p></li>
-<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
+<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
 choose one of: <code class="docutils literal notranslate"><span class="pre">'nested'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'expanded'</span></code>,
 <code class="docutils literal notranslate"><span class="pre">'compact'</span></code>, <code class="docutils literal notranslate"><span class="pre">'compressed'</span></code></p></li>
-<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
+<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
 <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</p></li>
-<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
-<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
-<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
-<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
-<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
+<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
+<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
+<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
+<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
+<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</p></li>
-<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
-<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
+<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
+<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
 see also below <a class="reference internal" href="#custom-functions">custom functions</a> description</p></li>
 <li><p><strong>custom_import_extensions</strong> – (ignored, for backward compatibility)</p></li>
-<li><p><strong>indented</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – optional declaration that the string is Sass, not SCSS
+<li><p><strong>indented</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – optional declaration that the string is Sass, not SCSS
 formatted. <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</p></li>
-<li><p><strong>importers</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – optional callback functions.
+<li><p><strong>importers</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – optional callback functions.
 see also below <a class="reference internal" href="#importer-callbacks">importer callbacks</a> description</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the compiled CSS string</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> – when it fails for any reason
 (for example the given Sass has broken syntax)</p>
 </dd>
@@ -249,42 +252,42 @@ see also below <a class="reference internal" href="#importer-callbacks">importer
 <p>The <code class="docutils literal notranslate"><span class="pre">filename</span></code> is the most commonly used way.  It takes a string of
 Sass filename, and then returns a compiled CSS string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the filename of Sass source code to compile.
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the filename of Sass source code to compile.
 it’s exclusive to <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">dirname</span></code> parameters</p></li>
-<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
+<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
 choose one of: <code class="docutils literal notranslate"><span class="pre">'nested'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'expanded'</span></code>,
 <code class="docutils literal notranslate"><span class="pre">'compact'</span></code>, <code class="docutils literal notranslate"><span class="pre">'compressed'</span></code></p></li>
-<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
+<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
 <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</p></li>
-<li><p><strong>source_map_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – use source maps and indicate the source map
+<li><p><strong>source_map_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – use source maps and indicate the source map
 output filename.  <code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code> means not
 using source maps.  <code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code> by default.</p></li>
-<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
-<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
-<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
-<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
-<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
+<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
+<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
+<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
+<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
+<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</p></li>
-<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
-<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
+<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
+<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
 see also below <a class="reference internal" href="#custom-functions">custom functions</a> description</p></li>
 <li><p><strong>custom_import_extensions</strong> – (ignored, for backward compatibility)</p></li>
-<li><p><strong>importers</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – optional callback functions.
+<li><p><strong>importers</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Callable</span></code></a>) – optional callback functions.
 see also below <a class="reference internal" href="#importer-callbacks">importer callbacks</a> description</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the compiled CSS string, or a pair of the compiled CSS string
 and the source map string if <code class="docutils literal notranslate"><span class="pre">source_map_filename</span></code> is set</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> – when it fails for any reason
 (for example the given Sass has broken syntax)</p></li>
@@ -301,37 +304,37 @@ that compiled CSS files would be saved.  Directory tree structure of
 the source directory will be maintained in the output directory as well.
 If <code class="docutils literal notranslate"><span class="pre">dirname</span></code> parameter is used the function returns <code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dirname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a pair of <code class="docutils literal notranslate"><span class="pre">(source_dir,</span> <span class="pre">output_dir)</span></code>.
+<li><p><strong>dirname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>) – a pair of <code class="docutils literal notranslate"><span class="pre">(source_dir,</span> <span class="pre">output_dir)</span></code>.
 it’s exclusive to <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">filename</span></code>
 parameters</p></li>
-<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
+<li><p><strong>output_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – an optional coding style of the compiled result.
 choose one of: <code class="docutils literal notranslate"><span class="pre">'nested'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'expanded'</span></code>,
 <code class="docutils literal notranslate"><span class="pre">'compact'</span></code>, <code class="docutils literal notranslate"><span class="pre">'compressed'</span></code></p></li>
-<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
+<li><p><strong>source_comments</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – whether to add comments about source lines.
 <code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code> by default</p></li>
-<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
-<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
-<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
-<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
-<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
+<li><p><strong>source_map_contents</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed include contents in map</p></li>
+<li><p><strong>source_map_embed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – embed sourceMappingUrl as data URI</p></li>
+<li><p><strong>omit_source_map_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – omit source map URL comment from output</p></li>
+<li><p><strong>source_map_root</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – base path, will be emitted in source map as is</p></li>
+<li><p><strong>include_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>) – an optional list of paths to find <code class="docutils literal notranslate"><span class="pre">&#64;import</span></code>ed
 Sass/CSS source files</p></li>
-<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
-<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
+<li><p><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – optional precision for numbers. <code class="xref py py-const docutils literal notranslate"><span class="pre">5</span></code> by default.</p></li>
+<li><p><strong>custom_functions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Sequence</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.abc.Mapping</span></code></a>) – optional mapping of custom functions.
 see also below <a class="reference internal" href="#custom-functions">custom functions</a> description</p></li>
 <li><p><strong>custom_import_extensions</strong> – (ignored, for backward compatibility)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#sass.CompileError" title="sass.CompileError"><strong>sass.CompileError</strong></a> – when it fails for any reason
 (for example the given Sass has broken syntax)</p>
 </dd>
 </dl>
 <p id="custom-functions">The <code class="docutils literal notranslate"><span class="pre">custom_functions</span></code> parameter can take three types of forms:</p>
-<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a>s</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of <a class="reference internal" href="#sass.SassFunction" title="sass.SassFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">SassFunction</span></code></a>s</p>
 <blockquote>
 <div><p>It is the most general form.  Although pretty verbose, it can take
 any kind of callables like type objects, unnamed functions,
@@ -347,9 +350,9 @@ and user-defined callables.</p>
 </div>
 </div></blockquote>
 <dl>
-<dt><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> of names to functions</dt><dd><p>Less general, but easier-to-use form.  Although it’s not it can take
+<dt><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a> of names to functions</dt><dd><p>Less general, but easier-to-use form.  Although it’s not it can take
 any kind of callables, it can take any kind of <em>functions</em> defined
-using <a class="reference external" href="https://docs.python.org/3/reference/compound_stmts.html#def" title="(in Python v3.9)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">def</span></code></a>/<a class="reference external" href="https://docs.python.org/3/reference/expressions.html#lambda" title="(in Python v3.9)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">lambda</span></code></a> syntax.
+using <a class="reference external" href="https://docs.python.org/3/reference/compound_stmts.html#def" title="(in Python v3.11)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">def</span></code></a>/<a class="reference external" href="https://docs.python.org/3/reference/expressions.html#lambda" title="(in Python v3.11)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">lambda</span></code></a> syntax.
 It cannot take callables other than them since inspecting arguments
 is not always available for every kind of callables.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
@@ -363,10 +366,10 @@ is not always available for every kind of callables.</p>
 </div>
 </dd>
 </dl>
-<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of named functions</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>/<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a> of named functions</p>
 <blockquote>
 <div><p>Not general, but the easiest-to-use form for <em>named</em> functions.
-It can take only named functions, defined using <a class="reference external" href="https://docs.python.org/3/reference/compound_stmts.html#def" title="(in Python v3.9)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">def</span></code></a>.
+It can take only named functions, defined using <a class="reference external" href="https://docs.python.org/3/reference/compound_stmts.html#def" title="(in Python v3.11)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">def</span></code></a>.
 It cannot take lambdas sinc names are unavailable for them.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func_name</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">return</span> <span class="o">...</span>
@@ -419,8 +422,8 @@ imported name.</p>
 <p><span class="versionmodified added">New in version 0.4.0: </span>Added <code class="docutils literal notranslate"><span class="pre">source_comments</span></code> and <code class="docutils literal notranslate"><span class="pre">source_map_filename</span></code> parameters.</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.6.0: </span>The <code class="docutils literal notranslate"><span class="pre">source_comments</span></code> parameter becomes to take only <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
-instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>.</p>
+<p><span class="versionmodified changed">Changed in version 0.6.0: </span>The <code class="docutils literal notranslate"><span class="pre">source_comments</span></code> parameter becomes to take only <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
+instead of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>.</p>
 </div>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 0.6.0: </span>Values like <code class="docutils literal notranslate"><span class="pre">'none'</span></code>, <code class="docutils literal notranslate"><span class="pre">'line_numbers'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'map'</span></code> for
@@ -445,7 +448,6 @@ resolved path, so that importers can do relative path resolution.</p>
 </div>
 </dd></dl>
 
-</section>
 
 
           </div>
@@ -471,7 +473,35 @@ resolved path, so that importers can do relative path resolution.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="pysassc.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.MODES"><code class="docutils literal notranslate"><span class="pre">MODES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.OUTPUT_STYLES"><code class="docutils literal notranslate"><span class="pre">OUTPUT_STYLES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SOURCE_COMMENTS"><code class="docutils literal notranslate"><span class="pre">SOURCE_COMMENTS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassColor"><code class="docutils literal notranslate"><span class="pre">SassColor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassError"><code class="docutils literal notranslate"><span class="pre">SassError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassFunction"><code class="docutils literal notranslate"><span class="pre">SassFunction</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sass.SassFunction.from_lambda"><code class="docutils literal notranslate"><span class="pre">SassFunction.from_lambda()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sass.SassFunction.from_named_function"><code class="docutils literal notranslate"><span class="pre">SassFunction.from_named_function()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sass.SassFunction.signature"><code class="docutils literal notranslate"><span class="pre">SassFunction.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassList"><code class="docutils literal notranslate"><span class="pre">SassList</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassMap"><code class="docutils literal notranslate"><span class="pre">SassMap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassNumber"><code class="docutils literal notranslate"><span class="pre">SassNumber</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.SassWarning"><code class="docutils literal notranslate"><span class="pre">SassWarning</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.and_join"><code class="docutils literal notranslate"><span class="pre">and_join()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#sass.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIXES"><code class="docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIX_PATTERN"><code class="docutils literal notranslate"><span class="pre">SUFFIX_PATTERN</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory"><code class="docutils literal notranslate"><span class="pre">build_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass"><code class="docutils literal notranslate"><span class="pre">build_sass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.validate_manifests"><code class="docutils literal notranslate"><span class="pre">validate_manifests()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware"><code class="docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a></li>
 </ul>
 
 <div class="relations">
@@ -487,12 +517,12 @@ resolved path, so that importers can do relative path resolution.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -509,7 +539,7 @@ resolved path, so that importers can do relative path resolution.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

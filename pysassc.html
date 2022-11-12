@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pysassc — SassC compliant command line interface &#8212; libsass 0.21.0 documentation</title>
+    <title>pysassc — SassC compliant command line interface &#8212; libsass 0.22.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sass — Binding of libsass" href="sass.html" />
@@ -34,7 +36,7 @@
           <div class="body" role="main">
             
   <span class="target" id="module-pysassc"></span><section id="pysassc-sassc-compliant-command-line-interface">
-<h1><a class="reference internal" href="#module-pysassc" title="pysassc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code></a> — SassC compliant command line interface<a class="headerlink" href="#pysassc-sassc-compliant-command-line-interface" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-pysassc" title="pysassc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code></a> — SassC compliant command line interface<a class="headerlink" href="#pysassc-sassc-compliant-command-line-interface" title="Permalink to this heading">¶</a></h1>
 <p>This provides <a class="reference external" href="https://github.com/sass/sassc">SassC</a> compliant CLI executable named <strong class="program">pysassc</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pysassc
 <span class="go">Usage: pysassc [options] SCSS_FILE [CSS_FILE]</span>
@@ -176,7 +178,30 @@ The filename of source map will be the output CSS filename followed by
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.MODES"><code class="docutils literal notranslate"><span class="pre">MODES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.OUTPUT_STYLES"><code class="docutils literal notranslate"><span class="pre">OUTPUT_STYLES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS"><code class="docutils literal notranslate"><span class="pre">SOURCE_COMMENTS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassColor"><code class="docutils literal notranslate"><span class="pre">SassColor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassError"><code class="docutils literal notranslate"><span class="pre">SassError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassFunction"><code class="docutils literal notranslate"><span class="pre">SassFunction</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassList"><code class="docutils literal notranslate"><span class="pre">SassList</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassMap"><code class="docutils literal notranslate"><span class="pre">SassMap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassNumber"><code class="docutils literal notranslate"><span class="pre">SassNumber</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassWarning"><code class="docutils literal notranslate"><span class="pre">SassWarning</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.and_join"><code class="docutils literal notranslate"><span class="pre">and_join()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIXES"><code class="docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIX_PATTERN"><code class="docutils literal notranslate"><span class="pre">SUFFIX_PATTERN</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory"><code class="docutils literal notranslate"><span class="pre">build_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass"><code class="docutils literal notranslate"><span class="pre">build_sass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.validate_manifests"><code class="docutils literal notranslate"><span class="pre">validate_manifests()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware"><code class="docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a></li>
 </ul>
 
 <div class="relations">
@@ -192,12 +217,12 @@ The filename of source map will be the output CSS filename followed by
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -214,7 +239,7 @@ The filename of source map will be the output CSS filename followed by
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

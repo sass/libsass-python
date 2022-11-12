@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Using with Flask &#8212; libsass 0.21.0 documentation</title>
+    <title>Using with Flask &#8212; libsass 0.22.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Changelog" href="../changes.html" />
@@ -34,11 +36,11 @@
           <div class="body" role="main">
             
   <section id="using-with-flask">
-<h1><a class="toc-backref" href="#id2">Using with Flask</a><a class="headerlink" href="#using-with-flask" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id2" role="doc-backlink">Using with Flask</a><a class="headerlink" href="#using-with-flask" title="Permalink to this heading">¶</a></h1>
 <p>This guide explains how to use libsass with the <a class="reference external" href="http://flask.pocoo.org/">Flask</a> web framework.
 <a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code></a> package provides several tools that can be integrated
 into web applications written in Flask.</p>
-<div class="contents topic" id="contents">
+<nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#using-with-flask" id="id2">Using with Flask</a></p>
@@ -50,9 +52,9 @@ into web applications written in Flask.</p>
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="directory-layout">
-<h2><a class="toc-backref" href="#id3">Directory layout</a><a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Directory layout</a><a class="headerlink" href="#directory-layout" title="Permalink to this heading">¶</a></h2>
 <p>Imagine the project contained in such directory layout:</p>
 <ul class="simple">
 <li><p><code class="file docutils literal notranslate"><span class="pre">setup.py</span></code></p></li>
@@ -75,7 +77,7 @@ CSS files can be regenerated, so add <code class="file docutils literal notransl
 ignore list like <code class="file docutils literal notranslate"><span class="pre">.gitignore</span></code> or <code class="file docutils literal notranslate"><span class="pre">.hgignore</span></code>.</p>
 </section>
 <section id="defining-manifest">
-<h2><a class="toc-backref" href="#id4">Defining manifest</a><a class="headerlink" href="#defining-manifest" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Defining manifest</a><a class="headerlink" href="#defining-manifest" title="Permalink to this heading">¶</a></h2>
 <p>The <a class="reference internal" href="../sassutils.html#module-sassutils" title="sassutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code></a> defines a concept named <em class="dfn">manifest</em>.
 Manifest is the build settings of Sass/SCSS.  It specifies some paths
 related to building Sass/SCSS:</p>
@@ -102,14 +104,14 @@ The exposed path is <code class="file docutils literal notranslate"><span class=
 in which the keys are packages names and the values are tuples of paths.</p>
 </section>
 <section id="building-sass-scss-for-each-request">
-<h2><a class="toc-backref" href="#id5">Building Sass/SCSS for each request</a><a class="headerlink" href="#building-sass-scss-for-each-request" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Building Sass/SCSS for each request</a><a class="headerlink" href="#building-sass-scss-for-each-request" title="Permalink to this heading">¶</a></h2>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
 <dt>Flask — <a class="reference external" href="http://flask.pocoo.org/docs/quickstart/#hooking-in-wsgi-middlewares">Hooking in WSGI Middlewares</a></dt><dd><p>The section which explains how to integrate WSGI middlewares to
 Flask.</p>
 </dd>
-<dt>Flask — <span class="xref std std-ref">app-dispatch</span></dt><dd><p>The documentation which explains how Flask dispatches each
+<dt>Flask — <span class="xref std std-ref">flask:app-dispatch</span></dt><dd><p>The documentation which explains how Flask dispatches each
 request internally.</p>
 </dd>
 </dl>
@@ -136,7 +138,7 @@ Flask.</p>
 </pre></div>
 </div>
 <p>And then, if you want to link a compiled CSS file, use the
-<a class="reference external" href="https://flask.palletsprojects.com/en/2.0.x/api/#flask.url_for" title="(in Flask v2.0.x)"><code class="xref py py-func docutils literal notranslate"><span class="pre">url_for()</span></code></a> function:</p>
+<a class="reference external" href="https://flask.palletsprojects.com/en/2.2.x/api/#flask.url_for" title="(in Flask v2.2.x)"><code class="xref py py-func docutils literal notranslate"><span class="pre">url_for()</span></code></a> function:</p>
 <div class="highlight-html+jinja notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">url_for</span><span class="o">(</span><span class="s1">&#39;static&#39;</span><span class="o">,</span> <span class="nv">filename</span><span class="o">=</span><span class="s1">&#39;css/style.scss.css&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
       <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/css&quot;</span><span class="p">&gt;</span>
 </pre></div>
@@ -148,7 +150,7 @@ All compiled filenames have trailing <code class="docutils literal notranslate">
 </div>
 </section>
 <section id="building-sass-scss-for-each-deployment">
-<h2><a class="toc-backref" href="#id6">Building Sass/SCSS for each deployment</a><a class="headerlink" href="#building-sass-scss-for-each-deployment" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Building Sass/SCSS for each deployment</a><a class="headerlink" href="#building-sass-scss-for-each-deployment" title="Permalink to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This section assumes that you use <a class="reference external" href="https://pypi.org/pypi/setuptools/">setuptools</a> for deployment.</p>
@@ -156,7 +158,7 @@ All compiled filenames have trailing <code class="docutils literal notranslate">
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt>Flask — <span class="xref std std-ref">distribute-deployment</span></dt><dd><p>How to deploy Flask application using <a class="reference external" href="https://pypi.org/pypi/setuptools/">setuptools</a>.</p>
+<dt>Flask — <span class="xref std std-ref">flask:distribute-deployment</span></dt><dd><p>How to deploy Flask application using <a class="reference external" href="https://pypi.org/pypi/setuptools/">setuptools</a>.</p>
 </dd>
 </dl>
 </div>
@@ -191,9 +193,9 @@ also contain the compiled CSS files!</p>
 </div>
 <p>You can add aliases to make these commands always run the <code class="docutils literal notranslate"><span class="pre">build_sass</span></code>
 command first.  Make <code class="file docutils literal notranslate"><span class="pre">setup.cfg</span></code> config:</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[aliases]</span>
-<span class="na">sdist</span> <span class="o">=</span> <span class="s">build_sass sdist</span>
-<span class="na">bdist</span> <span class="o">=</span> <span class="s">build_sass bdist</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[aliases]</span><span class="w"></span>
+<span class="na">sdist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">build_sass sdist</span><span class="w"></span>
+<span class="na">bdist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">build_sass bdist</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Now it automatically builds Sass/SCSS sources and include the compiled CSS files
@@ -231,7 +233,30 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../pysassc.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sass.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.MODES"><code class="docutils literal notranslate"><span class="pre">MODES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.OUTPUT_STYLES"><code class="docutils literal notranslate"><span class="pre">OUTPUT_STYLES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SOURCE_COMMENTS"><code class="docutils literal notranslate"><span class="pre">SOURCE_COMMENTS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassColor"><code class="docutils literal notranslate"><span class="pre">SassColor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassError"><code class="docutils literal notranslate"><span class="pre">SassError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassFunction"><code class="docutils literal notranslate"><span class="pre">SassFunction</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassList"><code class="docutils literal notranslate"><span class="pre">SassList</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassMap"><code class="docutils literal notranslate"><span class="pre">SassMap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassNumber"><code class="docutils literal notranslate"><span class="pre">SassNumber</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.SassWarning"><code class="docutils literal notranslate"><span class="pre">SassWarning</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.and_join"><code class="docutils literal notranslate"><span class="pre">and_join()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sass.html#sass.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/builder.html#sassutils.builder.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/builder.html#sassutils.builder.SUFFIXES"><code class="docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/builder.html#sassutils.builder.SUFFIX_PATTERN"><code class="docutils literal notranslate"><span class="pre">SUFFIX_PATTERN</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/builder.html#sassutils.builder.build_directory"><code class="docutils literal notranslate"><span class="pre">build_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/distutils.html#sassutils.distutils.build_sass"><code class="docutils literal notranslate"><span class="pre">build_sass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/distutils.html#sassutils.distutils.validate_manifests"><code class="docutils literal notranslate"><span class="pre">validate_manifests()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sassutils/wsgi.html#sassutils.wsgi.SassMiddleware"><code class="docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a></li>
 </ul>
 
 <div class="relations">
@@ -247,12 +272,12 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -269,7 +294,7 @@ to the package archive when you run <strong class="program">setup.py sdist</stro
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

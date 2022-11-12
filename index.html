@@ -1,18 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.21.0 documentation</title>
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.22.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using with Flask" href="frameworks/flask.html" />
@@ -33,16 +35,16 @@
           <div class="body" role="main">
             
   <section id="libsass-python-sass-scss-for-python">
-<h1>libsass-python: <a class="reference external" href="https://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this headline">¶</a></h1>
+<h1>libsass-python: <a class="reference external" href="https://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this heading">¶</a></h1>
 <p>This package provides a simple Python extension module <a class="reference internal" href="sass.html#module-sass" title="sass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code></a> which is
 binding <a class="reference external" href="https://github.com/sass/libsass">LibSass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
 It’s very straightforward and there isn’t any headache related Python
 distribution/deployment.  That means you can add just <code class="docutils literal notranslate"><span class="pre">libsass</span></code> into
 your <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">install_requires</span></code> list or <code class="file docutils literal notranslate"><span class="pre">requirements.txt</span></code>
 file.</p>
-<p>It currently supports CPython 2.6, 2.7, 3.5–3.7, and PyPy 2.3+!</p>
+<p>It currently supports CPython 3.6+ and PyPy 3!</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>You don’t need any Ruby/Node.js stack at all, for development or deployment
 either.</p></li>
@@ -54,16 +56,16 @@ either.</p></li>
 <li><p>WSGI middleware for ease of development.
 It automatically compiles Sass/SCSS files for each request.
 See also <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> for details.</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration.
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration.
 You can build all Sass/SCSS files using
 <strong class="program">setup.py build_sass</strong> command.
 See also <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> for details.</p></li>
 <li><p>Works also on PyPy.</p></li>
-<li><p>Provides prebuilt wheel (<span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0427"><strong>PEP 427</strong></a>) binaries for Windows and Mac.</p></li>
+<li><p>Provides prebuilt wheel (<span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0427/"><strong>PEP 427</strong></a>) binaries for Windows and Mac.</p></li>
 </ul>
 </section>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h2>
 <p>It’s available on <a class="reference external" href="https://pypi.org/pypi/libsass/">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install libsass
 </pre></div>
@@ -76,9 +78,9 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 </section>
 <section id="examples">
-<span id="example"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<span id="example"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
 <section id="compile-a-string-of-sass-to-css">
-<h3>Compile a String of Sass to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this headline">¶</a></h3>
+<h3>Compile a String of Sass to CSS<a class="headerlink" href="#compile-a-string-of-sass-to-css" title="Permalink to this heading">¶</a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sass</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;a { b { color: blue; } }&#39;</span><span class="p">)</span>
 <span class="go">&#39;a b {\n  color: blue; }\n&#39;</span>
@@ -86,7 +88,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 </section>
 <section id="compile-a-directory-of-sass-files-to-css">
-<h3>Compile a Directory of Sass Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this headline">¶</a></h3>
+<h3>Compile a Directory of Sass Files to CSS<a class="headerlink" href="#compile-a-directory-of-sass-files-to-css" title="Permalink to this heading">¶</a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s1">&#39;css&#39;</span><span class="p">)</span>
@@ -110,7 +112,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </section>
 </section>
 <section id="user-s-guide">
-<h2>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h2>
+<h2>User’s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="frameworks/flask.html">Using with Flask</a><ul>
@@ -121,7 +123,8 @@ See also libsass project’s <a class="reference external" href="https://github.
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-21-1">Version 0.21.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-22-0">Version 0.22.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-21-0">Version 0.21.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-20-1">Version 0.20.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-20-0">Version 0.20.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-19-4">Version 0.19.4</a></li>
@@ -191,22 +194,60 @@ See also libsass project’s <a class="reference external" href="https://github.
 </div>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pysassc.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.MODES"><code class="docutils literal notranslate"><span class="pre">MODES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.OUTPUT_STYLES"><code class="docutils literal notranslate"><span class="pre">OUTPUT_STYLES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS"><code class="docutils literal notranslate"><span class="pre">SOURCE_COMMENTS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassColor"><code class="docutils literal notranslate"><span class="pre">SassColor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassError"><code class="docutils literal notranslate"><span class="pre">SassError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassFunction"><code class="docutils literal notranslate"><span class="pre">SassFunction</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sass.html#sass.SassFunction.from_lambda"><code class="docutils literal notranslate"><span class="pre">SassFunction.from_lambda()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sass.html#sass.SassFunction.from_named_function"><code class="docutils literal notranslate"><span class="pre">SassFunction.from_named_function()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sass.html#sass.SassFunction.signature"><code class="docutils literal notranslate"><span class="pre">SassFunction.signature</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassList"><code class="docutils literal notranslate"><span class="pre">SassList</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassMap"><code class="docutils literal notranslate"><span class="pre">SassMap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassNumber"><code class="docutils literal notranslate"><span class="pre">SassNumber</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassWarning"><code class="docutils literal notranslate"><span class="pre">SassWarning</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.and_join"><code class="docutils literal notranslate"><span class="pre">and_join()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build"><code class="docutils literal notranslate"><span class="pre">Manifest.build()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.build_one"><code class="docutils literal notranslate"><span class="pre">Manifest.build_one()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.resolve_filename"><code class="docutils literal notranslate"><span class="pre">Manifest.resolve_filename()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest.unresolve_filename"><code class="docutils literal notranslate"><span class="pre">Manifest.unresolve_filename()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIXES"><code class="docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIX_PATTERN"><code class="docutils literal notranslate"><span class="pre">SUFFIX_PATTERN</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory"><code class="docutils literal notranslate"><span class="pre">build_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass"><code class="docutils literal notranslate"><span class="pre">build_sass</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass.finalize_options"><code class="docutils literal notranslate"><span class="pre">build_sass.finalize_options()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass.get_package_dir"><code class="docutils literal notranslate"><span class="pre">build_sass.get_package_dir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass.initialize_options"><code class="docutils literal notranslate"><span class="pre">build_sass.initialize_options()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass.run"><code class="docutils literal notranslate"><span class="pre">build_sass.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.validate_manifests"><code class="docutils literal notranslate"><span class="pre">validate_manifests()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware"><code class="docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware.quote_css_string"><code class="docutils literal notranslate"><span class="pre">SassMiddleware.quote_css_string()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </div>
 </section>
 <section id="credit">
-<h2>Credit<a class="headerlink" href="#credit" title="Permalink to this headline">¶</a></h2>
+<h2>Credit<a class="headerlink" href="#credit" title="Permalink to this heading">¶</a></h2>
 <p>Hong Minhee wrote this Python binding of <a class="reference external" href="https://github.com/sass/libsass">LibSass</a>.</p>
 <p>Hampton Catlin and Aaron Leung wrote <a class="reference external" href="https://github.com/sass/libsass">LibSass</a>, which is portable C/C++
 implementation of <a class="reference external" href="https://sass-lang.com/">Sass</a>.</p>
@@ -215,15 +256,15 @@ reference implementation of it in Ruby.</p>
 <p>The above three  are all distributed under <a class="reference external" href="https://mit-license.org/">MIT license</a>.</p>
 </section>
 <section id="open-source">
-<h2>Open source<a class="headerlink" href="#open-source" title="Permalink to this headline">¶</a></h2>
+<h2>Open source<a class="headerlink" href="#open-source" title="Permalink to this heading">¶</a></h2>
 <dl>
 <dt>GitHub (Git repository + issues)</dt><dd><p><a class="reference external" href="https://github.com/sass/libsass-python">https://github.com/sass/libsass-python</a></p>
 </dd>
-<dt>Azure Pipelines CI (linux + windows)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master</a></p>
-<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master"><img alt="Build Status" src="https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=master" /></a>
+<dt>Azure Pipelines CI (linux + windows)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main</a></p>
+<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main"><img alt="Build Status" src="https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=main" /></a>
 </dd>
-<dt>Azure Pipelines Coverage (Test coverage)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master</a></p>
-<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=master"><img alt="Coverage Status" src="https://img.shields.io/azure-devops/coverage/asottile/asottile/22/master.svg" /></a>
+<dt>Azure Pipelines Coverage (Test coverage)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main</a></p>
+<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main"><img alt="Coverage Status" src="https://img.shields.io/azure-devops/coverage/asottile/asottile/22/main.svg" /></a>
 </dd>
 <dt>PyPI</dt><dd><p><a class="reference external" href="https://pypi.org/pypi/libsass/">https://pypi.org/pypi/libsass/</a></p>
 <a class="reference external image-reference" href="https://pypi.org/pypi/libsass/"><img alt="PyPI" src="https://badge.fury.io/py/libsass.svg" /></a>
@@ -233,7 +274,7 @@ reference implementation of it in Ruby.</p>
 </dl>
 </section>
 <section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -266,7 +307,30 @@ reference implementation of it in Ruby.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pysassc.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pysassc</span></code> — SassC compliant command line interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sass.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code> — Binding of <code class="docutils literal notranslate"><span class="pre">libsass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.CompileError"><code class="docutils literal notranslate"><span class="pre">CompileError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.MODES"><code class="docutils literal notranslate"><span class="pre">MODES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.OUTPUT_STYLES"><code class="docutils literal notranslate"><span class="pre">OUTPUT_STYLES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SOURCE_COMMENTS"><code class="docutils literal notranslate"><span class="pre">SOURCE_COMMENTS</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassColor"><code class="docutils literal notranslate"><span class="pre">SassColor</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassError"><code class="docutils literal notranslate"><span class="pre">SassError</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassFunction"><code class="docutils literal notranslate"><span class="pre">SassFunction</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassList"><code class="docutils literal notranslate"><span class="pre">SassList</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassMap"><code class="docutils literal notranslate"><span class="pre">SassMap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassNumber"><code class="docutils literal notranslate"><span class="pre">SassNumber</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.SassWarning"><code class="docutils literal notranslate"><span class="pre">SassWarning</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.and_join"><code class="docutils literal notranslate"><span class="pre">and_join()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sass.html#sass.compile"><code class="docutils literal notranslate"><span class="pre">compile()</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="sassutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils</span></code> — Additional utilities related to Sass</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.builder</span></code> — Build the whole directory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIXES"><code class="docutils literal notranslate"><span class="pre">SUFFIXES</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.SUFFIX_PATTERN"><code class="docutils literal notranslate"><span class="pre">SUFFIX_PATTERN</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/builder.html#sassutils.builder.build_directory"><code class="docutils literal notranslate"><span class="pre">build_directory()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code> — <code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.build_sass"><code class="docutils literal notranslate"><span class="pre">build_sass</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/distutils.html#sassutils.distutils.validate_manifests"><code class="docutils literal notranslate"><span class="pre">validate_manifests()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code> — WSGI middleware for development purpose</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sassutils/wsgi.html#sassutils.wsgi.SassMiddleware"><code class="docutils literal notranslate"><span class="pre">SassMiddleware</span></code></a></li>
 </ul>
 
 <div class="relations">
@@ -281,12 +345,12 @@ reference implementation of it in Ruby.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -303,7 +367,7 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
