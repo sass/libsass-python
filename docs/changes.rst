@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 0.22.0
+--------------
+
+Released on November 12, 2022.
+
+- Remove python 2.x support [:issue:`373` by anthony sottile].
+- Remove deprecated ``sassc`` cli [:issue:`379` by anthony sottile].
+
 Version 0.21.0
 --------------
 
