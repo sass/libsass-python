@@ -21,21 +21,20 @@ def check_call(*cmd):
 
 def main():
     os.makedirs('dist', exist_ok=True)
-    for python in ('cp27-cp27mu', 'cp36-cp36m'):
-        with tempfile.TemporaryDirectory() as work:
-            pip = f'/opt/python/{python}/bin/pip'
-            check_call(
-                'docker', 'run', '-ti',
-                # Use this so the files are not owned by root
-                '--user', f'{os.getuid()}:{os.getgid()}',
-                # We'll do building in /work and copy results to /dist
-                '-v', f'{work}:/work:rw',
-                '-v', '{}:/dist:rw'.format(os.path.abspath('dist')),
-                'quay.io/pypa/manylinux1_x86_64:latest',
-                'bash', '-exc',
-                '{} wheel --verbose --wheel-dir /work --no-deps libsass && '
-                'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip),
-            )
+    with tempfile.TemporaryDirectory() as work:
+        pip = '/opt/python/cp37-cp37m/bin/pip'
+        check_call(
+            'docker', 'run', '-ti',
+            # Use this so the files are not owned by root
+            '--user', f'{os.getuid()}:{os.getgid()}',
+            # We'll do building in /work and copy results to /dist
+            '-v', f'{work}:/work:rw',
+            '-v', '{}:/dist:rw'.format(os.path.abspath('dist')),
+            'quay.io/pypa/manylinux1_x86_64:latest',
+            'bash', '-exc',
+            '{} wheel --verbose --wheel-dir /work --no-deps libsass && '
+            'auditwheel repair --wheel-dir /dist /work/*.whl'.format(pip),
+        )
     return 0
 
 
