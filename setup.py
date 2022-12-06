@@ -276,10 +276,6 @@ setup(
         'Programming Language :: C',
         'Programming Language :: C++',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Programming Language :: Python :: Implementation :: Stackless',
@@ -288,6 +284,6 @@ setup(
         'Topic :: Software Development :: Code Generators',
         'Topic :: Software Development :: Compilers',
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     cmdclass=cmdclass,
 )
