@@ -29,5 +29,5 @@ jobs:
     wheel_tags: true
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [pypy3, py37, py38, py39]
+    toxenvs: [pypy3, py37, py38, py39, py310]
     os: linux
