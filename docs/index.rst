@@ -132,19 +132,11 @@ Open source
 GitHub (Git repository + issues)
    https://github.com/sass/libsass-python
 
-Azure Pipelines CI (linux + windows)
-   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
+GitHub Actions (linux + macos + windows)
 
-   .. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=main
-      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
+   .. image:: https://github.com/sass/libsass-python/actions/workflows/main.yml/badge.svg
+      :target: https://github.com/sass/libsass-python/actions/workflows/main.yml
       :alt: Build Status
-
-Azure Pipelines Coverage (Test coverage)
-   https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
-
-   .. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/main.svg
-      :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
-      :alt: Coverage Status
 
 PyPI
    https://pypi.org/pypi/libsass/
