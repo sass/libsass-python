@@ -5,13 +5,9 @@ libsass-python: Sass_/SCSS for Python
    :alt: PyPI
    :target: https://pypi.org/pypi/libsass/
 
-.. image:: https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=main
-   :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
+.. image:: https://github.com/sass/libsass-python/actions/workflows/main.yml/badge.svg
+   :target: https://github.com/sass/libsass-python/actions/workflows/main.yml
    :alt: Build Status
-
-.. image:: https://img.shields.io/azure-devops/coverage/asottile/asottile/22/main.svg
-   :target: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
-   :alt: Coverage Status
 
 .. image:: https://results.pre-commit.ci/badge/github/sass/libsass-python/main.svg
    :target: https://results.pre-commit.ci/latest/github/sass/libsass-python/main
