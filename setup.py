@@ -164,6 +164,11 @@ else:
     py_limited_api = False
     define_macros = []
 
+print("Limited API")
+print(py_limited_api)
+print("Define Macros")
+print(define_macros)
+
 sass_extension = Extension(
     '_sass',
     sorted(sources),
@@ -238,7 +243,15 @@ if sys.version_info >= (3,) and platform.python_implementation() == 'CPython':
     else:
         class bdist_wheel(wheel.bdist_wheel.bdist_wheel):
             def finalize_options(self):
+                print("py_limited_api")
+                print(py_limited_api)
+                print("self.py_limited_api")
+                print(self.py_limited_api)
                 self.py_limited_api = f'cp3{sys.version_info[1]}'
+                print("py_limited_api")
+                print(py_limited_api)
+                print("self.py_limited_api")
+                print(self.py_limited_api)
                 super().finalize_options()
 
         cmdclass['bdist_wheel'] = bdist_wheel
