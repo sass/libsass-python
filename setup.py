@@ -157,7 +157,7 @@ print(sysconfig.get_config_var('Py_DEBUG'))
 if not hasattr(sys, 'pypy_version_info'):
     py_limited_api = True
     define_macros = [('Py_LIMITED_API', None)]
-elif sysconfig.get_config_var('Py_DEBUG'):
+elif sysconfig.get_config_var('Py_DEBUG') == 1:
     py_limited_api = False
     define_macros = []
 else:
