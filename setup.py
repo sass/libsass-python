@@ -5,7 +5,6 @@ import platform
 import shutil
 import subprocess
 import sys
-import sysconfig
 import tempfile
 
 import distutils.cmd
@@ -151,16 +150,17 @@ else:
 
 print("HELLO RYAN!")
 print("DEBUG")
-print(sysconfig.get_config_var('Py_DEBUG'))
+print(distutils.sysconfig.get_config_var('Py_DEBUG'))
 # Py_LIMITED_API does not work for pypy
 # https://foss.heptapod.net/pypy/pypy/issues/3173
 if not hasattr(sys, 'pypy_version_info'):
     py_limited_api = True
     define_macros = [('Py_LIMITED_API', None)]
-elif sysconfig.get_config_var('Py_DEBUG') == 1:
+else:
     py_limited_api = False
     define_macros = []
-else:
+
+if distutils.sysconfig.get_config_var('Py_DEBUG') == 1:
     py_limited_api = False
     define_macros = []
 
