@@ -5,6 +5,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import sysconfig
 import tempfile
 
 import distutils.cmd
@@ -152,6 +153,9 @@ else:
 if not hasattr(sys, 'pypy_version_info'):
     py_limited_api = True
     define_macros = [('Py_LIMITED_API', None)]
+elif sysconfig.get_config_var('Py_DEBUG'):
+    py_limited_api = False
+    define_macros = []
 else:
     py_limited_api = False
     define_macros = []
