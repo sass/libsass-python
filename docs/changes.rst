@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 0.22.1
+--------------
+
+Released on November 12, 2022.
+
+- Added Check for Py_DEBUG and do not use Limited API
+
 Version 0.22.0
 --------------
 

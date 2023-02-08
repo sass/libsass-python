@@ -148,6 +148,10 @@ else:
     include_dirs = [os.path.join('.', 'libsass', 'include')]
     extra_compile_args.append(define)
 
+
+print("HELLO RYAN!")
+print("DEBUG")
+print(sysconfig.get_config_var('Py_DEBUG'))
 # Py_LIMITED_API does not work for pypy
 # https://foss.heptapod.net/pypy/pypy/issues/3173
 if not hasattr(sys, 'pypy_version_info'):
