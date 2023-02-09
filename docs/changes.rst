@@ -6,7 +6,7 @@ Version 0.22.1
 
 Released on November 12, 2022.
 
-- Added Check for Py_DEBUG and do not use Limited API
+- Added Check for Py_DEBUG and do not use Limited API [:issue:`419` by Ryan Skadberg].
 
 Version 0.22.0
 --------------
