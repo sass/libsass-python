@@ -147,10 +147,6 @@ else:
     include_dirs = [os.path.join('.', 'libsass', 'include')]
     extra_compile_args.append(define)
 
-
-print("HELLO RYAN!")
-print("DEBUG")
-print(distutils.sysconfig.get_config_var('Py_DEBUG'))
 # Py_LIMITED_API does not work for pypy
 # https://foss.heptapod.net/pypy/pypy/issues/3173
 if not hasattr(sys, 'pypy_version_info'):
@@ -163,11 +159,6 @@ else:
 if distutils.sysconfig.get_config_var('Py_DEBUG') == 1:
     py_limited_api = False
     define_macros = []
-
-print("Limited API")
-print(py_limited_api)
-print("Define Macros")
-print(define_macros)
 
 sass_extension = Extension(
     '_sass',
@@ -243,15 +234,7 @@ if sys.version_info >= (3,) and platform.python_implementation() == 'CPython':
     else:
         class bdist_wheel(wheel.bdist_wheel.bdist_wheel):
             def finalize_options(self):
-                print("py_limited_api")
-                print(py_limited_api)
-                print("self.py_limited_api")
-                print(self.py_limited_api)
                 self.py_limited_api = f'cp3{sys.version_info[1]}'
-                print("py_limited_api")
-                print(py_limited_api)
-                print("self.py_limited_api")
-                print(self.py_limited_api)
                 super().finalize_options()
 
         cmdclass['bdist_wheel'] = bdist_wheel
