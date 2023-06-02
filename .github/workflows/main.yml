@@ -8,7 +8,7 @@ on:
 
 jobs:
   main-windows:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.1.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.4.2
     with:
       env: '["py37"]'
       os: windows-latest
@@ -16,14 +16,14 @@ jobs:
       wheel-tags: true
       submodules: true
   main-macos:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.1.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.4.2
     with:
       env: '["py37"]'
       os: macos-latest
       wheel-tags: true
       submodules: true
   main-linux:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.1.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.4.2
     with:
       env: '["pypy3", "py37", "py38", "py39", "py310"]'
       os: ubuntu-latest
