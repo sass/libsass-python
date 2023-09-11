@@ -15,7 +15,7 @@ libsass-python: Sass_/SCSS for Python
 
 This package provides a simple Python extension module ``sass`` which is
 binding LibSass_ (written in C/C++ by Hampton Catlin and Aaron Leung).
-It's very straightforward and there isn't any headache related Python
+It's very straightforward and there isn't any headache related to Python
 distribution/deployment.  That means you can add just ``libsass`` into
 your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
 No need for Ruby nor Node.js.
