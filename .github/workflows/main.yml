@@ -25,6 +25,6 @@ jobs:
   main-linux:
     uses: asottile/workflows/.github/workflows/tox.yml@v1.5.0
     with:
-      env: '["pypy3", "py38", "py39", "py310", "py311"]'
+      env: '["pypy3", "py38", "py39", "py310", "py311", "py312"]'
       os: ubuntu-latest
       submodules: true
