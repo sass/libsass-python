@@ -23,10 +23,10 @@ Tests
 - All code patches should contain one or more unit tests or regression tests.
 - All code patches have to successfully run tests on every Python version
   we aim to support.  tox_ would help.
-- All commits will be tested by `Azure Pipelines`_ (Linux and Windows).
+- All commits will be tested by `GitHub Actions`_ (Linux and Windows).
 
 .. _tox:  https://tox.readthedocs.io/
-.. _`Azure Pipelines`: https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&branchName=main
+.. _`GitHub Actions`: https://github.com/sass/libsass-python/actions
 
 
 Maintainer's guide
@@ -50,10 +50,9 @@ Here's a brief check list for releasing a new version:
 - Make a source distribution and upload it to PyPI
   (``python3 setup.py sdist upload``).
   If it's successful the new version must appear on PyPI_.
-- `Azure Pipelines`_ automatically makes binary wheels for Windows, but each
+- `GitHub Actions`_ automatically makes binary wheels for Windows, but each
   CI build takes a while.  These wheels are not automatically uploaded,
-  but there's ``./bin/download-windows-wheels`` script that downloads built
-  wheels.  Then upload them with ``twine``.
+  you can retreive them from the build's artifacts.
 - Run ``./bin/build-manylinux-wheels`` to build linux wheels and upload them to
   PyPI (takes ~5 minutes).
 - The `docs website`__ also has to be updated.
