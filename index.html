@@ -6,13 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.22.0 documentation</title>
+    <title>libsass-python: Sass/SCSS for Python &#8212; libsass 0.23.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -38,11 +35,11 @@
 <h1>libsass-python: <a class="reference external" href="https://sass-lang.com/">Sass</a>/SCSS for Python<a class="headerlink" href="#libsass-python-sass-scss-for-python" title="Permalink to this heading">¶</a></h1>
 <p>This package provides a simple Python extension module <a class="reference internal" href="sass.html#module-sass" title="sass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sass</span></code></a> which is
 binding <a class="reference external" href="https://github.com/sass/libsass">LibSass</a> (written in C/C++ by Hampton Catlin and Aaron Leung).
-It’s very straightforward and there isn’t any headache related Python
+It’s very straightforward and there isn’t any headache related to Python
 distribution/deployment.  That means you can add just <code class="docutils literal notranslate"><span class="pre">libsass</span></code> into
 your <code class="file docutils literal notranslate"><span class="pre">setup.py</span></code>’s <code class="docutils literal notranslate"><span class="pre">install_requires</span></code> list or <code class="file docutils literal notranslate"><span class="pre">requirements.txt</span></code>
 file.</p>
-<p>It currently supports CPython 3.6+ and PyPy 3!</p>
+<p>It currently supports CPython 3.7+ and PyPy 3!</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
@@ -56,7 +53,7 @@ either.</p></li>
 <li><p>WSGI middleware for ease of development.
 It automatically compiles Sass/SCSS files for each request.
 See also <a class="reference internal" href="sassutils/wsgi.html#module-sassutils.wsgi" title="sassutils.wsgi"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.wsgi</span></code></a> for details.</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<a class="reference external" href="https://docs.python.org/3/library/distutils.html#module-distutils" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code></a> integration.
+<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">setuptools</span></code>/<code class="xref py py-mod docutils literal notranslate"><span class="pre">distutils</span></code> integration.
 You can build all Sass/SCSS files using
 <strong class="program">setup.py build_sass</strong> command.
 See also <a class="reference internal" href="sassutils/distutils.html#module-sassutils.distutils" title="sassutils.distutils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sassutils.distutils</span></code></a> for details.</p></li>
@@ -67,7 +64,7 @@ See also <a class="reference internal" href="sassutils/distutils.html#module-sas
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h2>
 <p>It’s available on <a class="reference external" href="https://pypi.org/pypi/libsass/">PyPI</a>, so you can install it using <strong class="program">pip</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip install libsass
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>libsass
 </pre></div>
 </div>
 <div class="admonition note">
@@ -123,6 +120,7 @@ See also libsass project’s <a class="reference external" href="https://github.
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-23-0">Version 0.23.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-22-0">Version 0.22.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-21-0">Version 0.21.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changes.html#version-0-20-1">Version 0.20.1</a></li>
@@ -257,15 +255,15 @@ reference implementation of it in Ruby.</p>
 </section>
 <section id="open-source">
 <h2>Open source<a class="headerlink" href="#open-source" title="Permalink to this heading">¶</a></h2>
-<dl>
+<dl class="simple">
 <dt>GitHub (Git repository + issues)</dt><dd><p><a class="reference external" href="https://github.com/sass/libsass-python">https://github.com/sass/libsass-python</a></p>
 </dd>
-<dt>Azure Pipelines CI (linux + windows)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main</a></p>
-<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main"><img alt="Build Status" src="https://dev.azure.com/asottile/asottile/_apis/build/status/sass.libsass-python?branchName=main" /></a>
-</dd>
-<dt>Azure Pipelines Coverage (Test coverage)</dt><dd><p><a class="reference external" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main">https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main</a></p>
-<a class="reference external image-reference" href="https://dev.azure.com/asottile/asottile/_build/latest?definitionId=22&amp;branchName=main"><img alt="Coverage Status" src="https://img.shields.io/azure-devops/coverage/asottile/asottile/22/main.svg" /></a>
-</dd>
+</dl>
+<p>GitHub Actions (linux + macos + windows)</p>
+<blockquote>
+<div><a class="reference external image-reference" href="https://github.com/sass/libsass-python/actions/workflows/main.yml"><img alt="Build Status" src="https://github.com/sass/libsass-python/actions/workflows/main.yml/badge.svg" /></a>
+</div></blockquote>
+<dl>
 <dt>PyPI</dt><dd><p><a class="reference external" href="https://pypi.org/pypi/libsass/">https://pypi.org/pypi/libsass/</a></p>
 <a class="reference external image-reference" href="https://pypi.org/pypi/libsass/"><img alt="PyPI" src="https://badge.fury.io/py/libsass.svg" /></a>
 </dd>
@@ -367,8 +365,8 @@ reference implementation of it in Ruby.</p>
       &copy;2012, Hong Minhee.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/index.rst.txt"

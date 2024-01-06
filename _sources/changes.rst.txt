@@ -1,6 +1,16 @@
 Changelog
 =========
 
+Version 0.23.0
+--------------
+
+Released on January 6, 2024.
+
+- Follow up the libsass upstream: 3.6.6 --- See the release notes of LibSass
+  3.6.6__. [:issue:`452` by Anthony Sottile]
+
+__ https://github.com/sass/libsass/releases/tag/3.6.6
+
 Version 0.22.0
 --------------
 
