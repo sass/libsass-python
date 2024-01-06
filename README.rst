@@ -20,8 +20,6 @@ distribution/deployment.  That means you can add just ``libsass`` into
 your ``setup.py``'s ``install_requires`` list or ``requirements.txt`` file.
 No need for Ruby nor Node.js.
 
-It currently supports CPython 3.7+, and PyPy 3!
-
 .. _Sass: https://sass-lang.com/
 .. _LibSass: https://github.com/sass/libsass
 
