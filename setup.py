@@ -1,4 +1,3 @@
-import ast
 import atexit
 import os.path
 import platform
@@ -169,24 +168,6 @@ sass_extension = Extension(
 )
 
 
-def version(sass_filename='sass.py'):
-    with open(sass_filename) as f:
-        tree = ast.parse(f.read(), sass_filename)
-    for node in tree.body:
-        if isinstance(node, ast.Assign) and len(node.targets) == 1:
-            target, = node.targets
-            if isinstance(target, ast.Name) and target.id == '__version__':
-                return node.value.s
-
-
-def readme():
-    try:
-        with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as f:
-            return f.read()
-    except OSError:
-        pass
-
-
 class upload_doc(distutils.cmd.Command):
     """Uploads the documentation to GitHub pages."""
 
@@ -237,53 +218,6 @@ if sys.version_info >= (3,) and platform.python_implementation() == 'CPython':
 
 
 setup(
-    name='libsass',
-    description='Sass for Python: '
-                'A straightforward binding of libsass for Python.',
-    long_description=readme(),
-    version=version(),
     ext_modules=[sass_extension],
-    packages=['sassutils'],
-    py_modules=['pysassc', 'sass', 'sasstests'],
-    package_data={
-        '': [
-            'README.rst',
-            'test/*.sass',
-        ],
-    },
-    license='MIT License',
-    author='Hong Minhee',
-    author_email='minhee' '@' 'dahlia.kr',
-    url='https://sass.github.io/libsass-python/',
-    download_url='https://github.com/sass/libsass-python/releases',
-    entry_points={
-        'distutils.commands': [
-            'build_sass = sassutils.distutils:build_sass',
-        ],
-        'distutils.setup_keywords': [
-            'sass_manifests = sassutils.distutils:validate_manifests',
-        ],
-        'console_scripts': [
-            ['pysassc = pysassc:main'],
-        ],
-    },
-    classifiers=[
-        'Development Status :: 5 - Production/Stable',
-        'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-        'Programming Language :: C',
-        'Programming Language :: C++',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        'Programming Language :: Python :: Implementation :: Stackless',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Software Development :: Code Generators',
-        'Topic :: Software Development :: Compilers',
-    ],
-    python_requires='>=3.8',
     cmdclass=cmdclass,
 )
