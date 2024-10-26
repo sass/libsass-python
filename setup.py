@@ -96,26 +96,7 @@ else:
                 elif filename.endswith('.h'):
                     headers.append(filename)
 
-    if sys.platform == 'win32':
-        from distutils.msvc9compiler import get_build_version
-        vscomntools_env = 'VS{}{}COMNTOOLS'.format(
-            int(get_build_version()),
-            int(get_build_version() * 10) % 10,
-        )
-        try:
-            os.environ[vscomntools_env] = os.environ['VS140COMNTOOLS']
-        except KeyError:
-            distutils.log.warn(
-                'You probably need Visual Studio 2015 (14.0) '
-                'or higher',
-            )
-        from distutils import msvccompiler, msvc9compiler
-        if msvccompiler.get_build_version() < 14.0:
-            msvccompiler.get_build_version = lambda: 14.0
-        if get_build_version() < 14.0:
-            msvc9compiler.get_build_version = lambda: 14.0
-            msvc9compiler.VERSION = 14.0
-    elif platform.system() in {'Darwin', 'FreeBSD', 'OpenBSD'}:
+    if platform.system() in {'Darwin', 'FreeBSD', 'OpenBSD'}:
         # Dirty workaround to avoid link error...
         # Python distutils doesn't provide any way
         # to configure different flags for each cc and c++.
