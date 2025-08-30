@@ -39,7 +39,7 @@ Features
 - ``setuptools``/``distutils`` integration.
   You can build all Sass/SCSS files using
   ``setup.py build_sass`` command.
-- Works also on PyPy.
+- Works also on PyPI.
 - Provides prebuilt wheel_ binaries for Linux, Windows, and Mac.
 
 .. _wheel: https://www.python.org/dev/peps/pep-0427/
