@@ -1,6 +1,10 @@
 libsass-python: Sass_/SCSS for Python
 =====================================
 
+LibSass has reached its end of life. It will no longer receive updates of any kind,
+nor will its wrapper libraries. Users should migrate to Dart Sass at their earliest
+convenience. See also https://github.com/attakei/sass-embedded-python.
+
 .. image:: https://badge.fury.io/py/libsass.svg
    :alt: PyPI
    :target: https://pypi.org/pypi/libsass/
